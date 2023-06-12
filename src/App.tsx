@@ -2,41 +2,50 @@ import * as React from "react";
 import {
   ChakraProvider,
   Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
   theme,
 } from "@chakra-ui/react";
-import { ColorModeSwitcher } from "./ColorModeSwitcher";
-import { Logo } from "./Logo";
 import { WagmiProvider } from "./modules/wagmi/components";
 import { TopBar } from "./modules/common/components";
+import { Control } from "./modules/interfaces/components";
 
 export const App = () => (
   <ChakraProvider theme={theme}>
     <WagmiProvider>
-      <Box textAlign="center" fontSize="xl">
-        <TopBar />
-        <Grid minH="100vh" p={3}>
-          <ColorModeSwitcher justifySelf="flex-end" />
-          <VStack spacing={8}>
-            <Logo h="40vmin" pointerEvents="none" />
-            <Text>
-              Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-            </Text>
-            <Link
-              color="teal.500"
-              href="https://chakra-ui.com"
-              fontSize="2xl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn Chakra
-            </Link>
-          </VStack>
-        </Grid>
+      <TopBar />
+      <Box p={4}>
+        <Box
+          maxWidth="1440px"
+          m="auto"
+          w="100%"
+          border="2px solid #cccccc"
+          borderRadius="md"
+          p={2}
+        >
+          <Tabs variant="enclosed">
+            <TabList>
+              <Tab>Control</Tab>
+              <Tab>Borrowers</Tab>
+              <Tab>Lenders</Tab>
+            </TabList>
+
+            <TabPanels>
+              <TabPanel>
+                <Control />
+              </TabPanel>
+              <TabPanel>
+                <p>two!</p>
+              </TabPanel>
+              <TabPanel>
+                <p>three!</p>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Box>
       </Box>
     </WagmiProvider>
   </ChakraProvider>
