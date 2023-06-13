@@ -1,12 +1,12 @@
 import React from "react";
-import { WagmiConfig, createConfig, configureChains, mainnet } from "wagmi";
+import { WagmiConfig, createConfig, configureChains, sepolia } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { LedgerConnector } from "wagmi/connectors/ledger";
 import type { ReactNode } from "react";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [mainnet],
+  [sepolia],
   [alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_API_KEY as string })]
 );
 

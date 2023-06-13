@@ -27,7 +27,7 @@ export function ConnectButton() {
   const { disconnect } = useDisconnect();
   const { chain } = useNetwork();
 
-  const isWrongNetwork = chain?.id !== 1;
+  const isWrongNetwork = chain?.id !== 11155111;
 
   const openModal = useCallback(() => {
     if (!isOpen) {
@@ -76,7 +76,7 @@ export function ConnectButton() {
             {isWrongNetwork ? (
               <Button
                 type="button"
-                onClick={() => switchNetwork?.(1)}
+                onClick={() => switchNetwork?.(11155111)}
                 w="100%"
                 colorScheme="blue"
               >
@@ -85,7 +85,9 @@ export function ConnectButton() {
             ) : null}
             {isConnected ? (
               <>
-                <Text textAlign="center" size="sm">{address}</Text>
+                <Text textAlign="center" size="sm">
+                  {address}
+                </Text>
 
                 <Button
                   type="button"
