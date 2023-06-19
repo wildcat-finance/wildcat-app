@@ -9,44 +9,49 @@ import {
   TabPanel,
   theme,
 } from "@chakra-ui/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "./modules/wagmi/components";
 import { TopBar } from "./modules/common/components";
-import { Control } from "./modules/interfaces/components";
+import { Control, Borrow } from "./modules/interfaces/components";
+
+const queryClient = new QueryClient();
 
 export const App = () => (
   <ChakraProvider theme={theme}>
-    <WagmiProvider>
-      <TopBar />
-      <Box p={4}>
-        <Box
-          maxWidth="1440px"
-          m="auto"
-          w="100%"
-          border="2px solid #cccccc"
-          borderRadius="md"
-          p={2}
-        >
-          <Tabs variant="enclosed">
-            <TabList>
-              <Tab>Control</Tab>
-              <Tab>Borrowers</Tab>
-              <Tab>Lenders</Tab>
-            </TabList>
+    <QueryClientProvider client={queryClient}>
+      <WagmiProvider>
+        <TopBar />
+        <Box p={4}>
+          <Box
+            maxWidth="1440px"
+            m="auto"
+            w="100%"
+            border="2px solid #cccccc"
+            borderRadius="md"
+            p={2}
+          >
+            <Tabs variant="enclosed">
+              <TabList>
+                <Tab>Control</Tab>
+                <Tab>Borrowers</Tab>
+                <Tab>Lenders</Tab>
+              </TabList>
 
-            <TabPanels>
-              <TabPanel>
-                <Control />
-              </TabPanel>
-              <TabPanel>
-                <p>two!</p>
-              </TabPanel>
-              <TabPanel>
-                <p>three!</p>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
+              <TabPanels>
+                <TabPanel>
+                  <Control />
+                </TabPanel>
+                <TabPanel>
+                  <Borrow />
+                </TabPanel>
+                <TabPanel>
+                  <p>three!</p>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </Box>
         </Box>
-      </Box>
-    </WagmiProvider>
+      </WagmiProvider>
+    </QueryClientProvider>
   </ChakraProvider>
 );

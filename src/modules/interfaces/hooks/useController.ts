@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState, useMemo } from "react";
 import { VaultController } from "@wildcatfi/wildcat-sdk";
-import { useAllVaults } from "./useAllVaults";
+import { useAllVaultsQuery } from "./useAllVaultsQuery";
 import { useProvider } from "./useProvider";
 
 export function useController() {
   const [controller, setController] = useState<VaultController | undefined>(
     undefined
   );
-  const { vaults, status: vaultStatus } = useAllVaults();
+  const { data: vaults } = useAllVaultsQuery();
   const provider = useProvider();
 
   const controllerAddress = useMemo(() => {
@@ -21,10 +21,10 @@ export function useController() {
   }, [controllerAddress, provider]);
 
   useEffect(() => {
-    if (!controller && controllerAddress !== "" && vaultStatus === "resolved") {
+    if (!controller && controllerAddress && vaults.length) {
       handleController();
     }
-  }, [controller, controllerAddress, vaultStatus, handleController]);
+  }, [controller, controllerAddress, handleController, vaults]);
 
   return controller;
 }
