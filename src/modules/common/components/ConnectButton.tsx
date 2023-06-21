@@ -80,7 +80,7 @@ export function ConnectButton() {
                 w="100%"
                 colorScheme="blue"
               >
-                Switch to Mainnet
+                Switch to Sepolia
               </Button>
             ) : null}
             {isConnected ? (

@@ -1,3 +1,4 @@
 import { useIsOpen } from "./useIsOpen";
+import { useEthersSigner } from "./useEthersSigner";
 
-export { useIsOpen };
+export { useIsOpen, useEthersSigner };
