@@ -1,12 +1,10 @@
-import { useCallback, useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useRef, useMemo } from "react";
 import { VaultController } from "@wildcatfi/wildcat-sdk";
 import { useAllVaultsQuery } from "./useAllVaultsQuery";
 import { useProvider } from "./useProvider";
 
 export function useController() {
-  const [controller, setController] = useState<VaultController | undefined>(
-    undefined
-  );
+  const controllerRef = useRef<VaultController | undefined>(undefined);
   const { data: vaults } = useAllVaultsQuery();
   const provider = useProvider();
 
@@ -16,15 +14,15 @@ export function useController() {
 
   const handleController = useCallback(() => {
     if (controllerAddress !== "") {
-      setController(new VaultController(controllerAddress, provider));
+      controllerRef.current = new VaultController(controllerAddress, provider);
     }
   }, [controllerAddress, provider]);
 
   useEffect(() => {
-    if (!controller && controllerAddress && vaults.length) {
+    if (!controllerRef.current && controllerAddress && vaults.length) {
       handleController();
     }
-  }, [controller, controllerAddress, handleController, vaults]);
+  }, [controllerRef, controllerAddress, handleController, vaults]);
 
-  return controller;
+  return controllerRef.current;
 }

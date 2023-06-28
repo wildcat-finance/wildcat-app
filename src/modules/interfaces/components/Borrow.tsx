@@ -7,8 +7,11 @@ import { useAllVaultsForUser } from "../../interfaces/hooks/useAllVaultsForUser"
 export function Borrow() {
   const { address } = useAccount();
 
-  const { data: userVaults } = useAllVaultsForUser();
-  console.log(userVaults);
+  const { data: allVaults } = useAllVaultsForUser();
+
+  const userVaults = useMemo(() => {
+    return allVaults.filter((vault) => vault.isBorrower());
+  }, [allVaults]);
 
   const shortenedAddress = useMemo(() => {
     return address
@@ -107,7 +110,15 @@ export function Borrow() {
             </Box>
           ))}
         </VStack>
-      ) : null}
+      ) : (
+        <Box borderRadius="md" border="1px solid #cccccc" p={4} mt={4}>
+          <Box fontWeight="bold" fontSize="bold">
+            <Text display="inline" mr={2}>
+              No vaults for Borrower {shortenedAddress}
+            </Text>
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 }
