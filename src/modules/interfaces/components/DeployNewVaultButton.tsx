@@ -14,10 +14,18 @@ import {
   FormLabel,
   FormErrorMessage,
   Input,
+  InputGroup,
+  InputRightAddon,
+  Spinner,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { useAccount, useToken } from "wagmi";
+import { useEthersSigner } from "../../common/hooks/useEthersSigner";
 import { useIsOpen } from "../../common/hooks";
 import { useController } from "../hooks/useController";
+import { Token, TokenAmount } from "@wildcatfi/wildcat-sdk";
+import { parseUnits } from "ethers/lib/utils";
 
 interface NewVaultValues {
   asset?: string;
@@ -37,15 +45,19 @@ interface NewVaultValues {
 export function DeployNewVaultButton() {
   const controller = useController();
 
+  const signer = useEthersSigner();
+
+  const { address } = useAccount();
+
   const { isOpen, handleOpen, handleClose } = useIsOpen();
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, watch } = useForm({
     defaultValues: {
       asset: undefined,
       namePrefix: undefined,
       symbolPrefix: undefined,
       borrower: undefined,
-      controller: undefined,
+      controller: controller?.address,
       maxTotalSupply: 0,
       annualInterestBips: 0,
       penaltyFeeBips: 0,
@@ -56,17 +68,73 @@ export function DeployNewVaultButton() {
     } as NewVaultValues,
   });
 
-  const onSubmit = useCallback(
-    (data: any) => {
-      const factoryInterface = controller?.contractFactory?.createInterface();
-      console.log(factoryInterface);
+  const assetWatch = watch("asset");
+
+  const {
+    data: assetData,
+    isLoading: assetDataLoading,
+    isError: assetDataError,
+  } = useToken({
+    address: assetWatch as `0x${string}`,
+    enabled: typeof assetWatch !== "undefined" && assetWatch.length === 42,
+  });
+
+  const { mutate: deployNewVault, isLoading: isDeploying } = useMutation({
+    mutationFn: async (values: NewVaultValues) => {
+      if (!signer || !controller || !assetData) {
+        console.log({ signer, controller, assetData });
+        return;
+      }
+
+      const asset = new Token(
+        assetData.address,
+        assetData.name,
+        assetData.symbol,
+        assetData.decimals,
+        signer
+      );
+
+      const maxTotalSupply = new TokenAmount(
+        parseUnits(
+          values.maxTotalSupply as unknown as string,
+          assetData.decimals
+        ),
+        asset
+      );
+
+      await controller.deployVault({
+        asset,
+        namePrefix: values.namePrefix as string,
+        symbolPrefix: values.symbolPrefix as string,
+        borrower: address as `0x${string}`,
+        maxTotalSupply,
+        annualInterestBips: values.annualInterestBips as number,
+        penaltyFeeBips: values.penaltyFeeBips as number,
+        gracePeriod: values.gracePeriod as number,
+        liquidityCoverageRatio: values.liquidityCoverageRatio as number,
+        interestFeeBips: values.interestFeeBips as number,
+        feeRecipient: values.feeRecipient as `0x${string}`,
+      });
     },
-    [controller]
+    onError: function (error) {
+      console.log(error);
+      window.alert((error as Error).message ?? "Error deploying vault");
+    },
+  });
+
+  const onSubmit = useCallback(
+    (data: NewVaultValues) => deployNewVault(data),
+    [deployNewVault]
   );
 
   return (
     <Box>
-      <Button type="button" onClick={handleOpen} colorScheme="blue">
+      <Button
+        type="button"
+        onClick={handleOpen}
+        colorScheme="blue"
+        isDisabled={typeof signer === "undefined"}
+      >
         Deploy New Vault
       </Button>
 
@@ -87,21 +155,30 @@ export function DeployNewVaultButton() {
             <form method="post" onSubmit={handleSubmit(onSubmit)}>
               <Box as="fieldset" disabled={formState.isSubmitting}>
                 <FormControl
-                  isInvalid={typeof formState.errors.asset !== "undefined"}
+                  isInvalid={
+                    typeof formState.errors.asset !== "undefined" ||
+                    assetDataError
+                  }
                 >
                   <FormLabel htmlFor="asset">Underlying Asset</FormLabel>
-                  <Input
-                    placeholder="address"
-                    {...register("asset", {
-                      required: true,
-                      minLength: {
-                        value: 42,
-                        message: "Address is not formatted correctly",
-                      },
-                    })}
-                  />
+                  <InputGroup>
+                    <Input
+                      placeholder="address"
+                      {...register("asset", {
+                        required: true,
+                        minLength: {
+                          value: 42,
+                          message: "Address is not formatted correctly",
+                        },
+                      })}
+                    />
+                    {assetDataLoading ? (
+                      <InputRightAddon children={<Spinner size="xs" />} />
+                    ) : null}
+                  </InputGroup>
                   <FormErrorMessage>
                     {formState.errors.asset && formState.errors.asset.message}
+                    {assetDataError && "Error loading asset metadata"}
                   </FormErrorMessage>
                 </FormControl>
 
@@ -181,16 +258,7 @@ export function DeployNewVaultButton() {
                   <FormLabel htmlFor="controller">
                     Lender Contoller (Whitelister)
                   </FormLabel>
-                  <Input
-                    placeholder="address"
-                    {...register("controller", {
-                      required: true,
-                      minLength: {
-                        value: 42,
-                        message: "Address not formatted correctly",
-                      },
-                    })}
-                  />
+                  <Input placeholder="address" isReadOnly />
                   <FormErrorMessage>
                     {formState.errors.controller &&
                       formState.errors.controller.message}
@@ -205,11 +273,25 @@ export function DeployNewVaultButton() {
                 </FormControl>
 
                 <FormControl mt={2}>
-                  <FormLabel htmlFor="gracePeriod">Grace Period</FormLabel>
+                  <FormLabel htmlFor="gracePeriod">
+                    Grace Period (Hours)
+                  </FormLabel>
                   <Input {...register("gracePeriod")} />
                 </FormControl>
 
-                <Button type="submit" colorScheme="blue" mt={4} w="100%">
+                <Button
+                  type="submit"
+                  colorScheme="blue"
+                  mt={4}
+                  w="100%"
+                  isLoading={isDeploying}
+                  disabled={
+                    isDeploying ||
+                    Object.values(formState.errors).length > 0 ||
+                    !assetData ||
+                    !controller
+                  }
+                >
                   Submit
                 </Button>
               </Box>

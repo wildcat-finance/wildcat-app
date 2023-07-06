@@ -4610,10 +4610,10 @@
     "@webassemblyjs/ast" "1.11.6"
     "@xtuc/long" "4.2.2"
 
-"@wildcatfi/wildcat-sdk@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@wildcatfi/wildcat-sdk/-/wildcat-sdk-1.0.2.tgz#cee8bfadb6c647ce1f52747041b86fcb9e062cb5"
-  integrity sha512-QlDvZh9ig0+oKsOAPp1pWSsjuuZ536O+ICXe/bg6JUQYr7JPJCuw6oiZVNkIozXlhCkeNsRvfYKS2pYGcWrkuA==
+"@wildcatfi/wildcat-sdk@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@wildcatfi/wildcat-sdk/-/wildcat-sdk-1.0.4.tgz#68bd3141cc61d48615272add186789ee40dcc621"
+  integrity sha512-6qE5g2X9C32uJvAEMRVqzONF02tZjUJ1jSMfGop5KsZ5lE+o394lbW8MhkFStbPt3hTu3L3OYDlzl7s+6WiQYQ==
   dependencies:
     ethers "^5.5.3"
 

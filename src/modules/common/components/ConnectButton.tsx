@@ -73,7 +73,7 @@ export function ConnectButton() {
           </ModalHeader>
 
           <ModalBody>
-            {isWrongNetwork ? (
+            {isConnected && isWrongNetwork ? (
               <Button
                 type="button"
                 onClick={() => switchNetwork?.(11155111)}
