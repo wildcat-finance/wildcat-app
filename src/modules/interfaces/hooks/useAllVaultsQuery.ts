@@ -5,12 +5,17 @@ import { useProvider } from "./useProvider";
 export function useAllVaultsQuery() {
   const provider = useProvider();
 
-  const handleVaults = async () => await getAllVaults(provider);
+  const handleVaults = async () => {
+    console.log("about to call getAllVaults()");
+    return await getAllVaults(provider);
+  };
 
   return useQuery({
     queryKey: ["allVaults"],
     queryFn: handleVaults,
     initialData: [] as Vault[],
-    refetchOnMount: false,
+    onError(e) {
+      console.log(e);
+    },
   });
 }

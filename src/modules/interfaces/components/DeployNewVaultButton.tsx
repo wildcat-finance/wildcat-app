@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 import {
   Box,
   Button,
@@ -16,6 +16,11 @@ import {
   Input,
   InputGroup,
   InputRightAddon,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
   Spinner,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
@@ -51,13 +56,13 @@ export function DeployNewVaultButton() {
 
   const { isOpen, handleOpen, handleClose } = useIsOpen();
 
-  const { register, handleSubmit, formState, watch } = useForm({
+  const { register, handleSubmit, formState, watch, setValue } = useForm({
     defaultValues: {
       asset: undefined,
       namePrefix: undefined,
       symbolPrefix: undefined,
       borrower: undefined,
-      controller: controller?.address,
+      controller: undefined,
       maxTotalSupply: 0,
       annualInterestBips: 0,
       penaltyFeeBips: 0,
@@ -67,6 +72,12 @@ export function DeployNewVaultButton() {
       feeRecipient: undefined,
     } as NewVaultValues,
   });
+
+  useEffect(() => {
+    if (controller?.address) {
+      setValue("controller", controller?.address);
+    }
+  }, [controller, setValue]);
 
   const assetWatch = watch("asset");
 
@@ -108,11 +119,11 @@ export function DeployNewVaultButton() {
         symbolPrefix: values.symbolPrefix as string,
         borrower: address as `0x${string}`,
         maxTotalSupply,
-        annualInterestBips: values.annualInterestBips as number,
-        penaltyFeeBips: values.penaltyFeeBips as number,
+        annualInterestBips: Number(values.annualInterestBips) * 1000,
+        penaltyFeeBips: Number(values.penaltyFeeBips) * 1000,
         gracePeriod: values.gracePeriod as number,
-        liquidityCoverageRatio: values.liquidityCoverageRatio as number,
-        interestFeeBips: values.interestFeeBips as number,
+        liquidityCoverageRatio: Number(values.liquidityCoverageRatio) * 1000,
+        interestFeeBips: Number(values.interestFeeBips) * 1000,
         feeRecipient: values.feeRecipient as `0x${string}`,
       });
     },
@@ -133,7 +144,9 @@ export function DeployNewVaultButton() {
         type="button"
         onClick={handleOpen}
         colorScheme="blue"
-        isDisabled={typeof signer === "undefined"}
+        isDisabled={
+          typeof signer === "undefined" || typeof controller === "undefined"
+        }
       >
         Deploy New Vault
       </Button>
@@ -241,14 +254,61 @@ export function DeployNewVaultButton() {
                   <FormLabel htmlFor="annualInterestBips">
                     Annual Interest Rate (APR)
                   </FormLabel>
-                  <Input {...register("annualInterestBips")} />
+                  <InputGroup>
+                    <NumberInput
+                      defaultValue={0.01}
+                      min={0}
+                      max={100}
+                      step={0.01}
+                    >
+                      <NumberInputField {...register("annualInterestBips")} />
+                      <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                      </NumberInputStepper>
+                    </NumberInput>
+                    <InputRightAddon children="%" />
+                  </InputGroup>
                 </FormControl>
 
                 <FormControl mt={2}>
                   <FormLabel htmlFor="penaltyFeeBips">
                     Penalty Fee Rate
                   </FormLabel>
-                  <Input {...register("penaltyFeeBips")} />
+                  <InputGroup>
+                    <NumberInput
+                      defaultValue={0.01}
+                      min={0}
+                      max={100}
+                      step={0.01}
+                    >
+                      <NumberInputField {...register("penaltyFeeBips")} />
+                      <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                      </NumberInputStepper>
+                    </NumberInput>
+                    <InputRightAddon children="%" />
+                  </InputGroup>
+                </FormControl>
+
+                <FormControl mt={2}>
+                  <FormLabel htmlFor="interestFeeBips">Interest Fee</FormLabel>
+                  <InputGroup>
+                    <NumberInput
+                      defaultValue={0.01}
+                      min={0}
+                      max={100}
+                      step={0.01}
+                    >
+                      <NumberInputField {...register("interestFeeBips")} />
+                      <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                      </NumberInputStepper>
+                    </NumberInput>
+                    <InputRightAddon children="%" />
+                  </InputGroup>
                 </FormControl>
 
                 <FormControl
@@ -258,7 +318,11 @@ export function DeployNewVaultButton() {
                   <FormLabel htmlFor="controller">
                     Lender Contoller (Whitelister)
                   </FormLabel>
-                  <Input placeholder="address" isReadOnly />
+                  <Input
+                    placeholder="address"
+                    isReadOnly
+                    {...register("controller")}
+                  />
                   <FormErrorMessage>
                     {formState.errors.controller &&
                       formState.errors.controller.message}
@@ -269,7 +333,23 @@ export function DeployNewVaultButton() {
                   <FormLabel htmlFor="liquidityCoverageRatio">
                     Liquidity Coverage Ratio
                   </FormLabel>
-                  <Input {...register("liquidityCoverageRatio")} />
+                  <InputGroup>
+                    <NumberInput
+                      defaultValue={0.01}
+                      min={0}
+                      max={100}
+                      step={0.01}
+                    >
+                      <NumberInputField
+                        {...register("liquidityCoverageRatio")}
+                      />
+                      <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                      </NumberInputStepper>
+                    </NumberInput>
+                    <InputRightAddon children="%" />
+                  </InputGroup>
                 </FormControl>
 
                 <FormControl mt={2}>
@@ -277,6 +357,29 @@ export function DeployNewVaultButton() {
                     Grace Period (Hours)
                   </FormLabel>
                   <Input {...register("gracePeriod")} />
+                </FormControl>
+
+                <FormControl
+                  mt={2}
+                  isInvalid={
+                    typeof formState.errors.feeRecipient !== "undefined"
+                  }
+                >
+                  <FormLabel htmlFor="feeRecipient">Fee Recipient</FormLabel>
+                  <Input
+                    placeholder="address"
+                    {...register("feeRecipient", {
+                      required: true,
+                      minLength: {
+                        value: 42,
+                        message: "Address is not formatted correctly",
+                      },
+                    })}
+                  />
+                  <FormErrorMessage>
+                    {formState.errors.feeRecipient &&
+                      formState.errors.feeRecipient.message}
+                  </FormErrorMessage>
                 </FormControl>
 
                 <Button
