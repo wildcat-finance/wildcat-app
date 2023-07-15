@@ -24,7 +24,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAccount, useToken } from "wagmi";
 import { useEthersSigner } from "../../common/hooks/useEthersSigner";
 import { useIsOpen } from "../../common/hooks";
@@ -56,22 +56,24 @@ export function DeployNewVaultButton() {
 
   const { isOpen, handleOpen, handleClose } = useIsOpen();
 
-  const { register, handleSubmit, formState, watch, setValue } = useForm({
-    defaultValues: {
-      asset: undefined,
-      namePrefix: undefined,
-      symbolPrefix: undefined,
-      borrower: undefined,
-      controller: undefined,
-      maxTotalSupply: 0,
-      annualInterestBips: 0,
-      penaltyFeeBips: 0,
-      gracePeriod: 0,
-      liquidityCoverageRatio: 0,
-      interestFeeBips: 0,
-      feeRecipient: undefined,
-    } as NewVaultValues,
-  });
+  const { register, handleSubmit, formState, watch, setValue, reset } = useForm(
+    {
+      defaultValues: {
+        asset: undefined,
+        namePrefix: undefined,
+        symbolPrefix: undefined,
+        borrower: undefined,
+        controller: undefined,
+        maxTotalSupply: 0,
+        annualInterestBips: 0,
+        penaltyFeeBips: 0,
+        gracePeriod: 0,
+        liquidityCoverageRatio: 0,
+        interestFeeBips: 0,
+        feeRecipient: undefined,
+      } as NewVaultValues,
+    }
+  );
 
   useEffect(() => {
     if (controller?.address) {
@@ -89,6 +91,8 @@ export function DeployNewVaultButton() {
     address: assetWatch as `0x${string}`,
     enabled: typeof assetWatch !== "undefined" && assetWatch.length === 42,
   });
+
+  const queryClient = useQueryClient();
 
   const { mutate: deployNewVault, isLoading: isDeploying } = useMutation({
     mutationFn: async (values: NewVaultValues) => {
@@ -126,6 +130,10 @@ export function DeployNewVaultButton() {
         interestFeeBips: Number(values.interestFeeBips) * 100,
         feeRecipient: values.feeRecipient as `0x${string}`,
       });
+    },
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ["allVaults"] });
+      handleClose();
     },
     onError: function (error) {
       console.log(error);
@@ -356,7 +364,13 @@ export function DeployNewVaultButton() {
                   <FormLabel htmlFor="gracePeriod">
                     Grace Period (Hours)
                   </FormLabel>
-                  <Input {...register("gracePeriod")} />
+                  <NumberInput min={0} step={1}>
+                    <NumberInputField {...register("gracePeriod")} />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
                 </FormControl>
 
                 <FormControl
@@ -383,6 +397,31 @@ export function DeployNewVaultButton() {
                 </FormControl>
 
                 <Button
+                  type="button"
+                  colorScheme="red"
+                  mt={4}
+                  w="100%"
+                  onClick={() =>
+                    reset({
+                      asset: undefined,
+                      namePrefix: undefined,
+                      symbolPrefix: undefined,
+                      borrower: undefined,
+                      controller: controller?.address,
+                      maxTotalSupply: 0,
+                      annualInterestBips: 0,
+                      penaltyFeeBips: 0,
+                      gracePeriod: 0,
+                      liquidityCoverageRatio: 0,
+                      interestFeeBips: 0,
+                      feeRecipient: undefined,
+                    })
+                  }
+                >
+                  Reset Form
+                </Button>
+
+                <Button
                   type="submit"
                   colorScheme="blue"
                   mt={4}
@@ -402,7 +441,7 @@ export function DeployNewVaultButton() {
           </ModalBody>
 
           <ModalFooter borderTop="1px solid #cccccc" mt={4}>
-            <Button type="button" w="100%">
+            <Button type="button" w="100%" onClick={handleClose}>
               Close
             </Button>
           </ModalFooter>
