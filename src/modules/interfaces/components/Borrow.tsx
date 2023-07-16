@@ -90,7 +90,9 @@ export function Borrow() {
                     <Text display="inline" mr={1} fontWeight="bold">
                       Maximum Capacity:
                     </Text>
-                    <Text display="inline">69</Text>
+                    <Text display="inline">
+                      {vaultAccount.vault.maxTotalSupply.format(2)}
+                    </Text>
                   </Box>
 
                   <Box>
