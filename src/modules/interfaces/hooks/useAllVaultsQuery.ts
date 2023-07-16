@@ -6,8 +6,9 @@ export function useAllVaultsQuery() {
   const provider = useProvider();
 
   const handleVaults = async () => {
-    console.log("about to call getAllVaults()");
-    return await getAllVaults(provider);
+    const allVaults = await getAllVaults(provider);
+    console.log(allVaults);
+    return allVaults;
   };
 
   return useQuery({
