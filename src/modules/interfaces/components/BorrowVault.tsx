@@ -12,8 +12,11 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
+  InputGroup,
+  InputRightAddon,
 } from "@chakra-ui/react";
 import { VaultAccount } from "@wildcatfi/wildcat-sdk";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
 interface Props {
@@ -21,6 +24,8 @@ interface Props {
 }
 
 export function BorrowVault({ vaultAccount }: Props) {
+  const queryClient = useQueryClient();
+
   const { register: withdrawRegister, handleSubmit: withdrawSubmit } = useForm({
     defaultValues: {
       withdrawAmount: 0,
@@ -39,6 +44,20 @@ export function BorrowVault({ vaultAccount }: Props) {
         newAprAmount: 0,
       },
     });
+
+  const { mutate: handleSetAPR, isLoading: isSettingAPR } = useMutation({
+    mutationFn: async ({ newAprAmount }: { newAprAmount: number }) => {
+      const amount = newAprAmount * 100;
+      await vaultAccount.setAPR(amount);
+    },
+    onSuccess() {
+      queryClient.invalidateQueries(["allVaults"]);
+    },
+    onError(e) {
+      console.log(e);
+      window.alert("Error setting new vault APR!");
+    },
+  });
 
   return (
     <Box borderRadius="md" border="1px solid #cccccc" p={4}>
@@ -134,7 +153,10 @@ export function BorrowVault({ vaultAccount }: Props) {
                     </Text>
                   </FormLabel>
                   <NumberInput size="sm">
-                    <NumberInputField {...withdrawRegister} min={0} />
+                    <NumberInputField
+                      {...withdrawRegister("withdrawAmount")}
+                      min={0}
+                    />
                     <NumberInputStepper>
                       <NumberIncrementStepper />
                       <NumberDecrementStepper />
@@ -178,7 +200,10 @@ export function BorrowVault({ vaultAccount }: Props) {
                     </Text>
                   </FormLabel>
                   <NumberInput size="sm">
-                    <NumberInputField {...repayRegister} min={0} />
+                    <NumberInputField
+                      {...repayRegister("repayAmount")}
+                      min={0}
+                    />
                     <NumberInputStepper>
                       <NumberIncrementStepper />
                       <NumberDecrementStepper />
@@ -206,12 +231,10 @@ export function BorrowVault({ vaultAccount }: Props) {
           <Box>
             <form
               method="post"
-              onSubmit={aprAdjustSubmit(() =>
-                console.log("apr adjust submitted")
-              )}
+              onSubmit={aprAdjustSubmit((data) => handleSetAPR(data))}
             >
               <Flex alignItems="flex-end">
-                <FormControl mr={2}>
+                <FormControl>
                   <FormLabel
                     fontSize="12px"
                     fontWeight="bold"
@@ -219,13 +242,19 @@ export function BorrowVault({ vaultAccount }: Props) {
                   >
                     New Interest Rate
                   </FormLabel>
-                  <NumberInput size="sm">
-                    <NumberInputField {...aprAdjustRegister} min={0} />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
+                  <InputGroup size="sm">
+                    <NumberInput precision={2} step={0.01}>
+                      <NumberInputField
+                        min={0}
+                        {...aprAdjustRegister("newAprAmount")}
+                      />
+                      <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                      </NumberInputStepper>
+                    </NumberInput>
+                    <InputRightAddon children="%" />
+                  </InputGroup>
                 </FormControl>
 
                 <Button
@@ -233,7 +262,8 @@ export function BorrowVault({ vaultAccount }: Props) {
                   size="sm"
                   colorScheme="blue"
                   px={6}
-                  isDisabled={!vaultAccount.vault.canChangeAPR}
+                  isDisabled={!vaultAccount.vault.canChangeAPR || isSettingAPR}
+                  isLoading={isSettingAPR}
                 >
                   Adjust
                 </Button>
