@@ -110,7 +110,9 @@ export function BorrowVault({ vaultAccount }: Props) {
             <Text display="inline" mr={1} fontWeight="bold">
               Current Liqidity Ratio:
             </Text>
-            <Text display="inline">69</Text>
+            <Text display="inline">
+              {vaultAccount.vault.liquidityCoverageBips / 100}%
+            </Text>
           </Box>
 
           <Box>
