@@ -1,33 +1,27 @@
-import { useCallback, useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useState,  } from "react";
 import { VaultController } from "@wildcatfi/wildcat-sdk";
-import { useAllVaultsQuery } from "./useAllVaultsQuery";
+import { ControllerAddress } from "@wildcatfi/wildcat-sdk/dist/constants";
 import { useProvider } from "./useProvider";
 import { useEthersSigner } from "../../common/hooks/useEthersSigner";
 
+// @todo update when signer changes
 export function useController() {
-  const [controller, setController] = useState<VaultController | undefined>(
-    undefined
-  );
-  const { data: vaults } = useAllVaultsQuery();
   const provider = useProvider();
   const signer = useEthersSigner();
-
-  const controllerAddress = useMemo(() => {
-    return vaults.length ? vaults[0].controller : "";
-  }, [vaults]);
+  const [controller, setController] = useState<VaultController>(
+    new VaultController(ControllerAddress, signer ?? provider)
+  );
 
   const handleController = useCallback(() => {
     console.log("calling handleController()");
-    if (controllerAddress !== "") {
-      setController(new VaultController(controllerAddress, signer ?? provider));
-    }
-  }, [controllerAddress, provider, signer]);
+    setController(new VaultController(ControllerAddress, signer ?? provider));
+  }, [provider, signer, setController]);
 
   useEffect(() => {
-    if (!controller && controllerAddress && vaults.length) {
+    if (controller.provider !== (signer ?? provider)) {
       handleController();
     }
-  }, [controller, controllerAddress, handleController, vaults]);
+  }, [controller, handleController, signer, provider ]);
 
   return controller;
 }
