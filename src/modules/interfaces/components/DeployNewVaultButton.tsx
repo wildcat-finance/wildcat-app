@@ -22,6 +22,7 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   Spinner,
+  Collapse,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -31,6 +32,10 @@ import { useIsOpen } from "../../common/hooks";
 import { useController } from "../hooks/useController";
 import { Token, TokenAmount } from "@wildcatfi/wildcat-sdk";
 import { parseUnits } from "ethers/lib/utils";
+import { useTokenMetadata } from "../hooks/useToken";
+import { useMockTokenFactory } from "../hooks/useMockTokenFactory";
+import { ControllerAddress } from "@wildcatfi/wildcat-sdk/dist/constants";
+import { constants } from "ethers";
 
 interface NewVaultValues {
   asset?: string;
@@ -45,6 +50,122 @@ interface NewVaultValues {
   liquidityCoverageRatio?: number;
   interestFeeBips?: number;
   feeRecipient?: string;
+}
+type NewTokenValues = {
+  name?: string;
+  symbol?: string;
+};
+function MockTokenForm({
+  handleTokenDeployed,
+}: {
+  handleTokenDeployed: (token: Token) => void;
+}) {
+  const { register, handleSubmit, formState, watch, setValue, reset } = useForm(
+    {
+      defaultValues: {
+        name: undefined,
+        symbol: undefined,
+      } as NewTokenValues,
+    }
+  );
+  const tokenFactory = useMockTokenFactory();
+
+  const signer = useEthersSigner();
+
+  const queryClient = useQueryClient();
+
+  const { isOpen, handleOpen, handleClose, handleToggle } = useIsOpen();
+
+  const { mutate: deployNewToken, isLoading: isDeploying } = useMutation({
+    mutationFn: async ({ name, symbol }: NewTokenValues) => {
+      if (!signer || !name || !symbol) {
+        console.log({ signer, name, symbol });
+        throw Error("Missing signer or token name/symbol");
+      }
+      const token = await tokenFactory.deployToken(name, symbol);
+      return token;
+    },
+    onSuccess(token) {
+      queryClient.invalidateQueries({ queryKey: ["allVaults"] });
+      handleClose();
+      handleTokenDeployed(token);
+    },
+    onError: function (error) {
+      console.log(error);
+      window.alert((error as Error).message ?? "Error deploying vault");
+    },
+  });
+
+  const onSubmit = useCallback(
+    (data: NewTokenValues) => deployNewToken(data),
+    [deployNewToken]
+  );
+
+  return (
+    <Box>
+      <Button colorScheme="blue" onClick={handleToggle}>
+        Deploy Mock Token
+      </Button>
+      <Collapse in={isOpen}>
+        <form method="post" onSubmit={handleSubmit(onSubmit)}>
+          <Box as="fieldset" disabled={formState.isSubmitting}>
+            <FormControl
+              mt={2}
+              isInvalid={typeof formState.errors.name !== "undefined"}
+            >
+              <FormLabel htmlFor="name">Mock Token Name</FormLabel>
+              <Input
+                placeholder="Token"
+                {...register("name", {
+                  required: true,
+                  minLength: {
+                    value: 4,
+                    message: "Name prefix must be at least 4 characters",
+                  },
+                })}
+              />
+              <FormErrorMessage>
+                {formState.errors.name && formState.errors.name.message}
+              </FormErrorMessage>
+            </FormControl>
+
+            <FormControl
+              mt={2}
+              isInvalid={typeof formState.errors.symbol !== "undefined"}
+            >
+              <FormLabel htmlFor="symbolPrefix">Mock Token Symbol</FormLabel>
+              <Input
+                placeholder="XYZ"
+                {...register("symbol", {
+                  required: true,
+                  minLength: {
+                    value: 3,
+                    message: "Symbol must be at least 3 characters",
+                  },
+                })}
+              />
+              <FormErrorMessage>
+                {formState.errors.symbol && formState.errors.symbol.message}
+              </FormErrorMessage>
+            </FormControl>
+
+            <Button
+              type="submit"
+              colorScheme="blue"
+              mt={4}
+              w="100%"
+              isLoading={isDeploying}
+              disabled={
+                isDeploying || Object.values(formState.errors).length > 0
+              }
+            >
+              Submit
+            </Button>
+          </Box>
+        </form>
+      </Collapse>
+    </Box>
+  );
 }
 
 export function DeployNewVaultButton() {
@@ -63,14 +184,14 @@ export function DeployNewVaultButton() {
         namePrefix: undefined,
         symbolPrefix: undefined,
         borrower: undefined,
-        controller: undefined,
+        controller: ControllerAddress,
         maxTotalSupply: 0,
         annualInterestBips: 0,
         penaltyFeeBips: 0,
         gracePeriod: 0,
         liquidityCoverageRatio: 0,
-        interestFeeBips: 0,
-        feeRecipient: undefined,
+        interestFeeBips: 5,
+        feeRecipient: constants.AddressZero,
       } as NewVaultValues,
     }
   );
@@ -87,9 +208,8 @@ export function DeployNewVaultButton() {
     data: assetData,
     isLoading: assetDataLoading,
     isError: assetDataError,
-  } = useToken({
+  } = useTokenMetadata({
     address: assetWatch as `0x${string}`,
-    enabled: typeof assetWatch !== "undefined" && assetWatch.length === 42,
   });
 
   const queryClient = useQueryClient();
@@ -106,6 +226,7 @@ export function DeployNewVaultButton() {
         assetData.name,
         assetData.symbol,
         assetData.decimals,
+        false,
         signer
       );
 
@@ -173,6 +294,14 @@ export function DeployNewVaultButton() {
             <Text fontWeight="bold">New Vault</Text>
           </ModalHeader>
           <ModalBody>
+            <MockTokenForm
+              handleTokenDeployed={(token: Token) => {
+                window.alert(
+                  `Deployed token ${token.address}! ${token.name} || ${token.symbol}`
+                );
+                setValue("asset", token.address);
+              }}
+            />
             <form method="post" onSubmit={handleSubmit(onSubmit)}>
               <Box as="fieldset" disabled={formState.isSubmitting}>
                 <FormControl
@@ -267,7 +396,7 @@ export function DeployNewVaultButton() {
                       defaultValue={0.01}
                       min={0}
                       max={100}
-                      step={0.01}
+                      step={1}
                     >
                       <NumberInputField {...register("annualInterestBips")} />
                       <NumberInputStepper>
@@ -285,10 +414,10 @@ export function DeployNewVaultButton() {
                   </FormLabel>
                   <InputGroup>
                     <NumberInput
-                      defaultValue={0.01}
-                      min={0}
+                      defaultValue={10}
+                      min={10}
                       max={100}
-                      step={0.01}
+                      step={1}
                     >
                       <NumberInputField {...register("penaltyFeeBips")} />
                       <NumberInputStepper>
@@ -300,14 +429,14 @@ export function DeployNewVaultButton() {
                   </InputGroup>
                 </FormControl>
 
-                <FormControl mt={2}>
+                {/* <FormControl mt={2}>
                   <FormLabel htmlFor="interestFeeBips">Interest Fee</FormLabel>
                   <InputGroup>
                     <NumberInput
-                      defaultValue={0.01}
+                      defaultValue={0}
                       min={0}
                       max={100}
-                      step={0.01}
+                      step={1}
                     >
                       <NumberInputField {...register("interestFeeBips")} />
                       <NumberInputStepper>
@@ -317,9 +446,9 @@ export function DeployNewVaultButton() {
                     </NumberInput>
                     <InputRightAddon children="%" />
                   </InputGroup>
-                </FormControl>
+                </FormControl> */}
 
-                <FormControl
+                {/* <FormControl
                   mt={2}
                   isInvalid={typeof formState.errors.controller !== "undefined"}
                 >
@@ -335,7 +464,7 @@ export function DeployNewVaultButton() {
                     {formState.errors.controller &&
                       formState.errors.controller.message}
                   </FormErrorMessage>
-                </FormControl>
+                </FormControl> */}
 
                 <FormControl mt={2}>
                   <FormLabel htmlFor="liquidityCoverageRatio">
@@ -343,10 +472,10 @@ export function DeployNewVaultButton() {
                   </FormLabel>
                   <InputGroup>
                     <NumberInput
-                      defaultValue={0.01}
-                      min={0}
+                      defaultValue={10}
+                      min={10}
                       max={100}
-                      step={0.01}
+                      step={1}
                     >
                       <NumberInputField
                         {...register("liquidityCoverageRatio")}
@@ -364,7 +493,7 @@ export function DeployNewVaultButton() {
                   <FormLabel htmlFor="gracePeriod">
                     Grace Period (Hours)
                   </FormLabel>
-                  <NumberInput min={0} step={1}>
+                  <NumberInput min={0} step={1} max={24}>
                     <NumberInputField {...register("gracePeriod")} />
                     <NumberInputStepper>
                       <NumberIncrementStepper />
@@ -373,7 +502,7 @@ export function DeployNewVaultButton() {
                   </NumberInput>
                 </FormControl>
 
-                <FormControl
+                {/* <FormControl
                   mt={2}
                   isInvalid={
                     typeof formState.errors.feeRecipient !== "undefined"
@@ -394,7 +523,7 @@ export function DeployNewVaultButton() {
                     {formState.errors.feeRecipient &&
                       formState.errors.feeRecipient.message}
                   </FormErrorMessage>
-                </FormControl>
+                </FormControl> */}
 
                 <Button
                   type="button"
