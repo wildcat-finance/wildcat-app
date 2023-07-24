@@ -12,9 +12,21 @@ export function useAllVaultsForUser() {
   const signer = useEthersSigner();
 
   async function getVaultsForUser() {
-    return (await getAllVaultAccountsForUser(
+    const vaultAccounts = (await getAllVaultAccountsForUser(
       signer as Signer
     )) as VaultAccount[];
+    const score = (acct: VaultAccount) => {
+      const b = acct.isBorrower() ? 4 : 0;
+      const u = acct.userHasUnderlyingBalance ? 1 : 0;
+      const v = acct.userHasBalance ? 2 : 0;
+      return b + u + v;
+    };
+    vaultAccounts.sort((a, b) => {
+      let aScore = score(a);
+      let bScore = score(b);
+      return bScore - aScore
+    });
+    return vaultAccounts;
   }
 
   return useQuery({
