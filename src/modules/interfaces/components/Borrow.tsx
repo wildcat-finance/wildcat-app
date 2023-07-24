@@ -11,7 +11,8 @@ export function Borrow() {
   const { data: allVaults } = useAllVaultsForUser();
 
   const userVaults = useMemo(() => {
-    return allVaults.filter((vault) => vault.isBorrower());
+    const res = allVaults.filter((vault) => vault.isBorrower());
+    return res;
   }, [allVaults]);
 
   const shortenedAddress = useMemo(() => {

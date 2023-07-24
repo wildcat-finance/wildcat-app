@@ -18,6 +18,7 @@ import {
 import { VaultAccount } from "@wildcatfi/wildcat-sdk";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { VaultInfoSidebar } from "./VaultDisplay";
 
 interface Props {
   vaultAccount: VaultAccount;
@@ -74,61 +75,7 @@ export function BorrowVault({ vaultAccount }: Props) {
       </Box>
 
       <Flex mt={2}>
-        <VStack
-          spacing={1}
-          fontSize="12px"
-          maxWidth="50%"
-          align="stretch"
-          mr={8}
-        >
-          <Box>
-            <Text display="inline" mr={1} fontWeight="bold">
-              Interest Rate:
-            </Text>
-            <Text display="inline">
-              {vaultAccount.vault.annualInterestBips / 100}%
-            </Text>
-          </Box>
-
-          <Box>
-            <Text display="inline" mr={1} fontWeight="bold">
-              Maximum Capacity:
-            </Text>
-            <Text display="inline">
-              {vaultAccount.vault.maxTotalSupply.format(2)}
-            </Text>
-          </Box>
-
-          <Box>
-            <Text display="inline" mr={1} fontWeight="bold">
-              Current Capacity:
-            </Text>
-            <Text display="inline">69</Text>
-          </Box>
-
-          <Box>
-            <Text display="inline" mr={1} fontWeight="bold">
-              Current Liqidity Ratio:
-            </Text>
-            <Text display="inline">
-              {vaultAccount.vault.liquidityCoverageBips / 100}%
-            </Text>
-          </Box>
-
-          <Box>
-            <Text display="inline" mr={1} fontWeight="bold">
-              Allowed Liqidity Ratio:
-            </Text>
-            <Text display="inline">69</Text>
-          </Box>
-
-          <Box>
-            <Text display="inline" mr={1} fontWeight="bold">
-              Grace Period (hours):
-            </Text>
-            <Text display="inline">{vaultAccount.vault.gracePeriod}</Text>
-          </Box>
-        </VStack>
+        <VaultInfoSidebar vaultAccount={vaultAccount} />
 
         <VStack spacing={3} fontSize="12px" maxWidth="50%" align="stretch">
           <Box>
