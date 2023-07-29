@@ -1,17 +1,22 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { Box, Flex, Text, VStack } from "@chakra-ui/react";
 import { useAccount } from "wagmi";
 import { DeployNewVaultButton } from "./DeployNewVaultButton";
 import { BorrowVault } from "./BorrowVault";
-import { useAllVaultsForUser } from "../../interfaces/hooks/useAllVaultsForUser";
+import { VaultAccount } from "@wildcatfi/wildcat-sdk";
 
-export function Borrow() {
+export interface Props {
+  allVaults: VaultAccount[];
+}
+
+export function Borrow({ allVaults }: Props) {
   const { address } = useAccount();
 
-  const { data: allVaults } = useAllVaultsForUser();
+  console.log(`Rendering Borrow`)
 
   const userVaults = useMemo(() => {
-    return allVaults.filter((vault) => vault.isBorrower());
+    const res = allVaults.filter((vault) => vault.isBorrower);
+    return res;
   }, [allVaults]);
 
   const shortenedAddress = useMemo(() => {

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer } from "react";
-import { getAllVaults, Vault } from "@wildcatfi/wildcat-sdk";
+import { getAllVaultsData, Vault } from "@wildcatfi/wildcat-sdk";
 import { useProvider } from "./useProvider";
 
 interface State {
@@ -45,7 +45,7 @@ export function useAllVaults() {
   const handleVaults = useCallback(async () => {
     try {
       dispatch({ type: "started" });
-      const vaults = await getAllVaults(provider);
+      const vaults = await getAllVaultsData(provider);
       dispatch({ type: "success", payload: vaults });
     } catch (e) {
       console.log(e);
