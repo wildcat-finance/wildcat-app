@@ -1,13 +1,15 @@
-import React from "react";
 import { Box, Flex, Text, VStack } from "@chakra-ui/react";
 import { useAccount } from "wagmi";
 import { LendVault } from "./LendVault";
-import { useAllVaultsForUser } from "../hooks/useAllVaultsForUser";
+import { VaultAccount } from "@wildcatfi/wildcat-sdk";
 
-export function Lend() {
+export interface Props {
+  allVaults: VaultAccount[];
+}
+
+export function Lend({ allVaults }: Props) {
   const { address } = useAccount();
-
-  const { data: allVaults } = useAllVaultsForUser();
+  console.log(`Rendering Lend`);
 
   return (
     <Box>

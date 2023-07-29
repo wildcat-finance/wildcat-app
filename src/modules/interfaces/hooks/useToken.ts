@@ -1,9 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAccount } from "wagmi";
 import {
   Token,
   Signer,
-  VaultAccount,
 } from "@wildcatfi/wildcat-sdk";
 import { useEthersSigner } from "../../common/hooks";
 
@@ -13,7 +11,7 @@ export function useTokenMetadata({ address } : { address: string | undefined }) 
   async function getToken() {
     console.log(`Getting token metadata for ${address}`)
     if (address !== undefined && signer !== undefined && address.length === 42) {
-      const token = await Token.getTokenInfo(address, signer as Signer);
+      const token = await Token.getTokenData(address, signer as Signer);
       console.log(token);
       return token;
     }

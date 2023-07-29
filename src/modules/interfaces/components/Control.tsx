@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Stack, Text, Input } from "@chakra-ui/react";
 import { useController } from "../hooks";
 

@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { TokenFactory } from "@wildcatfi/wildcat-sdk/dist/mockerc20factory";
-import { Signer } from "@wildcatfi/wildcat-sdk/dist/types";
 import { useProvider } from "./useProvider";
 import { useEthersSigner } from "../../common/hooks/useEthersSigner";
 

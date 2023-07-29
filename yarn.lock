@@ -4610,10 +4610,10 @@
     "@webassemblyjs/ast" "1.11.6"
     "@xtuc/long" "4.2.2"
 
-"@wildcatfi/wildcat-sdk@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@wildcatfi/wildcat-sdk/-/wildcat-sdk-1.0.7.tgz#7c5084985649b674a2b839c074f41381247747b4"
-  integrity sha512-Z2MaqglXKXm4YJfXfA3NLS6HAGrWXj8hApdyffKW9b2B5g4u/FQHHfZ6/Blv0kZlsK+pTYEvzvU5Ku6qrM+ehg==
+"@wildcatfi/wildcat-sdk@^1.0.15":
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/@wildcatfi/wildcat-sdk/-/wildcat-sdk-1.0.15.tgz#9eef355917d52a6e528ba134af632361a3bc044f"
+  integrity sha512-xDoG/0N0kffBOquuDT8mdCuDHI7u1Gh0yOl+yBERYVtvctBVUXiWoQ61GKT1KWNgiC1rhVTN/lul38cYD9QNUQ==
   dependencies:
     ethers "^5.5.3"
 
@@ -9214,6 +9214,11 @@ mkdirp@~0.5.1:
   integrity sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==
   dependencies:
     minimist "^1.2.6"
+
+moment@^2.29.4:
+  version "2.29.4"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
+  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
 
 motion@10.16.2:
   version "10.16.2"

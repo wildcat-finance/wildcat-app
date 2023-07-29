@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import {
   Box,
   Button,
@@ -26,7 +26,7 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAccount, useToken } from "wagmi";
+import { useAccount } from "wagmi";
 import { useEthersSigner } from "../../common/hooks/useEthersSigner";
 import { useIsOpen } from "../../common/hooks";
 import { useController } from "../hooks/useController";
@@ -60,6 +60,7 @@ function MockTokenForm({
 }: {
   handleTokenDeployed: (token: Token) => void;
 }) {
+  const { address } = useAccount();
   const { register, handleSubmit, formState, watch, setValue, reset } = useForm(
     {
       defaultValues: {
@@ -87,6 +88,7 @@ function MockTokenForm({
     },
     onSuccess(token) {
       queryClient.invalidateQueries({ queryKey: ["allVaults"] });
+      queryClient.invalidateQueries(["vaultsForUser", address]);
       handleClose();
       handleTokenDeployed(token);
     },
@@ -392,12 +394,7 @@ export function DeployNewVaultButton() {
                     Annual Interest Rate (APR)
                   </FormLabel>
                   <InputGroup>
-                    <NumberInput
-                      defaultValue={0.01}
-                      min={0}
-                      max={100}
-                      step={1}
-                    >
+                    <NumberInput defaultValue={0.01} min={0} max={100} step={1}>
                       <NumberInputField {...register("annualInterestBips")} />
                       <NumberInputStepper>
                         <NumberIncrementStepper />
@@ -413,12 +410,7 @@ export function DeployNewVaultButton() {
                     Penalty Fee Rate
                   </FormLabel>
                   <InputGroup>
-                    <NumberInput
-                      defaultValue={10}
-                      min={10}
-                      max={100}
-                      step={1}
-                    >
+                    <NumberInput defaultValue={10} min={10} max={100} step={1}>
                       <NumberInputField {...register("penaltyFeeBips")} />
                       <NumberInputStepper>
                         <NumberIncrementStepper />
@@ -471,12 +463,7 @@ export function DeployNewVaultButton() {
                     Liquidity Coverage Ratio
                   </FormLabel>
                   <InputGroup>
-                    <NumberInput
-                      defaultValue={10}
-                      min={10}
-                      max={100}
-                      step={1}
-                    >
+                    <NumberInput defaultValue={10} min={10} max={100} step={1}>
                       <NumberInputField
                         {...register("liquidityCoverageRatio")}
                       />

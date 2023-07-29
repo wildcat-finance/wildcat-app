@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAccount } from "wagmi";
 import {
-  getAllVaultAccountsForUser,
+  getAllVaultAccounts,
   Signer,
   VaultAccount,
 } from "@wildcatfi/wildcat-sdk";
@@ -12,11 +12,12 @@ export function useAllVaultsForUser() {
   const signer = useEthersSigner();
 
   async function getVaultsForUser() {
-    const vaultAccounts = (await getAllVaultAccountsForUser(
-      signer as Signer
+    const vaultAccounts = (await getAllVaultAccounts(
+      signer as Signer,
+      address as string
     )) as VaultAccount[];
     const score = (acct: VaultAccount) => {
-      const b = acct.isBorrower() ? 4 : 0;
+      const b = acct.isBorrower ? 4 : 0;
       const u = acct.userHasUnderlyingBalance ? 1 : 0;
       const v = acct.userHasBalance ? 2 : 0;
       return b + u + v;

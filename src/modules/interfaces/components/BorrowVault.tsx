@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   Flex,
@@ -19,6 +18,10 @@ import { VaultAccount } from "@wildcatfi/wildcat-sdk";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { VaultInfoSidebar } from "./VaultDisplay";
+import { BorrowForm } from "./forms/BorrowForm";
+import { AddTokenButton } from "./AddTokenButton";
+import { RepayForm } from "./forms/RepayForm";
+import { AdjustInterestRateForm } from "./forms/AdjustInterestRateForm";
 
 interface Props {
   vaultAccount: VaultAccount;
@@ -26,18 +29,6 @@ interface Props {
 
 export function BorrowVault({ vaultAccount }: Props) {
   const queryClient = useQueryClient();
-
-  const { register: withdrawRegister, handleSubmit: withdrawSubmit } = useForm({
-    defaultValues: {
-      withdrawAmount: 0,
-    },
-  });
-
-  const { register: repayRegister, handleSubmit: repaySubmit } = useForm({
-    defaultValues: {
-      repayAmount: 0,
-    },
-  });
 
   const { register: aprAdjustRegister, handleSubmit: aprAdjustSubmit } =
     useForm({
@@ -72,6 +63,7 @@ export function BorrowVault({ vaultAccount }: Props) {
         <Text display="inline" as="mark">
           {vaultAccount.vault.underlyingToken.name}
         </Text>
+        <AddTokenButton vaultAccount={vaultAccount} />
       </Box>
 
       <Flex mt={2}>
@@ -79,106 +71,13 @@ export function BorrowVault({ vaultAccount }: Props) {
 
         <VStack spacing={3} fontSize="12px" maxWidth="50%" align="stretch">
           <Box>
-            <form
-              method="post"
-              onSubmit={withdrawSubmit(() =>
-                console.log({
-                  disabled:
-                    vaultAccount.vault.borrowableAssets.format(2) === "0",
-                })
-              )}
-            >
-              <Flex alignItems="flex-end">
-                <FormControl mr={2}>
-                  <FormLabel htmlFor="withdrawAmount" fontSize="12px">
-                    <Text display="inline" mr={1} fontWeight="bold">
-                      Available to Withdraw:
-                    </Text>
-                    <Text display="inline" mr={1}>
-                      {vaultAccount.vault.borrowableAssets.format(2)}
-                    </Text>
-                    <Text display="inline">
-                      {vaultAccount.vaultBalance.token.symbol}
-                    </Text>
-                  </FormLabel>
-                  <NumberInput size="sm">
-                    <NumberInputField
-                      {...withdrawRegister("withdrawAmount")}
-                      min={0}
-                    />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
-                </FormControl>
-
-                <Button
-                  type="submit"
-                  size="sm"
-                  colorScheme="blue"
-                  px={6}
-                  isDisabled={
-                    vaultAccount.vault.borrowableAssets.format(2) === "0"
-                  }
-                >
-                  Withdraw
-                </Button>
-              </Flex>
-            </form>
+            <BorrowForm vaultAccount={vaultAccount} />
           </Box>
 
-          <Box>
-            <form
-              method="post"
-              onSubmit={repaySubmit(() => console.log("repay submitted"))}
-            >
-              <Flex alignItems="flex-end">
-                <FormControl mr={2}>
-                  <FormLabel htmlFor="repayAmount" fontSize="12px">
-                    <Text display="inline" mr={1} fontWeight="bold">
-                      Required to Repay:
-                    </Text>
-                    <Text display="inline" mr={1}>
-                      {vaultAccount.vault.collateralNeededForGoodStanding.format(
-                        2
-                      )}
-                    </Text>
-                    <Text display="inline">
-                      {vaultAccount.vaultBalance.token.symbol}
-                    </Text>
-                  </FormLabel>
-                  <NumberInput size="sm">
-                    <NumberInputField
-                      {...repayRegister("repayAmount")}
-                      min={0}
-                    />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
-                </FormControl>
-
-                <Button
-                  type="submit"
-                  size="sm"
-                  colorScheme="blue"
-                  px={6}
-                  isDisabled={
-                    vaultAccount.vault.collateralNeededForGoodStanding.format(
-                      2
-                    ) === "0"
-                  }
-                >
-                  Repay
-                </Button>
-              </Flex>
-            </form>
-          </Box>
-
-          <Box>
-            <form
+          <RepayForm vaultAccount={vaultAccount} />
+          <AdjustInterestRateForm vaultAccount={vaultAccount} />
+          {/* <Box> */}
+          {/*     <form
               method="post"
               onSubmit={aprAdjustSubmit((data) => handleSetAPR(data))}
             >
@@ -217,8 +116,8 @@ export function BorrowVault({ vaultAccount }: Props) {
                   Adjust
                 </Button>
               </Flex>
-            </form>
-          </Box>
+            </form> */}
+          {/* </Box> */}
         </VStack>
       </Flex>
     </Box>

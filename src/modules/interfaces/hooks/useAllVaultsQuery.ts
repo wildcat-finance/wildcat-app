@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllVaults, Vault } from "@wildcatfi/wildcat-sdk";
+import { getAllVaultsData, Vault } from "@wildcatfi/wildcat-sdk";
 import { useProvider } from "./useProvider";
 
 export function useAllVaultsQuery() {
   const provider = useProvider();
 
   const handleVaults = async () => {
-    const allVaults = await getAllVaults(provider);
+    const allVaults = await getAllVaultsData(provider);
     console.log(allVaults);
     return allVaults;
   };
