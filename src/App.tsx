@@ -15,6 +15,7 @@ import { useAccount } from "wagmi";
 import { WagmiProvider } from "./modules/wagmi/components";
 import { TopBar } from "./modules/common/components";
 import { Borrow, Lend } from "./modules/interfaces/components";
+import { UI } from './components/UI';
 import { useAllVaultsForUser } from "./modules/interfaces/hooks/useAllVaultsForUser";
 
 const queryClient = new QueryClient();
@@ -55,6 +56,8 @@ function Main() {
           </Text>
         )}
       </Box>
+
+      <UI />
     </Box>
   );
 }
