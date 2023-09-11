@@ -12,6 +12,9 @@ import {
 } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAccount } from "wagmi";
+
+import './styles/index.css';
+
 import { WagmiProvider } from "./modules/wagmi/components";
 import { TopBar } from "./modules/common/components";
 import { Borrow, Lend } from "./modules/interfaces/components";
