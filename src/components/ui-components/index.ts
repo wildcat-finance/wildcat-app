@@ -1,2 +1,2 @@
 export { Button } from './Button'
-export { Input } frgit om './Input'
+export { Input } from './Input'
