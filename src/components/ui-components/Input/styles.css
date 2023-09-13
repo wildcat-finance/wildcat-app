@@ -1,0 +1,9 @@
+@tailwind components;
+
+.wc-input {
+    @apply h-8 px-4
+}
+
+.wc-label {
+    @apply font-black
+}

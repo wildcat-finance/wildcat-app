@@ -1,4 +1,4 @@
-import Button from '../ui-components/Button'
+import { Button, Input } from '../ui-components'
 
 export const UI = () => {
     return (
@@ -8,6 +8,10 @@ export const UI = () => {
             </div>
             <div>
                 <Button variant="blue">Blue</Button>
+            </div>
+            <br />
+            <div>
+                <Input label="Label" value='123' />
             </div>
         </>
     )
