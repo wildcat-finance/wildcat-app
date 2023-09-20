@@ -6,6 +6,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        'border-black': '#000000',
         'black': '#232323',
         'blue': '#78BFC9',
         'green': '#7DA58A',
@@ -17,6 +18,7 @@ module.exports = {
       },
       borderRadius: {
         "sm": "10px",
+        "md": "16px"
       }
     }
   },
