@@ -13,7 +13,11 @@ module.exports = {
         'gold': '#857844',
         'red': '#932D2D',
         'sand': '#FFFEF2',
+        'tint-11': '#F0F7FA',
       },
+      borderRadius: {
+        "sm": "10px",
+      }
     }
   },
   plugins: [],

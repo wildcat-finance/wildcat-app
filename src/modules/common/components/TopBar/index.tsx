@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { ConnectButton } from "./ConnectButton";
-import { ColorModeSwitcher } from "../../../ColorModeSwitcher";
+import { ConnectButton } from "../ConnectButton";
+import { ColorModeSwitcher } from "../../../../ColorModeSwitcher";
 
 export function TopBar() {
   return (
