@@ -1,13 +1,14 @@
 import { NavItemProps } from './interface'
+import { Link } from 'react-router-dom';
 
 const NavItem = ({ link, name }: NavItemProps) => {
   return (
-    <a
-      href={link}
+    <Link
+      to={link}
       className='text-sm text-white underline font-bold'
     >
       {name}
-    </a>
+    </Link>
   )
 }
 

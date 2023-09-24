@@ -1,0 +1,1 @@
+export { default as AddNewVault } from './borrower/AddNewVault';
