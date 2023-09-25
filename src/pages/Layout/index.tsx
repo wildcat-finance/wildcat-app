@@ -1,13 +1,13 @@
+import { Outlet } from "react-router-dom";
+
 import { Header } from "../../components/Header";
 import { LayoutProps } from "./interface";
-import {AddNewVault} from "../index";
-import * as React from "react";
 
 const Layout = ({ children }: LayoutProps) => {
     return (
         <div>
             <Header />
-            <AddNewVault />
+            <Outlet />
         </div>
     )
 }

@@ -11,7 +11,8 @@ export const Input = (props: AriaTextFieldProps) => {
     const { labelProps, inputProps } = useTextField(props, ref);
 
     const cssClass = cn(
-        'wc-input'
+        'h-8 px-4 border border-border-black rounded-md',
+        { 'opac': props.isDisabled }
     )
 
     return (

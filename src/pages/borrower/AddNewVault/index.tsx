@@ -1,4 +1,4 @@
-const AddNewVault = () => {
+export const AddNewVault = () => {
 
     return (
         <div>
@@ -8,4 +8,4 @@ const AddNewVault = () => {
 
 }
 
-export default AddNewVault;
+export default AddNewVault

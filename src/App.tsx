@@ -9,10 +9,9 @@ import {
 } from "react-router-dom";
 
 import { WagmiProvider } from "./modules/wagmi/components";
-import { Header } from './components/Header'
-import { AddNewVault } from "./pages";
-import './styles/index.css';
 import Layout from "./pages/Layout";
+import { AddNewVault, BorrowerAgreement, HomePage } from "./pages";
+import './styles/index.css';
 
 const queryClient = new QueryClient();
 
@@ -22,13 +21,21 @@ const router = createBrowserRouter([
     element: <Layout />,
   },
   {
-    path: "borrower",
+    path: "/borrower",
     element: <Layout />,
     children: [
       {
+        path: "*",
+        element: <HomePage />,
+      },
+      {
         path: "add-new-vault",
         element: <AddNewVault />,
-      }
+      },
+      {
+        path: "agreement",
+        element: <BorrowerAgreement />,
+      },
     ]
   }
 ]);
