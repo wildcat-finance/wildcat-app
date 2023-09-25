@@ -10,7 +10,7 @@ export const Header = () => {
         <div className="h-20 bg-black px-8 py-4 flex items-center justify-between bg-">
             <WildcartLogo className="h-full" />
             <div className="flex flex-1 items-center justify-center gap-10">
-                <NavItem name="Borrowers" link="borrower/add-new-vault" />
+                <NavItem name="Borrowers" link="/borrower/add-new-vault" />
             </div>
             <ConnectButton />
         </div>
