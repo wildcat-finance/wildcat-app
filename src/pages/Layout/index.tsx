@@ -1,13 +1,15 @@
 import { Outlet } from "react-router-dom";
 
 import { Header } from "../../components/Header";
-import { LayoutProps } from "./interface";
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = () => {
     return (
         <div>
             <Header />
-            <Outlet />
+
+            <div className="p-10 w-full bg-sand">
+                <Outlet />
+            </div>
         </div>
     )
 }
