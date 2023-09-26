@@ -58,7 +58,7 @@ const BorrowerAgreement = () => {
     return (
         <>
             <h2 className={cssClassTitle}>
-                Wilcat Service Agreement
+                Wildcat Service Agreement
             </h2>
             <Paper className={cssClassPaper}>
                 <div className={cssClassContentWrapper}>
