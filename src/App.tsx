@@ -1,11 +1,7 @@
 import * as React from "react";
-import {
-  ChakraProvider,
-  theme,
-} from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
-  createBrowserRouter, RouterProvider, useNavigate,
+  createBrowserRouter, RouterProvider
 } from "react-router-dom";
 
 import { WagmiProvider } from "./modules/wagmi/components";
@@ -42,13 +38,10 @@ const router = createBrowserRouter([
 
 export const App = () => {
   return (
-    <ChakraProvider theme={theme}>
-        <QueryClientProvider client={queryClient}>
-          <WagmiProvider>
-            {/*<Header />*/}
-            <RouterProvider router={router} />
-          </WagmiProvider>
-        </QueryClientProvider>
-    </ChakraProvider>
+    <QueryClientProvider client={queryClient}>
+      <WagmiProvider>
+        <RouterProvider router={router} />
+      </WagmiProvider>
+    </QueryClientProvider>
   );
 };

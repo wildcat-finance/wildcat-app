@@ -2,27 +2,42 @@ import { useRef } from 'react';
 import { useTextField } from 'react-aria';
 import cn from 'classnames'
 
+import { Tooltip } from "../Tooltip";
 import { InputProps } from "./interface";
 
 export const Input = (props: InputProps) => {
-    const { label, endDecorator } = props;
+    const {
+        label,
+        endDecorator,
+        inputClassName ,
+        className,
+        tooltip
+    } = props;
     const ref = useRef(null);
     const { labelProps, inputProps } = useTextField(props, ref);
 
-    const cssClass = cn(
-        'h-8 px-4 border border-tint-9 bg-white',
-        { 'opacity-50': props.isDisabled }
+    const inputCssClass = cn(
+        'h-8 px-3 text-xxs border border-tint-9 bg-white outline-none',
+        { 'opacity-50': props.isDisabled },
+        inputClassName
     )
 
     return (
-        <div className="flex flex-col">
-            <label {...labelProps} className="font-black">{label}</label>
+        <div className={cn('flex flex-col', className)}>
+            <div className="flex justify-between w-full items-start">
+                <label {...labelProps} className="font-bold text-xxs mb-2">
+                    {label}
+                </label>
+
+                { tooltip && <Tooltip content={tooltip} /> }
+            </div>
+
             <div className="flex">
                 <input
                     {...inputProps}
-                    className={cssClass} ref={ref}
+                    className={inputCssClass}
+                    ref={ref}
                 />
-
                 {endDecorator}
             </div>
         </div>

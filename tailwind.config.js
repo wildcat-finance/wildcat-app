@@ -10,6 +10,9 @@ module.exports = {
         '3xl': '756px',
         '1xl': '570px',
       },
+      fontSize: {
+        'xxs': '.65rem',
+      },
       colors: {
         'border-black': '#000000',
         'black': '#232323',
@@ -21,6 +24,7 @@ module.exports = {
         'gold': '#857844',
         'red': '#932D2D',
         'sand': "#FFFEF2",
+        'orange': '#F3A436',
         'tint': {
           1: '#393938',
           2: '#4F4F4C',

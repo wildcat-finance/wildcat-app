@@ -92,8 +92,8 @@ const ServiceAgreement = () => {
                 </div>
             </Paper>
             <div className="flex items-center justify-center mt-8">
-                <Button className="flex py-1.5 px-2.5 items-center" variant='black'>
-                    <span>Continue to Vaults</span>
+                <Button variant='black'>
+                    Continue to Vaults
                 </Button>
             </div>
         </>
