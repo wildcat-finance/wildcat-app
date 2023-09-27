@@ -12,6 +12,9 @@
     @apply wc-btn bg-brown;
 }
 
+.wc-btn-white-brown {
+    @apply wc-btn bg-white-brown;
+}
 .wc-btn-gold {
     @apply wc-btn bg-gold;
 }

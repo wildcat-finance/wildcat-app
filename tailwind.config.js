@@ -1,16 +1,23 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin')
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
     extend: {
+      maxHeight: {
+        '3xl': '756px',
+        '1xl': '570px',
+      },
       colors: {
         'border-black': '#000000',
         'black': '#232323',
         'blue': '#78BFC9',
+        'cian': '#BDD6ED',
         'green': '#7DA58A',
         'brown': '#854C31',
+        'white-brown': '#857844',
         'gold': '#857844',
         'red': '#932D2D',
         'sand': "#FFFEF2",
@@ -37,6 +44,13 @@ module.exports = {
       }
     }
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+    plugin(function ({ addBase, theme }) {
+      addBase({
+        'h1': { fontSize: theme('fontSize.2xl') },
+      })
+    })
+  ],
 }
 

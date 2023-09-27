@@ -10,7 +10,7 @@ import {
 
 import { WagmiProvider } from "./modules/wagmi/components";
 import Layout from "./pages/Layout";
-import { AddNewVault, BorrowerAgreement, HomePage } from "./pages";
+import { AddNewVault, ServiceAgreement, HomePage } from "./pages";
 import './styles/index.css';
 
 const queryClient = new QueryClient();
@@ -34,7 +34,7 @@ const router = createBrowserRouter([
       },
       {
         path: "agreement",
-        element: <BorrowerAgreement />,
+        element: <ServiceAgreement />,
       },
     ]
   }
