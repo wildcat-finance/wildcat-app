@@ -6,4 +6,5 @@ export type ButtonProps = {
     children?: ReactNode,
     onClick?: () => void,
     className?: string,
+    icon?: ReactNode,
 }
