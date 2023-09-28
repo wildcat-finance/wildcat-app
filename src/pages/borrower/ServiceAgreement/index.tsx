@@ -5,12 +5,14 @@ import { BluePaper } from '../../../components/ui-components/BluePaper';
 import { Button } from '../../../components/ui-components/Button';
 import { DownloadIcon, SignIcon } from "../../../components/ui-components/icons";
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
+import VaultCard from "../MyVaults/VaultCard/index"
 
 const ServiceAgreement = () => {
     const navigate = useNavigate();
 
     return (
         <>
+        <VaultCard />
             <div className="text-green text-2xl font-black mb-8 w-2/3">
                 Wildcat Service Agreement
             </div>
