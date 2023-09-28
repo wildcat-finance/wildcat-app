@@ -1,12 +1,18 @@
 import { Paper } from '../../../components/ui-components';
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
+import { Button } from '../../../components/ui-components/Button';
 
-export const MyVaults = () => {
+const MyVaults = () => {
 
     return (
         <div>
-            <div className="text-green text-2xl font-black mb-8 w-2/3">
-                New Vault
+            <div className="text-xs font-black mb-8">
+                My Vault
+                <div className='text-green text-2xl font-black justify-between items-center flex'>
+                    Active Vaults for borrower peaches.eth
+                <Button variant='blue'>New Vault</Button>
+
+                </div>
             </div>
 
             <Paper className="p-8 bg-tint-10 border-tint-8">
