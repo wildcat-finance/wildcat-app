@@ -2,6 +2,7 @@ import { Input, Paper } from '../../../components/ui-components';
 import { useNavigate } from "react-router-dom";
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
 import { Button } from '../../../components/ui-components/Button';
+import VaultCard from './VaultCard';
 
 const MyVaults = () => {
     const navigate = useNavigate();
@@ -23,8 +24,17 @@ const MyVaults = () => {
                 </div>
             </div>
 
-            <Paper className="p-8 bg-tint-10 border-tint-8">
-                Vaults list
+            <Paper className=" bg-tint-10 border-tint-8 flex items-center flex-wrap gap-5 border-0 bg-sand">
+                <div className='flex gap-5 w-full'>
+            <VaultCard className='w-full'/>
+            <VaultCard className='w-full'/>
+            <VaultCard className='w-full'/>
+            </div>
+            <div className='flex gap-5 w-full'>
+            <VaultCard className='w-full'/>
+            <VaultCard className='w-full'/>
+            <div className='w-full'/>
+            </div>
             </Paper>
 
             <ServiceAgreementCard
