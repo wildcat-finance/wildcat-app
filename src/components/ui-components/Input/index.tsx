@@ -17,7 +17,7 @@ export const Input = (props: InputProps) => {
     const { labelProps, inputProps } = useTextField(props, ref);
 
     const inputCssClass = cn(
-        'h-8 px-3 text-xxs border border-tint-9 bg-white outline-none',
+        'h-8 px-3 text-xxs border border-tint-9 w-full bg-white outline-none',
         { 'opacity-50': props.isDisabled },
         inputClassName
     )
