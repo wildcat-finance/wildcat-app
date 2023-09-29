@@ -24,6 +24,8 @@ module.exports = {
         'white-brown': '#857844',
         'gold': '#857844',
         'red': '#932D2D',
+        'red-border': '#CF292380',
+        'red-error': '#CF2923',
         'sand': "#FFFEF2",
         'orange': '#F3A436',
         'tint': {

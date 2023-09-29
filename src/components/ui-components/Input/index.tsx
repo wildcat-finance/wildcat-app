@@ -9,7 +9,7 @@ export const Input = (props: InputProps) => {
     const {
         label,
         endDecorator,
-        inputClassName ,
+        inputClassName,
         className,
         tooltip
     } = props;
@@ -17,21 +17,22 @@ export const Input = (props: InputProps) => {
     const { labelProps, inputProps } = useTextField(props, ref);
 
     const inputCssClass = cn(
-        'h-8 px-3 text-xxs border border-tint-9 w-full bg-white outline-none',
+        'h-8 px-3 text-xxs border w-full bg-white outline-none',
         { 'opacity-50': props.isDisabled },
-        inputClassName
+        inputClassName,
+        { 'border-red-border': props.error },
+        { 'border-tint-9': !props.error },
     )
 
+
     return (
-        <div className={cn('flex flex-col', className)}>
+        <div className={cn('flex flex-col relative', className)}>
             <div className="flex justify-between w-full items-start">
                 <label {...labelProps} className="font-bold text-xxs mb-2">
                     {label}
                 </label>
-
-                { tooltip && <Tooltip content={tooltip} /> }
+                {tooltip && <Tooltip content={tooltip} />}
             </div>
-
             <div className="flex">
                 <input
                     {...inputProps}
@@ -40,6 +41,9 @@ export const Input = (props: InputProps) => {
                 />
                 {endDecorator}
             </div>
+            {props.error && props.errorText && (
+                <p className="text-red-error text-xxs mt-1 absolute bottom-0 left-0">{props.errorText}</p>
+            )}
         </div>
-    )
+    );
 }

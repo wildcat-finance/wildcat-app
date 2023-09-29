@@ -6,4 +6,6 @@ export type InputProps = AriaTextFieldProps & {
     inputClassName?: string,
     className?: string,
     tooltip?: string,
+    error?: boolean;       
+    errorText?: string;    
 }
