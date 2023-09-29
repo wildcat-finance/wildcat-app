@@ -12,7 +12,6 @@ const ServiceAgreement = () => {
 
     return (
         <>
-        <VaultCard />
             <div className="text-green text-2xl font-black mb-8 w-2/3">
                 Wildcat Service Agreement
             </div>
