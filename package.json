@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@chakra-ui/react": "^2.7.0",
+    "@chakra-ui/react": "^2.8.1",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@tanstack/react-query": "^4.29.14",
@@ -15,13 +15,17 @@
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.4",
     "@wildcatfi/wildcat-sdk": "^1.0.15",
+    "classnames": "^2.3.2",
     "ethers": "^5.7.0",
     "framer-motion": "^6.2.9",
     "moment": "^2.29.4",
     "react": "^18.1.0",
+    "react-aria": "^3.28.0",
+    "react-aria-components": "^1.0.0-beta.0",
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.45.0-next.1",
     "react-icons": "^3.0.0",
+    "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.6.3",
     "viem": "^1.0.5",
@@ -30,7 +34,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "echo built",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -50,6 +54,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@tailwindcss/typography": "^0.5.10"
   }
 }

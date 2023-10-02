@@ -1,0 +1,24 @@
+@tailwind components;
+
+.wc-btn-black {
+    @apply bg-black;
+}
+
+.wc-btn-brown {
+    @apply bg-brown;
+}
+
+.wc-btn-white-brown {
+    @apply bg-white-brown;
+}
+.wc-btn-gold {
+    @apply bg-gold;
+}
+
+.wc-btn-green {
+    @apply bg-green;
+}
+
+.wc-btn-blue {
+    @apply bg-blue;
+}
