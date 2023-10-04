@@ -10,6 +10,7 @@ function tokensToOptions(tokens: TokenMeta[]) {
         id: token.address,
         label: token.name,
         value: token.address,
+        icon: token.logoURI,
     }))
 }
 

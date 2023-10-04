@@ -14,6 +14,9 @@ export const Combobox = ({ value, onSelect, onSearch, options}: ComboboxProps) =
         onSearch(value)
     }
 
+    console.log(options);
+    
+
     return (
         <HCombobox value={value} onChange={onSelect} >
             <HCombobox.Input
@@ -24,7 +27,14 @@ export const Combobox = ({ value, onSelect, onSearch, options}: ComboboxProps) =
 
             <HCombobox.Options>
                 {options.map((option) => (
-                    <HCombobox.Option key={option.id} value={option.value}>
+                    <HCombobox.Option 
+                        key={option.id} 
+                        value={option.value} 
+                        className="w-72 h-8 px-3 border border-tint-9 border-t-0 bg-white text-xxs flex items-center gap-x-2.5"
+                    >
+                        <div className="w-6 h-6 rounded-full flex items-center justify-center">
+                            <img src={option.icon} alt={option.label} className="w-6 h-6 rounded-full" />
+                        </div>
                         {option.label}
                     </HCombobox.Option>
                 ))}
