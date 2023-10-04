@@ -68,7 +68,7 @@ export function ConnectButton() {
 
           <ModalHeader>
             <Text textAlign="center" fontWeight="bold" size="lg">
-              {isConnected ? "Account" : " Select Wallet"}
+              {isConnected ? "Account" : " Combobox Wallet"}
             </Text>
           </ModalHeader>
 

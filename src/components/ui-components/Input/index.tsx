@@ -17,11 +17,11 @@ export const Input = (props: InputProps) => {
     const { labelProps, inputProps } = useTextField(props, ref);
 
     const inputCssClass = cn(
-        'h-8 px-3 text-xxs border w-full bg-white outline-none',
+        'h-8 px-3 text-xxs border bg-white outline-none',
         { 'opacity-50': props.isDisabled },
-        inputClassName,
         { 'border-red-border': props.error },
         { 'border-tint-9': !props.error },
+        inputClassName,
     )
 
 

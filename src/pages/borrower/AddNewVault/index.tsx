@@ -1,7 +1,9 @@
+import { useState } from 'react';
+
 import { Paper, Input, Chip, Tooltip, Button } from '../../../components/ui-components';
 import { SignIcon } from "../../../components/ui-components/icons";
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
-import { useState } from 'react';
+import { TokenSelector } from './TokenSelector'
 
 export const AddNewVault = () => {
     const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({});
@@ -21,6 +23,8 @@ export const AddNewVault = () => {
 
             <Paper className="p-8 bg-tint-10 border-tint-8">
                 <div className="flex flex-col items-start">
+                    <TokenSelector className="mb-5 pb-4" />
+
                     <Input
                         label="Issued vault token name prefix"
                         className="mb-5 pb-4"
