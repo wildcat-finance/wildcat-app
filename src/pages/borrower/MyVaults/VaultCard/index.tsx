@@ -13,8 +13,7 @@ const VaultCard = ({ className }: { className?: string }) => {
       </div>
       <div className="w-full flex justify-between items-center flex-row px-3 h-9 leading-8 bg-tint-9">
         <div className="inline text-black text-xs font-bold">Annual Interest Rate</div>
-        <div className="inline text-black text-xs">10%
-        </div>
+        <div className="inline text-black text-xs">10%</div>
       </div>
       <div className="w-full flex justify-between items-center flex-row px-3 h-9 leading-8 bg-tint-10">
         <div className="inline text-black text-xs font-bold">Maximum Capacity</div>
