@@ -4,9 +4,13 @@ import { Paper, Input, Chip, Tooltip, Button, FormItem } from '../../../componen
 import { SignIcon } from "../../../components/ui-components/icons";
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
 import { TokenSelector } from './TokenSelector'
+import arrowBack from '../../../components/ui-components/icons/arrow_back_ios.svg'
+import { useNavigate } from 'react-router-dom';
+import Dropdown from '../../../components/Dropdown';
 
 export const AddNewVault = () => {
     const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({});
+    const navigate = useNavigate()
 
     const setError = (fieldName: string, errorText: string | undefined) => {
         setErrors((prevErrors) => ({
@@ -15,14 +19,32 @@ export const AddNewVault = () => {
         }));
     };
 
+    const handleClickMyVaults = () => {
+        navigate('/borrower/my-vaults')
+    }
+
     return (
         <div>
-            <div className="text-green text-2xl font-black mb-8 w-2/3">
+            <button className='flex items-center gap-x-2 mb-8' onClick={handleClickMyVaults}>
+                <img src={arrowBack} alt="Back" />
+                <p className='text-xs font-normal underline'>My Vaults</p>
+            </button>
+            <div className="text-green text-2xl font-bold mb-8 w-2/3">
                 New Vault
             </div>
 
             <Paper className="p-8 bg-tint-10 border-tint-8">
                 <div className="flex flex-col items-start">
+
+                <FormItem
+                        label="Select vault type"
+                        className="mb-5 pb-4"
+                        tooltip="Lorem ipsum"
+                        error={!!errors['namePrefix']}
+                        errorText={errors['namePrefix']}
+                    >
+                        <Dropdown />
+                    </FormItem>
 
                     <FormItem
                         label="Underlying token (token you want to borrow)"
@@ -154,7 +176,8 @@ export const AddNewVault = () => {
                         </div>
 
                         <div className="text-xxs">
-                            Please read and agree to the Wildcat Master Loan Agreement
+                            Please read and agree to the
+                            <span className="text-xxs font-bold"> Wildcat Master Loan Agreement</span>
                         </div>
 
                         <Button className="mt-5" variant='blue' icon={<SignIcon />}>

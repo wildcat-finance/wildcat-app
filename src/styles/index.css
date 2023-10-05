@@ -1,7 +1,10 @@
+@import 'fonts.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 html {
     background-color: #FFFEF2;
+    font-family: "F37Lineca", sans-serif;
 }

@@ -12,10 +12,10 @@ export const ServiceAgreementCard = ({ className, children, title, description, 
 
     return (
         <div className={cardClassName}>{children}
-            <p>{title}</p>
+            <p className="font-extrabold">{title}</p>
 
             <div className='flex gap-5 justify-center items-center'>
-                <span>{description}</span>
+                <span className='font-light'>{description}</span>
                 <Button variant='white-brown' icon={<DownloadIcon />}>
                     Download
                 </Button>
