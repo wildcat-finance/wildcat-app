@@ -22,3 +22,7 @@
 .wc-btn-blue {
     @apply bg-blue;
 }
+
+.wc-btn-red {
+    @apply bg-red;
+}
