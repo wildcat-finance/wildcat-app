@@ -69,15 +69,15 @@ const VaultDetails = () => {
           </div>
       </Paper>
       <div className='text-base font-bold'>Vault Controller / Some title</div>
-      <div className='flex flex-wrap gap-x-7 mb-8'>
+      <div className='flex flex-wrap gap-x-7 mb-8 mt-5'>
         <FormItem
-        className='mt-5 w-72'
+        className='w-72'
         label='Vault type'
         tooltip='test'>
           <Input className='w-72' />
         </FormItem>
         <FormItem
-        className='mt-5 w-72'
+        className='w-72'
         label='Vault contract address'
         tooltip='test'>
           <Input className='w-72' />
@@ -108,7 +108,7 @@ const VaultDetails = () => {
       </div>
       <div className='flex w-full justify-between content-center'>
         <div className='text-base font-bold'>Lenders</div>
-        <Button variant={'blue'}>Onboard Lender</Button>
+        <Button variant={'blue'} className='w-24 whitespace-nowrap'>Onboard Lender</Button>
       </div>
       <div className='mt-5 mb-8 flex w-full'>
         <div className='w-52'>

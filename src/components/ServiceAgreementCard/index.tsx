@@ -12,7 +12,7 @@ export const ServiceAgreementCard = ({ className, children, title, description, 
 
     return (
         <div className={cardClassName}>{children}
-            <p className="font-extrabold">{title}</p>
+            <p className="font-bold">{title}</p>
 
             <div className='flex gap-5 justify-center items-center'>
                 <span className='font-light'>{description}</span>
