@@ -27,7 +27,7 @@ const VaultDetails = () => {
             <div className='w-full flex justify-between items-center'>
               <div className='font-bold'>Borrow</div>
               <div className='flex gap-x-3.5 w-full max-w-lg'>
-                <Input className='w-full' placeholder='00,000.00'/>
+                <Input className='w-full' placeholder='00,000.00' type='number' min={0} max={2750}/>
                 <Button variant={'green'} className='w-64'>Borrow</Button>
               </div>
             </div>
@@ -41,7 +41,7 @@ const VaultDetails = () => {
               <div className='font-bold mt-3'>Repay</div>
               <div className='flex items-center gap-x-3.5 w-full max-w-lg'>
                 <div className='w-full'>
-                  <Input className='w-full' placeholder='00,000.00'/>
+                  <Input className='w-full' placeholder='00,000.00' type='number' min={0} max={9000}/>
                   <div className='text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full'>
                     <span className='font-semibold'>Repay up to </span>
                     9,000 DAI
@@ -58,7 +58,7 @@ const VaultDetails = () => {
             <div className='w-full flex justify-between items-center'>
               <div className='font-bold'>Annual interest rate (%)</div>
               <div className='flex gap-x-3.5 w-full max-w-lg'>
-                <Input className='w-full' placeholder='10.00'/>
+                <Input className='w-full' placeholder='10.00' type='number' min={0}/>
                 <Button variant={'green'} className='w-64'>Adjust</Button>
               </div>
             </div>

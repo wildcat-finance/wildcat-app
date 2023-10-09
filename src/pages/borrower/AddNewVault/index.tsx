@@ -105,7 +105,7 @@ export const AddNewVault = () => {
                         error={!!errors['namePrefix']}
                         errorText={errors['namePrefix']} 
                     >
-                        <Input className="w-48" error={!!errors['namePrefix']} type="number"/>
+                        <Input className="w-48" error={!!errors['namePrefix']} type="number" min={0} max={100}/>
                     </FormItem>
 
                     <FormItem 
@@ -120,7 +120,7 @@ export const AddNewVault = () => {
                         error={!!errors['namePrefix']}
                         errorText={errors['namePrefix']} 
                     >
-                        <Input className="w-48" error={!!errors['namePrefix']} type="number"/>
+                        <Input className="w-48" error={!!errors['namePrefix']} type="number" min={0} max={100}/>
                     </FormItem>
 
                     <FormItem 
@@ -133,7 +133,7 @@ export const AddNewVault = () => {
                         error={!!errors['namePrefix']}
                         errorText={errors['namePrefix']} 
                     >
-                        <Input className="w-48" error={!!errors['namePrefix']} type="number"/>
+                        <Input className="w-48" error={!!errors['namePrefix']} type="number" min={0} max={100}/>
                     </FormItem>
 
                     <FormItem 
@@ -146,7 +146,7 @@ export const AddNewVault = () => {
                         error={!!errors['namePrefix']}
                         errorText={errors['namePrefix']} 
                     >
-                        <Input className="w-48" error={!!errors['namePrefix']} type="number"/>
+                        <Input className="w-48" error={!!errors['namePrefix']} type="number" min={0}/>
                     </FormItem>
 
                     <FormItem 
@@ -159,7 +159,7 @@ export const AddNewVault = () => {
                         error={!!errors['namePrefix']}
                         errorText={errors['namePrefix']} 
                     >
-                        <Input className="w-48" error={!!errors['namePrefix']} type="number"/>
+                        <Input className="w-48" error={!!errors['namePrefix']} type="number" min={0}/>
                     </FormItem>
 
                     <div>

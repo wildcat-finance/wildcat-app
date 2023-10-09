@@ -1,15 +1,39 @@
-import { useRef } from 'react';
-import { useTextField } from 'react-aria';
+import { Input as RInput } from 'react-aria-components'
 import cn from 'classnames'
-
 import { InputProps } from "./interface";
 
 export const Input = (props: InputProps) => {
     const {
         className,
+        min,
+        max,
+        type,
     } = props;
-    const ref = useRef(null);
-    const { inputProps } = useTextField(props, ref);
+
+    const isNumberInput = type === 'number';
+
+    const formatNumber = (n: string) => {
+        return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+    }
+
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (isNumberInput) {
+            formatNumber(event.target.value)
+            let numericValue = parseFloat(event.target.value);
+
+            if (isNaN(numericValue)) {
+                event.target.value = '';
+            } else if (numericValue < Number(min)) {
+                numericValue = Number(min);
+            } else if (numericValue > Number(max)) {
+                numericValue = Number(max);
+            }
+        
+            event.target.value = numericValue.toString();
+        }
+    };
+
 
     const inputCssClass = cn(
         'h-8 px-3 text-xxs border bg-white outline-none',
@@ -20,10 +44,12 @@ export const Input = (props: InputProps) => {
     )
 
     return (
-        <input
-            {...inputProps}
+        <RInput
             className={inputCssClass}
-            ref={ref}
+            min={min}
+            max={max}
+            type={type}
+            onChange={handleInputChange}
         />
     );
 }
