@@ -1,15 +1,38 @@
+import { useState } from "react";
 import { useController, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useNavigate } from 'react-router-dom';
 
-import { Paper, Input, Chip, Tooltip, Button, FormItem } from '../../../components/ui-components';
+import {
+    Paper,
+    Input,
+    Chip,
+    Tooltip,
+    Button,
+    FormItem,
+    Select
+} from '../../../components/ui-components';
 import { SignIcon } from "../../../components/ui-components/icons";
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
 import { TokenSelector } from './TokenSelector'
 import arrowBack from '../../../components/ui-components/icons/arrow_back_ios.svg'
-import { useNavigate } from 'react-router-dom';
-import Dropdown from '../../../components/Dropdown';
 import NumberVaultInput from './NumberVaultInput';
 import { validationSchema, FormSchema } from './validationSchema';
+import { SelectOptionItem } from "../../../components/ui-components/Select/interface";
+
+
+const mockedVaults: SelectOptionItem[] = [
+    {
+        id: '1',
+        label: 'Vault type 1',
+        value: '1'
+    },
+    {
+        id: '2',
+        label: 'Vault type 2',
+        value: '2'
+    },
+]
 
 const defaultVault: FormSchema = {
     vaultType: "",
@@ -37,6 +60,8 @@ export const AddNewVault = () => {
     });
     const navigate = useNavigate()
 
+    const [selectedVault, setSelectedVault] = useState<SelectOptionItem | null>(null)
+
     const handleClickMyVaults = () => {
         navigate('/borrower/my-vaults')
     }
@@ -50,6 +75,10 @@ export const AddNewVault = () => {
         name: 'symbolPrefix',
         control,
     });
+
+    const handleVaultSelect = (value: SelectOptionItem | null) => {
+        setSelectedVault(value)
+    }
 
     return (
         <div>
@@ -71,7 +100,11 @@ export const AddNewVault = () => {
                         error={Boolean(formErrors.vaultType?.message)}
                         errorText={formErrors.vaultType?.message}
                     >
-                        <Dropdown />
+                        <Select
+                            selected={selectedVault}
+                            options={mockedVaults}
+                            onChange={handleVaultSelect}
+                        />
                     </FormItem>
 
                     <FormItem

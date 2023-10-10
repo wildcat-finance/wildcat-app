@@ -1,8 +1,11 @@
-import { Input, Paper } from '../../../components/ui-components';
 import { useNavigate } from "react-router-dom";
+
+import { Input, Paper } from '../../../components/ui-components';
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
 import { Button } from '../../../components/ui-components/Button';
 import VaultCard from './VaultCard';
+
+import { mockedVaults } from './mocks'
 
 const MyVaults = () => {
     const navigate = useNavigate();
@@ -25,15 +28,12 @@ const MyVaults = () => {
             </div>
 
             <Paper className=" border-tint-8 flex items-center flex-wrap gap-5 border-0 bg-sand">
-                <div className='flex gap-5 w-full'>
-                    <VaultCard className='w-full' />
-                    <VaultCard className='w-full' />
-                    <VaultCard className='w-full' />
-                </div>
-                <div className='flex gap-5 w-full'>
-                    <VaultCard className='w-full' />
-                    <VaultCard className='w-full' />
-                    <div className='w-full' />
+                <div className='flex w-full flex-wrap -mx-2.5"'>
+                    {mockedVaults.map((vault) => (
+                        <div className="w-1/3 px-2.5 py-2.5">
+                            <VaultCard key={vault.name} vault={vault} className='w-full' />
+                        </div>
+                    ))}
                 </div>
             </Paper>
 
