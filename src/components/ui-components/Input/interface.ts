@@ -1,9 +1,6 @@
-import type { AriaTextFieldProps } from 'react-aria';
+import type { InputProps as RInputProps } from 'react-aria-components';
 
-export type InputProps = AriaTextFieldProps & {
+export type InputProps = RInputProps & {
     className?: string,
     error?: boolean;
-    min?: number;
-    max?: number;
-    type?: string;
 }

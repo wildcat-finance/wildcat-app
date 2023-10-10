@@ -11,7 +11,7 @@ export const UI = () => {
             </div>
             <br />
             <div>
-                <Input label="Label" value='123' />
+                <Input value='123' />
             </div>
         </>
     )

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useController, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Paper, Input, Chip, Tooltip, Button, FormItem } from '../../../components/ui-components';
 import { SignIcon } from "../../../components/ui-components/icons";
@@ -7,21 +8,48 @@ import { TokenSelector } from './TokenSelector'
 import arrowBack from '../../../components/ui-components/icons/arrow_back_ios.svg'
 import { useNavigate } from 'react-router-dom';
 import Dropdown from '../../../components/Dropdown';
+import NumberVaultInput from './NumberVaultInput';
+import { validationSchema, FormSchema } from './validationSchema';
+
+const defaultVault: FormSchema = {
+    vaultType: "",
+    underlyingToken: "",
+    namePrefix: "",
+    symbolPrefix: "",
+    maxAmount: 0,
+    annualRate: 0,
+    penaltyRate: 0,
+    reserveRatio: 0,
+    gracePeriod: 0,
+    withdrawalCycle: 0,
+};
 
 export const AddNewVault = () => {
-    const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({});
+    const {
+        control,
+        formState: {
+            errors: formErrors,
+        },
+    } = useForm<FormSchema>({
+        defaultValues: defaultVault,
+        resolver: zodResolver(validationSchema),
+        mode: "onBlur"
+    });
     const navigate = useNavigate()
-
-    const setError = (fieldName: string, errorText: string | undefined) => {
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            [fieldName]: errorText,
-        }));
-    };
 
     const handleClickMyVaults = () => {
         navigate('/borrower/my-vaults')
     }
+
+    const { field: namePrefixField } = useController({
+        name: 'namePrefix',
+        control,
+    });
+
+    const { field: symbolPrefixField } = useController({
+        name: 'symbolPrefix',
+        control,
+    });
 
     return (
         <div>
@@ -34,14 +62,14 @@ export const AddNewVault = () => {
             </div>
 
             <Paper className="p-8 bg-tint-10 border-tint-8">
-                <div className="flex flex-col items-start">
+                <form className="flex flex-col items-start">
 
-                <FormItem
+                    <FormItem
                         label="Select vault type"
                         className="mb-5 pb-4"
                         tooltip="Lorem ipsum"
-                        error={!!errors['namePrefix']}
-                        errorText={errors['namePrefix']}
+                        error={Boolean(formErrors.vaultType?.message)}
+                        errorText={formErrors.vaultType?.message}
                     >
                         <Dropdown />
                     </FormItem>
@@ -50,117 +78,104 @@ export const AddNewVault = () => {
                         label="Underlying token (token you want to borrow)"
                         className="mb-5 pb-4"
                         tooltip="Lorem ipsum"
-                        error={!!errors['namePrefix']}
-                        errorText={errors['namePrefix']}
+                        error={Boolean(formErrors.underlyingToken?.message)}
+                        errorText={formErrors.underlyingToken?.message}
                     >
                         <TokenSelector />
                     </FormItem>
 
-                    <FormItem 
+                    <FormItem
                         label="Issued vault token name prefix"
-                        className="mb-5 pb-4" 
+                        className="mb-5 pb-4"
                         tooltip="Lorem ipsum"
                         endDecorator={
                             <Chip className="w-32 ml-3">Dai Stablecoin</Chip>
                         }
-                        error={!!errors['namePrefix']}
-                        errorText={errors['namePrefix']} 
+                        error={Boolean(formErrors.namePrefix?.message)}
+                        errorText={formErrors.namePrefix?.message}
                     >
-                        <Input className="w-72" error={!!errors['namePrefix']} />
+                        <Input {...namePrefixField} className="w-72" error={Boolean(formErrors.namePrefix?.message)} />
                     </FormItem>
 
-                    <FormItem 
+                    <FormItem
                         label="Issued vault token symbol prefix"
-                        className="mb-5 pb-4" 
+                        className="mb-5 pb-4"
                         tooltip="Lorem ipsum"
                         endDecorator={
                             <Chip className="w-32 ml-3">DAI</Chip>
                         }
-                        error={!!errors['namePrefix']}
-                        errorText={errors['namePrefix']} 
+                        error={Boolean(formErrors.symbolPrefix?.message)}
+                        errorText={formErrors.symbolPrefix?.message}
                     >
-                        <Input className="w-72" error={!!errors['namePrefix']} />
+                        <Input {...symbolPrefixField} className="w-72" error={Boolean(formErrors.symbolPrefix?.message)} />
                     </FormItem>
 
-                    <FormItem 
+                    <NumberVaultInput
                         label="Maximum amount I want to borrow"
-                        className="mb-5 pb-4" 
-                        tooltip="Lorem ipsum"
                         endDecorator={
                             <Chip className="w-32 ml-3">DAI</Chip>
                         }
-                        error={!!errors['namePrefix']}
-                        errorText={errors['namePrefix']} 
-                    >
-                        <Input className="w-72" error={!!errors['namePrefix']} type="number"/>
-                    </FormItem>
+                        control={control}
+                        formErrors={formErrors}
+                        name="maxAmount"
+                        tooltip="Lorem ipsum"
+                        inputClass="w-72"
+                    />
 
-                    <FormItem 
+                    <NumberVaultInput
                         label="Annual interest rate (APR)"
-                        className="mb-5 pb-4" 
+                        endDecorator={
+                            <Chip className="w-11 justify-center font-bold">%</Chip>
+                        }
+                        control={control}
+                        formErrors={formErrors}
+                        name="annualRate"
                         tooltip="Lorem ipsum"
+                    />
+
+                    <NumberVaultInput
+                        label="Penalty fee rate (APR)"
                         endDecorator={
                             <Chip className="w-11 justify-center font-bold">%</Chip>
                         }
-                        error={!!errors['namePrefix']}
-                        errorText={errors['namePrefix']} 
-                    >
-                        <Input className="w-48" error={!!errors['namePrefix']} type="number" min={0} max={100}/>
-                    </FormItem>
+                        control={control}
+                        formErrors={formErrors}
+                        name="penaltyRate"
+                        tooltip="Lorem ipsum"
+                    />
 
-                    <FormItem 
-                        label="Penalty fee rate (APR) "
-                        className="mb-5 pb-4" 
-                        tooltip={`The percentage APR that 
-                        is added to your base APR, 
-                        should your vault become delinquent`}
-                        endDecorator={
-                            <Chip className="w-11 justify-center font-bold">%</Chip>
-                        }
-                        error={!!errors['namePrefix']}
-                        errorText={errors['namePrefix']} 
-                    >
-                        <Input className="w-48" error={!!errors['namePrefix']} type="number" min={0} max={100}/>
-                    </FormItem>
-
-                    <FormItem 
+                    <NumberVaultInput
                         label="Reserve ratio"
-                        className="mb-5 pb-4" 
-                        tooltip="Lorem ipsum"
                         endDecorator={
                             <Chip className="w-11 justify-center font-bold">%</Chip>
                         }
-                        error={!!errors['namePrefix']}
-                        errorText={errors['namePrefix']} 
-                    >
-                        <Input className="w-48" error={!!errors['namePrefix']} type="number" min={0} max={100}/>
-                    </FormItem>
+                        control={control}
+                        formErrors={formErrors}
+                        name="reserveRatio"
+                        tooltip="Lorem ipsum"
+                    />
 
-                    <FormItem 
+                    <NumberVaultInput
                         label="Grace period"
-                        className="mb-5 pb-4" 
-                        tooltip="Lorem ipsum"
                         endDecorator={
                             <Chip className="w-11 justify-center font-bold">hours</Chip>
                         }
-                        error={!!errors['namePrefix']}
-                        errorText={errors['namePrefix']} 
-                    >
-                        <Input className="w-48" error={!!errors['namePrefix']} type="number" min={0}/>
-                    </FormItem>
+                        control={control}
+                        formErrors={formErrors}
+                        name="gracePeriod"
+                        tooltip="Lorem ipsum"
+                    />
 
-                    <FormItem 
+                    <NumberVaultInput
                         label="Withdrawal cycle"
-                        className="mb-5 pb-4" 
-                        tooltip="Lorem ipsum"
                         endDecorator={
                             <Chip className="w-11 justify-center font-bold">hours</Chip>
                         }
-                        error={!!errors['namePrefix']}
-                        errorText={errors['namePrefix']} 
-                    >
-                        <Input className="w-48" error={!!errors['namePrefix']} type="number" min={0}/>
-                    </FormItem>
+                        control={control}
+                        formErrors={formErrors}
+                        name="withdrawalCycle"
+                        tooltip="Lorem ipsum"
+                    />
 
                     <div>
                         <div className="flex justify-between items-start mb-5" style={{ width: '236px' }}>
@@ -188,7 +203,7 @@ export const AddNewVault = () => {
                     <Button className="mt-10" variant='blue' disabled>
                         Submit and create vault
                     </Button>
-                </div>
+                </form>
             </Paper>
 
             <ServiceAgreementCard
