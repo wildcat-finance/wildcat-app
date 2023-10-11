@@ -12,7 +12,7 @@ const MyVaults = () => {
             <div className="text-xs font-black flex-col">
             <p className='text-xs font-normal underline'>My Markets</p>
                 <div className='text-green text-2xl font-black justify-between items-center flex mt-8'>
-                    Markets for borrower peaches.eth
+                    Active markets for borrower peaches.eth
                     <Button onClick={() => navigate('/borrower/add-new-vault')} variant='blue'>
                         New Market
                     </Button>
