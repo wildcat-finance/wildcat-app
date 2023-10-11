@@ -17,7 +17,7 @@ const VaultDetails = () => {
     <div>
       <button className='flex items-center gap-x-2 mb-8' onClick={handleClickMyVaults}>
           <img src={arrowBack} alt="Back" />
-          <p className='text-xs font-normal underline'>My Vaults</p>
+          <p className='text-xs font-normal underline'>My Markets</p>
       </button>
       <div className="text-green text-2xl font-bold mb-8 w-2/3">
       Blossom Dai Stablecoin
@@ -68,17 +68,17 @@ const VaultDetails = () => {
             </div>
           </div>
       </Paper>
-      <div className='text-base font-bold'>Vault Controller / Some title</div>
+      <div className='text-base font-bold'>Market Controller / Some title</div>
       <div className='flex flex-wrap gap-x-7 mb-8 mt-5'>
         <FormItem
         className='w-72'
-        label='Vault type'
+        label='Market type'
         tooltip='test'>
           <Input className='w-72' />
         </FormItem>
         <FormItem
         className='w-72'
-        label='Vault contract address'
+        label='Market contract address'
         tooltip='test'>
           <Input className='w-72' />
         </FormItem>
@@ -210,7 +210,7 @@ const VaultDetails = () => {
           
         </div>
       </div>
-      <div className='text-base font-bold'>Vault interaction history</div>
+      <div className='text-base font-bold'>Market interaction history</div>
       <Paper className='border-tint-10 mt-5 mb-8 bg-white h-48 p-5 flex flex-col gap-y-6 overflow-auto'>
         <div className='text-xs'>
           <div>
@@ -220,7 +220,7 @@ const VaultDetails = () => {
         </div>
         <div className='text-xs'>
           <div>28 Aug 2023; 14:24:38</div>
-          Borrower returned 1,000 DAI to vault, new reserve ratio XX%  (example)
+          Borrower returned 1,000 DAI to market, new reserve ratio XX%  (example)
         </div>
         <div className='text-xs'>
           <div>28 Aug 2023; 14:24:38</div>
@@ -229,10 +229,10 @@ const VaultDetails = () => {
       </Paper>
       <div className='flex justify-between items-center'>
         <ServiceAgreementCard
-                  title='Vault Master Loan Agreement'
+                  title='Market Master Loan Agreement'
                   description='You signed the blsmDAI Master Loan Agreement on 17-Sept-2023'
               />
-        <Button variant={'red'}>Terminate Vault</Button>
+        <Button variant={'red'}>Terminate Market</Button>
       </div>
 
       <ServiceAgreementCard

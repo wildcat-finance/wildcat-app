@@ -18,7 +18,7 @@ const VaultCard = ({ className }: { className?: string }) => {
         <TableItem title='Current Reserve Ratio' value='144%' />
       </div>
       <div className="w-full p-3 bg-tint-10">
-        <Button onClick={() => navigate('/borrower/add-new-vault')} className="w-full" variant={"black"}>Go to Vault</Button>
+        <Button onClick={() => navigate('/borrower/add-new-vault')} className="w-full" variant={"black"}>Go To Market</Button>
       </div>
     </div>
   )
