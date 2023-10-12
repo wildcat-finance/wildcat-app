@@ -2,12 +2,21 @@ import cn from 'classnames'
 
 import { ChipProps } from "./interface";
 
+const CHIP_COLORS = {
+    'default': 'bg-tint-9',
+    'gray': 'bg-gray',
+    'red': 'bg-red text-white',
+    'yellow': 'bg-yellow',
+    'green':  'bg-green'
+}
+
 export const Chip = (props: ChipProps) => {
-    const { className, children } = props;
+    const { className, color = 'default', children } = props;
 
     const cssClass = cn(
-        'h-8 px-2 flex items-center bg-tint-9 text-xxs',
-        className
+        CHIP_COLORS[color],
+        'h-8 px-2 flex items-center text-xxs',
+        className,
     )
 
     return (
