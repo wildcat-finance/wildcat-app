@@ -18,7 +18,7 @@ const ServiceAgreement = () => {
             <BluePaper className='mb-8'>
                 <AiOutlineExclamationCircle height={24} />
                 <span className='text-xs text-center'>
-                    Before you can start lending you’ll need to read and agree (via ETH<br /> wallet signature) to the Wildcat Service Agreement</span>
+                    Before you can interact with the protocol UI you need to read and agree (via ETH<br /> wallet signature) to the Wildcat Service Agreement.</span>
             </BluePaper>
 
             <Paper className="max-h-3xl flex flex-col">
@@ -104,7 +104,7 @@ const ServiceAgreement = () => {
                 onClick={() => navigate('/borrower/add-new-vault')}
             >
                 <Button variant='black' >
-                    Continue to Vaults
+                    Continue to Markets
                 </Button>
             </div>
         </>

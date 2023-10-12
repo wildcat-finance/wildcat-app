@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 
-import { Input, Paper, Select } from '../../../components/ui-components';
+import { Input, Select } from '../../../components/ui-components';
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
 import { Button } from '../../../components/ui-components/Button';
 import VaultCard from './VaultCard';
@@ -22,8 +22,6 @@ const mockedVaultRatioOptions: SelectOptionItem[] = mockedRatios
         label: ratio,
         value: ratio
     }))
-
-
 
 const MyVaults = () => {
     const navigate = useNavigate();
@@ -53,11 +51,11 @@ const MyVaults = () => {
     return (
         <div>
             <div className="text-xs flex-col">
-                <div className='text-xs font-normal underline'>My Vaults</div>
+                <div className='text-xs font-normal underline'>My Markets</div>
                 <div className='text-green text-2xl font-black justify-between items-center flex mt-8'>
-                    Active Vaults for borrower peaches.eth
+                    Active markets for borrower peaches.eth
                     <Button onClick={() => navigate('/borrower/add-new-vault')} variant='blue'>
-                        New Vault
+                        New Market
                     </Button>
                 </div>
 

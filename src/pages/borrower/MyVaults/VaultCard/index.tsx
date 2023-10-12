@@ -1,23 +1,24 @@
 import {useNavigate} from "react-router-dom";
 import cn from 'classnames'
 
-import {Button, Chip, TableItem} from "../../../../components/ui-components";
-import {VaultCardProps} from "./interface";
-import {VaultStatus} from "../../../../types/vaults";
+import { Button, Chip, TableItem } from "../../../../components/ui-components";
+import { VaultCardProps } from "./interface";
+import { VaultStatus } from "../../../../types/vaults";
+import  {ChipColorVariants } from "../../../../components/ui-components/Chip/interface";
 
-
-function getVaultStatusColor(status: VaultStatus) {
+function getVaultStatusColor(status: VaultStatus): ChipColorVariants  {
     switch (status) {
         case VaultStatus.ACTIVE:
-            return 'bg-green'
+            return 'green'
         case VaultStatus.PENDING:
-            return 'bg-yellow'
-        case VaultStatus.TERMINATED:
-            return 'bg-gray'
+            return 'yellow'
         case VaultStatus.DELINQUENT:
         case VaultStatus.PENALTY:
         case VaultStatus.REMOVED:
-            return 'bg-red text-white'
+            return 'red'
+        case VaultStatus.TERMINATED:
+        default:
+            return 'gray'
     }
 }
 
@@ -26,17 +27,18 @@ const VaultCard = ({
 }: VaultCardProps) => {
   const navigate = useNavigate();
 
-  const statusCssClass = cn(
-      'h-auto justify-center px-1 p-1',
-      getVaultStatusColor(vault.status)
-  )
-
   return (
     <div className={cn("border border-tint-8 border-solid border-1 rounded-lg pt-4 pad", className)}>
+
       <div className="w-full flex justify-between items-center flex-row px-3 mb-4">
         <div className="inline text-black text-xs font-bold">{vault.name}</div>
-        <Chip className={statusCssClass}>{vault.status}</Chip>
+        <Chip
+            color={getVaultStatusColor(vault.status)}
+            className='h-auto justify-center px-1 p-1'>
+            {vault.status}
+        </Chip>
       </div>
+
       <div>
         <TableItem title='Token asset' value={`${vault.tokenSymbol}%`} />
         <TableItem title='Annual Interest Rate' value={`${vault.annualInterestRate}%`} />
@@ -46,7 +48,7 @@ const VaultCard = ({
       </div>
 
       <div className="w-full p-3 bg-tint-10">
-        <Button onClick={() => navigate('/borrower/vault-details')} className="w-full" variant={"black"}>Go to Vault</Button>
+        <Button onClick={() => navigate('/borrower/vault-details')} className="w-full" variant={"black"}>Go To Market</Button>
       </div>
     </div>
   )
