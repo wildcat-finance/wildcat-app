@@ -5,6 +5,8 @@ import TableItem from "../../../components/ui-components/TableItem";
 import { BluePaper } from "../../../components/ui-components/BluePaper";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
+import expandMore from "../../../components/ui-components/icons/expand_more.svg";
+import expandLess from "../../../components/ui-components/icons/expand_less.svg";
 
 const demoVaults = [
   {
@@ -59,7 +61,6 @@ const ActiveVaults = () => {
     newActiveIndexes[index] = !newActiveIndexes[index];
     setActiveIndexes(newActiveIndexes);
   };
-  
 
   return (
     <>
@@ -79,12 +80,17 @@ const ActiveVaults = () => {
                   Add
                 </Button>
               </div>
-              <div
-                className="text-xxs underline cursor-pointer"
+              <button
+                className="flex items-center gap-x-2 text-xxs underline cursor-pointer"
                 onClick={() => toggleAccordion(index)}
               >
                 {activeIndexes[index] ? "Hide details" : "Show details"}
-              </div>
+                {activeIndexes[index] ? (
+                  <img src={expandLess} className="w-5" alt="Back" />
+                ) : (
+                  <img src={expandMore} className="w-5" alt="Back" />
+                )}
+              </button>
             </div>
             {activeIndexes[index] && (
               <div>
@@ -256,10 +262,10 @@ const ActiveVaults = () => {
         ))}
       </div>
       <ServiceAgreementCard
-          className="mt-12"
-          title="Wildcat Service Agreement"
-          description="You agreed to the Wildcat Service Agreement on 12-Sept-2023"
-        />
+        className="mt-12"
+        title="Wildcat Service Agreement"
+        description="You agreed to the Wildcat Service Agreement on 12-Sept-2023"
+      />
     </>
   );
 };
