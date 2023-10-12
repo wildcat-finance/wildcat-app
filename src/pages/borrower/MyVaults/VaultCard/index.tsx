@@ -23,7 +23,7 @@ function getVaultStatusColor(status: VaultStatus): ChipColorVariants  {
 }
 
 const VaultCard = ({
- vault, className
+  vault, className
 }: VaultCardProps) => {
   const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ const VaultCard = ({
       </div>
 
       <div>
-        <TableItem title='Token asset' value={`${vault.tokenSymbol}%`} />
+        <TableItem title='Token asset' value={`${vault.tokenSymbol}`} />
         <TableItem title='Annual Interest Rate' value={`${vault.annualInterestRate}%`} />
         <TableItem title='Maximum Capacity' value={`${vault.maximumCapacity} DAI`} />
         <TableItem title='Current Reserve Ratio' value={`${vault.reserveRatio}%`} />

@@ -31,22 +31,22 @@ const MyVaults = () => {
 
     const handleFilterByName = (evt: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = evt.target
-        setFilterByName(value)
+        setFilterByName(value.toLowerCase());
     }
 
     const filteredMockedVaults = mockedVaults
-        .filter((vault) => {
-            if (!filterByName) return true
-            return vault.name.includes(filterByName)
-        })
-        .filter((vault) => {
-            if (!selectedUnderlyingAsset) return true
-            return vault.tokenSymbol === selectedUnderlyingAsset.value
-        })
-        .filter((vault) => {
-            if (!selectedVaultRatio) return true
-            return vault.reserveRatio === selectedVaultRatio.value
-        })
+    .filter((vault) => {
+        if (!filterByName) return true;
+        return vault.name.toLowerCase().includes(filterByName);
+    })
+    .filter((vault) => {
+        if (!selectedUnderlyingAsset) return true;
+        return vault.tokenSymbol === selectedUnderlyingAsset.value;
+    })
+    .filter((vault) => {
+        if (!selectedVaultRatio) return true;
+        return vault.reserveRatio === selectedVaultRatio.value;
+    });
 
     return (
         <div>
@@ -81,7 +81,7 @@ const MyVaults = () => {
                             options={mockedVaultRatioOptions}
                             onChange={setSelectedVaultRatio}
                             selected={selectedVaultRatio}
-                            placeholder="Vault ratio"
+                            placeholder="Vault status"
                             className='w-full'
                         />
                     </div>
