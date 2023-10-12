@@ -1,7 +1,7 @@
 import { TableItemProps } from "./interface"
 import cn from 'classnames'
 
-const TableItem = ({ children, title, value, className }: TableItemProps) => {
+export const TableItem = ({ children, title, value, className }: TableItemProps) => {
   const itemClassName = cn(
     className,
     'w-full flex px-3 items-center flex-row h-9 leading-8 odd:bg-tint-9 even:bg-tint-10 justify-between'

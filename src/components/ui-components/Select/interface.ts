@@ -8,4 +8,6 @@ export type SelectProps = {
     selected: SelectOptionItem | null,
     onChange: (value: SelectOptionItem | null) => void,
     options: SelectOptionItem[];
+    placeholder?: string;
+    className?: string;
 }

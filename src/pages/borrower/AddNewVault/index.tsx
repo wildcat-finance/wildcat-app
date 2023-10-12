@@ -19,20 +19,13 @@ import arrowBack from '../../../components/ui-components/icons/arrow_back_ios.sv
 import NumberVaultInput from './NumberVaultInput';
 import { validationSchema, FormSchema } from './validationSchema';
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface";
+import { mockedVaultTypes } from "../../../mocks/vaults";
 
-
-const mockedVaults: SelectOptionItem[] = [
-    {
-        id: '1',
-        label: 'Vault type 1',
-        value: '1'
-    },
-    {
-        id: '2',
-        label: 'Vault type 2',
-        value: '2'
-    },
-]
+const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map((vaultType) => ({
+    id: vaultType,
+    label: vaultType,
+    value: vaultType
+}))
 
 const defaultVault: FormSchema = {
     vaultType: "",
@@ -102,7 +95,7 @@ export const AddNewVault = () => {
                     >
                         <Select
                             selected={selectedVault}
-                            options={mockedVaults}
+                            options={mockedVaultTypesOptions}
                             onChange={handleVaultSelect}
                         />
                     </FormItem>
@@ -157,6 +150,7 @@ export const AddNewVault = () => {
 
                     <NumberVaultInput
                         label="Annual interest rate (APR)"
+                        max={100}
                         endDecorator={
                             <Chip className="w-11 justify-center font-bold">%</Chip>
                         }
@@ -168,6 +162,7 @@ export const AddNewVault = () => {
 
                     <NumberVaultInput
                         label="Penalty fee rate (APR)"
+                        max={100}
                         endDecorator={
                             <Chip className="w-11 justify-center font-bold">%</Chip>
                         }

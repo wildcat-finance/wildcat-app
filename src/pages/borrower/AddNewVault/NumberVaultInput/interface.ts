@@ -10,4 +10,6 @@ export interface NumberVaultInputProps {
   endDecorator: ReactNode
   label: string
   tooltip: string
+  min?: number
+  max?: number
 }
