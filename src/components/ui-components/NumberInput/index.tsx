@@ -1,7 +1,7 @@
 import { useController } from "react-hook-form";
-import { FormItem } from "../../../../components/ui-components/FormItem";
-import { Input } from "../../../../components/ui-components/Input";
-import { NumberVaultInputProps } from "./interface";
+import { FormItem } from "../FormItem";
+import { Input } from "../Input";
+import { NumberInputProps } from "./interface";
 
 
 function processNumber(input: number, minNumber?: number, maxValue?: number): number {
@@ -14,7 +14,7 @@ function processNumber(input: number, minNumber?: number, maxValue?: number): nu
   return input;
 }
 
-const NumberVaultInput = (props: NumberVaultInputProps) => {
+const NumberInput = (props: NumberInputProps) => {
   const {
     control,
     formErrors,
@@ -54,4 +54,4 @@ const NumberVaultInput = (props: NumberVaultInputProps) => {
   )
 }
 
-export default NumberVaultInput
+export default NumberInput

@@ -82,24 +82,25 @@ const expandIcon = isExpanded ? expandLess : expandMore;
       <div className='text-base font-bold'>Details</div>
       <div className='flex w-full mt-5 mb-8'>
         <div className='w-full'>
-          <TableItem title='Annual Interest Rate' value='10%' className='pl-6 pr-24'/>
-          <TableItem title='Maximum Capacity' value='50,000 DAI' className='pl-6 pr-24'/>
-          <TableItem title='Deposits' value='25,000 DAI' className='pl-6 pr-24'/>
-          <TableItem title='Amount Borrowed' value='16,000 DAI' className='pl-6 pr-24'/>
-          <TableItem title='Current Reserves' value='9,000 DAI' className='pl-6 pr-24'/>
-          <TableItem title='Current Reserve Ratio' value='144%' className='pl-6 pr-24'/>
-          <TableItem title='Reqired Reserves' value='6,250 DAI' className='pl-6 pr-24'/>
+          <TableItem title='Capacity' value='50,000 DAI' className='pl-6 pr-24'/>
+          <TableItem title='APR' value='' className='pl-6 pr-24'/>
+          <TableItem title='Penalty Rate' value='10%' className='pl-6 pr-24'/>
           <TableItem title='Minimum Reserve Ratio' value='25%' className='pl-6 pr-24'/>
+          <TableItem title='Withdrawal Cycle' value='48 hours' className='pl-6 pr-24'/>
+          <TableItem title='Grace Period' value='24 hours' className='pl-6 pr-24'/>
+          <TableItem title='' value='' className='pl-6 pr-24'/>
+          <TableItem title='' value='' className='pl-6 pr-24'/>
         </div>
         <div className='w-full'>
-          <TableItem title='Grace Period' value='24 hours' className='pr-6 pl-24'/>
-          <TableItem title='Withdrawal Cycle' value='48 hours' className='pr-6 pl-24'/>
-          <TableItem title='Reserved Assets' value='10 DAI' className='pr-6 pl-24'/>
-          <TableItem title='Pending Withdrawals' value='0 DAI' className='pr-6 pl-24'/>
-          <TableItem title='Accrued Protocol Fees  ' value='3 DAI' className='pr-6 pl-24'/>
-          <TableItem title='' value='' className='pr-6 pl-24'/>
-          <TableItem title='' value='' className='pr-6 pl-24'/>
-          <TableItem title='' value='' className='pr-6 pl-24'/>
+          <TableItem title='Current Supply' value='24 hours' className='pr-6 pl-24'/>
+          <TableItem title='Minimum Reserves Required' value='25%' className='pr-6 pl-24'/>
+          <TableItem title='Current Reserves' value='9,000 DAI' className='pr-6 pl-24'/>
+          <TableItem title='Current Reserve Ratio' value='144%' className='pr-6 pl-24'/>
+          <TableItem title='Withdrawn' value='0 DAI' className='pr-6 pl-24'/>
+          <TableItem title='Upcoming Withdrawals' value='0 DAI' className='pr-6 pl-24'/>
+          <TableItem title='Incurred Interests' value='10%' className='pr-6 pl-24'/>
+          <TableItem title='Available for Withdrawal' value='3 DAI' className='pr-6 pl-24'/>
+
         </div>
       </div>
 

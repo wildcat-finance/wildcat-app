@@ -11,7 +11,7 @@ const ServiceAgreement = () => {
 
     return (
         <>
-            <div className="text-green text-2xl font-bold font-black mb-8 w-2/3">
+            <div className="text-green text-2xl font-bold mb-8 w-2/3">
                 Wildcat Service Agreement
             </div>
 
