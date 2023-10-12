@@ -52,14 +52,14 @@ const MyVaults = () => {
         <div>
             <div className="text-xs flex-col">
                 <div className='text-xs font-normal underline'>My Markets</div>
-                <div className='text-green text-2xl font-black justify-between items-center flex mt-8'>
+                <div className='text-green text-2xl font-bold justify-between items-center flex mt-8'>
                     Active markets for borrower peaches.eth
                     <Button onClick={() => navigate('/borrower/add-new-vault')} variant='blue'>
                         New Market
                     </Button>
                 </div>
 
-                <div className='flex flex w-full flex-wrap -mx-2.5 mt-8'>
+                <div className='flex w-full flex-wrap -mx-2.5 mt-8'>
                     <div className='w-1/3 px-2.5 py-2.5'>
                         <Input
                             onChange={handleFilterByName}

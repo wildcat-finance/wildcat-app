@@ -101,7 +101,7 @@ const ServiceAgreement = () => {
 
             <div
                 className="flex items-center justify-center mt-8"
-                onClick={() => navigate('/borrower/add-new-vault')}
+                onClick={() => navigate('/borrower/my-vaults')}
             >
                 <Button variant='black' >
                     Continue to Markets

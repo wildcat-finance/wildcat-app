@@ -1,17 +1,28 @@
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 import arrowBack from '../../../components/ui-components/icons/arrow_back_ios.svg'
+import expandMore from '../../../components/ui-components/icons/expand_more.svg'
+import expandLess from '../../../components/ui-components/icons/expand_less.svg'
 import { Button, FormItem, Input, Paper } from '../../../components/ui-components';
 import { ServiceAgreementCard } from '../../../components/ServiceAgreementCard';
 import TableItem from '../../../components/ui-components/TableItem';
 import canselIcon from '../../../components/ui-components/icons/cancel.svg'
 
+
 const VaultDetails = () => {
   const navigate = useNavigate();
+  const [isExpanded, setIsExpanded] = useState(true);
+
+  const toggleAccordion = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   const handleClickMyVaults = () => {
     navigate('/borrower/my-vaults')
 }
+
+const expandIcon = isExpanded ? expandLess : expandMore;
 
   return (
     <div>
@@ -68,21 +79,6 @@ const VaultDetails = () => {
             </div>
           </div>
       </Paper>
-      <div className='text-base font-bold'>Market Controller / Some title</div>
-      <div className='flex flex-wrap gap-x-7 mb-8 mt-5'>
-        <FormItem
-        className='w-72'
-        label='Market type'
-        tooltip='test'>
-          <Input className='w-72' />
-        </FormItem>
-        <FormItem
-        className='w-72'
-        label='Market contract address'
-        tooltip='test'>
-          <Input className='w-72' />
-        </FormItem>
-      </div>
       <div className='text-base font-bold'>Details</div>
       <div className='flex w-full mt-5 mb-8'>
         <div className='w-full'>
@@ -106,6 +102,7 @@ const VaultDetails = () => {
           <TableItem title='' value='' className='pr-6 pl-24'/>
         </div>
       </div>
+
       <div className='flex w-full justify-between content-center'>
         <div className='text-base font-bold'>Lenders</div>
         <Button variant={'blue'} className='w-24 whitespace-nowrap'>Onboard Lender</Button>
@@ -210,8 +207,17 @@ const VaultDetails = () => {
           
         </div>
       </div>
-      <div className='text-base font-bold'>Market interaction history</div>
-      <Paper className='border-tint-10 mt-5 mb-8 bg-white h-48 p-5 flex flex-col gap-y-6 overflow-auto'>
+
+      <div className='flex w-full justify-between content-center'>
+        <div className='text-base font-bold'>Market interaction history</div>
+        <button className='flex items-center gap-x-2' onClick={toggleAccordion}>
+          <p className='text-xs font-normal underline cursor-pointer' >
+          { isExpanded ? "Hide History" : "Show History"}
+        </p>
+        <img src={expandIcon} className='w-5' alt="Back" />
+      </button>
+      </div>
+      { isExpanded && <Paper className='border-tint-10 mt-5 bg-white h-48 p-5 flex flex-col gap-y-6 overflow-auto'>
         <div className='text-xs'>
           <div>
           1 Sep 2023; 13:37:00
@@ -226,7 +232,24 @@ const VaultDetails = () => {
           <div>28 Aug 2023; 14:24:38</div>
           Lender 0xcatcafe made withdrawal request for 9,000 DAI: 4,000 DAI added to the reserved assets pool, 5,000 DAI pending (example)
         </div>
-      </Paper>
+      </Paper>}
+
+      <div className='text-base font-bold mt-8'>Market Controller / Some title</div>
+      <div className='flex flex-wrap gap-x-7 mb-8 mt-5'>
+        <FormItem
+        className='w-72'
+        label='Market type'
+        tooltip='test'>
+          <Input className='w-72' />
+        </FormItem>
+        <FormItem
+        className='w-72'
+        label='Market contract address'
+        tooltip='test'>
+          <Input className='w-72' />
+        </FormItem>
+      </div>
+
       <div className='flex justify-between items-center'>
         <ServiceAgreementCard
                   title='Market Master Loan Agreement'
