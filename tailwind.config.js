@@ -39,6 +39,7 @@ module.exports = {
           8: '#D3D2C9',
           9: '#E9E8DD',
           10: '#F4F3E8',
+          11: '#F3E9E0',
         },
         silver: {
           100: '#F0F7FA',

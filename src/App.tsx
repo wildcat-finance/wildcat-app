@@ -6,7 +6,7 @@ import {
 
 import { WagmiProvider } from "./modules/wagmi/components";
 import Layout from "./pages/Layout";
-import { AddNewVault, ServiceAgreement, HomePage, MyVaults, VaultDetails } from "./pages";
+import { AddNewVault, ServiceAgreement, HomePage, MyVaults, VaultDetails, LendersServiceAgreement, ActiveVaults } from "./pages";
 import './styles/index.css';
 
 const queryClient = new QueryClient();
@@ -39,6 +39,24 @@ const router = createBrowserRouter([
       {
         path: "vault-details",
         element: <VaultDetails />
+      },
+    ]
+  },
+  {
+    path: "/lender",
+    element: <Layout />,
+    children: [
+      {
+        path: "*",
+        element: <HomePage />,
+      },
+      {
+        path: "agreement",
+        element: <LendersServiceAgreement />,
+      },
+      {
+        path: "active-vaults",
+        element: <ActiveVaults />,
       },
     ]
   }

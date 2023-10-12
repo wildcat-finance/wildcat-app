@@ -15,7 +15,7 @@ export const ServiceAgreementCard = ({ className, children, title, description, 
             <p className="font-bold">{title}</p>
 
             <div className='flex gap-5 justify-center items-center'>
-                <span className='font-light'>{description}</span>
+                <span className='font-light text-xxs'>{description}</span>
                 <Button variant='white-brown' icon={<DownloadIcon />}>
                     Download
                 </Button>

@@ -11,6 +11,7 @@ export const Header = () => {
             <WildcartLogo className="h-full" />
             <div className="flex flex-1 items-center justify-center gap-10">
                 <NavItem name="Borrowers" link="/borrower/agreement" />
+                <NavItem name="Lenders" link="/lender/agreement" />
             </div>
 
             <ConnectButton />
