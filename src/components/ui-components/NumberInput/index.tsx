@@ -33,10 +33,8 @@ const NumberInput = (props: NumberInputProps) => {
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement> ) => {
-    console.log('CHANGES', event.target.value)
     const { value } = event.target;
     const processedValue = value ? processNumber(parseFloat(value), min, max) : value;
-    console.log('PROCESSED', processedValue)
     onChange(processedValue)
   }
 
