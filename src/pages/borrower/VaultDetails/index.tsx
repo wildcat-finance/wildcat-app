@@ -14,6 +14,7 @@ import {
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
 import TableItem from "../../../components/ui-components/TableItem";
 import canselRoundIcon from "../../../components/ui-components/icons/cancel.svg";
+import canselRoundRedIcon from "../../../components/ui-components/icons/cancel_round_red.svg";
 
 const VaultDetails = () => {
   const navigate = useNavigate();
@@ -276,7 +277,7 @@ const VaultDetails = () => {
                     <div className="text-xs">{lender.lenderWallet}</div>
                   </div>
                   <button>
-                    <svg className="w-5 h-5 fill-red">{canselRoundIcon}</svg>
+                    <img src={canselRoundRedIcon} className="w-5 h-5" alt=""/>
                   </button>
                 </div>
               ))}
