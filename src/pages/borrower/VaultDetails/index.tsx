@@ -4,7 +4,7 @@ import { useState } from "react";
 import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.svg";
 import expandMore from "../../../components/ui-components/icons/expand_more.svg";
 import expandLess from "../../../components/ui-components/icons/expand_less.svg";
-import { Modal } from "../../../components/ui-components/Modal/Modal";
+import { Modal } from "../../../components/ui-components/Modal";
 import {
   Button,
   FormItem,
@@ -14,7 +14,6 @@ import {
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
 import TableItem from "../../../components/ui-components/TableItem";
 import canselRoundIcon from "../../../components/ui-components/icons/cancel.svg";
-import canselIcon from "../../../components/ui-components/icons/cansel_icon.svg";
 
 const VaultDetails = () => {
   const navigate = useNavigate();
@@ -54,6 +53,7 @@ const VaultDetails = () => {
         <img src={arrowBack} alt="Back" />
         <p className="text-xs font-normal underline">My Markets</p>
       </button>
+
       <div className="text-green text-2xl font-bold mb-8 w-2/3">
         Blossom Dai Stablecoin
       </div>
@@ -234,9 +234,7 @@ const VaultDetails = () => {
           buttonColor={"blue"}
           buttonClassName="w-24 whitespace-nowrap"
         >
-          <div className="text-base font-bold px-8">
-              Onboard new Lender(s)
-            </div>
+          <div className="text-base font-bold px-8">Onboard new Lender(s)</div>
 
           <div className="w-full border border-tint-10 my-3"></div>
 
@@ -252,7 +250,11 @@ const VaultDetails = () => {
                 placeholder="Enter name of Lender"
               />
             </FormItem>
-            <FormItem className="w-full" label="New Lender wallet" tooltip="test">
+            <FormItem
+              className="w-full"
+              label="New Lender wallet"
+              tooltip="test"
+            >
               <Input
                 className="w-full bg-tint-11"
                 placeholder="eg: 0x987234oiwef8u234892384824309ljw0975a"
@@ -262,12 +264,11 @@ const VaultDetails = () => {
               Add
             </Button>
             <div className="flex flex-col items-center gap-y-2">
-
               <div className="w-full border border-tint-10"></div>
-              
+
               <div className="text-base font-bold">You have added:</div>
               {lenders.map((lender) => (
-                <div className="flex gap-x-4">
+                <div key={lender.lenderWallet} className="flex gap-x-4">
                   <div className="flex flex-col justify-between w-full">
                     <div className="text-xs font-medium">
                       {lender.lenderName}
@@ -290,6 +291,7 @@ const VaultDetails = () => {
             </div>
           </div>
         </Modal>
+
       </div>
       <div className="mt-5 mb-8 flex w-full">
         <div className="w-52">
@@ -366,7 +368,7 @@ const VaultDetails = () => {
             </div>
             <Button variant={"red"} className="w-24 max-h-5 gap-x-2.5">
               Remove
-              <img src={canselIcon} alt="Cancel" />
+              <img src={canselRoundIcon} alt="Cancel" />
             </Button>
           </TableItem>
         </div>
