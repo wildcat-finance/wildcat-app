@@ -26,3 +26,7 @@
 .wc-btn-red {
     @apply bg-red;
 }
+
+.wc-btn-grey {
+    @apply bg-tint-8;
+}
