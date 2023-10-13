@@ -16,7 +16,7 @@ import { SignIcon } from "../../../components/ui-components/icons";
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
 import { TokenSelector } from "./TokenSelector";
 import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.svg";
-import NumberInput from "../../../components/ui-components/NumberInput";
+import NumberInput from "../../../components/ui-components/FormNumberInput";
 import { validationSchema, FormSchema } from "./validationSchema";
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface";
 import { mockedVaultTypes } from "../../../mocks/vaults";

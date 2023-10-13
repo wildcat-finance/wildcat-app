@@ -91,7 +91,7 @@ export function BorrowVault({ vaultAccount }: Props) {
                     New Interest Rate
                   </FormLabel>
                   <InputGroup size="sm">
-                    <NumberInput precision={2} step={0.01}>
+                    <FormNumberInput precision={2} step={0.01}>
                       <NumberInputField
                         min={0}
                         {...aprAdjustRegister("newAprAmount")}
@@ -100,7 +100,7 @@ export function BorrowVault({ vaultAccount }: Props) {
                         <NumberIncrementStepper />
                         <NumberDecrementStepper />
                       </NumberInputStepper>
-                    </NumberInput>
+                    </FormNumberInput>
                     <InputRightAddon children="%" />
                   </InputGroup>
                 </FormControl>

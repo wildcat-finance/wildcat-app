@@ -396,7 +396,7 @@ export function DeployNewVaultButton() {
                             {/* <FormControl mt={2}>
               <FormLabel htmlFor="interestFeeBips">Interest Fee</FormLabel>
               <InputGroup>
-                <NumberInput
+                <FormNumberInput
                   defaultValue={0}
                   min={0}
                   max={100}
@@ -407,7 +407,7 @@ export function DeployNewVaultButton() {
                     <NumberIncrementStepper />
                     <NumberDecrementStepper />
                   </NumberInputStepper>
-                </NumberInput>
+                </FormNumberInput>
                 <InputRightAddon children="%" />
               </InputGroup>
             </FormControl> */}
