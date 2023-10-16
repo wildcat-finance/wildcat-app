@@ -1,7 +1,8 @@
 import { useState } from "react";
 
-import { LenderVaultItemProps } from './interface'
+import { LenderVaultItemProps } from "./interface";
 import { VaultInfo } from "./VaultInfo";
+import { VaultDeposit } from "./VaultDeposit";
 
 import { Button, Chip, Paper } from "../../../../components/ui-components";
 import expandMore from "../../../../components/ui-components/icons/expand_more.svg";
@@ -10,8 +11,14 @@ import expandLess from "../../../../components/ui-components/icons/expand_less.s
 export const LenderVaultItem = ({ index, vault }: LenderVaultItemProps) => {
   const [toggleStatus, setToggleStatus] = useState(false);
 
+  const [step, setStep] = useState(1);
+
+  const toStep2 = () => {
+    setStep(2);
+  }
+
   const toggleAccordion = (index: number) => {
-    setToggleStatus(currentToggleStatus => !currentToggleStatus)
+    setToggleStatus((currentToggleStatus) => !currentToggleStatus);
   };
 
   return (
@@ -39,9 +46,8 @@ export const LenderVaultItem = ({ index, vault }: LenderVaultItemProps) => {
         </button>
       </div>
 
-      {toggleStatus && (
-        <VaultInfo vault={vault} />
-      )}
+      {toggleStatus && step === 1 && <VaultInfo vault={vault} nextStep={toStep2} />}
+      {toggleStatus && step === 2 && <VaultDeposit />}
     </Paper>
   );
 };

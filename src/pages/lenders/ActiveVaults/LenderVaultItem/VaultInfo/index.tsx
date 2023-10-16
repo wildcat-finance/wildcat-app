@@ -5,7 +5,8 @@ import { BluePaper } from "../../../../../components/ui-components/BluePaper";
 
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
-export const VaultInfo = ({ vault }: VaultInfoProps) => {
+export const VaultInfo = ({ vault, nextStep }: VaultInfoProps) => {
+
   return (
     <div>
       <TableItem className="grid grid-cols-2 gap-x-36">
@@ -158,7 +159,7 @@ export const VaultInfo = ({ vault }: VaultInfoProps) => {
         </div>
       </BluePaper>
       <div className="flex gap-x-5 pb-10 mx-auto w-fit">
-        <Button variant={"green"} className="w-40">
+        <Button variant={"green"} className="w-40" onClick={nextStep}>
           Show me the MLA
         </Button>
         <Button variant={"red"} className="w-40">

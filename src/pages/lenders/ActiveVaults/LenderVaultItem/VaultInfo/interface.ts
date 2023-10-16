@@ -21,4 +21,5 @@ export type VaultInfoProps = {
       minutes: number, },
     masterLoanAgreement: string,
   },
+  nextStep: () => void,
 }

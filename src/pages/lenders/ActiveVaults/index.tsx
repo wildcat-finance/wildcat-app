@@ -1,5 +1,4 @@
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
-import VaultInterationHistory from "./LenderVaultItem/VaultInterationHistory";
 import { LenderVaultItem } from "./LenderVaultItem/indes";
 
 const demoVaults = [
