@@ -8,3 +8,14 @@ html {
     background-color: #FFFEF2;
     font-family: "F37Lineca", sans-serif;
 }
+.react-aria-ModalOverlay {
+    height: var(--visual-viewport-height);
+    background: #00000080;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+}

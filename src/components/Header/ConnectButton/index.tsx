@@ -1,11 +1,13 @@
-import { RiWallet3Line } from 'react-icons/ri'
-import {useCallback, useState} from "react";
-import {useAccount, useConnect, useDisconnect, useNetwork, useSwitchNetwork} from "wagmi";
+import { RiWallet3Line, RiCloseLine } from 'react-icons/ri'
+import { useCallback, useMemo, useState } from "react";
+import { useAccount, useConnect, useDisconnect, useNetwork, useSwitchNetwork } from "wagmi";
+import { Dialog, Modal } from 'react-aria-components';
+import { Button } from '../../ui-components/Button';
 
 const ConnectButton = () => {
     const [isOpen, setOpen] = useState(false);
 
-    const { connectors, connect } = useConnect();
+    const { connectors, connect, isLoading, pendingConnector } = useConnect();
     const { address, isConnected } = useAccount();
     const { switchNetwork } = useSwitchNetwork();
     const { disconnect } = useDisconnect();
@@ -35,14 +37,88 @@ const ConnectButton = () => {
         }
     }, [isConnected, address, isWrongNetwork]);
 
+    const shortenedAddress = useMemo(() => {
+        return address
+            ? `${address.slice(0, 2)}..${address.slice(-4, address.length)}`
+            : null;
+    }, [address]);
+
     return (
-        <button className='bg-silver-100 rounded-sm px-2 py-1'>
-          <div className='flex items-center gap-2'>
-            <span className='text-black text-xs'>Connect</span>
-            <RiWallet3Line className='w-5'/>
-          </div>
-        </button>
-      )
+        <>
+            <button className='bg-silver-100 rounded-sm px-2 py-1' onClick={openModal}>
+                <div className='flex items-center gap-2'>
+                    <span className='text-black text-xs'>{getButtonText()}</span>
+                    <RiWallet3Line className='w-5' />
+                </div>
+            </button>
+            <Modal isDismissable isOpen={isOpen} onOpenChange={setOpen}>
+                <Dialog className="bg-sand w-80 p-6 rounded-sm flex flex-col">
+                    <div className='flex items-center justify-center mb-6 relative'>
+                        <p className='text-2xl font-medium select-none'>
+                            {isConnected ? "Account" : " Select Wallet"}
+                        </p>
+                        <RiCloseLine
+                            className='absolute w-6 right-0 top-0'
+                            onClick={closeModal}
+                        />
+                    </div>
+                    <div className='flex items-center flex-col gap-1'>
+                        {isConnected && isWrongNetwork && (
+                            <Button
+                                variant='black'
+                                className='w-full'
+                                onClick={() => switchNetwork?.(11155111)}
+                            >
+                                Switch to Sepolia
+                            </Button>
+                        )}
+                        {isConnected ? (
+                            <>
+                                <p>
+                                    {shortenedAddress}
+                                </p>
+
+                                <Button
+                                    variant='black'
+                                    className='w-full'
+                                    onClick={() => disconnect()}
+                                >
+                                    Disconnect
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                {connectors.map((connector) => (
+                                    <Button
+                                        disabled={!connector.ready}
+                                        key={connector.id}
+                                        onClick={() => connect({ connector })}
+                                        variant="black"
+                                        className='w-full'
+                                    >
+                                        {connector.name}
+                                        {!connector.ready && ' (unsupported)'}
+                                        {isLoading &&
+                                            connector.id === pendingConnector?.id &&
+                                            ' (connecting)'}
+                                    </Button>
+                                ))}
+                            </>
+                        )}
+                    </div>
+                    <div className='mt-6'>
+                        <Button
+                            variant="black"
+                            className='w-full'
+                            onClick={closeModal}
+                        >
+                            Close
+                        </Button>
+                    </div>
+                </Dialog>
+            </Modal>
+        </>
+    )
 }
 
 export default ConnectButton
