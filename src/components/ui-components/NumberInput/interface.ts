@@ -1,12 +1,7 @@
-import { ReactNode } from 'react';
-import { Control, FieldErrors } from 'react-hook-form';
-import { FormSchema } from '../../../pages/borrower/AddNewVault/validationSchema';
+import { InputProps } from '../Input/interface'
 
-export interface NumberInputProps {
-  name?: string
-  onChange: (value: string | number) => void
-  error: boolean
-  className?: string
+export type NumberInputProps = InputProps & {
+  onChange?: (value: string | number) => void
   min?: number
   max?: number
 }

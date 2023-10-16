@@ -14,7 +14,8 @@ import {
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
 import TableItem from "../../../components/ui-components/TableItem";
 import canselRoundIcon from "../../../components/ui-components/icons/cancel.svg";
-import canselRoundRedIcon from "../../../components/ui-components/icons/cancel_round_red.svg";
+import canselIcon from "../../../components/ui-components/icons/cancel_icon.svg";
+import { NumberInput } from "../../../components/ui-components/NumberInput";
 
 const VaultDetails = () => {
   const navigate = useNavigate();
@@ -54,7 +55,6 @@ const VaultDetails = () => {
         <img src={arrowBack} alt="Back" />
         <p className="text-xs font-normal underline">My Markets</p>
       </button>
-
       <div className="text-green text-2xl font-bold mb-8 w-2/3">
         Blossom Dai Stablecoin
       </div>
@@ -63,12 +63,10 @@ const VaultDetails = () => {
           <div className="w-full flex justify-between items-center">
             <div className="font-bold">Borrow</div>
             <div className="flex gap-x-3.5 w-full max-w-lg">
-              <Input
+              <NumberInput
                 className="w-full"
                 placeholder="00,000.00"
                 type="number"
-                min={0}
-                max={2750}
               />
               <Button variant={"green"} className="w-64">
                 Borrow
@@ -85,7 +83,7 @@ const VaultDetails = () => {
             <div className="font-bold mt-3">Repay</div>
             <div className="flex items-center gap-x-3.5 w-full max-w-lg">
               <div className="w-full">
-                <Input
+                <NumberInput
                   className="w-full"
                   placeholder="00,000.00"
                   type="number"
@@ -116,7 +114,7 @@ const VaultDetails = () => {
             <div className="font-bold mt-3">Annual interest rate (%)</div>
             <div className="flex items-center gap-x-3.5 w-full max-w-lg">
               <div className="w-full">
-                <Input
+                <NumberInput
                   className="w-full"
                   placeholder="00,000.00"
                   type="number"
@@ -143,7 +141,7 @@ const VaultDetails = () => {
           <div className="w-full flex justify-between items-center">
             <div className="font-bold">Capacity</div>
             <div className="flex gap-x-3.5 w-full max-w-lg">
-              <Input
+              <NumberInput
                 className="w-full"
                 placeholder="10.00"
                 type="number"
@@ -235,7 +233,9 @@ const VaultDetails = () => {
           buttonColor={"blue"}
           buttonClassName="w-24 whitespace-nowrap"
         >
-          <div className="text-base font-bold px-8">Onboard new Lender(s)</div>
+          <div className="text-base font-bold px-8">
+            Onboard new Lender(s)
+          </div>
 
           <div className="w-full border border-tint-10 my-3"></div>
 
@@ -246,16 +246,12 @@ const VaultDetails = () => {
               descriptive but not too waffly.
             </div>
             <FormItem className="w-full" label="New Lender name" tooltip="test">
-              <Input
+              <NumberInput
                 className="w-full bg-tint-11"
                 placeholder="Enter name of Lender"
               />
             </FormItem>
-            <FormItem
-              className="w-full"
-              label="New Lender wallet"
-              tooltip="test"
-            >
+            <FormItem className="w-full" label="New Lender wallet" tooltip="test">
               <Input
                 className="w-full bg-tint-11"
                 placeholder="eg: 0x987234oiwef8u234892384824309ljw0975a"
@@ -265,11 +261,12 @@ const VaultDetails = () => {
               Add
             </Button>
             <div className="flex flex-col items-center gap-y-2">
+
               <div className="w-full border border-tint-10"></div>
 
               <div className="text-base font-bold">You have added:</div>
               {lenders.map((lender) => (
-                <div key={lender.lenderWallet} className="flex gap-x-4">
+                <div className="flex gap-x-4">
                   <div className="flex flex-col justify-between w-full">
                     <div className="text-xs font-medium">
                       {lender.lenderName}
@@ -277,7 +274,7 @@ const VaultDetails = () => {
                     <div className="text-xs">{lender.lenderWallet}</div>
                   </div>
                   <button>
-                    <img src={canselRoundRedIcon} className="w-5 h-5" alt=""/>
+                    <svg className="w-5 h-5 fill-red">{canselRoundIcon}</svg>
                   </button>
                 </div>
               ))}
@@ -292,7 +289,6 @@ const VaultDetails = () => {
             </div>
           </div>
         </Modal>
-
       </div>
       <div className="mt-5 mb-8 flex w-full">
         <div className="w-52">
@@ -369,7 +365,7 @@ const VaultDetails = () => {
             </div>
             <Button variant={"red"} className="w-24 max-h-5 gap-x-2.5">
               Remove
-              <img src={canselRoundIcon} alt="Cancel" />
+              <img src={canselIcon} alt="Cancel" />
             </Button>
           </TableItem>
         </div>
@@ -408,14 +404,14 @@ const VaultDetails = () => {
       </div>
       <div className="flex flex-wrap gap-x-7 mb-8 mt-5">
         <FormItem className="w-72" label="Market type" tooltip="test">
-          <Input className="w-72" />
+          <NumberInput className="w-72" />
         </FormItem>
         <FormItem
           className="w-72"
           label="Market contract address"
           tooltip="test"
         >
-          <Input className="w-72" />
+          <NumberInput className="w-72" />
         </FormItem>
       </div>
 

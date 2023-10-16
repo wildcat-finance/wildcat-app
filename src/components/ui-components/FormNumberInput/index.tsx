@@ -17,7 +17,7 @@ const FormNumberInput = (props: NumberInputProps) => {
     max
   } = props
 
-  const { field: {onChange, ...rest} } = useController({
+  const { field: { onChange, ...rest } } = useController({
     name: name,
     control,
   });
@@ -32,11 +32,11 @@ const FormNumberInput = (props: NumberInputProps) => {
       errorText={formErrors[name]?.message}
     >
       <NumberInput {...rest}
-         onChange={onChange}
-         className={inputClass}
-         min={min}
-         max={max}
-         error={Boolean(formErrors[name]?.message)}
+        onChange={onChange}
+        className={inputClass}
+        min={min}
+        max={max}
+        error={Boolean(formErrors[name]?.message)}
       />
     </FormItem>
   )

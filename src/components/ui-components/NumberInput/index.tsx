@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Input } from "../Input";
 import { NumberInputProps } from "./interface";
 
@@ -18,23 +19,29 @@ export const NumberInput = (props: NumberInputProps) => {
     onChange,
     min = 0,
     max,
-    error,
-      ...rest
+    value,
+    ...rest
   } = props
+  const [inputValue, setInputValue] = useState<string | number | undefined>()
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement> ) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     const processedValue = value ? processNumber(parseFloat(value), min, max) : value;
-    onChange(processedValue)
+
+    if (onChange) {
+      onChange(processedValue)
+    }
+
+    setInputValue(processedValue)
   }
 
   return (
-      <Input
-          onChange={handleChange}
-          className={className ||  "w-48"}
-          error={error}
-          type="number"
-          {...rest}
-      />
+    <Input
+      onChange={handleChange}
+      value={value || inputValue}
+      className={className || "w-48"}
+      type="number"
+      {...rest}
+    />
   )
 }
