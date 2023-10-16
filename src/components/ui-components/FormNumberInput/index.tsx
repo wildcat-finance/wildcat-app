@@ -4,7 +4,7 @@ import { NumberInput } from "../NumberInput";
 import { NumberInputProps } from "./interface";
 
 
-const FormNumberInput = (props: NumberInputProps) => {
+export const FormNumberInput = (props: NumberInputProps) => {
   const {
     control,
     formErrors,
@@ -41,5 +41,3 @@ const FormNumberInput = (props: NumberInputProps) => {
     </FormItem>
   )
 }
-
-export default FormNumberInput

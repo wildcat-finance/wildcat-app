@@ -1,8 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useController, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
 
+import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
 import {
     Paper,
     Input,
@@ -11,20 +12,19 @@ import {
     Button,
     FormItem,
     Select,
+    FormNumberInput,
+    Modal
 } from "../../../components/ui-components";
+import { TokenSelector } from "./TokenSelector";
+
 import {
-  DownloadIcon,
   SignIcon,
 } from "../../../components/ui-components/icons";
-import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
-import { TokenSelector } from "./TokenSelector";
 import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.svg";
-import NumberInput from "../../../components/ui-components/FormNumberInput";
+
 import { validationSchema, FormSchema } from "./validationSchema";
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface";
 import { mockedVaultTypes } from "../../../mocks/vaults";
-import FormNumberInput from "../../../components/ui-components/FormNumberInput";
-import { Modal } from "../../../components/ui-components/Modal";
 
 const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
     (vaultType) => ({
@@ -33,6 +33,19 @@ const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
         value: vaultType,
     })
 );
+
+const mockedNewMarket = {
+    vaultType: "Vault type",
+    underlyingToken: "DAI",
+    namePrefix: "Blossom Dai Stablecoin",
+    symbolPrefix: "blsmDAI",
+    maxAmount: 30000,
+    annualRate: 10,
+    penaltyRate: 10,
+    reserveRatio: 10,
+    gracePeriod: 24,
+    withdrawalCycle: 48,
+};
 
 const defaultVault: FormSchema = {
     vaultType: "",
@@ -283,70 +296,70 @@ export const AddNewVault = () => {
             <FormItem label="Vault type">
               <input
                 className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={"test"}
+                value={mockedNewMarket.vaultType}
                 disabled
               />
             </FormItem>
             <FormItem label="Underlying token">
               <input
                 className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={"test"}
+                value={mockedNewMarket.underlyingToken}
                 disabled
               />
             </FormItem>
             <FormItem label="Issued vault token name">
               <input
                 className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={"test"}
+                value={mockedNewMarket.namePrefix}
                 disabled
               />
             </FormItem>
             <FormItem label="Issued vault token symbol">
               <input
                 className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={"test"}
+                value={mockedNewMarket.symbolPrefix}
                 disabled
               />
             </FormItem>
             <FormItem label="Maximum amount you can borrow">
               <input
                 className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={"test"}
+                value={`${mockedNewMarket.maxAmount} ${mockedNewMarket.underlyingToken}`}
                 disabled
               />
             </FormItem>
             <FormItem label="Annual interest rate (APR)">
               <input
                 className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={"test"}
+                value={`${mockedNewMarket.annualRate}%`}
                 disabled
               />
             </FormItem>
             <FormItem label="Reserve ratio">
               <input
                 className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={"test"}
+                value={`${mockedNewMarket.reserveRatio}%`}
                 disabled
               />
             </FormItem>
             <FormItem label="Penalty fee rate (APR)">
               <input
                 className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={"test"}
+                value={`${mockedNewMarket.penaltyRate}%`}
                 disabled
               />
             </FormItem>
             <FormItem label="Grace period">
               <input
                 className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={"test"}
+                value={`${mockedNewMarket.gracePeriod} hours`}
                 disabled
               />
             </FormItem>
             <FormItem label="Withdrawal cycle">
               <input
                 className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={"test"}
+                value={`${mockedNewMarket.withdrawalCycle} hours`}
                 disabled
               />
             </FormItem>

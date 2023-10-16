@@ -1,21 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.svg";
-import expandMore from "../../../components/ui-components/icons/expand_more.svg";
-import expandLess from "../../../components/ui-components/icons/expand_less.svg";
-import { Modal } from "../../../components/ui-components/Modal";
 import {
   Button,
   FormItem,
   Input,
   Paper,
+  Modal,
+  NumberInput,
+  TableItem
 } from "../../../components/ui-components";
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
-import TableItem from "../../../components/ui-components/TableItem";
+
 import canselRoundIcon from "../../../components/ui-components/icons/cancel.svg";
-import canselIcon from "../../../components/ui-components/icons/cancel_icon.svg";
-import { NumberInput } from "../../../components/ui-components/NumberInput";
+import cancelRoundRedIcon from "../../../components/ui-components/icons/cancel_round_red.svg";
+import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.svg";
+import expandMore from "../../../components/ui-components/icons/expand_more.svg";
+import expandLess from "../../../components/ui-components/icons/expand_less.svg";
 
 const VaultDetails = () => {
   const navigate = useNavigate();
@@ -270,7 +271,7 @@ const VaultDetails = () => {
                     <div className="text-xs">{lender.lenderWallet}</div>
                   </div>
                   <button>
-                    <svg className="w-5 h-5 fill-red">{canselRoundIcon}</svg>
+                    <img className="w-5 h-5" src={cancelRoundRedIcon} alt="Cancel"/>
                   </button>
                 </div>
               ))}
@@ -361,7 +362,7 @@ const VaultDetails = () => {
             </div>
             <Button variant={"red"} className="w-24 max-h-5 gap-x-2.5">
               Remove
-              <img src={canselIcon} alt="Cancel" />
+              <img src={canselRoundIcon} alt="Cancel" />
             </Button>
           </TableItem>
         </div>
