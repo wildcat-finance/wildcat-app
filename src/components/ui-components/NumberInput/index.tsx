@@ -3,7 +3,6 @@ import { Input } from "../Input";
 import { NumberInputProps } from "./interface";
 
 function cleanNumberInput(input: string): number {
-  console.log('in', input)
   const numbersOnly = input.replace(/[^0-9-]/g, '');
   const cleanedInput = numbersOnly.replace(/^0+(?=\d)|^-(?=\d)/, '');
   if (cleanedInput === '' || cleanedInput === '-') {
@@ -47,7 +46,6 @@ export const NumberInput = (props: NumberInputProps) => {
 
     setInputValue(processedValue)
   }
-  console.log('Input', inputValue, value)
 
   return (
     <Input
