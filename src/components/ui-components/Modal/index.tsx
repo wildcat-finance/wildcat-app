@@ -6,18 +6,20 @@ import { ModalProps } from "./interface";
 import { Paper } from "../Paper";
 
 import closeIcon from "../../ui-components/icons/cancel_icon.svg";
+import { SignIcon } from "../icons";
 
 export const Modal = ({
   buttonName,
   buttonColor,
   buttonClassName,
   children,
+  sign,
 }: ModalProps) => {
   let [isOpen, setIsOpen] = useState(false);
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
-  };
+  };  
 
   return (
     <>
@@ -64,6 +66,25 @@ export const Modal = ({
                     </button>
                     <Paper className="bg-white border-none py-5">
                       {children}
+                      <div className="flex gap-x-3 justify-center mt-5">
+                        {!sign && (
+                          <Button variant="blue" className="w-28">
+                            Submit
+                          </Button>
+                        )}
+                        {sign && (
+                          <Button variant="blue" icon={<SignIcon />}>
+                            Sign
+                          </Button>
+                        )}
+                        <Button
+                          variant={"grey"}
+                          className="!text-black font-semibold w-28"
+                          onClick={toggleModal}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
                     </Paper>
                   </div>
                 </Dialog.Panel>

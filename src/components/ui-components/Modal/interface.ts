@@ -3,4 +3,5 @@ export type ModalProps = {
   buttonColor: "green" | "brown" | "black" | "blue" | "gold" | "white-brown" | "red" | "grey";
   buttonClassName?: string;
   children: React.ReactNode;
+  sign?: boolean;
 };

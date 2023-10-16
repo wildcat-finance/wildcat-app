@@ -287,6 +287,7 @@ export const AddNewVault = () => {
           buttonClassName="mt-10"
           buttonName={"Submit and Create Market"}
           buttonColor={"blue"}
+          sign
         >
           <div className="text-center text-base font-bold">
             Confirm new Market
@@ -369,15 +370,6 @@ export const AddNewVault = () => {
             Some text about what you are about to get yourself into and can you
             fulfill the params of doing this and make the text nice and
             descriptive but not too waffly.
-          </div>
-          <div className="flex items-center gap-3 justify-center mt-5">
-            <Button variant="blue" icon={<SignIcon />}>
-              Sign
-            </Button>
-
-            <Button variant="grey" className="!text-black font-semibold w-28">
-              Cancel
-            </Button>
           </div>
         </Modal>
       </Paper>
