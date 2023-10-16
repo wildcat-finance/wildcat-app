@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Input } from "../Input";
 import { NumberInputProps } from "./interface";
 
-
 function processNumber(input: number, minNumber?: number, maxValue?: number): number {
   if (minNumber !== undefined && input < minNumber) {
     return minNumber;
@@ -21,19 +20,23 @@ export const NumberInput = (props: NumberInputProps) => {
     max,
     value,
     ...rest
-  } = props
-  const [inputValue, setInputValue] = useState<string | number | undefined>()
+  } = props;
+  const [inputValue, setInputValue] = useState<string | number | undefined>(value as string | number);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     const processedValue = value ? processNumber(parseFloat(value), min, max) : value;
 
-    if (onChange) {
-      onChange(processedValue)
+    if (typeof processedValue === 'number') {
+      setInputValue(processedValue.toString()); // Преобразование числа в строку
+    } else {
+      setInputValue(processedValue);
     }
 
-    setInputValue(processedValue)
-  }
+    if (onChange) {
+      onChange(processedValue);
+    }
+  };
 
   return (
     <Input
@@ -43,5 +46,5 @@ export const NumberInput = (props: NumberInputProps) => {
       type="number"
       {...rest}
     />
-  )
+  );
 }
