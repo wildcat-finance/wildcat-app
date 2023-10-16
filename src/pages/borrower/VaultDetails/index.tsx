@@ -66,7 +66,6 @@ const VaultDetails = () => {
               <NumberInput
                 className="w-full"
                 placeholder="00,000.00"
-                type="number"
               />
               <Button variant={"green"} className="w-64">
                 Borrow
@@ -86,7 +85,6 @@ const VaultDetails = () => {
                 <NumberInput
                   className="w-full"
                   placeholder="00,000.00"
-                  type="number"
                   min={0}
                   max={9000}
                 />
@@ -117,7 +115,6 @@ const VaultDetails = () => {
                 <NumberInput
                   className="w-full"
                   placeholder="00,000.00"
-                  type="number"
                   min={0}
                   max={9000}
                 />
@@ -144,7 +141,6 @@ const VaultDetails = () => {
               <NumberInput
                 className="w-full"
                 placeholder="10.00"
-                type="number"
                 min={0}
               />
               <Button variant={"green"} className="w-64">

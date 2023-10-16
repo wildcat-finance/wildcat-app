@@ -2,14 +2,27 @@ import { useState } from 'react'
 import { Input } from "../Input";
 import { NumberInputProps } from "./interface";
 
-function processNumber(input: number, minNumber?: number, maxValue?: number): number {
-  if (minNumber !== undefined && input < minNumber) {
+function cleanNumberInput(input: string): number {
+  console.log('in', input)
+  const numbersOnly = input.replace(/[^0-9-]/g, '');
+  const cleanedInput = numbersOnly.replace(/^0+(?=\d)|^-(?=\d)/, '');
+  if (cleanedInput === '' || cleanedInput === '-') {
+    return 0; 
+  }
+
+  return parseFloat(cleanedInput);
+}
+
+function processNumber(input: string, minNumber?: number, maxValue?: number): number {
+  const cleanedNumbedInput = cleanNumberInput(input)
+
+  if (minNumber !== undefined && cleanedNumbedInput < minNumber) {
     return minNumber;
-  } else if (maxValue && input > maxValue) {
+  } else if (maxValue && cleanedNumbedInput > maxValue) {
     return maxValue;
   }
 
-  return input;
+  return cleanedNumbedInput;
 }
 
 export const NumberInput = (props: NumberInputProps) => {
@@ -20,31 +33,28 @@ export const NumberInput = (props: NumberInputProps) => {
     max,
     value,
     ...rest
-  } = props;
-  const [inputValue, setInputValue] = useState<string | number | undefined>(value as string | number);
+  } = props
+
+  const [inputValue, setInputValue] = useState<string | number>("")
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    const processedValue = value ? processNumber(parseFloat(value), min, max) : value;
-
-    if (typeof processedValue === 'number') {
-      setInputValue(processedValue.toString()); // Преобразование числа в строку
-    } else {
-      setInputValue(processedValue);
-    }
+    const processedValue = value ? processNumber(value, min, max) : value;
 
     if (onChange) {
-      onChange(processedValue);
+      onChange(processedValue)
     }
-  };
+
+    setInputValue(processedValue)
+  }
+  console.log('Input', inputValue, value)
 
   return (
     <Input
       onChange={handleChange}
-      value={value || inputValue}
+      value={inputValue}
       className={className || "w-48"}
-      type="number"
       {...rest}
     />
-  );
+  )
 }
