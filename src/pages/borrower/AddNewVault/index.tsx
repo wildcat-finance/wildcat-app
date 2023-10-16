@@ -12,7 +12,10 @@ import {
     FormItem,
     Select,
 } from "../../../components/ui-components";
-import { SignIcon } from "../../../components/ui-components/icons";
+import {
+  DownloadIcon,
+  SignIcon,
+} from "../../../components/ui-components/icons";
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
 import { TokenSelector } from "./TokenSelector";
 import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.svg";
@@ -21,6 +24,7 @@ import { validationSchema, FormSchema } from "./validationSchema";
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface";
 import { mockedVaultTypes } from "../../../mocks/vaults";
 import FormNumberInput from "../../../components/ui-components/FormNumberInput";
+import { Modal } from "../../../components/ui-components/Modal";
 
 const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
     (vaultType) => ({
@@ -261,16 +265,109 @@ export const AddNewVault = () => {
                             for this market before creation.
                         </div>
 
-                        <Button className="mt-5" variant="blue" icon={<SignIcon />}>
-                            Sign
-                        </Button>
-                    </div>
+            <Button className="mt-5" variant="blue" icon={<SignIcon />}>
+              Sign
+            </Button>
+          </div>
+        </form>
+        <Modal
+          buttonClassName="mt-10"
+          buttonName={"Submit and Create Market"}
+          buttonColor={"blue"}
+        >
+          <div className="text-center text-base font-bold">
+            Confirm new Market
+          </div>
+          <div className="w-full border border-tint-10 my-6"></div>
+          <div className="grid grid-rows-5 grid-cols-2 gap-x-8 gap-y-7 px-8">
+            <FormItem label="Vault type">
+              <input
+                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
+                value={"test"}
+                disabled
+              />
+            </FormItem>
+            <FormItem label="Underlying token">
+              <input
+                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
+                value={"test"}
+                disabled
+              />
+            </FormItem>
+            <FormItem label="Issued vault token name">
+              <input
+                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
+                value={"test"}
+                disabled
+              />
+            </FormItem>
+            <FormItem label="Issued vault token symbol">
+              <input
+                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
+                value={"test"}
+                disabled
+              />
+            </FormItem>
+            <FormItem label="Maximum amount you can borrow">
+              <input
+                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
+                value={"test"}
+                disabled
+              />
+            </FormItem>
+            <FormItem label="Annual interest rate (APR)">
+              <input
+                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
+                value={"test"}
+                disabled
+              />
+            </FormItem>
+            <FormItem label="Reserve ratio">
+              <input
+                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
+                value={"test"}
+                disabled
+              />
+            </FormItem>
+            <FormItem label="Penalty fee rate (APR)">
+              <input
+                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
+                value={"test"}
+                disabled
+              />
+            </FormItem>
+            <FormItem label="Grace period">
+              <input
+                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
+                value={"test"}
+                disabled
+              />
+            </FormItem>
+            <FormItem label="Withdrawal cycle">
+              <input
+                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
+                value={"test"}
+                disabled
+              />
+            </FormItem>
+          </div>
+          <div className="w-full border border-tint-10 mt-9 mb-3.5"></div>
+          <div className="w-72 m-auto leading-3 font-light text-xxs text-center">
+            Some text about what you are about to get yourself into and can you
+            fulfill the params of doing this and make the text nice and
+            descriptive but not too waffly.
+          </div>
+          <div className="flex items-center gap-3 justify-center mt-5">
+            <Button variant="blue" icon={<SignIcon />}>
+              Sign
+            </Button>
 
-                    <Button className="mt-10" variant="blue" disabled>
-                        Submit and Create Market
-                    </Button>
-                </form>
-            </Paper>
+            <Button variant="grey" className="!text-black font-semibold w-28">
+              Cancel
+            </Button>
+          </div>
+        </Modal>
+      </Paper>
 
             <ServiceAgreementCard
                 className="mt-10"
