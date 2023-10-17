@@ -469,7 +469,6 @@ const VaultDetails = () => {
           title="Market Master Loan Agreement"
           description="You signed the blsmDAI Master Loan Agreement on 17-Sept-2023"
         />
-        <Button variant={"red"}>Terminate Market</Button>
       </div>
 
       <ServiceAgreementCard
