@@ -4,6 +4,7 @@ import { Combobox } from "../../../../components/ui-components";
 import { useTokensList } from "../../../../hooks/useTokensList";
 import { TokenMeta } from "../../../../types/tokens";
 import { TokenSelectorProps } from "./interface";
+import { ComboboxItem } from "../../../../components/ui-components/Combobox/interface";
 
 function tokensToOptions(tokens: TokenMeta[]) {
     return tokens.map((token) => ({
@@ -15,7 +16,7 @@ function tokensToOptions(tokens: TokenMeta[]) {
 }
 
 export const TokenSelector = ({ className}: TokenSelectorProps ) => {
-    const [selectedTokenAddress, setSelectedTokenAddress] = useState<string | null>(null)
+    const [selectedTokenAddress, setSelectedTokenAddress] = useState<ComboboxItem | null>(null)
     const { filterByName, filteredTokens } = useTokensList()
 
     const options = tokensToOptions(filteredTokens);
@@ -24,7 +25,7 @@ export const TokenSelector = ({ className}: TokenSelectorProps ) => {
     return (
         <div className={className}>
             <Combobox
-                onSelect={setSelectedTokenAddress}
+                onSelect={(option) => setSelectedTokenAddress(option)}
                 onSearch={filterByName}
                 value={selectedTokenAddress}
                 options={options}

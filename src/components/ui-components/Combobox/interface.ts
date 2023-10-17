@@ -8,8 +8,8 @@ export type ComboboxItem = {
 }
 
 export type ComboboxProps = {
-    value: string | null,
-    onSelect: (value: string) => void,
+    value: ComboboxItem | null | undefined,
+    onSelect: (value: ComboboxItem) => void,
     onSearch: (value: string) => void,
     options: ComboboxItem[]
 }
