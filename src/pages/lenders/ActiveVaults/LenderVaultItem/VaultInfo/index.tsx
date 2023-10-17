@@ -5,7 +5,7 @@ import { BluePaper } from "../../../../../components/ui-components/BluePaper";
 
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
-export const VaultInfo = ({ vault, nextStep }: VaultInfoProps) => {
+export const VaultInfo = ({ vault, nextStep, previousStep}: VaultInfoProps) => {
 
   return (
     <div>
@@ -162,7 +162,7 @@ export const VaultInfo = ({ vault, nextStep }: VaultInfoProps) => {
         <Button variant={"green"} className="w-40" onClick={nextStep}>
           Show me the MLA
         </Button>
-        <Button variant={"red"} className="w-40">
+        <Button variant={"red"} className="w-40" onClick={previousStep}>
           I don’t want the MLA
         </Button>
       </div>

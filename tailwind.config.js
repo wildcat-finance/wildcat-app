@@ -9,6 +9,7 @@ module.exports = {
       maxHeight: {
         '3xl': '756px',
         '1xl': '570px',
+        '2xl': '460px',
       },
       fontSize: {
         'xxs': '.65rem',

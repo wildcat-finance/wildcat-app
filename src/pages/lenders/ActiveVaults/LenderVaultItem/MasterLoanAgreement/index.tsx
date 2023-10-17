@@ -1,29 +1,16 @@
-import { useNavigate } from "react-router-dom";
+import { Paper } from "../../../../../components/ui-components/Paper";
 
-import { Paper } from "../../../components/ui-components/Paper";
-import { BluePaper } from "../../../components/ui-components/BluePaper";
-import { Button } from "../../../components/ui-components/Button";
-import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { Button } from "../../../../../components/ui-components/Button";
 
-const ServiceAgreement = () => {
-  const navigate = useNavigate();
-
+const MasterLoanAgreement = ({
+  nextStep,
+}: {
+  nextStep?: () => void;
+  previousStep?: () => void;
+}) => {
   return (
     <>
-      <div className="text-green text-2xl font-bold mb-8 w-2/3">
-        Wildcat Service Agreement
-      </div>
-
-      <BluePaper className="mb-8">
-        <AiOutlineExclamationCircle height={24} />
-        <span className="text-xs text-center">
-          Before you can interact with the protocol UI you need to read and
-          agree (via ETH
-          <br /> wallet signature) to the Wildcat Service Agreement.
-        </span>
-      </BluePaper>
-
-      <Paper className="bg-white max-h-3xl flex flex-col">
+      <Paper className="bg-white max-h-2xl flex flex-col border-0" >
         <div className="overflow-scroll mt-5 pr-14 pl-8 flex-grow-1">
           <div className=" text-xs">
             <p className="mb-4">
@@ -281,7 +268,7 @@ const ServiceAgreement = () => {
         </div>
 
         <div className="flex items-center gap-8 justify-center mb-9 mt-9">
-          <Button variant="green" className="w-40">
+          <Button variant="green" className="w-40" onClick={nextStep}>
             Sign
           </Button>
 
@@ -291,11 +278,8 @@ const ServiceAgreement = () => {
         </div>
       </Paper>
 
-      <div
-        className="flex items-center justify-center mt-8"
-        onClick={() => navigate("/lender/active-vaults")}
-      >
-        <Button variant="black" className="w-40">
+      <div className="flex items-center justify-center mt-8">
+        <Button disabled variant="black" className="w-40">
           Continue to Vaults
         </Button>
       </div>
@@ -303,4 +287,4 @@ const ServiceAgreement = () => {
   );
 };
 
-export default ServiceAgreement;
+export default MasterLoanAgreement;

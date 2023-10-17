@@ -6,7 +6,8 @@ import {
 
 import { WagmiProvider } from "./modules/wagmi/components";
 import Layout from "./pages/Layout";
-import { AddNewVault, ServiceAgreement, HomePage, MyVaults, VaultDetails, LendersServiceAgreement, ActiveVaults } from "./pages";
+import { AddNewVault, ServiceAgreement, HomePage, MyVaults, VaultDetails, ActiveVaults } from "./pages";
+import  LendersServiceAgreement from "./pages/lenders/LendersServiceAgreement";
 import './styles/index.css';
 
 const queryClient = new QueryClient();

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { LenderVaultItemProps } from "./interface";
 import { VaultInfo } from "./VaultInfo";
 import { VaultDeposit } from "./VaultDeposit";
+import MasterLoanAgreement from "./MasterLoanAgreement";
 
 import { Button, Chip, Paper } from "../../../../components/ui-components";
 import expandMore from "../../../../components/ui-components/icons/expand_more.svg";
@@ -13,8 +14,12 @@ export const LenderVaultItem = ({ index, vault }: LenderVaultItemProps) => {
 
   const [step, setStep] = useState(1);
 
-  const toStep2 = () => {
-    setStep(2);
+  const nextStep = () => {
+    setStep(step + 1);
+  }
+
+  const previousStep = () => {
+    setStep(step - 1);
   }
 
   const toggleAccordion = (index: number) => {
@@ -46,8 +51,9 @@ export const LenderVaultItem = ({ index, vault }: LenderVaultItemProps) => {
         </button>
       </div>
 
-      {toggleStatus && step === 1 && <VaultInfo vault={vault} nextStep={toStep2} />}
-      {toggleStatus && step === 2 && <VaultDeposit />}
+      {toggleStatus && step === 1 && <VaultInfo vault={vault} nextStep={nextStep} previousStep={previousStep} />}
+      {toggleStatus && step === 2 && <MasterLoanAgreement nextStep={nextStep} previousStep={previousStep} />}
+      {toggleStatus && step === 3 && <VaultDeposit />}
     </Paper>
   );
 };
