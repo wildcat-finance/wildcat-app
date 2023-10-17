@@ -38,7 +38,7 @@ export const NumberInput = (props: NumberInputProps) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    const processedValue = value ? processNumber(value, min, max) : value;
+    const processedValue = value ? processNumber(value, Number(min), Number(max)) : value;
 
     if (onChange) {
       onChange(processedValue)

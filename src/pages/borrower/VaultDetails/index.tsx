@@ -17,10 +17,28 @@ import cancelRoundRedIcon from "../../../components/ui-components/icons/cancel_r
 import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.svg";
 import expandMore from "../../../components/ui-components/icons/expand_more.svg";
 import expandLess from "../../../components/ui-components/icons/expand_less.svg";
+import { useForm } from "react-hook-form";
+import { FormSchema, validationSchema } from "./validationSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const defaultDetails: FormSchema = {
+  borrow: "",
+  repay: "",
+  annualInterestRate: "",
+  capacity: "",
+};
 
 const VaultDetails = () => {
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(true);
+
+  const {
+    setValue,
+} = useForm<FormSchema>({
+    defaultValues: defaultDetails,
+    resolver: zodResolver(validationSchema),
+    mode: "onBlur",
+});
 
   const toggleAccordion = () => {
     setIsExpanded(!isExpanded);
@@ -47,6 +65,10 @@ const VaultDetails = () => {
     },
   ];
 
+  const handleFieldChange = (field: string, value: string | number) => {
+    setValue(field as keyof typeof defaultDetails, String(value))
+  }
+
   return (
     <div>
       <button
@@ -64,7 +86,7 @@ const VaultDetails = () => {
           <div className="w-full flex justify-between items-center">
             <div className="font-bold">Borrow</div>
             <div className="flex gap-x-3.5 w-full max-w-lg">
-              <NumberInput className="w-full" placeholder="00,000.00" />
+              <NumberInput onChange={(value) => handleFieldChange('borrow', value)} className="w-full" placeholder="00,000.00" />
               <Button variant={"green"} className="w-64">
                 Borrow
               </Button>
@@ -85,6 +107,7 @@ const VaultDetails = () => {
                   placeholder="00,000.00"
                   min={0}
                   max={9000}
+                  onChange={(value) => handleFieldChange('repay', value)}
                 />
                 <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
                   <span className="font-semibold">Repay up to </span>
@@ -115,6 +138,7 @@ const VaultDetails = () => {
                   placeholder="00,000.00"
                   min={0}
                   max={9000}
+                  onChange={(value) => handleFieldChange('annualInterestRate', value)}
                 />
                 <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
                   <span className="font-semibold">Current </span>
@@ -136,7 +160,7 @@ const VaultDetails = () => {
           <div className="w-full flex justify-between items-center">
             <div className="font-bold">Capacity</div>
             <div className="flex gap-x-3.5 w-full max-w-lg">
-              <NumberInput className="w-full" placeholder="10.00" min={0} />
+              <NumberInput onChange={(value) => handleFieldChange('capacity', value)} className="w-full" placeholder="10.00" min={0} />
               <Button variant={"green"} className="w-64">
                 Adjust
               </Button>
