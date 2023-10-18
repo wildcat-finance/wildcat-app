@@ -23,7 +23,7 @@ export const Select = (props: SelectProps) => {
         <div>
           <Listbox.Button className="cursor-default bg-white text-left w-full h-8 pl-3 border border-tint-8 flex items-center justify-between pr-2">
             <span className="block truncate text-xxs">
-              {selected ? selected.label : placeholder || 'Please select'}
+              {selected ? selected.label : placeholder || 'Select'}
             </span>
 
             <span>
@@ -38,16 +38,6 @@ export const Select = (props: SelectProps) => {
             leaveTo="opacity-0"
           >
             <Listbox.Options className="absolute z-40 mt-0 py-0 shadow-lg w-full overflow-auto bg-white text-base sm:text-sm">
-              <Listbox.Option
-                  value={null}
-                  onChange={() => onChange(null)}
-                  className={cn(SelectOptionBaseClass, 'text-gray-900')}
-              >
-                <span className="block truncate text-xxs">
-                  None
-                </span>
-              </Listbox.Option>
-
               {options.map((option) => (
                 <Listbox.Option
                   key={option.id}

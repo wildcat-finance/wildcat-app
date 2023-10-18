@@ -57,6 +57,6 @@ export const mockedVaults: Vault[] = [
     },
 ]
 
-export const mockedVaultTypes = [ 'Vault type 1', 'Vault type 2']
+export const mockedVaultTypes = [ 'Standard Loan']
 export const mockedRatios = mockedVaults.map(vault => vault.reserveRatio)
 export const mockedUnderlyingAssets = mockedVaults.map(vault => vault.tokenSymbol)

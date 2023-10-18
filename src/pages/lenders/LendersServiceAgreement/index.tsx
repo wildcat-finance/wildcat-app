@@ -282,7 +282,7 @@ const LendersServiceAgreement = () => {
 
         <div className="flex items-center gap-8 justify-center mb-9 mt-9">
           <Button variant="green" className="w-40">
-            Signh
+            Sign
           </Button>
 
           <Button variant="brown" className="w-40">
