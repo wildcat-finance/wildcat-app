@@ -239,7 +239,6 @@ export const AddNewVault = () => {
                         control={control}
                         formErrors={formErrors}
                         name="gracePeriod"
-                        toFixed={1}
                         tooltip="The length of time for which a market is permitted to be delinquent before the penalty APR activates.
                                 The grace period is an aggregate length of time for delinquency: the borrower *does not* have this much
                                 time to rectify delinquency every single time it triggers. An internal variable tracks the time a market

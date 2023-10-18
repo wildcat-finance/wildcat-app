@@ -14,7 +14,6 @@ export const FormNumberInput = (props: NumberInputProps) => {
     tooltip,
     min = 0,
     max,
-    toFixed = 0,
     decimalScale
   } = props
 
