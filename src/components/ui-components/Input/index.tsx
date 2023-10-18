@@ -1,6 +1,7 @@
-import { Input as RInput } from 'react-aria-components'
 import cn from 'classnames'
 import { InputProps } from "./interface";
+import { NumericFormat } from 'react-number-format';
+
 
 export const Input = (props: InputProps) => {
     const {
@@ -18,8 +19,10 @@ export const Input = (props: InputProps) => {
     )
 
     return (
-        <RInput
+        <NumericFormat
             className={inputCssClass}
+            decimalSeparator={','}
+            allowNegative={false}
             {...rest}
         />
     );

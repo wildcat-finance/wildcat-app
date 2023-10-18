@@ -3,7 +3,6 @@ import { FormItem } from "../FormItem";
 import { NumberInput } from "../NumberInput";
 import { NumberInputProps } from "./interface";
 
-
 export const FormNumberInput = (props: NumberInputProps) => {
   const {
     control,
@@ -14,7 +13,9 @@ export const FormNumberInput = (props: NumberInputProps) => {
     label,
     tooltip,
     min = 0,
-    max
+    max,
+    toFixed = 0,
+    decimalScale
   } = props
 
   const { field: { onChange, ...rest } } = useController({
@@ -37,6 +38,7 @@ export const FormNumberInput = (props: NumberInputProps) => {
         min={min}
         max={max}
         error={Boolean(formErrors[name]?.message)}
+        decimalScale={decimalScale}
       />
     </FormItem>
   )

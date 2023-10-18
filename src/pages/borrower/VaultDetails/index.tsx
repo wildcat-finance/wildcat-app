@@ -86,7 +86,7 @@ const VaultDetails = () => {
           <div className="w-full flex justify-between items-center">
             <div className="font-bold">Borrow</div>
             <div className="flex gap-x-3.5 w-full max-w-lg">
-              <NumberInput onChange={(value) => handleFieldChange('borrow', value)} className="w-full" placeholder="00,000.00" />
+              <NumberInput decimalScale={4} onChange={(value) => handleFieldChange('borrow', value)} className="w-full" placeholder="00,000.00" />
               <Button variant={"green"} className="w-64">
                 Borrow
               </Button>
@@ -103,6 +103,7 @@ const VaultDetails = () => {
             <div className="flex items-center gap-x-3.5 w-full max-w-lg">
               <div className="w-full">
                 <NumberInput
+                  decimalScale={4}
                   className="w-full"
                   placeholder="00,000.00"
                   min={0}
@@ -134,6 +135,7 @@ const VaultDetails = () => {
             <div className="flex items-center gap-x-3.5 w-full max-w-lg">
               <div className="w-full">
                 <NumberInput
+                  decimalScale={2}
                   className="w-full"
                   placeholder="00,000.00"
                   min={0}
@@ -160,7 +162,7 @@ const VaultDetails = () => {
           <div className="w-full flex justify-between items-center">
             <div className="font-bold">Capacity</div>
             <div className="flex gap-x-3.5 w-full max-w-lg">
-              <NumberInput onChange={(value) => handleFieldChange('capacity', value)} className="w-full" placeholder="10.00" min={0} />
+              <NumberInput decimalScale={4} onChange={(value) => handleFieldChange('capacity', value)} className="w-full" placeholder="10.00" min={0} />
               <Button variant={"green"} className="w-64">
                 Adjust
               </Button>

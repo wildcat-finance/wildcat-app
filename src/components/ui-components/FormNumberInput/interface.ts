@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
 import { Control, FieldErrors } from 'react-hook-form';
+
 import { FormSchema } from '../../../pages/borrower/AddNewVault/validationSchema';
+import { InputProps } from '../Input/interface';
 
 export type NumberInputProps = {
   control: Control<FormSchema, any>
@@ -12,4 +14,5 @@ export type NumberInputProps = {
   tooltip: string
   min?: number
   max?: number
+  decimalScale?: InputProps['decimalScale']
 }

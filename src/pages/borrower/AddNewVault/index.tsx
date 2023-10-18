@@ -25,6 +25,7 @@ import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.sv
 import { validationSchema, FormSchema } from "./validationSchema";
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface";
 import { mockedVaultTypes } from "../../../mocks/vaults";
+import {TextInput} from "../../../components/ui-components/TextInput";
 
 const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
     (vaultType) => ({
@@ -144,7 +145,7 @@ export const AddNewVault = () => {
                                 Stablecoin will result in your lenders being issued a market token
                                 named Test Dai Stablecoin."
                     >
-                        <Input
+                        <TextInput
                             {...namePrefixField}
                             className="w-72"
                             error={Boolean(formErrors.namePrefix?.message)}
@@ -163,6 +164,7 @@ export const AddNewVault = () => {
                         your lenders being issued a market token with the symbol TSTDAI."
                     >
                         <Input
+                            decimalScale={4}
                             {...symbolPrefixField}
                             className="w-72"
                             error={Boolean(formErrors.symbolPrefix?.message)}
@@ -170,6 +172,7 @@ export const AddNewVault = () => {
                     </FormItem>
 
                     <FormNumberInput
+                        decimalScale={4}
                         label="Market Capacity:"
                         endDecorator={<Chip className="w-32 ml-3">DAI</Chip>}
                         control={control}
@@ -183,6 +186,7 @@ export const AddNewVault = () => {
                     />
 
                     <FormNumberInput
+                        decimalScale={2}
                         label="Lender APR (%)"
                         max={100}
                         endDecorator={
@@ -197,6 +201,7 @@ export const AddNewVault = () => {
                     />
 
                     <FormNumberInput
+                        decimalScale={2}
                         label="Penalty APR (%)"
                         max={100}
                         endDecorator={
@@ -211,6 +216,7 @@ export const AddNewVault = () => {
                     />
 
                     <FormNumberInput
+                        decimalScale={2}
                         label="Reserve Ratio (%)"
                         endDecorator={
                             <Chip className="w-11 justify-center font-bold">%</Chip>
@@ -225,6 +231,7 @@ export const AddNewVault = () => {
                     />
 
                     <FormNumberInput
+                        decimalScale={1}
                         label="Grace Period Length (Hours):"
                         endDecorator={
                             <Chip className="w-11 justify-center font-bold">hours</Chip>
@@ -232,6 +239,7 @@ export const AddNewVault = () => {
                         control={control}
                         formErrors={formErrors}
                         name="gracePeriod"
+                        toFixed={1}
                         tooltip="The length of time for which a market is permitted to be delinquent before the penalty APR activates.
                                 The grace period is an aggregate length of time for delinquency: the borrower *does not* have this much
                                 time to rectify delinquency every single time it triggers. An internal variable tracks the time a market
@@ -240,6 +248,7 @@ export const AddNewVault = () => {
                     />
 
                     <FormNumberInput
+                        decimalScale={1}
                         label="Withdrawal Cycle Length (Hours):"
                         endDecorator={
                             <Chip className="w-11 justify-center font-bold">hours</Chip>

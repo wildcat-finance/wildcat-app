@@ -1,6 +1,6 @@
-import type { InputProps as RInputProps } from 'react-aria-components';
+import type {NumericFormatProps} from "react-number-format/types/types";
 
-export type InputProps = RInputProps & {
+export type InputProps = NumericFormatProps & {
     className?: string,
     error?: boolean;
 }
