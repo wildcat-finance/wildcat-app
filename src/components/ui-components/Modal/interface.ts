@@ -4,4 +4,5 @@ export type ModalProps = {
   buttonClassName?: string;
   children: React.ReactNode;
   sign?: boolean;
+  onClose?: () => void;
 };

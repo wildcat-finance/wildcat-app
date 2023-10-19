@@ -22,6 +22,7 @@ import { useForm } from "react-hook-form";
 import { FormSchema, validationSchema } from "./validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import  RemoveLendersModal from "./RemoveLendersModal";
+import NewLendersModal from "./NewLendersModal";
 
 const defaultDetails: FormSchema = {
   borrow: "",
@@ -247,70 +248,7 @@ const VaultDetails = () => {
       <div className="flex w-full justify-between content-center">
         <div className="text-base font-bold">Lenders</div>
         <div className="flex gap-x-2">
-          <Modal
-            buttonName={"Onboard Lender"}
-            buttonColor={"blue"}
-            buttonClassName="w-24 whitespace-nowrap"
-          >
-            <div className="text-base font-bold px-8">
-              Onboard new Lender(s)
-            </div>
-
-            <div className="w-full border border-tint-10 my-3"></div>
-
-            <div className="flex flex-col items-center gap-y-5 px-8">
-              <div className="w-72 font-light text-xxs text-center ">
-                Some text about what you are about to get yourself into and can
-                you fulfill the params of doing this and make the text nice and
-                descriptive but not too waffly.
-              </div>
-              <FormItem
-                className="w-full"
-                label="New Lender name"
-                tooltip="test"
-              >
-                <NumberInput
-                  className="w-full bg-tint-11"
-                  placeholder="Enter name of Lender"
-                />
-              </FormItem>
-              <FormItem
-                className="w-full"
-                label="New Lender wallet"
-                tooltip="test"
-              >
-                <Input
-                  className="w-full bg-tint-11"
-                  placeholder="eg: 0x987234oiwef8u234892384824309ljw0975a"
-                />
-              </FormItem>
-              <Button variant={"blue"} className="w-28">
-                Add
-              </Button>
-              <div className="flex flex-col items-center gap-y-2">
-                <div className="w-full border border-tint-10"></div>
-
-                <div className="text-base font-bold">You have added:</div>
-                {lenders.map((lender) => (
-                  <div className="flex gap-x-4">
-                    <div className="flex flex-col justify-between w-full">
-                      <div className="text-xs font-medium">
-                        {lender.lenderName}
-                      </div>
-                      <div className="text-xs">{lender.lenderWallet}</div>
-                    </div>
-                    <button>
-                      <img
-                        className="w-5 h-5"
-                        src={cancelRoundRedIcon}
-                        alt="Cancel"
-                      />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Modal>
+           <NewLendersModal />
           <RemoveLendersModal lenders={lenders} />
         </div>
       </div>

@@ -1,7 +1,8 @@
 import { useState } from 'react'
+import { NumberFormatValues } from "react-number-format/types/types";
+
 import { Input } from "../Input";
 import { NumberInputProps } from "./interface";
-import {NumberFormatValues} from "react-number-format/types/types";
 
 function processNumber(input: string, minNumber?: number, maxValue?: number): number {
 

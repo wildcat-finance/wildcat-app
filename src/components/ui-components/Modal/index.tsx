@@ -14,11 +14,15 @@ export const Modal = ({
   buttonClassName,
   children,
   sign,
+    onClose,
 }: ModalProps) => {
 
   let [isOpen, setIsOpen] = useState(false);
 
   const toggleModal = () => {
+    if (isOpen && onClose) {
+        onClose();
+    }
     setIsOpen(!isOpen);
   };  
 
