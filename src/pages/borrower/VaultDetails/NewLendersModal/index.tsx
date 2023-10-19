@@ -45,12 +45,22 @@ export const NewLendersModal = () => {
 
     const formValues = watch();
 
+    const clearInputOnClose = () => {
+        setNewLenders([]);
+        reset()
+    }
+
+    const handleCancelLender = (lenderToRemove: NewLenderFormSchema) => {
+        const updatedLenders = newLenders.filter(lender => lender !== lenderToRemove);
+        setNewLenders(updatedLenders);
+    }
 
     return (
         <Modal
             buttonName={"Onboard Lender"}
             buttonColor={"blue"}
             buttonClassName="w-24 whitespace-nowrap"
+            onClose={clearInputOnClose}
         >
             <div className="text-base font-bold px-8">
                 Onboard new Lender(s)
@@ -105,9 +115,9 @@ export const NewLendersModal = () => {
                                 </div>
                                 <div className="text-xs">{lender.lenderWallet}</div>
                             </div>
-                            <button>
+                            <button onClick={() => handleCancelLender(lender)}>
                                 <img
-                                    className="w-5 h-5"
+                                    className="max-w-5 max-h-5"
                                     src={cancelRoundRedIcon}
                                     alt="Cancel"
                                 />
