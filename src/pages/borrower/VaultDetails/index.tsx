@@ -1,3 +1,4 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -20,6 +21,7 @@ import expandLess from "../../../components/ui-components/icons/expand_less.svg"
 import { useForm } from "react-hook-form";
 import { FormSchema, validationSchema } from "./validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import  RemoveLendersModal from "./RemoveLendersModal";
 
 const defaultDetails: FormSchema = {
   borrow: "",
@@ -53,15 +55,15 @@ const VaultDetails = () => {
   const lenders = [
     {
       lenderName: "Hudson",
-      lenderWallet: "0x987234oiwef8u234892384824309ljw0975a",
+      lenderWallet: "0x987234oiwef8u234892384824309ljw09751",
     },
     {
       lenderName: "Hudson",
-      lenderWallet: "0x987234oiwef8u234892384824309ljw0975a",
+      lenderWallet: "0x987234oiwef8u234892384824309ljw09752",
     },
     {
       lenderName: "Hudson",
-      lenderWallet: "0x987234oiwef8u234892384824309ljw0975a",
+      lenderWallet: "0x987234oiwef8u234892384824309ljw09753",
     },
   ];
 
@@ -309,36 +311,7 @@ const VaultDetails = () => {
               </div>
             </div>
           </Modal>
-
-          <Modal buttonName={"Remove all lenders"} buttonColor={"red"}>
-            <div className="text-base font-bold px-8">Remove all Lenders</div>
-
-            <div className="w-full border border-tint-10 my-3"></div>
-
-            <div className="px-8">
-              <div className="w-72 font-light text-xxs text-center mx-auto">
-                Some text about what you are about to get yourself into and can
-                you fulfill the params of doing this and make the text nice and
-                descriptive but not too waffly.
-              </div>
-
-              <div className="flex flex-col items-center gap-y-2 mt-3">
-                <div className="w-full border border-tint-10"></div>
-
-                <div className="text-base font-bold">You have added:</div>
-                {lenders.map((lender) => (
-                  <div className="flex gap-x-4">
-                    <div className="flex flex-col justify-between w-full">
-                      <div className="text-xs font-medium">
-                        {lender.lenderName}
-                      </div>
-                      <div className="text-xs">{lender.lenderWallet}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Modal>
+          <RemoveLendersModal lenders={lenders} />
         </div>
       </div>
       <div className="mt-5 mb-8 flex w-full">

@@ -15,6 +15,7 @@ export const Modal = ({
   children,
   sign,
 }: ModalProps) => {
+
   let [isOpen, setIsOpen] = useState(false);
 
   const toggleModal = () => {
