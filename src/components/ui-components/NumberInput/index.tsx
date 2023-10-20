@@ -1,8 +1,9 @@
 import { useState } from 'react'
+import { NumericFormat } from 'react-number-format';
 import { NumberFormatValues } from "react-number-format/types/types";
 
-import { Input } from "../Input";
 import { NumberInputProps } from "./interface";
+import cn from "classnames";
 
 function processNumber(input: string, minNumber?: number, maxValue?: number): number {
 
@@ -20,6 +21,7 @@ export const NumberInput = (props: NumberInputProps) => {
   const {
     className,
     onChange,
+    error,
     min = 0,
     max,
     value,
@@ -38,11 +40,21 @@ export const NumberInput = (props: NumberInputProps) => {
     setInputValue(processedValue || 0)
   }
 
+  const inputCssClass = cn(
+      'h-8 px-3 text-xxs border bg-white outline-none',
+      { 'opacity-50': props.disabled },
+      { 'border-red-border': error },
+      { 'border-tint-9': !error },
+      className,
+  )
+
   return (
-    <Input
+    <NumericFormat
       onValueChange={(values, _) => handleChange(values)}
       value={inputValue}
-      className={className || "w-48"}
+      className={inputCssClass}
+      decimalSeparator={','}
+      allowNegative={false}
       {...rest}
     />
   )

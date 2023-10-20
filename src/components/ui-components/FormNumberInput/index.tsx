@@ -1,9 +1,9 @@
 import { useController } from "react-hook-form";
 import { FormItem } from "../FormItem";
 import { NumberInput } from "../NumberInput";
-import { NumberInputProps } from "./interface";
+import { FormNumberInputProps } from "./interface";
 
-export const FormNumberInput = (props: NumberInputProps) => {
+export const FormNumberInput = (props: FormNumberInputProps) => {
   const {
     control,
     formErrors,

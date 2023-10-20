@@ -1,13 +1,14 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 
-import { Input, Select } from '../../../components/ui-components';
+import { Select, TextInput } from '../../../components/ui-components';
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
 import { Button } from '../../../components/ui-components/Button';
 import VaultCard from './VaultCard';
 
 import { mockedVaults, mockedUnderlyingAssets, mockedRatios } from '../../../mocks/vaults'
 import {SelectOptionItem} from "../../../components/ui-components/Select/interface";
+import {Text} from "@chakra-ui/react";
 
 const mockedUnderlyingAssetsOptions: SelectOptionItem[] = mockedUnderlyingAssets.map((tokenSymbol) => ({
     id: tokenSymbol,
@@ -61,7 +62,7 @@ const MyVaults = () => {
 
                 <div className='flex w-full flex-wrap -mx-2.5 mt-8'>
                     <div className='w-1/3 px-2.5 py-2.5'>
-                        <Input
+                        <TextInput
                             onChange={handleFilterByName}
                             placeholder="Filter by name"
                             className='w-full'

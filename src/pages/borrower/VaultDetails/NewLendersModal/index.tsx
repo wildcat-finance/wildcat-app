@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from 'react-hook-form';
 
 import cancelRoundRedIcon from "../../../../components/ui-components/icons/cancel_round_red.svg";
-import {Button, FormItem, Input, Modal, TextInput } from "../../../../components/ui-components";
+import {Button, FormItem, Modal, TextInput } from "../../../../components/ui-components";
 
 
 import { NewLenderFormSchema, newLenderValisationSchema } from "./validationSchema";

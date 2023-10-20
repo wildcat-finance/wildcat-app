@@ -6,13 +6,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
 import {
     Paper,
-    Input,
     Chip,
     Tooltip,
     Button,
     FormItem,
     Select,
     FormNumberInput,
+    TextInput,
     Modal
 } from "../../../components/ui-components";
 import { TokenSelector } from "./TokenSelector";
@@ -25,7 +25,6 @@ import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.sv
 import { validationSchema, FormSchema } from "./validationSchema";
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface";
 import { mockedVaultTypes } from "../../../mocks/vaults";
-import {TextInput} from "../../../components/ui-components/TextInput";
 
 const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
     (vaultType) => ({
@@ -163,8 +162,7 @@ export const AddNewVault = () => {
                         For example, entering 'TST' here when he underlying asset is DAI will result in
                         your lenders being issued a market token with the symbol TSTDAI."
                     >
-                        <Input
-                            decimalScale={4}
+                        <TextInput
                             {...symbolPrefixField}
                             className="w-72"
                             error={Boolean(formErrors.symbolPrefix?.message)}

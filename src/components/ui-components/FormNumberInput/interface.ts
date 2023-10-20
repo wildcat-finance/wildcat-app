@@ -2,9 +2,9 @@ import { ReactNode } from 'react';
 import { Control, FieldErrors } from 'react-hook-form';
 
 import { FormSchema } from '../../../pages/borrower/AddNewVault/validationSchema';
-import { InputProps } from '../Input/interface';
+import { NumberInputProps } from '../NumberInput/interface';
 
-export type NumberInputProps = {
+export type FormNumberInputProps = {
   control: Control<FormSchema, any>
   formErrors: FieldErrors<FormSchema> 
   name: "vaultType" | "underlyingToken" | "namePrefix" | "symbolPrefix" | "maxAmount" | "annualRate" | "penaltyRate" | "reserveRatio" | "gracePeriod" | "withdrawalCycle"
@@ -14,5 +14,5 @@ export type NumberInputProps = {
   tooltip: string
   min?: number
   max?: number
-  decimalScale?: InputProps['decimalScale']
+  decimalScale?: NumberInputProps['decimalScale']
 }

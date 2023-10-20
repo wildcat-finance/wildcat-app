@@ -5,16 +5,13 @@ import { useState } from "react";
 import {
   Button,
   FormItem,
-  Input,
   Paper,
-  Modal,
   NumberInput,
   TableItem,
 } from "../../../components/ui-components";
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
 
 import canselRoundIcon from "../../../components/ui-components/icons/cancel.svg";
-import cancelRoundRedIcon from "../../../components/ui-components/icons/cancel_round_red.svg";
 import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.svg";
 import expandMore from "../../../components/ui-components/icons/expand_more.svg";
 import expandLess from "../../../components/ui-components/icons/expand_less.svg";
