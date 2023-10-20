@@ -93,13 +93,13 @@ export function AddNewVault() {
 
   return (
     <div>
-      <button
+      <Button
         className="flex items-center gap-x-2 mb-8"
         onClick={handleClickMyVaults}
       >
         <img src={arrowBack} alt="Back" />
         <p className="text-xs font-normal underline">My Markets</p>
-      </button>
+      </Button>
       <div className="text-green text-2xl font-bold mb-8 w-2/3">New Market</div>
 
       <Paper className="p-8 bg-tint-10 border-tint-8">

@@ -5,7 +5,9 @@ import { Button } from "../../../../../components/ui-components/Button"
 function MasterLoanAgreement({
   nextStep,
 }: {
+  // eslint-disable-next-line react/require-default-props
   nextStep?: () => void
+  // eslint-disable-next-line react/no-unused-prop-types,react/require-default-props
   previousStep?: () => void
 }) {
   return (

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Modal } from "../../../../components/ui-components"
 
-import { RemoveLendersModalProps, Lender } from "./interface"
+import { RemoveLendersModalProps } from "./interface"
 
 function RemoveLendersModal({ lenders }: RemoveLendersModalProps) {
   const [selectedLenders, setSelectedLenders] = useState<string[]>([])
@@ -31,19 +31,15 @@ function RemoveLendersModal({ lenders }: RemoveLendersModalProps) {
     >
       <>
         <div className="text-base font-bold px-8">Remove Lenders</div>
-
         <div className="w-full border border-tint-10 my-3" />
-
         <div className="px-8">
           <div className="w-72 font-light text-xxs text-center mx-auto">
             Some text about what you are about to get yourself into and can you
             fulfill the params of doing this and make the text nice and
             descriptive but not too waffly.
           </div>
-
           <div className="flex flex-col items-center gap-y-2 mt-3">
             <div className="w-full border border-tint-10" />
-
             <div className="text-base font-bold">You have added:</div>
             {lenders.map((lender) => (
               <div className="flex gap-x-4" key={lender.lenderWallet}>

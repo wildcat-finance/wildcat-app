@@ -18,7 +18,7 @@ import expandMore from "../../../components/ui-components/icons/expand_more.svg"
 import expandLess from "../../../components/ui-components/icons/expand_less.svg"
 import { FormSchema, validationSchema } from "./validationSchema"
 import RemoveLendersModal from "./RemoveLendersModal"
-import NewLendersModal from "./NewLendersModal"
+import { NewLendersModal } from "./NewLendersModal"
 
 const defaultDetails: FormSchema = {
   borrow: "",
@@ -68,13 +68,13 @@ function VaultDetails() {
 
   return (
     <div>
-      <button
+      <Button
         className="flex items-center gap-x-2 mb-8"
         onClick={handleClickMyVaults}
       >
         <img src={arrowBack} alt="Back" />
         <p className="text-xs font-normal underline">My Markets</p>
-      </button>
+      </Button>
       <div className="text-green text-2xl font-bold mb-8 w-2/3">
         Blossom Dai Stablecoin
       </div>
@@ -342,12 +342,12 @@ function VaultDetails() {
 
       <div className="flex w-full justify-between content-center">
         <div className="text-base font-bold">Market interaction history</div>
-        <button className="flex items-center gap-x-2" onClick={toggleAccordion}>
+        <Button className="flex items-center gap-x-2" onClick={toggleAccordion}>
           <p className="text-xs font-normal underline cursor-pointer">
             {isExpanded ? "Hide History" : "Show History"}
           </p>
           <img src={expandIcon} className="w-5" alt="Back" />
-        </button>
+        </Button>
       </div>
       {isExpanded && (
         <Paper className="border-tint-10 mt-5 bg-white h-48 p-5 flex flex-col gap-y-6 overflow-auto">

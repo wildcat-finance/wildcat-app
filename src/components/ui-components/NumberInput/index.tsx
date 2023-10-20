@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { NumericFormat } from "react-number-format"
-import { NumberFormatValues } from "react-number-format/types/types"
+import type { NumberFormatValues } from "react-number-format/types/types"
 
 import cn from "classnames"
 import { NumberInputProps } from "./interface"
@@ -47,7 +47,7 @@ export function NumberInput(props: NumberInputProps) {
 
   return (
     <NumericFormat
-      onValueChange={(values, _) => handleChange(values)}
+      onValueChange={(values) => handleChange(values)}
       value={inputValue}
       className={inputCssClass}
       decimalSeparator=","

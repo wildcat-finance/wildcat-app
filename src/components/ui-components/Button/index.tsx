@@ -4,7 +4,7 @@ import "./styles.css"
 import { ButtonProps } from "./interface"
 
 export function Button({
-  variant,
+  variant = "black",
   disabled,
   children,
   onClick,

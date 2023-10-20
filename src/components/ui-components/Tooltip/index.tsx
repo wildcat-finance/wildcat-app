@@ -22,12 +22,7 @@ export function TooltipContent({ children, ...props }: TooltipContentProps) {
   )
 }
 
-export function Tooltip({
-  children,
-  content,
-  placement,
-  ...props
-}: TooltipProps) {
+export function Tooltip({ content, placement, ...props }: TooltipProps) {
   return (
     <TooltipTrigger delay={0}>
       <Button className="w-3 outline-none">

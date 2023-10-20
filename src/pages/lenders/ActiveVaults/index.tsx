@@ -52,6 +52,8 @@ function ActiveVaults() {
       </div>
       <div className="space-y-2">
         {demoVaults.map((vault, index) => (
+          // TODO: add address to Vaults
+          // eslint-disable-next-line react/no-array-index-key
           <LenderVaultItem key={index} index={index} vault={vault} />
         ))}
       </div>

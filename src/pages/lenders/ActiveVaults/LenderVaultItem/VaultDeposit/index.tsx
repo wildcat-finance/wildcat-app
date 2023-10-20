@@ -1,9 +1,12 @@
 import { Button, NumberInput } from "../../../../../components/ui-components"
 
 export function VaultDeposit({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   nextStep,
 }: {
+  // eslint-disable-next-line react/require-default-props
   nextStep?: () => void
+  // eslint-disable-next-line react/no-unused-prop-types,react/require-default-props
   previousStep?: () => void
 }) {
   return (

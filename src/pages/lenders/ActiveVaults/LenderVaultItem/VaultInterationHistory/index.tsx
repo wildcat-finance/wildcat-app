@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Paper } from "../../../../../components/ui-components"
+import { Paper, Button } from "../../../../../components/ui-components"
 import expandMore from "../../../../../components/ui-components/icons/expand_more.svg"
 import expandLess from "../../../../../components/ui-components/icons/expand_less.svg"
 import { ServiceAgreementCard } from "../../../../../components/ServiceAgreementCard"
@@ -17,12 +17,12 @@ function VaultInterationHistory() {
     <>
       <div className="flex w-full justify-between content-center">
         <div className="text-base font-bold">Market interaction history</div>
-        <button className="flex items-center gap-x-2" onClick={toggleAccordion}>
+        <Button className="flex items-center gap-x-2" onClick={toggleAccordion}>
           <p className="text-xs font-normal underline cursor-pointer">
             {isExpanded ? "Hide History" : "Show History"}
           </p>
           <img src={expandIcon} className="w-5" alt="Back" />
-        </button>
+        </Button>
       </div>
       {isExpanded && (
         <>

@@ -96,7 +96,7 @@ export function NewLendersModal() {
         <Button variant="blue" className="w-28" onClick={handleAddLender}>
           Add
         </Button>
-        <div className="flex flex-col items-center gap-y-2">
+        <div className="flex flex-col gap-y-2">
           <div className="w-full border border-tint-10" />
 
           <div className="text-base font-bold">You have added:</div>
@@ -106,13 +106,13 @@ export function NewLendersModal() {
                 <div className="text-xs font-medium">{lender.lenderName}</div>
                 <div className="text-xs">{lender.lenderWallet}</div>
               </div>
-              <button onClick={() => handleCancelLender(lender)}>
+              <Button onClick={() => handleCancelLender(lender)}>
                 <img
                   className="max-w-5 max-h-5"
                   src={cancelRoundRedIcon}
                   alt="Cancel"
                 />
-              </button>
+              </Button>
             </div>
           ))}
         </div>

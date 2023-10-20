@@ -62,12 +62,12 @@ export function Modal({
               >
                 <Dialog.Panel className="transform overflow-hidden transition-all">
                   <div className="flex flex-col items-end">
-                    <button
+                    <Button
                       onClick={toggleModal}
                       className="w-fit relative top-7 right-4"
                     >
                       <img src={closeIcon} alt="close" />
-                    </button>
+                    </Button>
                     <Paper className="bg-white border-none py-5">
                       {children}
                       <div className="flex gap-x-3 justify-center mt-5">

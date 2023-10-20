@@ -1,7 +1,7 @@
 import { ReactNode } from "react"
 
 export type ButtonProps = {
-  variant:
+  variant?:
     | "green"
     | "brown"
     | "black"

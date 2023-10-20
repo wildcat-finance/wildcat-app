@@ -53,7 +53,7 @@ function ConnectButton() {
 
   return (
     <>
-      <button
+      <Button
         className="bg-silver-100 rounded-sm px-2 py-1"
         onClick={openModal}
       >
@@ -61,7 +61,7 @@ function ConnectButton() {
           <span className="text-black text-xs">{getButtonText()}</span>
           <RiWallet3Line className="w-5" />
         </div>
-      </button>
+      </Button>
       <Modal isDismissable isOpen={isOpen} onOpenChange={setOpen}>
         <Dialog className="bg-sand w-80 p-6 rounded-sm flex flex-col">
           <div className="flex items-center justify-center mb-6 relative">

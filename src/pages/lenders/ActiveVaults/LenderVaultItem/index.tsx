@@ -22,7 +22,7 @@ export function LenderVaultItem({ index, vault }: LenderVaultItemProps) {
     setStep(step - 1)
   }
 
-  const toggleAccordion = (index: number) => {
+  const toggleAccordion = () => {
     setToggleStatus((currentToggleStatus) => !currentToggleStatus)
   }
 
@@ -38,9 +38,9 @@ export function LenderVaultItem({ index, vault }: LenderVaultItemProps) {
             Add
           </Button>
         </div>
-        <button
+        <Button
           className="flex items-center gap-x-2 text-xxs underline cursor-pointer"
-          onClick={() => toggleAccordion(index)}
+          onClick={() => toggleAccordion()}
         >
           {toggleStatus ? "Hide details" : "Show details"}
           {toggleStatus ? (
@@ -48,7 +48,7 @@ export function LenderVaultItem({ index, vault }: LenderVaultItemProps) {
           ) : (
             <img src={expandMore} className="w-5" alt="Back" />
           )}
-        </button>
+        </Button>
       </div>
 
       {toggleStatus && step === 1 && (

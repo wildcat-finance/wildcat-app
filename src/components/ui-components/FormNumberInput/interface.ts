@@ -5,7 +5,7 @@ import { FormSchema } from "../../../pages/borrower/AddNewVault/validationSchema
 import { NumberInputProps } from "../NumberInput/interface"
 
 export type FormNumberInputProps = {
-  control: Control<FormSchema, any>
+  control: Control<FormSchema>
   formErrors: FieldErrors<FormSchema>
   name:
     | "vaultType"
