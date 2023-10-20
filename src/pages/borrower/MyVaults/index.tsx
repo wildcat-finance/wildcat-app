@@ -8,7 +8,6 @@ import VaultCard from './VaultCard';
 
 import { mockedVaults, mockedUnderlyingAssets, mockedRatios } from '../../../mocks/vaults'
 import {SelectOptionItem} from "../../../components/ui-components/Select/interface";
-import {Text} from "@chakra-ui/react";
 
 const mockedUnderlyingAssetsOptions: SelectOptionItem[] = mockedUnderlyingAssets.map((tokenSymbol) => ({
     id: tokenSymbol,
