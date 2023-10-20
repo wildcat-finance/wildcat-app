@@ -1,32 +1,37 @@
+@tailwind base;
 @tailwind components;
 
-.wc-btn-black {
+.wc-btn-black[type='button'] {
     @apply bg-black;
 }
 
-.wc-btn-brown {
+.wc-btn-brown[type='button'] {
     @apply bg-brown;
 }
 
-.wc-btn-white-brown {
+.wc-btn-white-brown[type='button'] {
     @apply bg-white-brown;
 }
-.wc-btn-gold {
+.wc-btn-gold[type='button'] {
     @apply bg-gold;
 }
 
-.wc-btn-green {
+.wc-btn-green[type='button'] {
     @apply bg-green;
 }
 
-.wc-btn-blue {
+.wc-btn-blue[type='button'] {
     @apply bg-blue;
 }
 
-.wc-btn-red {
+.wc-btn-red[type='button'] {
     @apply bg-red;
 }
 
-.wc-btn-grey {
+.wc-btn-grey[type='button'] {
     @apply bg-tint-8;
+}
+
+.wc-btn-outline[type='button'] {
+    @apply bg-transparent text-black;
 }

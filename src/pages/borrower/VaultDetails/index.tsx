@@ -69,6 +69,7 @@ function VaultDetails() {
   return (
     <div>
       <Button
+        variant="outline"
         className="flex items-center gap-x-2 mb-8"
         onClick={handleClickMyVaults}
       >
@@ -342,7 +343,11 @@ function VaultDetails() {
 
       <div className="flex w-full justify-between content-center">
         <div className="text-base font-bold">Market interaction history</div>
-        <Button className="flex items-center gap-x-2" onClick={toggleAccordion}>
+        <Button
+          variant="outline"
+          className="flex items-center gap-x-2"
+          onClick={toggleAccordion}
+        >
           <p className="text-xs font-normal underline cursor-pointer">
             {isExpanded ? "Hide History" : "Show History"}
           </p>

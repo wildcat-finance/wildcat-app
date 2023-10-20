@@ -1,6 +1,7 @@
 import { ReactNode } from "react"
+import { AriaButtonOptions } from "react-aria"
 
-export type ButtonProps = {
+export type ButtonProps = AriaButtonOptions<"button"> & {
   variant?:
     | "green"
     | "brown"
@@ -10,6 +11,7 @@ export type ButtonProps = {
     | "white-brown"
     | "red"
     | "grey"
+    | "outline"
   disabled?: boolean
   children?: ReactNode
   onClick?: () => void
