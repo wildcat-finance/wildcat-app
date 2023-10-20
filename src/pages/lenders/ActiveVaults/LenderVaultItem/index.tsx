@@ -1,30 +1,30 @@
-import { useState } from "react";
+import { useState } from "react"
 
-import { LenderVaultItemProps } from "./interface";
-import { VaultInfo } from "./VaultInfo";
-import { VaultDeposit } from "./VaultDeposit";
-import MasterLoanAgreement from "./MasterLoanAgreement";
+import { LenderVaultItemProps } from "./interface"
+import { VaultInfo } from "./VaultInfo"
+import { VaultDeposit } from "./VaultDeposit"
+import MasterLoanAgreement from "./MasterLoanAgreement"
 
-import { Button, Chip, Paper } from "../../../../components/ui-components";
-import expandMore from "../../../../components/ui-components/icons/expand_more.svg";
-import expandLess from "../../../../components/ui-components/icons/expand_less.svg";
+import { Button, Chip, Paper } from "../../../../components/ui-components"
+import expandMore from "../../../../components/ui-components/icons/expand_more.svg"
+import expandLess from "../../../../components/ui-components/icons/expand_less.svg"
 
-export const LenderVaultItem = ({ index, vault }: LenderVaultItemProps) => {
-  const [toggleStatus, setToggleStatus] = useState(false);
+export function LenderVaultItem({ index, vault }: LenderVaultItemProps) {
+  const [toggleStatus, setToggleStatus] = useState(false)
 
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(1)
 
   const nextStep = () => {
-    setStep(step + 1);
+    setStep(step + 1)
   }
 
   const previousStep = () => {
-    setStep(step - 1);
+    setStep(step - 1)
   }
 
   const toggleAccordion = (index: number) => {
-    setToggleStatus((currentToggleStatus) => !currentToggleStatus);
-  };
+    setToggleStatus((currentToggleStatus) => !currentToggleStatus)
+  }
 
   return (
     <Paper key={index} className="border-tint-8">
@@ -34,7 +34,7 @@ export const LenderVaultItem = ({ index, vault }: LenderVaultItemProps) => {
           <Chip className="h-auto justify-center p-1 ml-4 mr-3 bg-tint-11">
             blsmDAI
           </Chip>
-          <Button variant={"blue"} className="pl-1 w-16">
+          <Button variant="blue" className="pl-1 w-16">
             Add
           </Button>
         </div>
@@ -51,9 +51,17 @@ export const LenderVaultItem = ({ index, vault }: LenderVaultItemProps) => {
         </button>
       </div>
 
-      {toggleStatus && step === 1 && <VaultInfo vault={vault} nextStep={nextStep} previousStep={previousStep} />}
-      {toggleStatus && step === 2 && <MasterLoanAgreement nextStep={nextStep} previousStep={previousStep} />}
+      {toggleStatus && step === 1 && (
+        <VaultInfo
+          vault={vault}
+          nextStep={nextStep}
+          previousStep={previousStep}
+        />
+      )}
+      {toggleStatus && step === 2 && (
+        <MasterLoanAgreement nextStep={nextStep} previousStep={previousStep} />
+      )}
       {toggleStatus && step === 3 && <VaultDeposit />}
     </Paper>
-  );
-};
+  )
+}

@@ -1,12 +1,10 @@
-import { VaultInfoProps } from "./interface";
+import { AiOutlineExclamationCircle } from "react-icons/ai"
+import { VaultInfoProps } from "./interface"
 
-import { Button, TableItem } from "../../../../../components/ui-components";
-import { BluePaper } from "../../../../../components/ui-components/BluePaper";
+import { Button, TableItem } from "../../../../../components/ui-components"
+import { BluePaper } from "../../../../../components/ui-components/BluePaper"
 
-import { AiOutlineExclamationCircle } from "react-icons/ai";
-
-export const VaultInfo = ({ vault, nextStep, previousStep}: VaultInfoProps) => {
-
+export function VaultInfo({ vault, nextStep, previousStep }: VaultInfoProps) {
   return (
     <div>
       <TableItem className="grid grid-cols-2 gap-x-36">
@@ -159,13 +157,13 @@ export const VaultInfo = ({ vault, nextStep, previousStep}: VaultInfoProps) => {
         </div>
       </BluePaper>
       <div className="flex gap-x-5 pb-10 mx-auto w-fit">
-        <Button variant={"green"} className="w-40" onClick={nextStep}>
+        <Button variant="green" className="w-40" onClick={nextStep}>
           Show me the MLA
         </Button>
-        <Button variant={"red"} className="w-40" onClick={previousStep}>
+        <Button variant="red" className="w-40" onClick={previousStep}>
           I don’t want the MLA
         </Button>
       </div>
     </div>
-  );
-};
+  )
+}

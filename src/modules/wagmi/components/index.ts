@@ -1,3 +1,3 @@
-import { WagmiProvider } from "./WagmiProvider";
+import { WagmiProvider } from "./WagmiProvider"
 
-export { WagmiProvider };
+export { WagmiProvider }

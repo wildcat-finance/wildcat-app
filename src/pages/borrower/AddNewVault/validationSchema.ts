@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod"
 
 export const validationSchema = z.object({
   vaultType: z.string(),
@@ -11,6 +11,6 @@ export const validationSchema = z.object({
   reserveRatio: z.number().gte(0).lte(100),
   gracePeriod: z.number().nonnegative(),
   withdrawalCycle: z.number().nonnegative(),
-});
+})
 
 export type FormSchema = z.infer<typeof validationSchema>

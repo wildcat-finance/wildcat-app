@@ -1,17 +1,17 @@
-import { useState } from "react";
-import { Paper } from "../../../../../components/ui-components";
-import expandMore from "../../../../../components/ui-components/icons/expand_more.svg";
-import expandLess from "../../../../../components/ui-components/icons/expand_less.svg";
-import { ServiceAgreementCard } from "../../../../../components/ServiceAgreementCard";
+import { useState } from "react"
+import { Paper } from "../../../../../components/ui-components"
+import expandMore from "../../../../../components/ui-components/icons/expand_more.svg"
+import expandLess from "../../../../../components/ui-components/icons/expand_less.svg"
+import { ServiceAgreementCard } from "../../../../../components/ServiceAgreementCard"
 
-const VaultInterationHistory = () => {
-  const [isExpanded, setIsExpanded] = useState(true);
+function VaultInterationHistory() {
+  const [isExpanded, setIsExpanded] = useState(true)
 
   const toggleAccordion = () => {
-    setIsExpanded(!isExpanded);
-  };
+    setIsExpanded(!isExpanded)
+  }
 
-  const expandIcon = isExpanded ? expandLess : expandMore;
+  const expandIcon = isExpanded ? expandLess : expandMore
 
   return (
     <>
@@ -50,7 +50,7 @@ const VaultInterationHistory = () => {
         </>
       )}
     </>
-  );
-};
+  )
+}
 
-export default VaultInterationHistory;
+export default VaultInterationHistory

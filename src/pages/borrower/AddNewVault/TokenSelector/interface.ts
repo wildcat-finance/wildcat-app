@@ -1,3 +1,3 @@
 export type TokenSelectorProps = {
-    className?: string,
+  className?: string
 }

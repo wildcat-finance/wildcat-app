@@ -1,9 +1,10 @@
-import { z } from "zod";
+import { z } from "zod"
 
-
-export const newLenderValisationSchema = z.object({
+export const newLenderValisationSchema = z
+  .object({
     lenderName: z.string(),
     lenderWallet: z.string(),
-}).required();
+  })
+  .required()
 
 export type NewLenderFormSchema = z.infer<typeof newLenderValisationSchema>

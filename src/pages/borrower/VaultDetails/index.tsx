@@ -1,54 +1,51 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 import {
   Button,
   FormItem,
   Paper,
   NumberInput,
   TableItem,
-} from "../../../components/ui-components";
-import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
+} from "../../../components/ui-components"
+import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 
-import canselRoundIcon from "../../../components/ui-components/icons/cancel.svg";
-import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.svg";
-import expandMore from "../../../components/ui-components/icons/expand_more.svg";
-import expandLess from "../../../components/ui-components/icons/expand_less.svg";
-import { useForm } from "react-hook-form";
-import { FormSchema, validationSchema } from "./validationSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import  RemoveLendersModal from "./RemoveLendersModal";
-import NewLendersModal from "./NewLendersModal";
+import canselRoundIcon from "../../../components/ui-components/icons/cancel.svg"
+import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.svg"
+import expandMore from "../../../components/ui-components/icons/expand_more.svg"
+import expandLess from "../../../components/ui-components/icons/expand_less.svg"
+import { FormSchema, validationSchema } from "./validationSchema"
+import RemoveLendersModal from "./RemoveLendersModal"
+import NewLendersModal from "./NewLendersModal"
 
 const defaultDetails: FormSchema = {
   borrow: "",
   repay: "",
   annualInterestRate: "",
   capacity: "",
-};
+}
 
-const VaultDetails = () => {
-  const navigate = useNavigate();
-  const [isExpanded, setIsExpanded] = useState(true);
+function VaultDetails() {
+  const navigate = useNavigate()
+  const [isExpanded, setIsExpanded] = useState(true)
 
-  const {
-    setValue,
-} = useForm<FormSchema>({
+  const { setValue } = useForm<FormSchema>({
     defaultValues: defaultDetails,
     resolver: zodResolver(validationSchema),
     mode: "onBlur",
-});
+  })
 
   const toggleAccordion = () => {
-    setIsExpanded(!isExpanded);
-  };
+    setIsExpanded(!isExpanded)
+  }
 
   const handleClickMyVaults = () => {
-    navigate("/borrower/my-vaults");
-  };
+    navigate("/borrower/my-vaults")
+  }
 
-  const expandIcon = isExpanded ? expandLess : expandMore;
+  const expandIcon = isExpanded ? expandLess : expandMore
 
   const lenders = [
     {
@@ -63,7 +60,7 @@ const VaultDetails = () => {
       lenderName: "Hudson",
       lenderWallet: "0x987234oiwef8u234892384824309ljw09753",
     },
-  ];
+  ]
 
   const handleFieldChange = (field: string, value: string | number) => {
     setValue(field as keyof typeof defaultDetails, String(value))
@@ -86,8 +83,13 @@ const VaultDetails = () => {
           <div className="w-full flex justify-between items-center">
             <div className="font-bold">Borrow</div>
             <div className="flex gap-x-3.5 w-full max-w-lg">
-              <NumberInput decimalScale={4} onChange={(value) => handleFieldChange('borrow', value)} className="w-full" placeholder="00,000.00" />
-              <Button variant={"green"} className="w-64">
+              <NumberInput
+                decimalScale={4}
+                onChange={(value) => handleFieldChange("borrow", value)}
+                className="w-full"
+                placeholder="00,000.00"
+              />
+              <Button variant="green" className="w-64">
                 Borrow
               </Button>
             </div>
@@ -108,7 +110,7 @@ const VaultDetails = () => {
                   placeholder="00,000.00"
                   min={0}
                   max={9000}
-                  onChange={(value) => handleFieldChange('repay', value)}
+                  onChange={(value) => handleFieldChange("repay", value)}
                 />
                 <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
                   <span className="font-semibold">Repay up to </span>
@@ -116,11 +118,11 @@ const VaultDetails = () => {
                 </div>
               </div>
               <div className="w-44 flex flex-col gap-y-1.5">
-                <Button variant={"green"} className="w-full">
+                <Button variant="green" className="w-full">
                   Repay
                 </Button>
                 <Button
-                  variant={"green"}
+                  variant="green"
                   className="w-full px-2 whitespace-nowrap"
                 >
                   Repay to minimum reserve ratio
@@ -140,7 +142,9 @@ const VaultDetails = () => {
                   placeholder="00,000.00"
                   min={0}
                   max={9000}
-                  onChange={(value) => handleFieldChange('annualInterestRate', value)}
+                  onChange={(value) =>
+                    handleFieldChange("annualInterestRate", value)
+                  }
                 />
                 <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
                   <span className="font-semibold">Current </span>
@@ -148,10 +152,10 @@ const VaultDetails = () => {
                 </div>
               </div>
               <div className="w-44 flex flex-col gap-y-1.5">
-                <Button variant={"green"} className="w-full">
+                <Button variant="green" className="w-full">
                   Adjust
                 </Button>
-                <Button variant={"red"} className="w-44 px-2 whitespace-nowrap">
+                <Button variant="red" className="w-44 px-2 whitespace-nowrap">
                   Terminate Market
                 </Button>
               </div>
@@ -162,8 +166,14 @@ const VaultDetails = () => {
           <div className="w-full flex justify-between items-center">
             <div className="font-bold">Capacity</div>
             <div className="flex gap-x-3.5 w-full max-w-lg">
-              <NumberInput decimalScale={4} onChange={(value) => handleFieldChange('capacity', value)} className="w-full" placeholder="10.00" min={0} />
-              <Button variant={"green"} className="w-64">
+              <NumberInput
+                decimalScale={4}
+                onChange={(value) => handleFieldChange("capacity", value)}
+                className="w-full"
+                placeholder="10.00"
+                min={0}
+              />
+              <Button variant="green" className="w-64">
                 Adjust
               </Button>
             </div>
@@ -245,7 +255,7 @@ const VaultDetails = () => {
       <div className="flex w-full justify-between content-center">
         <div className="text-base font-bold">Lenders</div>
         <div className="flex gap-x-2">
-           <NewLendersModal />
+          <NewLendersModal />
           <RemoveLendersModal lenders={lenders} />
         </div>
       </div>
@@ -277,7 +287,7 @@ const VaultDetails = () => {
             <div className="inline text-black text-xs">
               0x287324837498sjdf098234lkjsef08234af
             </div>
-            <Button variant={"white-brown"} className="w-24 max-h-5 gap-x-2.5">
+            <Button variant="white-brown" className="w-24 max-h-5 gap-x-2.5">
               Pending
               <img src={canselRoundIcon} alt="Cancel" />
             </Button>
@@ -286,7 +296,7 @@ const VaultDetails = () => {
             <div className="inline text-black text-xs">
               0x287324837498sjdf098234lkjsef08234af
             </div>
-            <Button variant={"white-brown"} className="w-24 max-h-5 gap-x-2.5">
+            <Button variant="white-brown" className="w-24 max-h-5 gap-x-2.5">
               Pending
               <img src={canselRoundIcon} alt="Cancel" />
             </Button>
@@ -295,7 +305,7 @@ const VaultDetails = () => {
             <div className="inline text-black text-xs">
               0x287324837498sjdf098234lkjsef08234af
             </div>
-            <Button variant={"red"} className="w-24 max-h-5 gap-x-2.5">
+            <Button variant="red" className="w-24 max-h-5 gap-x-2.5">
               Remove
               <img src={canselRoundIcon} alt="Cancel" />
             </Button>
@@ -304,7 +314,7 @@ const VaultDetails = () => {
             <div className="inline text-black text-xs">
               0x287324837498sjdf098234lkjsef08234af
             </div>
-            <Button variant={"red"} className="w-24 max-h-5 gap-x-2.5">
+            <Button variant="red" className="w-24 max-h-5 gap-x-2.5">
               Remove
               <img src={canselRoundIcon} alt="Cancel" />
             </Button>
@@ -313,7 +323,7 @@ const VaultDetails = () => {
             <div className="inline text-black text-xs">
               0x287324837498sjdf098234lkjsef08234af
             </div>
-            <Button variant={"red"} className="w-24 max-h-5 gap-x-2.5">
+            <Button variant="red" className="w-24 max-h-5 gap-x-2.5">
               Remove
               <img src={canselRoundIcon} alt="Cancel" />
             </Button>
@@ -322,7 +332,7 @@ const VaultDetails = () => {
             <div className="inline text-black text-xs">
               0x287324837498sjdf098234lkjsef08234af
             </div>
-            <Button variant={"red"} className="w-24 max-h-5 gap-x-2.5">
+            <Button variant="red" className="w-24 max-h-5 gap-x-2.5">
               Remove
               <img src={canselRoundIcon} alt="Cancel" />
             </Button>
@@ -387,7 +397,7 @@ const VaultDetails = () => {
         description="You agreed to the Wildcat Service Agreement on 12-Sept-2023"
       />
     </div>
-  );
-};
+  )
+}
 
-export default VaultDetails;
+export default VaultDetails

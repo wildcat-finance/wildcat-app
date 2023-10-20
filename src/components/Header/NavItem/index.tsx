@@ -1,12 +1,9 @@
-import { NavItemProps } from './interface'
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom"
+import { NavItemProps } from "./interface"
 
-const NavItem = ({ link, name }: NavItemProps) => {
+function NavItem({ link, name }: NavItemProps) {
   return (
-    <Link
-      to={link}
-      className='text-sm text-white underline font-bold'
-    >
+    <Link to={link} className="text-sm text-white underline font-bold">
       {name}
     </Link>
   )

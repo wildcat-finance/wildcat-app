@@ -1,21 +1,17 @@
-import { Fragment } from 'react'
-import { Listbox, Transition } from '@headlessui/react'
-import cn from 'classnames'
+import { Fragment } from "react"
+import { Listbox, Transition } from "@headlessui/react"
+import cn from "classnames"
 
-import expandArrow from '../icons/expand_more.svg'
-import { SelectProps } from './interface'
+import expandArrow from "../icons/expand_more.svg"
+import { SelectProps } from "./interface"
 
-const SelectOptionBaseClass = 'relative z-50 border border-t-0 border-tint-8 cursor-default bg-white text-left w-full h-8 px-3 flex items-center '
+const SelectOptionBaseClass =
+  "relative z-50 border border-t-0 border-tint-8 cursor-default bg-white text-left w-full h-8 px-3 flex items-center "
 
+export function Select(props: SelectProps) {
+  const { options, selected, onChange, placeholder } = props
 
-export const Select = (props: SelectProps) => {
-  const {
-    options,
-    selected,
-    onChange, placeholder
-  } = props
-
-  const rootCss = cn('ml-0 w-72 relative', props.className)
+  const rootCss = cn("ml-0 w-72 relative", props.className)
 
   return (
     <div className={rootCss}>
@@ -23,7 +19,7 @@ export const Select = (props: SelectProps) => {
         <div>
           <Listbox.Button className="cursor-default bg-white text-left w-full h-8 pl-3 border border-tint-8 flex items-center justify-between pr-2">
             <span className="block truncate text-xxs">
-              {selected ? selected.label : placeholder || 'Select'}
+              {selected ? selected.label : placeholder || "Select"}
             </span>
 
             <span>
@@ -42,16 +38,16 @@ export const Select = (props: SelectProps) => {
                 <Listbox.Option
                   key={option.id}
                   value={option}
-                  className={({ active }) => (
-                      cn(SelectOptionBaseClass, {
-                        'text-amber-900': active,
-                        'text-gray-900': !active,
-                      })
-                  )}
+                  className={({ active }) =>
+                    cn(SelectOptionBaseClass, {
+                      "text-amber-900": active,
+                      "text-gray-900": !active,
+                    })
+                  }
                 >
-                    <span className="block truncate text-xxs">
-                      {option.label}
-                    </span>
+                  <span className="block truncate text-xxs">
+                    {option.label}
+                  </span>
                 </Listbox.Option>
               ))}
             </Listbox.Options>

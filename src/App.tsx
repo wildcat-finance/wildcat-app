@@ -1,16 +1,21 @@
-import * as React from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import * as React from "react"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
+
+import { WagmiProvider } from "./modules/wagmi/components"
+import Layout from "./pages/Layout"
 import {
-  createBrowserRouter, RouterProvider
-} from "react-router-dom";
+  AddNewVault,
+  ServiceAgreement,
+  HomePage,
+  MyVaults,
+  VaultDetails,
+  ActiveVaults,
+} from "./pages"
+import LendersServiceAgreement from "./pages/lenders/LendersServiceAgreement"
+import "./styles/index.css"
 
-import { WagmiProvider } from "./modules/wagmi/components";
-import Layout from "./pages/Layout";
-import { AddNewVault, ServiceAgreement, HomePage, MyVaults, VaultDetails, ActiveVaults } from "./pages";
-import  LendersServiceAgreement from "./pages/lenders/LendersServiceAgreement";
-import './styles/index.css';
-
-const queryClient = new QueryClient();
+const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
   {
@@ -35,13 +40,13 @@ const router = createBrowserRouter([
       },
       {
         path: "my-vaults",
-        element: <MyVaults />
+        element: <MyVaults />,
       },
       {
         path: "vault-details",
-        element: <VaultDetails />
+        element: <VaultDetails />,
       },
-    ]
+    ],
   },
   {
     path: "/lender",
@@ -59,16 +64,16 @@ const router = createBrowserRouter([
         path: "active-vaults",
         element: <ActiveVaults />,
       },
-    ]
-  }
-]);
+    ],
+  },
+])
 
-export const App = () => {
+export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <WagmiProvider>
         <RouterProvider router={router} />
       </WagmiProvider>
     </QueryClientProvider>
-  );
-};
+  )
+}

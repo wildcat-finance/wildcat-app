@@ -1,9 +1,9 @@
-import { useController } from "react-hook-form";
-import { FormItem } from "../FormItem";
-import { NumberInput } from "../NumberInput";
-import { FormNumberInputProps } from "./interface";
+import { useController } from "react-hook-form"
+import { FormItem } from "../FormItem"
+import { NumberInput } from "../NumberInput"
+import { FormNumberInputProps } from "./interface"
 
-export const FormNumberInput = (props: FormNumberInputProps) => {
+export function FormNumberInput(props: FormNumberInputProps) {
   const {
     control,
     formErrors,
@@ -14,13 +14,15 @@ export const FormNumberInput = (props: FormNumberInputProps) => {
     tooltip,
     min = 0,
     max,
-    decimalScale
+    decimalScale,
   } = props
 
-  const { field: { onChange, ...rest } } = useController({
-    name: name,
+  const {
+    field: { onChange, ...rest },
+  } = useController({
+    name,
     control,
-  });
+  })
 
   return (
     <FormItem
@@ -31,7 +33,8 @@ export const FormNumberInput = (props: FormNumberInputProps) => {
       error={Boolean(formErrors[name]?.message)}
       errorText={formErrors[name]?.message}
     >
-      <NumberInput {...rest}
+      <NumberInput
+        {...rest}
         onChange={onChange}
         className={inputClass}
         min={min}

@@ -1,11 +1,11 @@
-import { Button, NumberInput } from "../../../../../components/ui-components";
+import { Button, NumberInput } from "../../../../../components/ui-components"
 
-export const VaultDeposit = ({
+export function VaultDeposit({
   nextStep,
 }: {
-  nextStep?: () => void;
-  previousStep?: () => void;
-}) => {
+  nextStep?: () => void
+  previousStep?: () => void
+}) {
   return (
     <>
       {/* <div className="flex-col items-center justify-center"> */}
@@ -15,7 +15,7 @@ export const VaultDeposit = ({
           <div className="flex gap-x-3.5 w-full max-w-lg">
             <NumberInput className="w-full" placeholder="00,000.00" />
             <div className="flex flex-col">
-              <Button variant={"green"} className="w-44">
+              <Button variant="green" className="w-44">
                 Deposit
               </Button>
             </div>
@@ -40,10 +40,10 @@ export const VaultDeposit = ({
             </div>
 
             <div className="flex flex-col justify-between">
-              <Button variant={"green"} className="w-44">
+              <Button variant="green" className="w-44">
                 Withdraw
               </Button>
-              <Button variant={"green"} className="w-44">
+              <Button variant="green" className="w-44">
                 Claim from Vault
               </Button>
             </div>
@@ -52,5 +52,5 @@ export const VaultDeposit = ({
       </div>
       {/* </div> */}
     </>
-  );
-};
+  )
+}

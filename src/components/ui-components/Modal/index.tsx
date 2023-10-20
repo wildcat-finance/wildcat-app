@@ -1,30 +1,29 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
-import { Button } from "../Button";
+import { Dialog, Transition } from "@headlessui/react"
+import { Fragment, useState } from "react"
+import { Button } from "../Button"
 
-import { ModalProps } from "./interface";
-import { Paper } from "../Paper";
+import { ModalProps } from "./interface"
+import { Paper } from "../Paper"
 
-import closeIcon from "../../ui-components/icons/cancel_icon.svg";
-import { SignIcon } from "../icons";
+import closeIcon from "../icons/cancel_icon.svg"
+import { SignIcon } from "../icons"
 
-export const Modal = ({
+export function Modal({
   buttonName,
   buttonColor,
   buttonClassName,
   children,
   sign,
-    onClose,
-}: ModalProps) => {
-
-  let [isOpen, setIsOpen] = useState(false);
+  onClose,
+}: ModalProps) {
+  const [isOpen, setIsOpen] = useState(false)
 
   const toggleModal = () => {
     if (isOpen && onClose) {
-        onClose();
+      onClose()
     }
-    setIsOpen(!isOpen);
-  };  
+    setIsOpen(!isOpen)
+  }
 
   return (
     <>
@@ -83,7 +82,7 @@ export const Modal = ({
                           </Button>
                         )}
                         <Button
-                          variant={"grey"}
+                          variant="grey"
                           className="!text-black font-semibold w-28"
                           onClick={toggleModal}
                         >
@@ -99,5 +98,5 @@ export const Modal = ({
         </Dialog>
       </Transition>
     </>
-  );
-};
+  )
+}

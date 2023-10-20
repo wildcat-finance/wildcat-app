@@ -1,16 +1,16 @@
-import { Paper } from "../../../../../components/ui-components/Paper";
+import { Paper } from "../../../../../components/ui-components/Paper"
 
-import { Button } from "../../../../../components/ui-components/Button";
+import { Button } from "../../../../../components/ui-components/Button"
 
-const MasterLoanAgreement = ({
+function MasterLoanAgreement({
   nextStep,
 }: {
-  nextStep?: () => void;
-  previousStep?: () => void;
-}) => {
+  nextStep?: () => void
+  previousStep?: () => void
+}) {
   return (
     <>
-      <Paper className="bg-white max-h-2xl flex flex-col border-0" >
+      <Paper className="bg-white max-h-2xl flex flex-col border-0">
         <div className="overflow-scroll mt-5 pr-14 pl-8 flex-grow-1">
           <div className=" text-xs">
             <p className="mb-4">
@@ -284,7 +284,7 @@ const MasterLoanAgreement = ({
         </Button>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default MasterLoanAgreement;
+export default MasterLoanAgreement

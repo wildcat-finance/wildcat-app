@@ -1,14 +1,18 @@
-import React from "react";
-import { WagmiConfig, createConfig, configureChains, sepolia } from "wagmi";
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import { InjectedConnector } from "wagmi/connectors/injected";
-import { LedgerConnector } from "wagmi/connectors/ledger";
-import type { ReactNode } from "react";
+import React from "react"
+import { WagmiConfig, createConfig, configureChains, sepolia } from "wagmi"
+import { alchemyProvider } from "wagmi/providers/alchemy"
+import { InjectedConnector } from "wagmi/connectors/injected"
+import { LedgerConnector } from "wagmi/connectors/ledger"
+import type { ReactNode } from "react"
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [sepolia],
-  [alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_API_KEY as string })]
-);
+  [
+    alchemyProvider({
+      apiKey: process.env.REACT_APP_ALCHEMY_API_KEY as string,
+    }),
+  ],
+)
 
 const config = createConfig({
   autoConnect: true,
@@ -18,12 +22,12 @@ const config = createConfig({
     new LedgerConnector({ chains }),
   ],
   webSocketPublicClient,
-});
+})
 
 interface WagmiProviderProps {
-  children?: ReactNode;
+  children?: ReactNode
 }
 
 export function WagmiProvider({ children }: WagmiProviderProps) {
-  return <WagmiConfig config={config}>{children}</WagmiConfig>;
+  return <WagmiConfig config={config}>{children}</WagmiConfig>
 }

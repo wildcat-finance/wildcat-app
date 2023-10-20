@@ -1,5 +1,5 @@
-import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard";
-import { LenderVaultItem } from "./LenderVaultItem";
+import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
+import { LenderVaultItem } from "./LenderVaultItem"
 
 const demoVaults = [
   {
@@ -42,9 +42,9 @@ const demoVaults = [
     withdrawalCycleCountdown: { hours: 28, minutes: 39 },
     masterLoanAgreement: "false",
   },
-];
+]
 
-const ActiveVaults = () => {
+function ActiveVaults() {
   return (
     <>
       <div className="text-green text-2xl font-bold mb-12 w-2/3">
@@ -61,7 +61,7 @@ const ActiveVaults = () => {
         description="You agreed to the Wildcat Service Agreement on 12-Sept-2023"
       />
     </>
-  );
-};
+  )
+}
 
-export default ActiveVaults;
+export default ActiveVaults

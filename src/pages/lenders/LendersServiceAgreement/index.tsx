@@ -1,12 +1,12 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
 
-import { Paper } from "../../../components/ui-components/Paper";
-import { BluePaper } from "../../../components/ui-components/BluePaper";
-import { Button } from "../../../components/ui-components/Button";
-import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { AiOutlineExclamationCircle } from "react-icons/ai"
+import { Paper } from "../../../components/ui-components/Paper"
+import { BluePaper } from "../../../components/ui-components/BluePaper"
+import { Button } from "../../../components/ui-components/Button"
 
-const LendersServiceAgreement = () => {
-  const navigate = useNavigate();
+function LendersServiceAgreement() {
+  const navigate = useNavigate()
 
   return (
     <>
@@ -300,7 +300,7 @@ const LendersServiceAgreement = () => {
         </Button>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default LendersServiceAgreement;
+export default LendersServiceAgreement
