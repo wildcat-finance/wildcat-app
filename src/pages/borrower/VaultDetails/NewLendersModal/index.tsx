@@ -96,19 +96,22 @@ export function NewLendersModal() {
         <Button variant="blue" className="w-28" onClick={handleAddLender}>
           Add
         </Button>
-        <div className="flex flex-col gap-y-2">
+        <div className="flex flex-col gap-y-2 w-full">
           <div className="w-full border border-tint-10" />
 
-          <div className="text-base font-bold">You have added:</div>
+          <div className="text-base font-bold text-center">You have added:</div>
           {newLenders.map((lender) => (
             <div className="flex gap-x-4">
               <div className="flex flex-col justify-between w-full">
                 <div className="text-xs font-medium">{lender.lenderName}</div>
                 <div className="text-xs">{lender.lenderWallet}</div>
               </div>
-              <Button onClick={() => handleCancelLender(lender)}>
+              <Button
+                onClick={() => handleCancelLender(lender)}
+                variant="outline"
+              >
                 <img
-                  className="max-w-5 max-h-5"
+                  className="w-5 h-5"
                   src={cancelRoundRedIcon}
                   alt="Cancel"
                 />

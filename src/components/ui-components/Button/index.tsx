@@ -17,7 +17,7 @@ export function Button({
   const { buttonProps } = useButton(restProps, ref)
 
   const cssClass = cn(
-    "text-white text-xxs min-w-18 h-8 px-5 rounded-full",
+    "text-white text-xxs min-w-18 h-8 px-5 rounded-full outline-none",
     "flex items-center justify-center",
     `wc-btn-${variant}`,
     { "bg-gray cursor-not-allowed": buttonProps.disabled },

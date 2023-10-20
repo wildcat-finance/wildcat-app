@@ -64,7 +64,8 @@ export function Modal({
                   <div className="flex flex-col items-end">
                     <Button
                       onClick={toggleModal}
-                      className="w-fit relative top-7 right-4"
+                      className="w-fit relative top-10 right-0"
+                      variant="outline"
                     >
                       <img src={closeIcon} alt="close" />
                     </Button>

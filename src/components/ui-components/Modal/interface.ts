@@ -9,6 +9,7 @@ export type ModalProps = {
     | "white-brown"
     | "red"
     | "grey"
+    | "outline"
   buttonClassName?: string
   children: React.ReactNode
   sign?: boolean
