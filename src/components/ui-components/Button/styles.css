@@ -35,3 +35,7 @@
 .wc-btn-outline[type='button'] {
     @apply bg-transparent text-black;
 }
+
+.wc-btn-silver[type='button'] {
+    @apply bg-silver-100 text-black h-6;
+}

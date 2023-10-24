@@ -12,6 +12,7 @@ export type ButtonProps = AriaButtonOptions<"button"> & {
     | "red"
     | "grey"
     | "outline"
+    | "silver"
   disabled?: boolean
   children?: ReactNode
   onClick?: () => void
