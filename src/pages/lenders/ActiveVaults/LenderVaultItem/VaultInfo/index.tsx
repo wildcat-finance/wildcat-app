@@ -4,7 +4,12 @@ import { VaultInfoProps } from "./interface"
 import { Button, TableItem } from "../../../../../components/ui-components"
 import { BluePaper } from "../../../../../components/ui-components/BluePaper"
 
-export function VaultInfo({ vault, nextStep, previousStep }: VaultInfoProps) {
+export function VaultInfo({
+  vault,
+  nextStep,
+  previousStep,
+  showButtons,
+}: VaultInfoProps) {
   return (
     <div>
       <TableItem className="grid grid-cols-2 gap-x-36">
@@ -149,21 +154,25 @@ export function VaultInfo({ vault, nextStep, previousStep }: VaultInfoProps) {
           </div>
         </div>
       </TableItem>
-      <BluePaper className="mt-11 mb-8">
-        <AiOutlineExclamationCircle height={24} />
-        <div className="text-xxs text-center max-w-xs">
-          Before you can interact with this vault please confirm whether you
-          would like an MLA (a Master Loan Agreement) on this vault.
-        </div>
-      </BluePaper>
-      <div className="flex gap-x-5 pb-10 mx-auto w-fit">
-        <Button variant="green" className="w-40" onClick={nextStep}>
-          Show me the MLA
-        </Button>
-        <Button variant="red" className="w-40" onClick={previousStep}>
-          I don’t want the MLA
-        </Button>
-      </div>
+      {showButtons && (
+        <>
+          <BluePaper className="mt-11 mb-8">
+            <AiOutlineExclamationCircle height={24} />
+            <div className="text-xxs text-center max-w-xs">
+              Before you can interact with this vault please confirm whether you
+              would like an MLA (a Master Loan Agreement) on this vault.
+            </div>
+          </BluePaper>
+          <div className="flex gap-x-5 pb-10 mx-auto w-fit">
+            <Button variant="green" className="w-40" onClick={nextStep}>
+              Show me the MLA
+            </Button>
+            <Button variant="red" className="w-40" onClick={previousStep}>
+              I don’t want the MLA
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   )
 }

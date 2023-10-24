@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react"
 
 import { LenderVaultItemProps } from "./interface"
 import { VaultInfo } from "./VaultInfo"
@@ -8,6 +8,7 @@ import MasterLoanAgreement from "./MasterLoanAgreement"
 import { Button, Chip, Paper } from "../../../../components/ui-components"
 import expandMore from "../../../../components/ui-components/icons/expand_more.svg"
 import expandLess from "../../../../components/ui-components/icons/expand_less.svg"
+import { VaultOverview } from "./VaultOverview"
 
 export function LenderVaultItem({ index, vault }: LenderVaultItemProps) {
   const [toggleStatus, setToggleStatus] = useState(false)
@@ -56,12 +57,14 @@ export function LenderVaultItem({ index, vault }: LenderVaultItemProps) {
           vault={vault}
           nextStep={nextStep}
           previousStep={previousStep}
+          showButtons
         />
       )}
       {toggleStatus && step === 2 && (
         <MasterLoanAgreement nextStep={nextStep} previousStep={previousStep} />
       )}
-      {toggleStatus && step === 3 && <VaultDeposit />}
+      {toggleStatus && step === 3 && <VaultDeposit nextStep={nextStep} />}
+      {toggleStatus && step === 4 && <VaultOverview />}
     </Paper>
   )
 }

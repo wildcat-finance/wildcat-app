@@ -24,4 +24,5 @@ export type VaultInfoProps = {
   }
   nextStep: () => void
   previousStep: () => void
+  showButtons?: boolean
 }

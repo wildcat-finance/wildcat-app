@@ -12,7 +12,7 @@ export function VaultDeposit({
   return (
     <>
       {/* <div className="flex-col items-center justify-center"> */}
-      <div className="px-5">
+      <div className="px-5 bg-tint-10 pt-8">
         <div className="w-full flex justify-between items-center">
           <div className="font-bold">Deposit</div>
           <div className="flex gap-x-3.5 w-full max-w-lg">
@@ -30,15 +30,31 @@ export function VaultDeposit({
         </div>
       </div>
 
-      <div className="px-5">
-        <div className="w-full flex justify-between items-center">
+      <div className="px-5 bg-tint-10">
+        <div className="w-full flex justify-between items-center pb-5">
           <div className="font-bold">Withdraw</div>
           <div className="flex gap-x-3.5 w-full max-w-lg">
             <div className="flex flex-1 flex-col items-end">
               <NumberInput className="w-full" placeholder="00,000.00" />
-              <div className="text-xxs text-right">
-                <span className="font-semibold">Deposit up to </span>
-                25,000 DAI
+              <div className="text-xxs text-right mt-1.5 flex-col flex">
+                <p className="mb-3.5">
+                  <span className="font-semibold">Withdraw up to </span>
+                  25,000 DAI
+                </p>
+                <p>
+                  <span className="font-semibold">
+                    WReserved assets awaiting cycle:{" "}
+                  </span>
+                  25,000 DAI
+                </p>
+                <p className="mb-3.5">
+                  <span className="font-semibold">Pending withdrawals: </span>
+                  25,000 DAI
+                </p>
+                <p>
+                  <span className="font-semibold">Claimable from vault: </span>
+                  25,000 DAI
+                </p>
               </div>
             </div>
 
@@ -46,7 +62,7 @@ export function VaultDeposit({
               <Button variant="green" className="w-44">
                 Withdraw
               </Button>
-              <Button variant="green" className="w-44">
+              <Button variant="green" className="w-44" onClick={nextStep}>
                 Claim from Vault
               </Button>
             </div>
