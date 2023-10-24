@@ -53,11 +53,7 @@ function ConnectButton() {
 
   return (
     <>
-      <Button
-        className="rounded-sm px-2 py-1 w-24 h-6"
-        onClick={openModal}
-        variant="silver"
-      >
+      <Button className="rounded-sm" onClick={openModal} variant="silver">
         <div className="flex items-center gap-2">
           <span className="text-black text-xs">{getButtonText()}</span>
           <RiWallet3Line className="w-5" />

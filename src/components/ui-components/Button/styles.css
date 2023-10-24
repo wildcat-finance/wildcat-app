@@ -37,5 +37,5 @@
 }
 
 .wc-btn-silver[type='button'] {
-    @apply bg-silver-100 text-black h-6;
+    @apply bg-silver-100 text-black px-2 py-1;
 }
