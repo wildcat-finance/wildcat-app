@@ -3,20 +3,20 @@ import cn from "classnames"
 
 export function TableItem({
   children,
-  align,
+  justify,
 }: {
   children: ReactNode
-  align: "start" | "center" | "end"
+  justify: "start" | "center" | "end"
 }) {
   return (
     <td className="first:pl-6 last:pr-6">
       <div
         className={cn(
-          "flex items-center inline text-black text-xs",
-          `justify-${align}`,
+          "flex items-center text-black text-xs",
+          `justify-${justify}`,
         )}
       >
-        {children}
+        <div>{children}</div>
       </div>
     </td>
   )

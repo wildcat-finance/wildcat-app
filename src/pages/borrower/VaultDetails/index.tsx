@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { DateValue } from "react-aria-components"
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -10,6 +11,7 @@ import {
   NumberInput,
   TableItem,
   Chip,
+  DatePickerInput,
 } from "../../../components/ui-components"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 
@@ -107,6 +109,20 @@ const tableData = [
     status: "Pending",
   },
 ]
+const lenders = [
+  {
+    lenderName: "Hudson",
+    lenderWallet: "0x987234oiwef8u234892384824309ljw09751",
+  },
+  {
+    lenderName: "Hudson",
+    lenderWallet: "0x987234oiwef8u234892384824309ljw09752",
+  },
+  {
+    lenderName: "Hudson",
+    lenderWallet: "0x987234oiwef8u234892384824309ljw09753",
+  },
+]
 
 const defaultDetails: FormSchema = {
   borrow: "",
@@ -115,9 +131,33 @@ const defaultDetails: FormSchema = {
   capacity: "",
 }
 
+function numberToArray(number: number) {
+  const array = []
+  for (let i = 1; i <= number; i += 1) {
+    array.push(i)
+  }
+  return array
+}
+
 function VaultDetails() {
   const navigate = useNavigate()
   const [isExpanded, setIsExpanded] = useState(true)
+  const [isActivePage, setIsActivePage] = useState(1)
+  const [dateArray, setDateArray] = useState<DateValue[]>([])
+
+  const isDatePicked = dateArray.length >= 1
+
+  const handleFirstDateChange = (date: DateValue) => {
+    setDateArray([date, dateArray[1]])
+  }
+
+  const handleSecondDateChange = (date: DateValue) => {
+    setDateArray([dateArray[0], date])
+  }
+
+  const handleDateReset = () => {
+    setDateArray([])
+  }
 
   const { setValue } = useForm<FormSchema>({
     defaultValues: defaultDetails,
@@ -134,21 +174,6 @@ function VaultDetails() {
   }
 
   const expandIcon = isExpanded ? expandLess : expandMore
-
-  const lenders = [
-    {
-      lenderName: "Hudson",
-      lenderWallet: "0x987234oiwef8u234892384824309ljw09751",
-    },
-    {
-      lenderName: "Hudson",
-      lenderWallet: "0x987234oiwef8u234892384824309ljw09752",
-    },
-    {
-      lenderName: "Hudson",
-      lenderWallet: "0x987234oiwef8u234892384824309ljw09753",
-    },
-  ]
 
   const handleFieldChange = (field: string, value: string | number) => {
     setValue(field as keyof typeof defaultDetails, String(value))
@@ -311,24 +336,32 @@ function VaultDetails() {
               </div>
             </div>
           </div>
-          <div className="flex items-center">
-            <input
-              className="w-36 h-7 bg-white border border-tint-11 mr-2 px-2 text-xxs"
+          <div className="flex items-center gap-x-3">
+            <DatePickerInput
               placeholder="Date from"
+              onChange={handleFirstDateChange}
+              value={dateArray[0]}
             />
-            <input
-              className="w-36 h-7 bg-white border border-tint-11 mr-4 px-2 text-xxs"
+            <DatePickerInput
               placeholder="Date to"
+              onChange={handleSecondDateChange}
+              value={dateArray[1]}
             />
             <button onClick={handleClickMyVaults}>
               <Search className="h-6 w-6" />
             </button>
           </div>
         </div>
-        <Chip className="bg-white w-fit mb-3">
-          12-Jul-2023 – 10-Aug-2023
-          <CancelRoundBlack className="ml-2" />
-        </Chip>
+        {isDatePicked && (
+          <Chip className="bg-white w-fit mb-3">
+            {dateArray[0]?.toString()} – {dateArray[1]?.toString()}
+            <CancelRoundBlack
+              className="ml-2 cursor-pointer"
+              onClick={handleDateReset}
+            />
+          </Chip>
+        )}
+        {!isDatePicked && <div className="h-8 w-8 mb-3" />}
         <Table
           headers={[
             {
@@ -360,14 +393,26 @@ function VaultDetails() {
           {tableData.map((item, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <TableRow key={index}>
-              <TableItem2 align="start">{item.lender}</TableItem2>
-              <TableItem2 align="end">{item.dateSubmitted}</TableItem2>
-              <TableItem2 align="end">{item.dateExecuted}</TableItem2>
-              <TableItem2 align="end">{item.amount}</TableItem2>
-              <TableItem2 align="end">{item.status}</TableItem2>
+              <TableItem2 justify="start">{item.lender}</TableItem2>
+              <TableItem2 justify="end">{item.dateSubmitted}</TableItem2>
+              <TableItem2 justify="end">{item.dateExecuted}</TableItem2>
+              <TableItem2 justify="end">{item.amount}</TableItem2>
+              <TableItem2 justify="end">{item.status}</TableItem2>
             </TableRow>
           ))}
         </Table>
+        <div className="flex justify-center gap-x-1 text-xxs mt-6">
+          {numberToArray(4).map((item, index) => (
+            <button
+              // eslint-disable-next-line react/no-array-index-key
+              key={index}
+              onClick={() => setIsActivePage(item)}
+              className={`${isActivePage === item ? "font-bold" : ""}`}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
       </div>
       <div className="text-base font-bold">Details</div>
       <div className="flex w-full mt-5 mb-8">
