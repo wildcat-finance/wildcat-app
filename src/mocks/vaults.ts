@@ -2,7 +2,7 @@ import { Vault, VaultStatus } from "../types/vaults"
 
 export const mockedVaults: Vault[] = [
   {
-    name: "Blossom Dai Stablecoin Vault",
+    name: "Blossom Dai Stablecoin Market",
     tokenSymbol: "DAI",
     maximumCapacity: "1000",
     reserveRatio: "20",
@@ -11,8 +11,8 @@ export const mockedVaults: Vault[] = [
     availableCapacity: "100",
   },
   {
-    name: "Ethereum Vault",
-    tokenSymbol: "ETH",
+    name: "Wintermute Wrapped Ether Market",
+    tokenSymbol: "WETH",
     maximumCapacity: "1500",
     reserveRatio: "30",
     annualInterestRate: "4",
@@ -20,7 +20,7 @@ export const mockedVaults: Vault[] = [
     availableCapacity: "300",
   },
   {
-    name: "Crypto Paradise Vault",
+    name: "Jump Crypto Paradise Market",
     tokenSymbol: "PARA",
     maximumCapacity: "800",
     reserveRatio: "25",
@@ -29,7 +29,7 @@ export const mockedVaults: Vault[] = [
     availableCapacity: "345",
   },
   {
-    name: "Secure Token Vault",
+    name: "GSR Secure Token Market",
     tokenSymbol: "STT",
     maximumCapacity: "1200",
     reserveRatio: "18",
@@ -38,7 +38,7 @@ export const mockedVaults: Vault[] = [
     availableCapacity: "1005",
   },
   {
-    name: "Digital Asset Vault",
+    name: "DWF Labs Digital Asset Market",
     tokenSymbol: "DAT",
     maximumCapacity: "2000",
     reserveRatio: "22",

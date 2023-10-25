@@ -18,9 +18,8 @@ function ServiceAgreement() {
       <BluePaper className="mb-8">
         <AiOutlineExclamationCircle height={24} />
         <span className="text-xs text-center">
-          Before you can interact with the protocol UI you need to read and
-          agree (via ETH
-          <br /> wallet signature) to the Wildcat Service Agreement.
+          Please review and sign the Wildcat Service Agreement in order to
+          access the app.
         </span>
       </BluePaper>
 

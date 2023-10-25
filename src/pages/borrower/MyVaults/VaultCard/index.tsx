@@ -43,20 +43,20 @@ function VaultCard({ vault, className }: VaultCardProps) {
       </div>
 
       <div>
-        <TableItem title="Token asset" value={`${vault.tokenSymbol}`} />
-        <TableItem
-          title="Annual Interest Rate"
-          value={`${vault.annualInterestRate}%`}
-        />
-        <TableItem
-          title="Maximum Capacity"
-          value={`${vault.maximumCapacity} DAI`}
-        />
+        <TableItem title="Underlying Asset" value={`${vault.tokenSymbol}`} />
+        <TableItem title="Lender APR" value={`${vault.annualInterestRate}%`} />
         <TableItem
           title="Current Reserve Ratio"
           value={`${vault.reserveRatio}%`}
         />
-        <TableItem title="Available" value={`${vault.availableCapacity} DAI`} />
+        <TableItem
+          title="Total Credit Extended"
+          value={`${vault.maximumCapacity} DAI`}
+        />
+        <TableItem
+          title="Available To Borrow"
+          value={`${vault.availableCapacity} DAI`}
+        />
       </div>
 
       <div className="w-full p-3 bg-tint-10">

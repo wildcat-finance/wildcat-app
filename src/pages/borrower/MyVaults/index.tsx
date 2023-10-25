@@ -60,7 +60,7 @@ function MyVaults() {
       <div className="text-xs flex-col">
         <div className="text-xs font-normal underline">My Markets</div>
         <div className="text-green text-2xl font-bold justify-between items-center flex mt-8">
-          Active markets for borrower peaches.eth
+          All Markets For Borrower: peaches.eth
           <Button
             onClick={() => navigate("/borrower/add-new-vault")}
             variant="blue"
@@ -73,7 +73,7 @@ function MyVaults() {
           <div className="w-1/3 px-2.5 py-2.5">
             <TextInput
               onChange={handleFilterByName}
-              placeholder="Filter by name"
+              placeholder="Filter By Market Name"
               className="w-full"
             />
           </div>
@@ -82,7 +82,7 @@ function MyVaults() {
               options={mockedUnderlyingAssetsOptions}
               onChange={setSelectedUnderlyingAsset}
               selected={selectedUnderlyingAsset}
-              placeholder="Underlying asset"
+              placeholder="Underlying Asset"
               className="w-full"
             />
           </div>
@@ -91,7 +91,7 @@ function MyVaults() {
               options={mockedVaultRatioOptions}
               onChange={setSelectedVaultRatio}
               selected={selectedVaultRatio}
-              placeholder="Vault status"
+              placeholder="Market Status"
               className="w-full"
             />
           </div>
