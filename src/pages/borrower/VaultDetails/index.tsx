@@ -9,6 +9,7 @@ import {
   Paper,
   NumberInput,
   TableItem,
+  Chip,
 } from "../../../components/ui-components"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 
@@ -16,9 +17,96 @@ import canselRoundIcon from "../../../components/ui-components/icons/cancel.svg"
 import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.svg"
 import expandMore from "../../../components/ui-components/icons/expand_more.svg"
 import expandLess from "../../../components/ui-components/icons/expand_less.svg"
+import {
+  CancelRoundBlack,
+  Search,
+} from "../../../components/ui-components/icons/index"
 import { FormSchema, validationSchema } from "./validationSchema"
 import RemoveLendersModal from "./RemoveLendersModal"
 import { NewLendersModal } from "./NewLendersModal"
+import Table from "../../../components/ui-components/Table"
+import TableRow from "../../../components/ui-components/Table/TableRow"
+import { TableItem as TableItem2 } from "../../../components/ui-components/Table/TableItem"
+
+const tableData = [
+  {
+    lender: "Hudson",
+    dateSubmitted: "12-Jul-2023",
+    dateExecuted: "12-Jul-2023",
+    amount: "1,000 DAI",
+    status: "Pending",
+  },
+  {
+    lender: "Hudson",
+    dateSubmitted: "12-Jul-2023",
+    dateExecuted: "12-Jul-2023",
+    amount: "1,000 DAI",
+    status: "Pending",
+  },
+  {
+    lender: "Hudson",
+    dateSubmitted: "12-Jul-2023",
+    dateExecuted: "12-Jul-2023",
+    amount: "1,000 DAI",
+    status: "Pending",
+  },
+  {
+    lender: "Hudson",
+    dateSubmitted: "12-Jul-2023",
+    dateExecuted: "12-Jul-2023",
+    amount: "1,000 DAI",
+    status: "Pending",
+  },
+  {
+    lender: "Hudson",
+    dateSubmitted: "12-Jul-2023",
+    dateExecuted: "12-Jul-2023",
+    amount: "1,000 DAI",
+    status: "Pending",
+  },
+  {
+    lender: "Hudson",
+    dateSubmitted: "12-Jul-2023",
+    dateExecuted: "12-Jul-2023",
+    amount: "1,000 DAI",
+    status: "Pending",
+  },
+  {
+    lender: "Hudson",
+    dateSubmitted: "12-Jul-2023",
+    dateExecuted: "12-Jul-2023",
+    amount: "1,000 DAI",
+    status: "Pending",
+  },
+  {
+    lender: "Hudson",
+    dateSubmitted: "12-Jul-2023",
+    dateExecuted: "12-Jul-2023",
+    amount: "1,000 DAI",
+    status: "Pending",
+  },
+  {
+    lender: "Hudson",
+    dateSubmitted: "12-Jul-2023",
+    dateExecuted: "12-Jul-2023",
+    amount: "1,000 DAI",
+    status: "Pending",
+  },
+  {
+    lender: "Hudson",
+    dateSubmitted: "12-Jul-2023",
+    dateExecuted: "12-Jul-2023",
+    amount: "1,000 DAI",
+    status: "Pending",
+  },
+  {
+    lender: "Hudson",
+    dateSubmitted: "12-Jul-2023",
+    dateExecuted: "12-Jul-2023",
+    amount: "1,000 DAI",
+    status: "Pending",
+  },
+]
 
 const defaultDetails: FormSchema = {
   borrow: "",
@@ -185,6 +273,102 @@ function VaultDetails() {
           </div>
         </div>
       </Paper>
+      <div className="mb-20">
+        <div className="flex justify-between mb-3">
+          <div className="text-base font-bold">Withdrawals</div>
+          <div className="flex gap-16">
+            <div className="flex gap-x-2">
+              <div className="inline text-black text-xs font-bold">
+                Cycle start
+              </div>
+              <div className="text-black text-xs">23-Dec-2023</div>
+            </div>
+            <div className="flex gap-x-2">
+              <div className="inline text-black text-xs font-bold">
+                Cycle end
+              </div>
+              <div className="text-black text-xs">25-Dec-2023</div>
+            </div>
+          </div>
+        </div>
+        <div className="flex gap-x-1 mb-6">
+          <div className="inline text-black text-xs font-bold">
+            Pending withdrawal in current cycle:
+          </div>
+          <div className="text-black text-xs">5,000 DAI</div>
+        </div>
+        <div className="flex justify-between items-center mb-5">
+          <div className="flex">
+            <button onClick={handleClickMyVaults}>
+              <img src={arrowBack} alt="Back" className="h-3 w-3" />
+            </button>
+            <div className="flex gap-x-5">
+              <div className="text-black text-xs underline">19-20 Dec-2023</div>
+              <div className="text-black text-xs underline">21-22-Dec-2023</div>
+              <div className="text-black text-xs underline">21-22-Dec-2023</div>
+              <div className="inline text-black text-xs font-bold">
+                Current cycle
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <input
+              className="w-36 h-7 bg-white border border-tint-11 mr-2 px-2 text-xxs"
+              placeholder="Date from"
+            />
+            <input
+              className="w-36 h-7 bg-white border border-tint-11 mr-4 px-2 text-xxs"
+              placeholder="Date to"
+            />
+            <button onClick={handleClickMyVaults}>
+              <Search className="h-6 w-6" />
+            </button>
+          </div>
+        </div>
+        <Chip className="bg-white w-fit mb-3">
+          12-Jul-2023 – 10-Aug-2023
+          <CancelRoundBlack className="ml-2" />
+        </Chip>
+        <Table
+          headers={[
+            {
+              title: "Lender",
+              align: "start",
+            },
+            {
+              title: "Date submitted",
+              align: "end",
+              className: "w-40",
+            },
+            {
+              title: "Date executed",
+              align: "end",
+              className: "w-40",
+            },
+            {
+              title: "Amount",
+              align: "end",
+              className: "w-40",
+            },
+            {
+              title: "Status",
+              align: "end",
+              className: "w-40",
+            },
+          ]}
+        >
+          {tableData.map((item, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <TableRow key={index}>
+              <TableItem2 align="start">{item.lender}</TableItem2>
+              <TableItem2 align="end">{item.dateSubmitted}</TableItem2>
+              <TableItem2 align="end">{item.dateExecuted}</TableItem2>
+              <TableItem2 align="end">{item.amount}</TableItem2>
+              <TableItem2 align="end">{item.status}</TableItem2>
+            </TableRow>
+          ))}
+        </Table>
+      </div>
       <div className="text-base font-bold">Details</div>
       <div className="flex w-full mt-5 mb-8">
         <div className="w-full">

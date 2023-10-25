@@ -8,6 +8,7 @@ const CHIP_COLORS = {
   red: "bg-red text-white",
   yellow: "bg-yellow",
   green: "bg-green",
+  white: "bg-white",
 }
 
 export function Chip(props: ChipProps) {
