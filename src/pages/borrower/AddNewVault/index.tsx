@@ -116,6 +116,7 @@ const AddNewVault = () => {
               selected={selectedVault}
               options={mockedVaultTypesOptions}
               onChange={handleVaultSelect}
+              noneOption={false}
             />
           </FormItem>
 

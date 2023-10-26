@@ -27,7 +27,7 @@ function RemoveLendersModal({ lenders }: RemoveLendersModalProps) {
     <Modal
       buttonName="Remove lenders"
       buttonColor="red"
-      onClose={clearInputOnClose} // Устанавливаем функцию для очистки состояния при закрытии
+      onClose={clearInputOnClose}
     >
       <>
         <div className="text-base font-bold px-8">Remove Lenders</div>
@@ -42,19 +42,17 @@ function RemoveLendersModal({ lenders }: RemoveLendersModalProps) {
             <div className="w-full border border-tint-10" />
             <div className="text-base font-bold">You have added:</div>
             {lenders.map((lender) => (
-              <div className="flex gap-x-4" key={lender.lenderWallet}>
-                <div className="flex flex-col justify-between w-full">
-                  <div className="text-xs font-medium">{lender.lenderName}</div>
-                  <div className="text-xs">{lender.lenderWallet}</div>
+              <div className="flex gap-x-4 w-full" key={lender.wallet}>
+                <div className="flex flex-col w-full">
+                  <div className="text-xs font-medium">{lender.lender}</div>
+                  <div className="text-xs">{lender.wallet}</div>
                 </div>
                 <div className="mt-2">
                   <input
                     type="checkbox"
                     name="RemoveLenderCheckbox"
-                    onChange={() =>
-                      handleSelectLenderWallet(lender.lenderWallet)
-                    }
-                    checked={isSelected(lender.lenderWallet)}
+                    onChange={() => handleSelectLenderWallet(lender.wallet)}
+                    checked={isSelected(lender.wallet)}
                   />
                 </div>
               </div>

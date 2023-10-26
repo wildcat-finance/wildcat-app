@@ -4,30 +4,50 @@ import cn from "classnames"
 export default function Table({
   headers,
   children,
+  showHeader = true,
 }: {
-  headers: {
-    title: string
-    align: "start" | "center" | "end"
-    className?: string
-  }[]
+  showHeader?: boolean
+  headers:
+    | {
+        title: string
+        align: "start" | "center" | "end"
+        className?: string
+      }[]
+    | number
   children?: React.ReactNode
 }) {
   return (
     <table className="w-full border-collapse">
-      <tr className="bg-tint-9 h-9">
-        {headers.map((header) => (
-          <th
-            className={cn(
-              `${header.className}`,
-              "text-black first:pl-6 last:pr-6 text-xs font-bold",
-            )}
-          >
-            <div className={cn("flex items-center", `justify-${header.align}`)}>
-              {header.title}
-            </div>
-          </th>
-        ))}
-      </tr>
+      {showHeader && (
+        <tr className="bg-tint-9 h-9">
+          {Array.isArray(headers)
+            ? headers.map((header) => (
+                <th
+                  className={cn(
+                    `${header.className}`,
+                    "text-black first:pl-6 last:pr-6 text-xs font-bold",
+                  )}
+                >
+                  <div
+                    className={cn(
+                      "flex items-center",
+                      `justify-${header.align}`,
+                    )}
+                  >
+                    {header.title}
+                  </div>
+                </th>
+              ))
+            : Array.from(Array(headers).keys()).map((item) => (
+                <th
+                  className="text-black first:pl-6 last:pr-6 text-xs font-bold"
+                  key={item}
+                >
+                  {item}
+                </th>
+              ))}
+        </tr>
+      )}
       {children}
     </table>
   )

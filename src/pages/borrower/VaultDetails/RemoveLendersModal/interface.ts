@@ -1,6 +1,6 @@
 export type Lender = {
-  lenderName: string
-  lenderWallet: string
+  lender: string
+  wallet: string
 }
 
 export type RemoveLendersModalProps = {

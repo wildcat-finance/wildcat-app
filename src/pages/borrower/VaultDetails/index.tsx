@@ -15,11 +15,11 @@ import {
 } from "../../../components/ui-components"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 
-import canselRoundIcon from "../../../components/ui-components/icons/cancel.svg"
 import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.svg"
 import expandMore from "../../../components/ui-components/icons/expand_more.svg"
 import expandLess from "../../../components/ui-components/icons/expand_less.svg"
 import {
+  CancelRound,
   CancelRoundBlack,
   Search,
 } from "../../../components/ui-components/icons/index"
@@ -41,6 +41,7 @@ const tableData = [
     dateExecuted: "12-Jul-2023",
     amount: "1,000 DAI",
     status: "Pending",
+    wallet: "0x287324837498sjdf098234lkjsef08234af",
   },
   {
     lender: "Smith",
@@ -48,6 +49,7 @@ const tableData = [
     dateExecuted: "20-Jul-2023",
     amount: "2,500 DAI",
     status: "Approved",
+    wallet: "0x874329847234sjdf432432lkjsef82384ad",
   },
   {
     lender: "Johnson",
@@ -55,6 +57,7 @@ const tableData = [
     dateExecuted: "12-Jul-2023",
     amount: "500 DAI",
     status: "Completed",
+    wallet: "0x129084379012sjdf987651lkjsef76543az",
   },
   {
     lender: "Brown",
@@ -62,6 +65,7 @@ const tableData = [
     dateExecuted: "19-Jul-2023",
     amount: "3,000 DAI",
     status: "Rejected",
+    wallet: "0x768209478645sjdf784356lkjsef76598ba",
   },
   {
     lender: "Davis",
@@ -69,6 +73,7 @@ const tableData = [
     dateExecuted: "25-Jul-2023",
     amount: "1,200 DAI",
     status: "Approved",
+    wallet: "0x329847325478sjdf657890lkjsef23487cd",
   },
   {
     lender: "Miller",
@@ -76,6 +81,7 @@ const tableData = [
     dateExecuted: "16-Jul-2023",
     amount: "800 DAI",
     status: "Pending",
+    wallet: "0x534982374568sjdf239804lkjsef65432fd",
   },
   {
     lender: "Wilson",
@@ -83,23 +89,26 @@ const tableData = [
     dateExecuted: "14-Jul-2023",
     amount: "1,750 DAI",
     status: "Completed",
+    wallet: "0x784938274561sjdf128743lkjsef23467de",
   },
 ]
 
-const lenders = [
-  {
-    lenderName: "Hudson",
-    lenderWallet: "0x987234oiwef8u234892384824309ljw09751",
-  },
-  {
-    lenderName: "Hudson",
-    lenderWallet: "0x987234oiwef8u234892384824309ljw09752",
-  },
-  {
-    lenderName: "Hudson",
-    lenderWallet: "0x987234oiwef8u234892384824309ljw09753",
-  },
-]
+// const vaultData = {
+//   Capacity: "50,000 DAI",
+//   APR: "10%",
+//   PenaltyRate: "10%",
+//   MinimumReserveRatio: "25%",
+//   WithdrawalCycle: "48 hours",
+//   MaxGracePeriod: "24 hours",
+//   CurrentSupply: "24 hours",
+//   MinimumReservesRequired: "25%",
+//   CurrentReserves: "9,000 DAI",
+//   CurrentReserveRatio: "144%",
+//   Withdrawn: "0 DAI",
+//   UpcomingWithdrawals: "0 DAI",
+//   IncurredInterests: "10%",
+//   AvailableForWithdrawal: "3 DAI",
+// }
 
 const defaultDetails: FormSchema = {
   borrow: "",
@@ -185,7 +194,6 @@ function VaultDetails() {
           </div>
           <div className="text-xxs text-right mt-1.5 mr-48">
             <span className="font-semibold">Borrow up to </span>
-            2,750 DAI
           </div>
         </div>
         <div>
@@ -203,7 +211,6 @@ function VaultDetails() {
                 />
                 <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
                   <span className="font-semibold">Repay up to </span>
-                  9,000 DAI
                 </div>
               </div>
               <div className="w-44 flex flex-col gap-y-1.5">
@@ -235,7 +242,6 @@ function VaultDetails() {
                 />
                 <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
                   <span className="font-semibold">Current </span>
-                  10%
                 </div>
               </div>
               <div className="w-44 flex flex-col gap-y-1.5">
@@ -263,7 +269,6 @@ function VaultDetails() {
           </div>
           <div className="text-xxs text-right mt-1.5 mr-48">
             <span className="font-semibold">Current </span>
-            10%
           </div>
         </div>
       </Paper>
@@ -359,9 +364,8 @@ function VaultDetails() {
             },
           ]}
         >
-          {tableData.map((item, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <TableRow key={index}>
+          {tableData.map((item) => (
+            <TableRow key={item.wallet}>
               <TableItem2 justify="start">{item.lender}</TableItem2>
               <TableItem2 justify="end">{item.dateSubmitted}</TableItem2>
               <TableItem2 justify="end">{item.dateExecuted}</TableItem2>
@@ -371,10 +375,9 @@ function VaultDetails() {
           ))}
         </Table>
         <div className="flex justify-center gap-x-1 text-xxs mt-6">
-          {numberToArray(4).map((item, index) => (
+          {numberToArray(4).map((item) => (
             <button
-              // eslint-disable-next-line react/no-array-index-key
-              key={index}
+              key={item}
               onClick={() => setIsActivePage(item)}
               className={`${isActivePage === item ? "font-bold" : ""}`}
             >
@@ -404,11 +407,15 @@ function VaultDetails() {
             className="pl-6 pr-24"
           />
           <TableItem
-            title="Grace Period"
+            title="Max Grace Period"
             value="24 hours"
             className="pl-6 pr-24"
           />
-          <TableItem title="" value="" className="pl-6 pr-24" />
+          <TableItem
+            title="Available Grace"
+            value="12 hours"
+            className="pl-6 pr-24"
+          />
           <TableItem title="" value="" className="pl-6 pr-24" />
         </div>
         <div className="w-full">
@@ -455,88 +462,47 @@ function VaultDetails() {
         <div className="text-base font-bold">Lenders</div>
         <div className="flex gap-x-2">
           <NewLendersModal />
-          <RemoveLendersModal lenders={lenders} />
+          <RemoveLendersModal lenders={tableData} />
         </div>
       </div>
-      <div className="mt-5 mb-14 flex w-full">
-        <div className="w-52">
-          <TableItem title="Name" className="pl-6" />
-          <TableItem className="pl-6">
-            <div className="inline text-black text-xs">Polygon Something</div>
-          </TableItem>
-          <TableItem className="pl-6">
-            <div className="inline text-black text-xs">Polygon Something</div>
-          </TableItem>
-          <TableItem className="pl-6">
-            <div className="inline text-black text-xs">Polygon Something</div>
-          </TableItem>
-          <TableItem className="pl-6">
-            <div className="inline text-black text-xs">Polygon Something</div>
-          </TableItem>
-          <TableItem className="pl-6">
-            <div className="inline text-black text-xs">Polygon Something</div>
-          </TableItem>
-          <TableItem className="pl-6">
-            <div className="inline text-black text-xs">Polygon Something</div>
-          </TableItem>
-        </div>
-        <div className="w-full">
-          <TableItem title="Wallet" className="px-0" />
-          <TableItem className="px-0 pr-6">
-            <div className="inline text-black text-xs">
-              0x287324837498sjdf098234lkjsef08234af
-            </div>
-            <Button variant="white-brown" className="w-24 max-h-5 gap-x-2.5">
-              Pending
-              <img src={canselRoundIcon} alt="Cancel" />
-            </Button>
-          </TableItem>
-          <TableItem className="px-0 pr-6">
-            <div className="inline text-black text-xs">
-              0x287324837498sjdf098234lkjsef08234af
-            </div>
-            <Button variant="white-brown" className="w-24 max-h-5 gap-x-2.5">
-              Pending
-              <img src={canselRoundIcon} alt="Cancel" />
-            </Button>
-          </TableItem>
-          <TableItem className="px-0 pr-6">
-            <div className="inline text-black text-xs">
-              0x287324837498sjdf098234lkjsef08234af
-            </div>
-            <Button variant="red" className="w-24 max-h-5 gap-x-2.5">
-              Remove
-              <img src={canselRoundIcon} alt="Cancel" />
-            </Button>
-          </TableItem>
-          <TableItem className="px-0 pr-6">
-            <div className="inline text-black text-xs">
-              0x287324837498sjdf098234lkjsef08234af
-            </div>
-            <Button variant="red" className="w-24 max-h-5 gap-x-2.5">
-              Remove
-              <img src={canselRoundIcon} alt="Cancel" />
-            </Button>
-          </TableItem>
-          <TableItem className="px-0 pr-6">
-            <div className="inline text-black text-xs">
-              0x287324837498sjdf098234lkjsef08234af
-            </div>
-            <Button variant="red" className="w-24 max-h-5 gap-x-2.5">
-              Remove
-              <img src={canselRoundIcon} alt="Cancel" />
-            </Button>
-          </TableItem>
-          <TableItem className="px-0 pr-6">
-            <div className="inline text-black text-xs">
-              0x287324837498sjdf098234lkjsef08234af
-            </div>
-            <Button variant="red" className="w-24 max-h-5 gap-x-2.5">
-              Remove
-              <img src={canselRoundIcon} alt="Cancel" />
-            </Button>
-          </TableItem>
-        </div>
+      <div className="mt-5 mb-14">
+        <Table
+          headers={[
+            {
+              title: "Name",
+              align: "start",
+              className: "w-44",
+            },
+            {
+              title: "Wallet",
+              align: "start",
+            },
+            {
+              title: "",
+              align: "start",
+              className: "w-24",
+            },
+          ]}
+        >
+          {tableData.map((item, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <TableRow key={index}>
+              <TableItem2 justify="start">{item.lender}</TableItem2>
+              <TableItem2 justify="end">{item.wallet}</TableItem2>
+              <TableItem2 justify="end">
+                <Button
+                  variant={item.status === "Pending" ? "white-brown" : "red"}
+                  className="max-h-5 w-24 gap-x-2.5"
+                >
+                  {item.status === "Pending" ? "Pending" : "Remove"}
+                  <div className="flex items-center w-3 h-3">
+                    <CancelRound />
+                  </div>
+                </Button>
+              </TableItem2>
+            </TableRow>
+          ))}
+        </Table>
       </div>
 
       <div className="flex w-full justify-between content-center">
