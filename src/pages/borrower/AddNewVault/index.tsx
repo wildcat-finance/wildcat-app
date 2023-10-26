@@ -57,7 +57,7 @@ const defaultVault: FormSchema = {
   withdrawalCycle: 0,
 }
 
-export function AddNewVault() {
+const AddNewVault = () => {
   const {
     control,
     formState: { errors: formErrors },

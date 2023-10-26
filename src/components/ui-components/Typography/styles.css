@@ -1,0 +1,5 @@
+@tailwind components;
+
+.wc-typo-h1 {
+    @apply text-green text-2xl font-bold justify-between items-center flex mt-4 mb-8;
+}
