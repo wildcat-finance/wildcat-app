@@ -30,6 +30,9 @@ import Table from "../../../components/ui-components/Table"
 import TableRow from "../../../components/ui-components/Table/TableRow"
 import { TableItem as TableItem2 } from "../../../components/ui-components/Table/TableItem"
 import { ModalAPR } from "./ModalAPR"
+import { CapacityModal } from "./CapacityModal"
+import { BorrowModal } from "./BorrowModal"
+import { RepayModal } from "./RepayModal"
 
 const tableData = [
   {
@@ -177,9 +180,7 @@ function VaultDetails() {
                 className="w-full"
                 placeholder="00,000.00"
               />
-              <Button variant="green" className="w-64">
-                Borrow
-              </Button>
+              <BorrowModal />
             </div>
           </div>
           <div className="text-xxs text-right mt-1.5 mr-48">
@@ -206,9 +207,7 @@ function VaultDetails() {
                 </div>
               </div>
               <div className="w-44 flex flex-col gap-y-1.5">
-                <Button variant="green" className="w-full">
-                  Repay
-                </Button>
+                <RepayModal />
                 <Button
                   variant="green"
                   className="w-full px-2 whitespace-nowrap"
@@ -259,9 +258,7 @@ function VaultDetails() {
                 placeholder="10.00"
                 min={0}
               />
-              <Button variant="green" className="w-64">
-                Adjust
-              </Button>
+              <CapacityModal />
             </div>
           </div>
           <div className="text-xxs text-right mt-1.5 mr-48">
@@ -394,7 +391,7 @@ function VaultDetails() {
             value="50,000 DAI"
             className="pl-6 pr-24"
           />
-          <TableItem title="APR" value="" className="pl-6 pr-24" />
+          <TableItem title="APR" value="10%" className="pl-6 pr-24" />
           <TableItem title="Penalty Rate" value="10%" className="pl-6 pr-24" />
           <TableItem
             title="Minimum Reserve Ratio"
