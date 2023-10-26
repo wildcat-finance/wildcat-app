@@ -10,4 +10,5 @@ export type SelectProps = {
   options: SelectOptionItem[]
   placeholder?: string
   className?: string
+  noneOption?: boolean
 }

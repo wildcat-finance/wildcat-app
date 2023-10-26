@@ -9,7 +9,10 @@ const SelectOptionBaseClass =
   "relative z-50 border border-t-0 border-tint-8 cursor-default bg-white text-left w-full h-8 px-3 flex items-center "
 
 export function Select(props: SelectProps) {
-  const { options, selected, onChange, placeholder } = props
+  const { selected, onChange, placeholder, noneOption = true } = props
+  const options = noneOption
+    ? [{ id: "none", label: "Doesn't matter" }, ...props.options]
+    : props.options
 
   const rootCss = cn("ml-0 w-72 relative", props.className)
 
@@ -46,7 +49,7 @@ export function Select(props: SelectProps) {
                   }
                 >
                   <span className="block truncate text-xxs">
-                    {option.label}
+                    {option?.label}
                   </span>
                 </Listbox.Option>
               ))}

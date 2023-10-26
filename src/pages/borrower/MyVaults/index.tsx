@@ -47,11 +47,12 @@ function MyVaults() {
       return vault.name.toLowerCase().includes(filterByName)
     })
     .filter((vault) => {
-      if (!selectedUnderlyingAsset) return true
+      if (!selectedUnderlyingAsset || selectedUnderlyingAsset.id === "none")
+        return true
       return vault.tokenSymbol === selectedUnderlyingAsset.value
     })
     .filter((vault) => {
-      if (!selectedVaultRatio) return true
+      if (!selectedVaultRatio || selectedVaultRatio.id === "none") return true
       return vault.reserveRatio === selectedVaultRatio.value
     })
 
