@@ -156,7 +156,7 @@ function VaultDetails() {
     <div>
       <Button
         variant="outline"
-        className="flex items-center gap-x-2 mb-8"
+        className="flex items-center gap-x-2 mb-8 px-0"
         onClick={handleClickMyVaults}
       >
         <img src={arrowBack} alt="Back" />

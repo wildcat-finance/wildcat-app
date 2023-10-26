@@ -45,7 +45,7 @@ export function Select(props: SelectProps) {
                     })
                   }
                 >
-                  <span className="block truncate text-xxs">None</span>
+                  <span className="block truncate text-xxs">{placeholder}</span>
                 </Listbox.Option>
               )}
               {options.map((option) => (
