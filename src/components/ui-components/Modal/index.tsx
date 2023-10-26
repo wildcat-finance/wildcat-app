@@ -73,12 +73,20 @@ export function Modal({
                       {children}
                       <div className="flex gap-x-3 justify-center mt-5">
                         {!sign && (
-                          <Button variant="blue" className="w-28">
+                          <Button
+                            variant="blue"
+                            className="w-28"
+                            onClick={toggleModal}
+                          >
                             Submit
                           </Button>
                         )}
                         {sign && (
-                          <Button variant="blue" icon={<SignIcon />}>
+                          <Button
+                            variant="blue"
+                            icon={<SignIcon />}
+                            onClick={toggleModal}
+                          >
                             Sign
                           </Button>
                         )}

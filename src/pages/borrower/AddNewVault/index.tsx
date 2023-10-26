@@ -93,6 +93,7 @@ const AddNewVault = () => {
   return (
     <div>
       <Button
+        variant="outline"
         className="flex items-center gap-x-2 mb-8"
         onClick={handleClickMyVaults}
       >
