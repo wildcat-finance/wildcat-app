@@ -47,14 +47,15 @@ function MyVaults() {
       return vault.name.toLowerCase().includes(filterByName)
     })
     .filter((vault) => {
-      if (!selectedUnderlyingAsset || selectedUnderlyingAsset.id === "none")
-        return true
+      if (!selectedUnderlyingAsset) return true
       return vault.tokenSymbol === selectedUnderlyingAsset.value
     })
     .filter((vault) => {
-      if (!selectedVaultRatio || selectedVaultRatio.id === "none") return true
+      if (!selectedVaultRatio) return true
       return vault.reserveRatio === selectedVaultRatio.value
     })
+
+  console.log(selectedUnderlyingAsset, selectedVaultRatio)
 
   return (
     <div>

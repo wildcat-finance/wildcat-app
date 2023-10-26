@@ -9,10 +9,7 @@ const SelectOptionBaseClass =
   "relative z-50 border border-t-0 border-tint-8 cursor-default bg-white text-left w-full h-8 px-3 flex items-center "
 
 export function Select(props: SelectProps) {
-  const { selected, onChange, placeholder, noneOption = true } = props
-  const options = noneOption
-    ? [{ id: "none", label: "Doesn't matter" }, ...props.options]
-    : props.options
+  const { options, selected, onChange, placeholder, noneOption = true } = props
 
   const rootCss = cn("ml-0 w-72 relative", props.className)
 
@@ -37,6 +34,20 @@ export function Select(props: SelectProps) {
             leaveTo="opacity-0"
           >
             <Listbox.Options className="absolute z-40 mt-0 py-0 shadow-lg w-full overflow-auto bg-white text-base sm:text-sm">
+              {noneOption && (
+                <Listbox.Option
+                  value={null}
+                  onClick={() => onChange(null)}
+                  className={({ active }) =>
+                    cn(SelectOptionBaseClass, {
+                      "text-amber-900": active,
+                      "text-gray-900": !active,
+                    })
+                  }
+                >
+                  <span className="block truncate text-xxs">None</span>
+                </Listbox.Option>
+              )}
               {options.map((option) => (
                 <Listbox.Option
                   key={option.id}
