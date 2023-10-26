@@ -93,7 +93,7 @@ function MyVaults() {
               options={mockedVaultRatioOptions}
               onChange={setSelectedVaultRatio}
               selected={selectedVaultRatio}
-              placeholder="Market Status"
+              placeholder="Reserve ratio"
               className="w-full"
             />
           </div>
