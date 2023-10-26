@@ -29,6 +29,7 @@ import { NewLendersModal } from "./NewLendersModal"
 import Table from "../../../components/ui-components/Table"
 import TableRow from "../../../components/ui-components/Table/TableRow"
 import { TableItem as TableItem2 } from "../../../components/ui-components/Table/TableItem"
+import { ModalAPR } from "./ModalAPR"
 
 const tableData = [
   {
@@ -165,7 +166,7 @@ function VaultDetails() {
       <div className="text-green text-2xl font-bold mb-8 w-2/3">
         Blossom Dai Stablecoin
       </div>
-      <Paper className="flex flex-col gap-y-5 border-0 px-6 py-5 mb-8 bg-tint-10 border-tint-8 rounded-3xl">
+      <Paper className="flex flex-col gap-y-5 border-0 px-6 py-5 mb-14 bg-tint-10 border-tint-8 rounded-3xl">
         <div>
           <div className="w-full flex justify-between items-center">
             <div className="font-bold">Borrow</div>
@@ -239,9 +240,7 @@ function VaultDetails() {
                 </div>
               </div>
               <div className="w-44 flex flex-col gap-y-1.5">
-                <Button variant="green" className="w-full">
-                  Adjust
-                </Button>
+                <ModalAPR />
                 <Button variant="red" className="w-44 px-2 whitespace-nowrap">
                   Terminate Market
                 </Button>
@@ -271,7 +270,7 @@ function VaultDetails() {
           </div>
         </div>
       </Paper>
-      <div className="mb-8">
+      <div className="mb-14">
         <div className="flex justify-between mb-3">
           <div className="text-base font-bold">Withdrawals</div>
           <div className="flex gap-16">
@@ -388,7 +387,7 @@ function VaultDetails() {
         </div>
       </div>
       <div className="text-base font-bold">Details</div>
-      <div className="flex w-full mt-5 mb-8">
+      <div className="flex w-full mt-5 mb-14">
         <div className="w-full">
           <TableItem
             title="Capacity"
@@ -462,7 +461,7 @@ function VaultDetails() {
           <RemoveLendersModal lenders={lenders} />
         </div>
       </div>
-      <div className="mt-5 mb-8 flex w-full">
+      <div className="mt-5 mb-14 flex w-full">
         <div className="w-52">
           <TableItem title="Name" className="pl-6" />
           <TableItem className="pl-6">
@@ -575,10 +574,10 @@ function VaultDetails() {
         </Paper>
       )}
 
-      <div className="text-base font-bold mt-8">
+      <div className="text-base font-bold mt-14">
         Market Controller / Some title
       </div>
-      <div className="flex flex-wrap gap-x-7 mb-8 mt-5">
+      <div className="flex flex-wrap gap-x-7 mb-14 mt-5">
         <FormItem className="w-72" label="Market type" tooltip="test">
           <NumberInput className="w-72" />
         </FormItem>
