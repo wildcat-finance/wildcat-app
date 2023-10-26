@@ -271,7 +271,7 @@ function VaultDetails() {
           </div>
         </div>
       </Paper>
-      <div className="mb-20">
+      <div className="mb-8">
         <div className="flex justify-between mb-3">
           <div className="text-base font-bold">Withdrawals</div>
           <div className="flex gap-16">
