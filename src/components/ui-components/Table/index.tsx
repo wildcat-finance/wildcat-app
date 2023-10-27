@@ -10,7 +10,7 @@ export default function Table({
   headers:
     | {
         title: string
-        align: "start" | "center" | "end"
+        align: string
         className?: string
       }[]
     | number
@@ -30,11 +30,11 @@ export default function Table({
                 >
                   <div
                     className={cn(
-                      "flex items-center",
                       `justify-${header.align}`,
+                      "flex items-center",
                     )}
                   >
-                    {header.title}
+                    <div>{header.title}</div>
                   </div>
                 </th>
               ))

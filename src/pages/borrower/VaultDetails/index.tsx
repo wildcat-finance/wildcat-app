@@ -21,6 +21,7 @@ import expandLess from "../../../components/ui-components/icons/expand_less.svg"
 import {
   CancelRound,
   CancelRoundBlack,
+  ExpandMore,
   Search,
 } from "../../../components/ui-components/icons/index"
 import { FormSchema, validationSchema } from "./validationSchema"
@@ -42,6 +43,7 @@ const tableData = [
     amount: "1,000 DAI",
     status: "Pending",
     wallet: "0x287324837498sjdf098234lkjsef08234af",
+    txID: "0x7a8b19c62f3854a9e013d83663dbb6f6",
   },
   {
     lender: "Smith",
@@ -50,6 +52,7 @@ const tableData = [
     amount: "2,500 DAI",
     status: "Approved",
     wallet: "0x874329847234sjdf432432lkjsef82384ad",
+    txID: "0x2e1d4f8a5c7f30b1498d67b20e9a1dc3",
   },
   {
     lender: "Johnson",
@@ -58,6 +61,7 @@ const tableData = [
     amount: "500 DAI",
     status: "Completed",
     wallet: "0x129084379012sjdf987651lkjsef76543az",
+    txID: "0x9f6c57d183eba4c6b705d924a891e1f7",
   },
   {
     lender: "Brown",
@@ -66,6 +70,7 @@ const tableData = [
     amount: "3,000 DAI",
     status: "Rejected",
     wallet: "0x768209478645sjdf784356lkjsef76598ba",
+    txID: "0x4b3e8a91c61d79f5ad35b286a7f2c8d8",
   },
   {
     lender: "Davis",
@@ -74,6 +79,7 @@ const tableData = [
     amount: "1,200 DAI",
     status: "Approved",
     wallet: "0x329847325478sjdf657890lkjsef23487cd",
+    txID: "0xa1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d",
   },
   {
     lender: "Miller",
@@ -82,6 +88,7 @@ const tableData = [
     amount: "800 DAI",
     status: "Pending",
     wallet: "0x534982374568sjdf239804lkjsef65432fd",
+    txID: "0x5c1d9e8f5a3f7b9d0c1b6d1c8e7f5b9a",
   },
   {
     lender: "Wilson",
@@ -90,6 +97,7 @@ const tableData = [
     amount: "1,750 DAI",
     status: "Completed",
     wallet: "0x784938274561sjdf128743lkjsef23467de",
+    txID: "0x3d6a8e7f2b1c0d9f86a2b1d9c5a7f8b0",
   },
 ]
 
@@ -128,6 +136,8 @@ function numberToArray(number: number) {
 function VaultDetails() {
   const navigate = useNavigate()
   const [isExpanded, setIsExpanded] = useState(true)
+  const [isThisCycleExpanded, setIsThisCycleExpanded] = useState(true)
+  const [isPastCycleExpanded, setIsPastCycleExpanded] = useState(true)
   const [isActivePage, setIsActivePage] = useState(1)
   const [dateArray, setDateArray] = useState<DateValue[]>([])
 
@@ -153,6 +163,14 @@ function VaultDetails() {
 
   const toggleAccordion = () => {
     setIsExpanded(!isExpanded)
+  }
+
+  const toggleThisCycleAccordion = () => {
+    setIsThisCycleExpanded(!isThisCycleExpanded)
+  }
+
+  const togglePastCycleAccordion = () => {
+    setIsPastCycleExpanded(!isPastCycleExpanded)
   }
 
   const handleClickMyVaults = () => {
@@ -273,6 +291,233 @@ function VaultDetails() {
         </div>
       </Paper>
       <div className="mb-14">
+        <div className="flex justify-between items-center mb-8">
+          <div className="text-base font-bold">Lender withdrawals</div>
+          <div className="flex gap-x-7 items-center">
+            <Chip color="green" className="w-fit !h-6 text-white">
+              Ongoing cycle
+            </Chip>
+            <div className="flex gap-x-2">
+              <div className="inline text-black text-xs font-bold">Start</div>
+              <div className="text-black text-xs"> </div>
+            </div>
+            <div className="flex gap-x-2">
+              <div className="inline text-black text-xs font-bold">End</div>
+              <div className="text-black text-xs"> </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-between items-center mb-4 pr-6">
+          <div className="inline text-black text-xs font-bold">
+            Owed after current cycle end
+          </div>
+          <Chip className="w-fit">15000 DAI</Chip>
+        </div>
+        <div className="h-12 flex justify-between items-center bg-tint-10 px-6">
+          <div className="inline text-black text-xs font-bold">This cycle</div>
+          <div className="flex gap-x-4 items-center">
+            {isThisCycleExpanded ? (
+              <ExpandMore
+                className="transform rotate-180"
+                onClick={toggleThisCycleAccordion}
+              />
+            ) : (
+              <ExpandMore onClick={toggleThisCycleAccordion} />
+            )}
+            <Chip className="w-fit">5000 DAI</Chip>
+          </div>
+        </div>
+        {isThisCycleExpanded && (
+          <Table
+            headers={[
+              {
+                title: "Lender",
+                align: "start",
+                className: "w-40",
+              },
+              {
+                title: "TxID",
+                align: "start",
+                className: "w-72",
+              },
+              {
+                title: "Date submitted",
+                align: "start",
+                className: "w-28",
+              },
+              {
+                title: "",
+                align: "start",
+              },
+              {
+                title: "Amount",
+                align: "end",
+              },
+            ]}
+          >
+            {tableData.map((item) => (
+              <TableRow key={item.wallet}>
+                <TableItem2 justify="start">{item.lender}</TableItem2>
+                <TableItem2 justify="start">{item.txID}</TableItem2>
+                <TableItem2 justify="start">{item.dateExecuted}</TableItem2>
+                <TableItem2 justify="end">
+                  <div />
+                </TableItem2>
+                <TableItem2 justify="end">{item.amount}</TableItem2>
+              </TableRow>
+            ))}
+          </Table>
+        )}
+        <div className="h-12 flex justify-between items-center bg-tint-10 px-6 mt-6">
+          <div className="inline text-black text-xs font-bold">
+            Pending from past cycles
+          </div>
+          <div className="flex gap-x-4 items-center">
+            {isPastCycleExpanded ? (
+              <ExpandMore
+                className="transform rotate-180"
+                onClick={togglePastCycleAccordion}
+              />
+            ) : (
+              <ExpandMore onClick={togglePastCycleAccordion} />
+            )}
+            <Chip className="w-fit">5000 DAI</Chip>
+          </div>
+        </div>
+        {isPastCycleExpanded && (
+          <Table
+            headers={[
+              {
+                title: "Lender",
+                align: "start",
+                className: "w-40",
+              },
+              {
+                title: "TxID",
+                align: "start",
+                className: "w-72",
+              },
+              {
+                title: "Date submitted",
+                align: "start",
+                className: "w-52",
+              },
+              {
+                title: "Date queued",
+                align: "start",
+                className: "w-28",
+              },
+              {
+                title: "Amount",
+                align: "end",
+              },
+            ]}
+          >
+            {tableData.map((item) => (
+              <TableRow key={item.wallet}>
+                <TableItem2 justify="start">{item.lender}</TableItem2>
+                <TableItem2 justify="start">{item.txID}</TableItem2>
+                <TableItem2 justify="start">{item.dateExecuted}</TableItem2>
+                <TableItem2 justify="start">{item.dateExecuted}</TableItem2>
+                <TableItem2 justify="end">{item.amount}</TableItem2>
+              </TableRow>
+            ))}
+          </Table>
+        )}
+      </div>
+      <div className="mb-14">
+        <div className="text-base font-bold mb-8">Borrower payment history</div>
+        <div className="flex justify-between items-center mb-5">
+          <div className="flex">
+            <button onClick={handleClickMyVaults}>
+              <img src={arrowBack} alt="Back" className="h-3 w-3" />
+            </button>
+            <div className="flex gap-x-5">
+              <div className="text-black text-xs underline">19-20 Dec-2023</div>
+              <div className="text-black text-xs underline">21-22-Dec-2023</div>
+              <div className="text-black text-xs underline">21-22-Dec-2023</div>
+              <div className="inline text-black text-xs font-bold">
+                Current cycle
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-x-3">
+            <DatePickerInput
+              placeholder="Date from"
+              onChange={handleFirstDateChange}
+              value={dateArray[0]}
+            />
+            <DatePickerInput
+              placeholder="Date to"
+              onChange={handleSecondDateChange}
+              value={dateArray[1]}
+            />
+            <button onClick={handleClickMyVaults}>
+              <Search className="h-6 w-6" />
+            </button>
+          </div>
+        </div>
+        {isDatePicked && (
+          <Chip className="bg-white w-fit mb-3">
+            {dateArray[0]?.toString()} – {dateArray[1]?.toString()}
+            <CancelRoundBlack
+              className="ml-2 cursor-pointer"
+              onClick={handleDateReset}
+            />
+          </Chip>
+        )}
+        {!isDatePicked && <div className="h-8 w-8 mb-3" />}
+        <Table
+          headers={[
+            {
+              title: "Lender",
+              align: "start",
+              className: "w-40",
+            },
+            {
+              title: "TxID",
+              align: "start",
+              className: "w-72",
+            },
+            {
+              title: "Date submitted",
+              align: "start",
+              className: "w-52",
+            },
+            {
+              title: "Date processed",
+              align: "start",
+              className: "w-28",
+            },
+            {
+              title: "Amount",
+              align: "end",
+            },
+          ]}
+        >
+          {tableData.map((item) => (
+            <TableRow key={item.wallet}>
+              <TableItem2 justify="start">{item.lender}</TableItem2>
+              <TableItem2 justify="start">{item.txID}</TableItem2>
+              <TableItem2 justify="start">{item.dateSubmitted}</TableItem2>
+              <TableItem2 justify="start">{item.dateExecuted}</TableItem2>
+              <TableItem2 justify="end">{item.amount}</TableItem2>
+            </TableRow>
+          ))}
+        </Table>
+        <div className="flex justify-center gap-x-1 text-xxs mt-6">
+          {numberToArray(4).map((item) => (
+            <button
+              key={item}
+              onClick={() => setIsActivePage(item)}
+              className={`${isActivePage === item ? "font-bold" : ""}`}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="mb-14">
         <div className="flex justify-between mb-3">
           <div className="text-base font-bold">Withdrawals</div>
           <div className="flex gap-16">
@@ -280,13 +525,13 @@ function VaultDetails() {
               <div className="inline text-black text-xs font-bold">
                 Cycle start
               </div>
-              <div className="text-black text-xs">23-Dec-2023</div>
+              <div className="text-black text-xs"> </div>
             </div>
             <div className="flex gap-x-2">
               <div className="inline text-black text-xs font-bold">
                 Cycle end
               </div>
-              <div className="text-black text-xs">25-Dec-2023</div>
+              <div className="text-black text-xs"> </div>
             </div>
           </div>
         </div>
@@ -294,7 +539,7 @@ function VaultDetails() {
           <div className="inline text-black text-xs font-bold">
             Pending withdrawal in current cycle:
           </div>
-          <div className="text-black text-xs">5,000 DAI</div>
+          <div className="text-black text-xs"> </div>
         </div>
         <div className="flex justify-between items-center mb-5">
           <div className="flex">
@@ -488,8 +733,8 @@ function VaultDetails() {
             // eslint-disable-next-line react/no-array-index-key
             <TableRow key={index}>
               <TableItem2 justify="start">{item.lender}</TableItem2>
-              <TableItem2 justify="end">{item.wallet}</TableItem2>
-              <TableItem2 justify="end">
+              <TableItem2 justify="start">{item.wallet}</TableItem2>
+              <TableItem2 justify="center">
                 <Button
                   variant={item.status === "Pending" ? "white-brown" : "red"}
                   className="max-h-5 w-24 gap-x-2.5"
