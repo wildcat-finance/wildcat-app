@@ -1,13 +1,14 @@
 import { useNavigate } from "react-router-dom"
 
 import { AiOutlineExclamationCircle } from "react-icons/ai"
-import { Paper } from "../../../components/ui-components/Paper"
+import { Paper, Button } from "../../../components/ui-components"
 import { BluePaper } from "../../../components/ui-components/BluePaper"
-import { Button } from "../../../components/ui-components/Button"
 import { DownloadIcon, SignIcon } from "../../../components/ui-components/icons"
+import { useBorrowerAgreementStore } from "../store/useBorrowerStore"
 
 function ServiceAgreement() {
   const navigate = useNavigate()
+  const { setSignedAgreement } = useBorrowerAgreementStore()
 
   return (
     <>
@@ -281,7 +282,11 @@ function ServiceAgreement() {
         </div>
 
         <div className="flex items-center gap-8 justify-center mb-9 mt-9">
-          <Button variant="blue" icon={<SignIcon />}>
+          <Button
+            variant="blue"
+            icon={<SignIcon />}
+            onClick={() => setSignedAgreement(true)}
+          >
             Sign
           </Button>
 

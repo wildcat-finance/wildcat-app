@@ -55,8 +55,6 @@ function MyVaults() {
       return vault.reserveRatio === selectedVaultRatio.value
     })
 
-  console.log(selectedUnderlyingAsset, selectedVaultRatio)
-
   return (
     <div>
       <div className="text-xs flex-col">

@@ -8,6 +8,7 @@ import { ActiveVaults } from "./pages"
 import LendersServiceAgreement from "./pages/lenders/LendersServiceAgreement"
 import "./styles/index.css"
 import BorrowerSection from "./pages/borrower"
+import { BASE_PATHS } from "./routes/constants"
 
 const queryClient = new QueryClient()
 
@@ -17,7 +18,7 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: "/borrower/*",
+        path: `${BASE_PATHS.Borrower}/*`,
         element: <BorrowerSection />,
       },
       {
