@@ -99,8 +99,8 @@ function MyVaults() {
 
       <div className="flex w-full flex-wrap -mx-2.5 mt-5">
         {filteredMockedVaults.map((vault) => (
-          <div className="w-1/3 px-2.5 py-2.5">
-            <VaultCard key={vault.name} vault={vault} className="w-full" />
+          <div key={vault.name} className="w-1/3 px-2.5 py-2.5">
+            <VaultCard vault={vault} className="w-full" />
           </div>
         ))}
       </div>

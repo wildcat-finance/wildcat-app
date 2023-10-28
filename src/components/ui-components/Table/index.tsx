@@ -27,6 +27,7 @@ export function Table({
                     `${header.className}`,
                     "text-black first:pl-6 last:pr-6 text-xs font-bold",
                   )}
+                  key={header.title}
                 >
                   <div
                     className={cn(
