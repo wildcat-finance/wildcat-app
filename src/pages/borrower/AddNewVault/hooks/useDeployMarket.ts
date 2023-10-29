@@ -41,6 +41,8 @@ export const useDeployMarket = () => {
         delinquencyGracePeriod: marketParams.delinquencyGracePeriod,
       }
 
+      console.log(marketParameters)
+
       // 1. Ensure borrower is registered on the arch-controller.
       // For the testnet deployment, anyone can register a borrower
       if (!controller.isRegisteredBorrower) {
@@ -50,8 +52,6 @@ export const useDeployMarket = () => {
       if (controller.getExistingMarketForParameters(marketParameters)) {
         throw Error("Market already exists")
       }
-
-      console.log("ALL GOOD 2")
       // 3. Deploy market
       await controller.deployMarket(marketParameters)
     },

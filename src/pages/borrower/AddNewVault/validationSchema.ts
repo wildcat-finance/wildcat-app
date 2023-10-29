@@ -5,12 +5,12 @@ export const validationSchema = z.object({
   asset: z.string(),
   namePrefix: z.string(),
   symbolPrefix: z.string(),
-  maxTotalSupply: z.string(),
-  annualInterestBips: z.string(),
-  delinquencyFeeBips: z.string(),
-  reserveRatioBips: z.string(),
-  delinquencyGracePeriod: z.string(),
-  withdrawalBatchDuration: z.string(),
+  maxTotalSupply: z.coerce.number(),
+  annualInterestBips: z.coerce.number(),
+  delinquencyFeeBips: z.coerce.number(),
+  reserveRatioBips: z.coerce.number(),
+  delinquencyGracePeriod: z.coerce.number(),
+  withdrawalBatchDuration: z.coerce.number(),
 })
 
 export type NewMarketFormSchema = z.infer<typeof validationSchema>

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { Token } from "@wildcatfi/wildcat-sdk"
 
+import { Text } from "react-aria-components"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import {
   Paper,
@@ -13,18 +12,19 @@ import {
   Select,
   TextInput,
   NumberInput,
+  Spinner,
 } from "../../../components/ui-components"
 import { TokenSelector } from "./TokenSelector"
 
 import { SignIcon } from "../../../components/ui-components/icons"
 import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.svg"
-
-import { validationSchema, NewMarketFormSchema } from "./validationSchema"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
 import { mockedVaultTypes } from "../../../mocks/vaults"
 import { useDeployMarket } from "./hooks/useDeployMarket"
 import { useTokenMetadata } from "../hooks/useTokenMetaData"
 import { MarketPreviewModal } from "./MarketPreviewModal"
+import { useNewMarketForm } from "./hooks/useNewMarketForm"
+import { useGetController } from "../hooks/useGetController"
 
 const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
   (vaultType) => ({
@@ -34,43 +34,17 @@ const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
   }),
 )
 
-const defaultVault: NewMarketFormSchema = {
-  vaultType: "",
-  asset: "",
-  namePrefix: "",
-  symbolPrefix: "",
-  maxTotalSupply: "0",
-  annualInterestBips: "0",
-  delinquencyFeeBips: "0",
-  reserveRatioBips: "0",
-  delinquencyGracePeriod: "0",
-  withdrawalBatchDuration: "0",
-}
-
 const AddNewVault = () => {
-  const {
-    formState: { errors: formErrors },
-    handleSubmit,
-    getValues,
-    setValue,
-    watch,
-    register,
-  } = useForm<NewMarketFormSchema>({
-    defaultValues: defaultVault,
-    resolver: zodResolver(validationSchema),
-    mode: "onBlur",
-  })
-
+  const { handleSubmit, getValues, setValue, watch, register, formErrors } =
+    useNewMarketForm()
+  const { data: controller, isLoading: isControllerLoading } =
+    useGetController()
   const [tokenAsset, setTokenAsset] = useState<Token | undefined>()
   const { deployNewMarket, isDeploying } = useDeployMarket()
   const navigate = useNavigate()
-
   const [selectedVault, setSelectedVault] = useState<SelectOptionItem | null>(
     null,
   )
-
-  watch()
-  console.log("VALUES", getValues())
 
   const handleClickMyVaults = () => {
     navigate("/borrower/my-vaults")
@@ -82,11 +56,7 @@ const AddNewVault = () => {
 
   const assetWatch = watch("asset")
 
-  const {
-    data: assetData,
-    isLoading: assetDataLoading,
-    error,
-  } = useTokenMetadata({
+  const { data: assetData, isLoading: assetDataLoading } = useTokenMetadata({
     address: assetWatch.toLowerCase(),
   })
 
@@ -111,9 +81,7 @@ const AddNewVault = () => {
     }
   }
 
-  const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(evt)
-  }
+  const isLoading = assetDataLoading || isDeploying || isControllerLoading
 
   return (
     <div>
@@ -200,7 +168,8 @@ const AddNewVault = () => {
             errorText={formErrors.maxTotalSupply?.message}
             tooltip="Maximum quantity of underlying assets that you wish to borrow from lenders."
           >
-            <NumberInput className="w-72" {...register("maxTotalSupply")} />
+            {/* <NumberInput className="w-72" {...register("maxTotalSupply")} /> */}
+            <TextInput className="w-72" {...register("maxTotalSupply")} />
           </FormItem>
 
           <FormItem
@@ -216,7 +185,8 @@ const AddNewVault = () => {
                      amount of market tokens in circulation). You cannot withdraw reserved assets
                      from your vault, but you still pay interest on them."
           >
-            <NumberInput {...register("reserveRatioBips")} decimalScale={2} />
+            {/* <NumberInput {...register("reserveRatioBips")} decimalScale={2} /> */}
+            <TextInput className="w-72" {...register("reserveRatioBips")} />
           </FormItem>
 
           <FormItem
@@ -232,11 +202,12 @@ const AddNewVault = () => {
                      Note that your actual interest rate might be higher than the APR
                      if you have selected a market type that imposes a protocol fee."
           >
-            <NumberInput
-              {...register("annualInterestBips")}
-              decimalScale={2}
-              max={100}
-            />
+            {/* <NumberInput */}
+            {/*  {...register("annualInterestBips")} */}
+            {/*  decimalScale={2} */}
+            {/*  max={controller?.constraints?.maximumAnnualInterestBips} */}
+            {/* /> */}
+            <TextInput className="w-72" {...register("annualInterestBips")} />
           </FormItem>
 
           <FormItem
@@ -251,11 +222,12 @@ const AddNewVault = () => {
                       to the lender APR - in the event that your market reserves go
                       below your minimum reserve (i.e. delinquent).`}
           >
-            <NumberInput
-              {...register("delinquencyFeeBips")}
-              decimalScale={2}
-              max={100}
-            />
+            {/* <NumberInput */}
+            {/*  {...register("delinquencyFeeBips")} */}
+            {/*  decimalScale={2} */}
+            {/*  max={controller?.constraints?.maximumDelinquencyFeeBips} */}
+            {/* /> */}
+            <TextInput className="w-72" {...register("delinquencyFeeBips")} />
           </FormItem>
 
           <FormItem
@@ -266,12 +238,17 @@ const AddNewVault = () => {
             }
             error={Boolean(formErrors.delinquencyGracePeriod?.message)}
             errorText={formErrors.delinquencyGracePeriod?.message}
-            tooltip="Rolling period for which you are allowed to have deposits below 
+            tooltip="Rolling period for which you are allowed to have deposits below
                      your minimum reserve before the penalty rate is triggered."
           >
-            <NumberInput
+            {/* <NumberInput */}
+            {/*  {...register("delinquencyGracePeriod")} */}
+            {/*  decimalScale={1} */}
+            {/*  max={controller?.constraints?.maximumDelinquencyGracePeriod} */}
+            {/* /> */}
+            <TextInput
+              className="w-72"
               {...register("delinquencyGracePeriod")}
-              decimalScale={1}
             />
           </FormItem>
 
@@ -284,16 +261,22 @@ const AddNewVault = () => {
             error={Boolean(formErrors.withdrawalBatchDuration?.message)}
             errorText={formErrors.withdrawalBatchDuration?.message}
             tooltip="When no cycle is currently active and a lender submits a withdrawal
-                     request, the withdrawal cycle starts. During the withdrawal cycle 
-                     duration, other lenders can submit their withdrawal requests. When 
-                     the withdrawal cycle concludes, withdrawal requests get paid in 
-                     accordance with the rules of our Service Agreement. Withdrawal cycles 
-                     are not rolling: at the conclusion of one cycle, the next one will 
+                     request, the withdrawal cycle starts. During the withdrawal cycle
+                     duration, other lenders can submit their withdrawal requests. When
+                     the withdrawal cycle concludes, withdrawal requests get paid in
+                     accordance with the rules of our Service Agreement. Withdrawal cycles
+                     are not rolling: at the conclusion of one cycle, the next one will
                      not begin until the next withdrawal request."
           >
-            <NumberInput
+            {/* <NumberInput */}
+            {/*  {...register("withdrawalBatchDuration")} */}
+            {/*  decimalScale={1} */}
+            {/*  max={controller?.constraints?.maximumWithdrawalBatchDuration} */}
+            {/* /> */}
+
+            <TextInput
+              className="w-72"
               {...register("withdrawalBatchDuration")}
-              decimalScale={1}
             />
           </FormItem>
 
@@ -325,7 +308,7 @@ const AddNewVault = () => {
               className="mt-5"
               variant="blue"
               icon={<SignIcon />}
-              disabled={isDeploying || assetDataLoading}
+              disabled={isLoading}
             >
               Sign
             </Button>
