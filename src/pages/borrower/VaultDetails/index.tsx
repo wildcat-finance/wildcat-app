@@ -489,120 +489,6 @@ function VaultDetails() {
           ))}
         </div>
       </div>
-      <div className="mb-14">
-        <div className="flex justify-between mb-3">
-          <div className="text-base font-bold">Withdrawals</div>
-          <div className="flex gap-16">
-            <div className="flex gap-x-2">
-              <div className="inline text-black text-xs font-bold">
-                Cycle start
-              </div>
-              <div className="text-black text-xs"> </div>
-            </div>
-            <div className="flex gap-x-2">
-              <div className="inline text-black text-xs font-bold">
-                Cycle end
-              </div>
-              <div className="text-black text-xs"> </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex gap-x-1 mb-6">
-          <div className="inline text-black text-xs font-bold">
-            Pending withdrawal in current cycle:
-          </div>
-          <div className="text-black text-xs"> </div>
-        </div>
-        <div className="flex justify-between items-center mb-5">
-          <div className="flex">
-            <button onClick={handleClickMyVaults}>
-              <BackArrow />
-            </button>
-            <div className="flex gap-x-5">
-              <div className="text-black text-xs underline">19-20 Dec-2023</div>
-              <div className="text-black text-xs underline">21-22-Dec-2023</div>
-              <div className="text-black text-xs underline">21-22-Dec-2023</div>
-              <div className="inline text-black text-xs font-bold">
-                Current cycle
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-x-3">
-            <DatePickerInput
-              placeholder="Date from"
-              onChange={handleFirstDateChange}
-              value={dateArray[0]}
-            />
-            <DatePickerInput
-              placeholder="Date to"
-              onChange={handleSecondDateChange}
-              value={dateArray[1]}
-            />
-            <button onClick={handleClickMyVaults}>
-              <Search className="h-6 w-6" />
-            </button>
-          </div>
-        </div>
-        {isDatePicked && (
-          <Chip className="bg-white w-fit mb-3">
-            {dateArray[0]?.toString()} – {dateArray[1]?.toString()}
-            <CancelRoundBlack
-              className="ml-2 cursor-pointer"
-              onClick={handleDateReset}
-            />
-          </Chip>
-        )}
-        {!isDatePicked && <div className="h-8 w-8 mb-3" />}
-        <Table
-          headers={[
-            {
-              title: "Lender",
-              align: "start",
-            },
-            {
-              title: "Date submitted",
-              align: "end",
-              className: "w-40",
-            },
-            {
-              title: "Date executed",
-              align: "end",
-              className: "w-40",
-            },
-            {
-              title: "Amount",
-              align: "end",
-              className: "w-40",
-            },
-            {
-              title: "Status",
-              align: "end",
-              className: "w-40",
-            },
-          ]}
-        >
-          {tableData.map((item) => (
-            <TableRow key={item.wallet}>
-              <TableCell justify="start">{item.lender}</TableCell>
-              <TableCell justify="end">{item.dateSubmitted}</TableCell>
-              <TableCell justify="end">{item.dateExecuted}</TableCell>
-              <TableCell justify="end">{item.amount}</TableCell>
-              <TableCell justify="end">{item.status}</TableCell>
-            </TableRow>
-          ))}
-        </Table>
-        <div className="flex justify-center gap-x-1 text-xxs mt-6">
-          {numberToArray(4).map((item) => (
-            <button
-              key={item}
-              onClick={() => setIsActivePage(item)}
-              className={`${isActivePage === item ? "font-bold" : ""}`}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
-      </div>
       <div className="text-base font-bold">Details</div>
       <div className="flex w-full mt-5 mb-14">
         <div className="w-full">
@@ -702,20 +588,23 @@ function VaultDetails() {
           ]}
         >
           {tableData.map((item, index) => (
+            // Todo: add key
             // eslint-disable-next-line react/no-array-index-key
             <TableRow key={index}>
               <TableCell justify="start">{item.lender}</TableCell>
               <TableCell justify="start">{item.wallet}</TableCell>
               <TableCell justify="center">
-                <Button
-                  variant={item.status === "Pending" ? "white-brown" : "red"}
-                  className="max-h-5 w-24 gap-x-2.5"
-                >
-                  {item.status === "Pending" ? "Pending" : "Remove"}
-                  <div className="flex items-center w-3 h-3">
-                    <CancelRound />
-                  </div>
-                </Button>
+                {item.status === "Pending" && (
+                  <Button
+                    variant="white-brown"
+                    className="max-h-5 w-24 gap-x-2.5"
+                  >
+                    Pending
+                    <div className="flex items-center w-3 h-3">
+                      <CancelRound />
+                    </div>
+                  </Button>
+                )}
               </TableCell>
             </TableRow>
           ))}

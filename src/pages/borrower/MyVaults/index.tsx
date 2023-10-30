@@ -1,15 +1,14 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { Select, TextInput } from "../../../components/ui-components"
+import { Select, TextInput, Button } from "../../../components/ui-components"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
-import { Button } from "../../../components/ui-components/Button"
 import VaultCard from "./VaultCard"
 
 import {
   mockedVaults,
   mockedUnderlyingAssets,
-  mockedRatios,
+  mockedStatuses,
 } from "../../../mocks/vaults"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
 
@@ -20,12 +19,12 @@ const mockedUnderlyingAssetsOptions: SelectOptionItem[] =
     value: tokenSymbol,
   }))
 
-const mockedVaultRatioOptions: SelectOptionItem[] = mockedRatios
+const mockedVaultStatusOptions: SelectOptionItem[] = mockedStatuses
   .sort()
-  .map((ratio) => ({
-    id: ratio,
-    label: ratio,
-    value: ratio,
+  .map((status: string) => ({
+    id: status,
+    label: status,
+    value: status,
   }))
 
 function MyVaults() {
@@ -33,7 +32,7 @@ function MyVaults() {
   const [filterByName, setFilterByName] = useState<string>("")
   const [selectedUnderlyingAsset, setSelectedUnderlyingAsset] =
     useState<SelectOptionItem | null>(null)
-  const [selectedVaultRatio, setSelectedVaultRatio] =
+  const [selectedVaultStatus, setSelectedVaultStatus] =
     useState<SelectOptionItem | null>(null)
 
   const handleFilterByName = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,8 +50,8 @@ function MyVaults() {
       return vault.tokenSymbol === selectedUnderlyingAsset.value
     })
     .filter((vault) => {
-      if (!selectedVaultRatio) return true
-      return vault.reserveRatio === selectedVaultRatio.value
+      if (!selectedVaultStatus) return true
+      return vault.status === selectedVaultStatus.value
     })
 
   return (
@@ -88,10 +87,10 @@ function MyVaults() {
           </div>
           <div className="w-1/3 px-2.5 py-2.5">
             <Select
-              options={mockedVaultRatioOptions}
-              onChange={setSelectedVaultRatio}
-              selected={selectedVaultRatio}
-              placeholder="Reserve ratio"
+              options={mockedVaultStatusOptions}
+              onChange={setSelectedVaultStatus}
+              selected={selectedVaultStatus}
+              placeholder="Market Status"
               className="w-full"
             />
           </div>
