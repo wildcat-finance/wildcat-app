@@ -1,10 +1,10 @@
-import { Modal } from "../../../../components/ui-components"
+import { Modal } from "../../../../../components/ui-components"
 
-export const RepayModal = () => (
-  <Modal buttonName="Repay" buttonColor="green" buttonClassName="w-full" sign>
+export const BorrowModal = () => (
+  <Modal buttonName="Borrow" buttonColor="green" buttonClassName="w-64" sign>
     <div>
       <div className="text-base font-bold px-8 w-80 text-center">
-        You are repaying 0.00.
+        You are borrowing 0.00.
       </div>
 
       <div className="w-full border border-tint-10 my-3" />

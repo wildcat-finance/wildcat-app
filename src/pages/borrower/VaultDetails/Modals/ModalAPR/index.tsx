@@ -1,10 +1,10 @@
-import { Modal } from "../../../../components/ui-components"
+import { Modal } from "../../../../../components/ui-components"
 
-export const BorrowModal = () => (
-  <Modal buttonName="Borrow" buttonColor="green" buttonClassName="w-64" sign>
+export const ModalAPR = () => (
+  <Modal buttonName="Adjust" buttonColor="green" sign>
     <div>
       <div className="text-base font-bold px-8 w-80 text-center">
-        You are borrowing 0.00.
+        You are changing your APR from 0.00 to 0.00.
       </div>
 
       <div className="w-full border border-tint-10 my-3" />

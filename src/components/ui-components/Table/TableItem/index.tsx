@@ -1,19 +1,19 @@
 import React, { ReactNode } from "react"
 import cn from "classnames"
 
-export function TableItem({
+export function TableCell({
   children,
   justify,
 }: {
   children: ReactNode
-  justify: "start" | "center" | "end"
+  justify: string
 }) {
   return (
     <td className="first:pl-6 last:pr-6">
       <div
         className={cn(
-          "flex items-center text-black text-xs",
           `justify-${justify}`,
+          "flex items-center text-black text-xs",
         )}
       >
         <div>{children}</div>

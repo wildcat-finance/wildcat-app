@@ -1,4 +1,4 @@
-import { Modal } from "../../../../components/ui-components"
+import { Modal } from "../../../../../components/ui-components"
 
 export const CapacityModal = () => (
   <Modal buttonName="Adjust" buttonColor="green" buttonClassName="w-64" sign>

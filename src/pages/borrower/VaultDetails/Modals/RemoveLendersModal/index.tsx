@@ -1,9 +1,9 @@
 import React, { useState } from "react"
-import { Modal } from "../../../../components/ui-components"
+import { Modal } from "../../../../../components/ui-components"
 
 import { RemoveLendersModalProps } from "./interface"
 
-function RemoveLendersModal({ lenders }: RemoveLendersModalProps) {
+export function RemoveLendersModal({ lenders }: RemoveLendersModalProps) {
   const [selectedLenders, setSelectedLenders] = useState<string[]>([])
 
   const isSelected = (lenderWallet: string) =>
@@ -63,5 +63,3 @@ function RemoveLendersModal({ lenders }: RemoveLendersModalProps) {
     </Modal>
   )
 }
-
-export default RemoveLendersModal

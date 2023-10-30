@@ -4,6 +4,9 @@ import { DateValue } from "react-aria-components"
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+
+import { FormSchema, validationSchema } from "./validationSchema"
+
 import {
   Button,
   FormItem,
@@ -12,28 +15,28 @@ import {
   TableItem,
   Chip,
   DatePickerInput,
+  Table,
+  TableRow,
+  TableCell,
 } from "../../../components/ui-components"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 
-import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.svg"
-import expandMore from "../../../components/ui-components/icons/expand_more.svg"
-import expandLess from "../../../components/ui-components/icons/expand_less.svg"
 import {
   CancelRound,
   CancelRoundBlack,
   ExpandMore,
   Search,
+  BackArrow,
 } from "../../../components/ui-components/icons/index"
-import { FormSchema, validationSchema } from "./validationSchema"
-import RemoveLendersModal from "./RemoveLendersModal"
-import { NewLendersModal } from "./NewLendersModal"
-import Table from "../../../components/ui-components/Table"
-import TableRow from "../../../components/ui-components/Table/TableRow"
-import { TableItem as TableItem2 } from "../../../components/ui-components/Table/TableItem"
-import { ModalAPR } from "./ModalAPR"
-import { CapacityModal } from "./CapacityModal"
-import { BorrowModal } from "./BorrowModal"
-import { RepayModal } from "./RepayModal"
+
+import {
+  RemoveLendersModal,
+  ModalAPR,
+  CapacityModal,
+  BorrowModal,
+  RepayModal,
+  NewLendersModal,
+} from "./Modals"
 
 const tableData = [
   {
@@ -101,23 +104,6 @@ const tableData = [
   },
 ]
 
-// const vaultData = {
-//   Capacity: "50,000 DAI",
-//   APR: "10%",
-//   PenaltyRate: "10%",
-//   MinimumReserveRatio: "25%",
-//   WithdrawalCycle: "48 hours",
-//   MaxGracePeriod: "24 hours",
-//   CurrentSupply: "24 hours",
-//   MinimumReservesRequired: "25%",
-//   CurrentReserves: "9,000 DAI",
-//   CurrentReserveRatio: "144%",
-//   Withdrawn: "0 DAI",
-//   UpcomingWithdrawals: "0 DAI",
-//   IncurredInterests: "10%",
-//   AvailableForWithdrawal: "3 DAI",
-// }
-
 const defaultDetails: FormSchema = {
   borrow: "",
   repay: "",
@@ -135,13 +121,27 @@ function numberToArray(number: number) {
 
 function VaultDetails() {
   const navigate = useNavigate()
-  const [isExpanded, setIsExpanded] = useState(true)
-  const [isThisCycleExpanded, setIsThisCycleExpanded] = useState(true)
-  const [isPastCycleExpanded, setIsPastCycleExpanded] = useState(true)
+  const [accordionStates, setAccordionStates] = useState([true, true, true])
   const [isActivePage, setIsActivePage] = useState(1)
   const [dateArray, setDateArray] = useState<DateValue[]>([])
 
   const isDatePicked = dateArray.length >= 1
+
+  const toggleAccordion = (index: number) => {
+    const newAccordionStates = [...accordionStates]
+    newAccordionStates[index] = !newAccordionStates[index]
+    setAccordionStates(newAccordionStates)
+  }
+
+  const toggleAccordionIcon = (index: number) =>
+    accordionStates[index] ? (
+      <ExpandMore
+        className="transform rotate-180"
+        onClick={() => toggleAccordion(index)}
+      />
+    ) : (
+      <ExpandMore onClick={() => toggleAccordion(index)} />
+    )
 
   const handleFirstDateChange = (date: DateValue) => {
     setDateArray([date, dateArray[1]])
@@ -161,38 +161,23 @@ function VaultDetails() {
     mode: "onBlur",
   })
 
-  const toggleAccordion = () => {
-    setIsExpanded(!isExpanded)
-  }
-
-  const toggleThisCycleAccordion = () => {
-    setIsThisCycleExpanded(!isThisCycleExpanded)
-  }
-
-  const togglePastCycleAccordion = () => {
-    setIsPastCycleExpanded(!isPastCycleExpanded)
+  const handleFieldChange = (field: string, value: string | number) => {
+    setValue(field as keyof typeof defaultDetails, String(value))
   }
 
   const handleClickMyVaults = () => {
     navigate("/borrower/my-vaults")
   }
 
-  const expandIcon = isExpanded ? expandLess : expandMore
-
-  const handleFieldChange = (field: string, value: string | number) => {
-    setValue(field as keyof typeof defaultDetails, String(value))
-  }
-
   return (
     <div>
-      <Button
-        variant="outline"
+      <button
         className="flex items-center gap-x-2 mb-8 px-0"
         onClick={handleClickMyVaults}
       >
-        <img src={arrowBack} alt="Back" />
+        <BackArrow />
         <p className="text-xs font-normal underline">My Markets</p>
-      </Button>
+      </button>
       <div className="text-green text-2xl font-bold mb-8 w-2/3">
         Blossom Dai Stablecoin
       </div>
@@ -316,18 +301,11 @@ function VaultDetails() {
         <div className="h-12 flex justify-between items-center bg-tint-10 px-6">
           <div className="inline text-black text-xs font-bold">This cycle</div>
           <div className="flex gap-x-4 items-center">
-            {isThisCycleExpanded ? (
-              <ExpandMore
-                className="transform rotate-180"
-                onClick={toggleThisCycleAccordion}
-              />
-            ) : (
-              <ExpandMore onClick={toggleThisCycleAccordion} />
-            )}
+            {toggleAccordionIcon(0)}
             <Chip className="w-fit">5000 DAI</Chip>
           </div>
         </div>
-        {isThisCycleExpanded && (
+        {accordionStates[0] && (
           <Table
             headers={[
               {
@@ -343,11 +321,12 @@ function VaultDetails() {
               {
                 title: "Date submitted",
                 align: "start",
-                className: "w-28",
+                className: "w-52",
               },
               {
                 title: "",
-                align: "start",
+                align: "center",
+                className: "w-28",
               },
               {
                 title: "Amount",
@@ -357,13 +336,13 @@ function VaultDetails() {
           >
             {tableData.map((item) => (
               <TableRow key={item.wallet}>
-                <TableItem2 justify="start">{item.lender}</TableItem2>
-                <TableItem2 justify="start">{item.txID}</TableItem2>
-                <TableItem2 justify="start">{item.dateExecuted}</TableItem2>
-                <TableItem2 justify="end">
+                <TableCell justify="start">{item.lender}</TableCell>
+                <TableCell justify="start">{item.txID}</TableCell>
+                <TableCell justify="start">{item.dateExecuted}</TableCell>
+                <TableCell justify="end">
                   <div />
-                </TableItem2>
-                <TableItem2 justify="end">{item.amount}</TableItem2>
+                </TableCell>
+                <TableCell justify="end">{item.amount}</TableCell>
               </TableRow>
             ))}
           </Table>
@@ -373,18 +352,11 @@ function VaultDetails() {
             Pending from past cycles
           </div>
           <div className="flex gap-x-4 items-center">
-            {isPastCycleExpanded ? (
-              <ExpandMore
-                className="transform rotate-180"
-                onClick={togglePastCycleAccordion}
-              />
-            ) : (
-              <ExpandMore onClick={togglePastCycleAccordion} />
-            )}
+            {toggleAccordionIcon(1)}
             <Chip className="w-fit">5000 DAI</Chip>
           </div>
         </div>
-        {isPastCycleExpanded && (
+        {accordionStates[1] && (
           <Table
             headers={[
               {
@@ -415,11 +387,11 @@ function VaultDetails() {
           >
             {tableData.map((item) => (
               <TableRow key={item.wallet}>
-                <TableItem2 justify="start">{item.lender}</TableItem2>
-                <TableItem2 justify="start">{item.txID}</TableItem2>
-                <TableItem2 justify="start">{item.dateExecuted}</TableItem2>
-                <TableItem2 justify="start">{item.dateExecuted}</TableItem2>
-                <TableItem2 justify="end">{item.amount}</TableItem2>
+                <TableCell justify="start">{item.lender}</TableCell>
+                <TableCell justify="start">{item.txID}</TableCell>
+                <TableCell justify="start">{item.dateExecuted}</TableCell>
+                <TableCell justify="start">{item.dateExecuted}</TableCell>
+                <TableCell justify="end">{item.amount}</TableCell>
               </TableRow>
             ))}
           </Table>
@@ -430,7 +402,7 @@ function VaultDetails() {
         <div className="flex justify-between items-center mb-5">
           <div className="flex">
             <button onClick={handleClickMyVaults}>
-              <img src={arrowBack} alt="Back" className="h-3 w-3" />
+              <BackArrow />
             </button>
             <div className="flex gap-x-5">
               <div className="text-black text-xs underline">19-20 Dec-2023</div>
@@ -497,11 +469,11 @@ function VaultDetails() {
         >
           {tableData.map((item) => (
             <TableRow key={item.wallet}>
-              <TableItem2 justify="start">{item.lender}</TableItem2>
-              <TableItem2 justify="start">{item.txID}</TableItem2>
-              <TableItem2 justify="start">{item.dateSubmitted}</TableItem2>
-              <TableItem2 justify="start">{item.dateExecuted}</TableItem2>
-              <TableItem2 justify="end">{item.amount}</TableItem2>
+              <TableCell justify="start">{item.lender}</TableCell>
+              <TableCell justify="start">{item.txID}</TableCell>
+              <TableCell justify="start">{item.dateSubmitted}</TableCell>
+              <TableCell justify="start">{item.dateExecuted}</TableCell>
+              <TableCell justify="end">{item.amount}</TableCell>
             </TableRow>
           ))}
         </Table>
@@ -544,7 +516,7 @@ function VaultDetails() {
         <div className="flex justify-between items-center mb-5">
           <div className="flex">
             <button onClick={handleClickMyVaults}>
-              <img src={arrowBack} alt="Back" className="h-3 w-3" />
+              <BackArrow />
             </button>
             <div className="flex gap-x-5">
               <div className="text-black text-xs underline">19-20 Dec-2023</div>
@@ -611,11 +583,11 @@ function VaultDetails() {
         >
           {tableData.map((item) => (
             <TableRow key={item.wallet}>
-              <TableItem2 justify="start">{item.lender}</TableItem2>
-              <TableItem2 justify="end">{item.dateSubmitted}</TableItem2>
-              <TableItem2 justify="end">{item.dateExecuted}</TableItem2>
-              <TableItem2 justify="end">{item.amount}</TableItem2>
-              <TableItem2 justify="end">{item.status}</TableItem2>
+              <TableCell justify="start">{item.lender}</TableCell>
+              <TableCell justify="end">{item.dateSubmitted}</TableCell>
+              <TableCell justify="end">{item.dateExecuted}</TableCell>
+              <TableCell justify="end">{item.amount}</TableCell>
+              <TableCell justify="end">{item.status}</TableCell>
             </TableRow>
           ))}
         </Table>
@@ -732,9 +704,9 @@ function VaultDetails() {
           {tableData.map((item, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <TableRow key={index}>
-              <TableItem2 justify="start">{item.lender}</TableItem2>
-              <TableItem2 justify="start">{item.wallet}</TableItem2>
-              <TableItem2 justify="center">
+              <TableCell justify="start">{item.lender}</TableCell>
+              <TableCell justify="start">{item.wallet}</TableCell>
+              <TableCell justify="center">
                 <Button
                   variant={item.status === "Pending" ? "white-brown" : "red"}
                   className="max-h-5 w-24 gap-x-2.5"
@@ -744,7 +716,7 @@ function VaultDetails() {
                     <CancelRound />
                   </div>
                 </Button>
-              </TableItem2>
+              </TableCell>
             </TableRow>
           ))}
         </Table>
@@ -755,15 +727,15 @@ function VaultDetails() {
         <Button
           variant="outline"
           className="flex items-center gap-x-2"
-          onClick={toggleAccordion}
+          onClick={() => toggleAccordion(2)}
         >
           <p className="text-xs font-normal underline cursor-pointer">
-            {isExpanded ? "Hide History" : "Show History"}
+            {accordionStates[2] ? "Hide History" : "Show History"}
           </p>
-          <img src={expandIcon} className="w-5" alt="Back" />
+          {toggleAccordionIcon(2)}
         </Button>
       </div>
-      {isExpanded && (
+      {accordionStates[2] && (
         <Paper className="border-tint-10 mt-5 bg-white h-48 p-5 flex flex-col gap-y-6 overflow-auto">
           <div className="text-xs">
             <div>1 Sep 2023; 13:37:00</div>
