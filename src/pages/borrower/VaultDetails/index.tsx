@@ -236,9 +236,9 @@ function VaultDetails() {
                 <NumberInput
                   decimalScale={2}
                   className="w-full"
-                  placeholder="00,000.00"
+                  placeholder="000,00"
                   min={0}
-                  max={9000}
+                  max={100}
                   onChange={(value) =>
                     handleFieldChange("annualInterestRate", value)
                   }
