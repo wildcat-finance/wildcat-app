@@ -18,10 +18,6 @@ const HomePage = () => (
       </a>
       .
     </div>
-
-    <div className="mt-10">
-      <Link to="/borrower/agreement">Agreement (temp) link</Link>
-    </div>
   </div>
 )
 

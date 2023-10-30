@@ -4,7 +4,7 @@ import { AiOutlineExclamationCircle } from "react-icons/ai"
 import { Paper, Button } from "../../../components/ui-components"
 import { BluePaper } from "../../../components/ui-components/BluePaper"
 import { DownloadIcon, SignIcon } from "../../../components/ui-components/icons"
-import { useBorrowerAgreementStore } from "../store/useBorrowerStore"
+import { useBorrowerAgreementStore } from "../../../store/useBorrowerStore"
 
 function ServiceAgreement() {
   const navigate = useNavigate()

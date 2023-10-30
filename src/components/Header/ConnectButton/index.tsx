@@ -1,5 +1,5 @@
 import { RiWallet3Line, RiCloseLine } from "react-icons/ri"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 import {
   useAccount,
   useConnect,
@@ -8,28 +8,36 @@ import {
   useSwitchNetwork,
 } from "wagmi"
 import { Dialog, Modal } from "react-aria-components"
+
 import { Button } from "../../ui-components"
+import { useWalletConnectModalStore } from "../../../store/useWalletConnectModalStore"
+import { NETWORKS } from "../../../config/networks"
+import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 
 function ConnectButton() {
-  const [isOpen, setOpen] = useState(false)
+  const { isOpen, setIsWalletModalOpen } = useWalletConnectModalStore()
 
   const { connectors, connect, isLoading, pendingConnector } = useConnect()
   const { address, isConnected } = useAccount()
   const { switchNetwork } = useSwitchNetwork()
   const { disconnect } = useDisconnect()
-  const { chain } = useNetwork()
+  const { isWrongNetwork } = useCurrentNetwork()
 
-  const isWrongNetwork = chain?.id !== 11155111
+  useEffect(() => {
+    if (isConnected && !isWrongNetwork) {
+      setIsWalletModalOpen(false)
+    }
+  }, [isConnected, isWrongNetwork])
 
   const openModal = useCallback(() => {
     if (!isOpen) {
-      setOpen(true)
+      setIsWalletModalOpen(true)
     }
   }, [isOpen])
 
   const closeModal = useCallback(() => {
     if (isOpen) {
-      setOpen(false)
+      setIsWalletModalOpen(false)
     }
   }, [isOpen])
 
@@ -59,7 +67,7 @@ function ConnectButton() {
           <RiWallet3Line className="w-5" />
         </div>
       </Button>
-      <Modal isDismissable isOpen={isOpen} onOpenChange={setOpen}>
+      <Modal isDismissable isOpen={isOpen} onOpenChange={setIsWalletModalOpen}>
         <Dialog className="bg-sand w-80 p-6 rounded-sm flex flex-col">
           <div className="flex items-center justify-center mb-6 relative">
             <p className="text-2xl font-medium select-none">
@@ -75,7 +83,7 @@ function ConnectButton() {
               <Button
                 variant="black"
                 className="w-full"
-                onClick={() => switchNetwork?.(11155111)}
+                onClick={() => switchNetwork?.(NETWORKS.Sepolia.chainId)}
               >
                 Switch to Sepolia
               </Button>
@@ -112,11 +120,14 @@ function ConnectButton() {
               </>
             )}
           </div>
-          <div className="mt-6">
-            <Button variant="black" className="w-full" onClick={closeModal}>
-              Close
-            </Button>
-          </div>
+
+          {!isWrongNetwork && (
+            <div className="mt-6">
+              <Button variant="black" className="w-full" onClick={closeModal}>
+                Close
+              </Button>
+            </div>
+          )}
         </Dialog>
       </Modal>
     </>

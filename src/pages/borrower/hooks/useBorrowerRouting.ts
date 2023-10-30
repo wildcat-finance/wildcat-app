@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 
-import { useBorrowerAgreementStore } from "../store/useBorrowerStore"
+import { useBorrowerAgreementStore } from "../../../store/useBorrowerStore"
 import { useGetController } from "./useGetController"
 import { BASE_PATHS } from "../../../routes/constants"
 import { BORROWER_PATHS } from "../routes"

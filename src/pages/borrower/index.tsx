@@ -1,17 +1,18 @@
 import { Routes, Route } from "react-router-dom"
-import { useAccount } from "wagmi"
 
 import { BORROWER_ROUTES } from "./routes"
 import { Spinner } from "../../components/ui-components"
-import ConnectYourWallet from "../ConnectYourWallet"
 import { useBorrowerRouting } from "./hooks/useBorrowerRouting"
+import { useWalletConnect } from "./hooks/useWalletConnect"
+import { useCurrentNetwork } from "../../hooks/useCurrentNetwork"
 
 const BorrowerSection = () => {
-  const { isConnected } = useAccount()
+  const { isConnected } = useWalletConnect()
   const { isLoading } = useBorrowerRouting()
+  const { isWrongNetwork } = useCurrentNetwork()
 
-  if (!isConnected) {
-    return <ConnectYourWallet />
+  if (!isConnected || isWrongNetwork) {
+    return <div />
   }
 
   if (isLoading) {
