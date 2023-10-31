@@ -16,8 +16,7 @@ function processNumber(
   if (maxValue && Number(input) > maxValue) {
     return maxValue
   }
-
-  return Number(input)
+  return parseFloat(input)
 }
 
 export function NumberInput(props: NumberInputProps) {
@@ -34,7 +33,7 @@ export function NumberInput(props: NumberInputProps) {
       onChange(processedValue || 0)
     }
 
-    setInputValue(values.value)
+    setInputValue(parseFloat(values.value))
   }
 
   const inputCssClass = cn(
@@ -52,6 +51,7 @@ export function NumberInput(props: NumberInputProps) {
       className={inputCssClass}
       decimalSeparator=","
       allowNegative={false}
+      valueIsNumericString
       {...rest}
     />
   )
