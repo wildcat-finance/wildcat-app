@@ -235,13 +235,13 @@ function VaultDetails() {
         </div>
         <div>
           <div className="w-full flex justify-between">
-            <div className="font-bold mt-3">Adjust Base Lender APR</div>
+            <div className="font-bold mt-3">Adjust Lender APR</div>
             <div className="flex items-center gap-x-3.5 w-full max-w-lg">
               <div className="w-full">
                 <NumberInput
                   decimalScale={2}
                   className="w-full"
-                  placeholder="000,00"
+                  placeholder="00.00%"
                   min={0}
                   max={100}
                   onChange={(value) =>
@@ -285,13 +285,23 @@ function VaultDetails() {
         <div className="flex w-full mt-5 mb-14">
           <div className="w-full">
             <TableItem
-              title="Capacity"
+              title="Contract Address"
+              value="0xdc8f...63cA"
+              className="pl-6 pr-24"
+            />
+            <TableItem
+              title="Maximum Capacity"
               value="50,000 DAI"
               className="pl-6 pr-24"
             />
-            <TableItem title="APR" value="10%" className="pl-6 pr-24" />
+            <TableItem title="Lender APR" value="4%" className="pl-6 pr-24" />
             <TableItem
-              title="Penalty Rate"
+              title="Protocol Fee APR"
+              value="0.8%"
+              className="pl-6 pr-24"
+            />
+            <TableItem
+              title="Penalty Rate APR"
               value="10%"
               className="pl-6 pr-24"
             />
@@ -302,7 +312,7 @@ function VaultDetails() {
             />
             <TableItem
               title="Withdrawal Cycle Duration"
-              value="48 hours"
+              value="48:00:00"
               className="pl-6 pr-24"
             />
             <TableItem
@@ -310,48 +320,46 @@ function VaultDetails() {
               value="24:00:00"
               className="pl-6 pr-24"
             />
-            <TableItem
-              title="Available Grace Period"
-              value="12:00:00"
-              className="pl-6 pr-24"
-            />
-            <TableItem title="" value="" className="pl-6 pr-24" />
           </div>
           <div className="w-full">
             <TableItem
-              title="Current Supply"
-              value="24 hours"
+              title="Available Grace Period"
+              value="23:12:38"
               className="pr-6 pl-24"
             />
             <TableItem
-              title="Minimum Reserves Required"
-              value="25%"
+              title="Repayment To Minimum Reserves"
+              value="18,750 DAI"
               className="pr-6 pl-24"
             />
             <TableItem
-              title="Current Reserves"
-              value="9,000 DAI"
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Current Reserve Ratio"
-              value="144%"
-              className="pr-6 pl-24"
-            />
-            <TableItem title="Withdrawn" value="0 DAI" className="pr-6 pl-24" />
-            <TableItem
-              title="Upcoming Withdrawals"
+              title="Available To Borrow"
               value="0 DAI"
               className="pr-6 pl-24"
             />
             <TableItem
-              title="Incurred Interest"
-              value="10%"
+              title="Outstanding Debt"
+              value="30,000 DAI"
               className="pr-6 pl-24"
             />
             <TableItem
-              title="Available for Withdrawal"
-              value="3 DAI"
+              title="Assets In Reserves"
+              value="0 DAI"
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Minimum Reserves Required"
+              value="7,500 DAI"
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Current Reserve Ratio"
+              value="0%"
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Lifetime Accrued Interest"
+              value="5 DAI"
               className="pr-6 pl-24"
             />
           </div>
@@ -612,7 +620,7 @@ function VaultDetails() {
               className: "w-44",
             },
             {
-              title: "Wallet",
+              title: "Wallet Address",
               align: "start",
             },
             {
@@ -662,17 +670,8 @@ function VaultDetails() {
         <Paper className="border-tint-10 mt-5 bg-white h-48 p-5 flex flex-col gap-y-6 overflow-auto">
           <div className="text-xs">
             <div>1 Sep 2023; 13:37:00</div>
-            Lender 0xdeadbeef deposited 10 DAI (example)
-          </div>
-          <div className="text-xs">
-            <div>28 Aug 2023; 14:24:38</div>
-            Borrower returned 1,000 DAI to market, new reserve ratio XX%
-            (example)
-          </div>
-          <div className="text-xs">
-            <div>28 Aug 2023; 14:24:38</div>
-            Lender 0xcatcafe made withdrawal request for 9,000 DAI: 4,000 DAI
-            added to the reserved assets pool, 5,000 DAI pending (example)
+            Will be adding in examples of text for all of the various events we
+            index soon.
           </div>
         </Paper>
       )}
@@ -684,8 +683,8 @@ function VaultDetails() {
         </FormItem>
         <FormItem
           className="w-72"
-          label="Market contract address"
-          tooltip="test"
+          label="Market Controller Address"
+          tooltip="should be table of archcontroller, controller, factory addr"
         >
           <NumberInput className="w-72" />
         </FormItem>
