@@ -17,7 +17,7 @@ export function TableItem({
       {(title || value) && (
         <>
           <div className="inline text-black text-xs font-bold">{title}</div>
-          <div className="inline text-black text-xs">{value}</div>
+          <div className="inline text-black text-xs text-right">{value}</div>
         </>
       )}
       {children}
