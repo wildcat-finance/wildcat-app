@@ -34,7 +34,7 @@ export function NumberInput(props: NumberInputProps) {
       onChange(processedValue || 0)
     }
 
-    setInputValue(processedValue || 0)
+    setInputValue(values.value)
   }
 
   const inputCssClass = cn(
