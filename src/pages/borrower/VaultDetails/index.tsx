@@ -121,7 +121,12 @@ function numberToArray(number: number) {
 
 function VaultDetails() {
   const navigate = useNavigate()
-  const [accordionStates, setAccordionStates] = useState([true, true, true])
+  const [accordionStates, setAccordionStates] = useState([
+    false,
+    false,
+    true,
+    true,
+  ])
   const [isActivePage, setIsActivePage] = useState(1)
   const [dateArray, setDateArray] = useState<DateValue[]>([])
 
@@ -184,7 +189,7 @@ function VaultDetails() {
       <Paper className="flex flex-col gap-y-5 border-0 px-6 py-5 mb-14 bg-tint-10 border-tint-8 rounded-3xl">
         <div>
           <div className="w-full flex justify-between items-center">
-            <div className="font-bold">Borrow</div>
+            <div className="font-bold">Borrow Assets</div>
             <div className="flex gap-x-3.5 w-full max-w-lg">
               <NumberInput
                 decimalScale={4}
@@ -196,12 +201,12 @@ function VaultDetails() {
             </div>
           </div>
           <div className="text-xxs text-right mt-1.5 mr-48">
-            <span className="font-semibold">Borrow up to </span>
+            <span className="font-semibold">Available To Borrow: </span>
           </div>
         </div>
         <div>
           <div className="w-full flex justify-between">
-            <div className="font-bold mt-3">Repay</div>
+            <div className="font-bold mt-3">Repay Debt</div>
             <div className="flex items-center gap-x-3.5 w-full max-w-lg">
               <div className="w-full">
                 <NumberInput
@@ -213,7 +218,7 @@ function VaultDetails() {
                   onValueChange={(value) => handleFieldChange("repay", value)}
                 />
                 <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
-                  <span className="font-semibold">Repay up to </span>
+                  <span className="font-semibold">Outstanding Debt:</span>
                 </div>
               </div>
               <div className="w-44 flex flex-col gap-y-1.5">
@@ -222,7 +227,7 @@ function VaultDetails() {
                   variant="green"
                   className="w-full px-2 whitespace-nowrap"
                 >
-                  Repay to minimum reserve ratio
+                  Repay To Minimum Reserves
                 </Button>
               </div>
             </div>
@@ -230,13 +235,13 @@ function VaultDetails() {
         </div>
         <div>
           <div className="w-full flex justify-between">
-            <div className="font-bold mt-3">Annual interest rate (%)</div>
+            <div className="font-bold mt-3">Adjust Lender APR</div>
             <div className="flex items-center gap-x-3.5 w-full max-w-lg">
               <div className="w-full">
                 <NumberInput
                   decimalScale={2}
                   className="w-full"
-                  placeholder="000,00"
+                  placeholder="00.00%"
                   min={0}
                   max={100}
                   onValueChange={(value) =>
@@ -244,7 +249,7 @@ function VaultDetails() {
                   }
                 />
                 <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
-                  <span className="font-semibold">Current </span>
+                  <span className="font-semibold">Current Base Rate:</span>
                 </div>
               </div>
               <div className="w-44 flex flex-col gap-y-1.5">
@@ -258,7 +263,7 @@ function VaultDetails() {
         </div>
         <div>
           <div className="w-full flex justify-between items-center">
-            <div className="font-bold">Capacity</div>
+            <div className="font-bold">Adjust Maximum Capacity</div>
             <div className="flex gap-x-3.5 w-full max-w-lg">
               <NumberInput
                 decimalScale={4}
@@ -271,16 +276,101 @@ function VaultDetails() {
             </div>
           </div>
           <div className="text-xxs text-right mt-1.5 mr-48">
-            <span className="font-semibold">Current </span>
+            <span className="font-semibold">Current Capacity:</span>
           </div>
         </div>
       </Paper>
+      <div>
+        <div className="text-base font-bold">Market Details</div>
+        <div className="flex w-full mt-5 mb-14">
+          <div className="w-full">
+            <TableItem
+              title="Contract Address"
+              value="0xdc8f...63cA"
+              className="pl-6 pr-24"
+            />
+            <TableItem
+              title="Maximum Capacity"
+              value="50,000 DAI"
+              className="pl-6 pr-24"
+            />
+            <TableItem title="Lender APR" value="4%" className="pl-6 pr-24" />
+            <TableItem
+              title="Protocol Fee APR"
+              value="0.8%"
+              className="pl-6 pr-24"
+            />
+            <TableItem
+              title="Penalty Rate APR"
+              value="10%"
+              className="pl-6 pr-24"
+            />
+            <TableItem
+              title="Minimum Reserve Ratio"
+              value="25%"
+              className="pl-6 pr-24"
+            />
+            <TableItem
+              title="Withdrawal Cycle Duration"
+              value="48:00:00"
+              className="pl-6 pr-24"
+            />
+            <TableItem
+              title="Maximum Grace Period"
+              value="24:00:00"
+              className="pl-6 pr-24"
+            />
+          </div>
+          <div className="w-full">
+            <TableItem
+              title="Available Grace Period"
+              value="23:12:38"
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Repayment To Minimum Reserves"
+              value="18,750 DAI"
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Available To Borrow"
+              value="0 DAI"
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Outstanding Debt"
+              value="30,000 DAI"
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Assets In Reserves"
+              value="0 DAI"
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Minimum Reserves Required"
+              value="7,500 DAI"
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Current Reserve Ratio"
+              value="0%"
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Lifetime Accrued Interest"
+              value="5 DAI"
+              className="pr-6 pl-24"
+            />
+          </div>
+        </div>
+      </div>
       <div className="mb-14">
         <div className="flex justify-between items-center mb-8">
-          <div className="text-base font-bold">Lender withdrawals</div>
+          <div className="text-base font-bold">Lender Withdrawal Requests</div>
           <div className="flex gap-x-7 items-center">
             <Chip color="green" className="w-fit !h-6 text-white">
-              Ongoing cycle
+              Ongoing Cycle
             </Chip>
             <div className="flex gap-x-2">
               <div className="inline text-black text-xs font-bold">Start</div>
@@ -294,15 +384,17 @@ function VaultDetails() {
         </div>
         <div className="flex justify-between items-center mb-4 pr-6">
           <div className="inline text-black text-xs font-bold">
-            Owed after current cycle end
+            Total Withdrawal Requests Outstanding
           </div>
-          <Chip className="w-fit">15000 DAI</Chip>
+          <Chip className="w-20 flex justify-center">15,000 DAI</Chip>
         </div>
         <div className="h-12 flex justify-between items-center bg-tint-10 px-6">
-          <div className="inline text-black text-xs font-bold">This cycle</div>
+          <div className="inline text-black text-xs font-bold">
+            Requests Made In This Cycle
+          </div>
           <div className="flex gap-x-4 items-center">
             {toggleAccordionIcon(0)}
-            <Chip className="w-fit">5000 DAI</Chip>
+            <Chip className="w-20 flex justify-center">5,000 DAI</Chip>
           </div>
         </div>
         {accordionStates[0] && (
@@ -314,12 +406,12 @@ function VaultDetails() {
                 className: "w-40",
               },
               {
-                title: "TxID",
+                title: "Transaction ID",
                 align: "start",
                 className: "w-72",
               },
               {
-                title: "Date submitted",
+                title: "Date Submitted",
                 align: "start",
                 className: "w-52",
               },
@@ -349,11 +441,11 @@ function VaultDetails() {
         )}
         <div className="h-12 flex justify-between items-center bg-tint-10 px-6 mt-6">
           <div className="inline text-black text-xs font-bold">
-            Pending from past cycles
+            Requests Made In Previous Cycles
           </div>
           <div className="flex gap-x-4 items-center">
             {toggleAccordionIcon(1)}
-            <Chip className="w-fit">5000 DAI</Chip>
+            <Chip className="w-20 flex justify-center">10,000 DAI</Chip>
           </div>
         </div>
         {accordionStates[1] && (
@@ -365,17 +457,17 @@ function VaultDetails() {
                 className: "w-40",
               },
               {
-                title: "TxID",
+                title: "Transaction ID",
                 align: "start",
                 className: "w-72",
               },
               {
-                title: "Date submitted",
+                title: "Date Submitted",
                 align: "start",
                 className: "w-52",
               },
               {
-                title: "Date queued",
+                title: "Date Queued",
                 align: "start",
                 className: "w-28",
               },
@@ -398,171 +490,122 @@ function VaultDetails() {
         )}
       </div>
       <div className="mb-14">
-        <div className="text-base font-bold mb-8">Borrower payment history</div>
-        <div className="flex justify-between items-center mb-5">
-          <div className="flex">
-            <button onClick={handleClickMyVaults}>
-              <BackArrow />
-            </button>
-            <div className="flex gap-x-5">
-              <div className="text-black text-xs underline">19-20 Dec-2023</div>
-              <div className="text-black text-xs underline">21-22-Dec-2023</div>
-              <div className="text-black text-xs underline">21-22-Dec-2023</div>
-              <div className="inline text-black text-xs font-bold">
-                Current cycle
+        {/* <div className="text-base font-bold mb-8"></div> */}
+        <div className="flex w-full justify-between content-center mb-8">
+          <div className="text-base font-bold">Borrower Payment History</div>
+          <button
+            className="flex items-center gap-x-2"
+            onClick={() => toggleAccordion(2)}
+          >
+            <p className="text-xs font-normal underline cursor-pointer">
+              {accordionStates[2] ? "Hide History" : "Show History"}
+            </p>
+            {toggleAccordionIcon(2)}
+          </button>
+        </div>
+        {accordionStates[2] && (
+          <div>
+            <div className="flex justify-between items-center mb-5">
+              <div className="flex">
+                <button onClick={handleClickMyVaults}>
+                  <BackArrow />
+                </button>
+                <div className="flex gap-x-5">
+                  <div className="text-black text-xs underline">
+                    19-20 Dec-2023
+                  </div>
+                  <div className="text-black text-xs underline">
+                    21-22-Dec-2023
+                  </div>
+                  <div className="text-black text-xs underline">
+                    21-22-Dec-2023
+                  </div>
+                  <div className="inline text-black text-xs font-bold">
+                    Current Cycle
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-x-3">
+                <DatePickerInput
+                  placeholder="Date From"
+                  onChange={handleFirstDateChange}
+                  value={dateArray[0]}
+                />
+                <DatePickerInput
+                  placeholder="Date To"
+                  onChange={handleSecondDateChange}
+                  value={dateArray[1]}
+                />
+                <button onClick={handleClickMyVaults}>
+                  <Search className="h-6 w-6" />
+                </button>
               </div>
             </div>
-          </div>
-          <div className="flex items-center gap-x-3">
-            <DatePickerInput
-              placeholder="Date from"
-              onChange={handleFirstDateChange}
-              value={dateArray[0]}
-            />
-            <DatePickerInput
-              placeholder="Date to"
-              onChange={handleSecondDateChange}
-              value={dateArray[1]}
-            />
-            <button onClick={handleClickMyVaults}>
-              <Search className="h-6 w-6" />
-            </button>
-          </div>
-        </div>
-        {isDatePicked && (
-          <Chip className="bg-white w-fit mb-3">
-            {dateArray[0]?.toString()} – {dateArray[1]?.toString()}
-            <CancelRoundBlack
-              className="ml-2 cursor-pointer"
-              onClick={handleDateReset}
-            />
-          </Chip>
-        )}
-        {!isDatePicked && <div className="h-8 w-8 mb-3" />}
-        <Table
-          headers={[
-            {
-              title: "Lender",
-              align: "start",
-              className: "w-40",
-            },
-            {
-              title: "TxID",
-              align: "start",
-              className: "w-72",
-            },
-            {
-              title: "Date submitted",
-              align: "start",
-              className: "w-52",
-            },
-            {
-              title: "Date processed",
-              align: "start",
-              className: "w-28",
-            },
-            {
-              title: "Amount",
-              align: "end",
-            },
-          ]}
-        >
-          {tableData.map((item) => (
-            <TableRow key={item.wallet}>
-              <TableCell justify="start">{item.lender}</TableCell>
-              <TableCell justify="start">{item.txID}</TableCell>
-              <TableCell justify="start">{item.dateSubmitted}</TableCell>
-              <TableCell justify="start">{item.dateExecuted}</TableCell>
-              <TableCell justify="end">{item.amount}</TableCell>
-            </TableRow>
-          ))}
-        </Table>
-        <div className="flex justify-center gap-x-1 text-xxs mt-6">
-          {numberToArray(4).map((item) => (
-            <button
-              key={item}
-              onClick={() => setIsActivePage(item)}
-              className={`${isActivePage === item ? "font-bold" : ""}`}
+            {isDatePicked && (
+              <Chip className="bg-white w-fit mb-3">
+                {dateArray[0]?.toString()} – {dateArray[1]?.toString()}
+                <CancelRoundBlack
+                  className="ml-2 cursor-pointer"
+                  onClick={handleDateReset}
+                />
+              </Chip>
+            )}
+            {!isDatePicked && <div className="h-8 w-8 mb-3" />}
+            <Table
+              headers={[
+                {
+                  title: "Lender",
+                  align: "start",
+                  className: "w-40",
+                },
+                {
+                  title: "Transaction ID",
+                  align: "start",
+                  className: "w-72",
+                },
+                {
+                  title: "Date Submitted",
+                  align: "start",
+                  className: "w-52",
+                },
+                {
+                  title: "Date Processed",
+                  align: "start",
+                  className: "w-28",
+                },
+                {
+                  title: "Amount",
+                  align: "end",
+                },
+              ]}
             >
-              {item}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="text-base font-bold">Details</div>
-      <div className="flex w-full mt-5 mb-14">
-        <div className="w-full">
-          <TableItem
-            title="Capacity"
-            value="50,000 DAI"
-            className="pl-6 pr-24"
-          />
-          <TableItem title="APR" value="10%" className="pl-6 pr-24" />
-          <TableItem title="Penalty Rate" value="10%" className="pl-6 pr-24" />
-          <TableItem
-            title="Minimum Reserve Ratio"
-            value="25%"
-            className="pl-6 pr-24"
-          />
-          <TableItem
-            title="Withdrawal Cycle"
-            value="48 hours"
-            className="pl-6 pr-24"
-          />
-          <TableItem
-            title="Max Grace Period"
-            value="24 hours"
-            className="pl-6 pr-24"
-          />
-          <TableItem
-            title="Available Grace"
-            value="12 hours"
-            className="pl-6 pr-24"
-          />
-          <TableItem title="" value="" className="pl-6 pr-24" />
-        </div>
-        <div className="w-full">
-          <TableItem
-            title="Current Supply"
-            value="24 hours"
-            className="pr-6 pl-24"
-          />
-          <TableItem
-            title="Minimum Reserves Required"
-            value="25%"
-            className="pr-6 pl-24"
-          />
-          <TableItem
-            title="Current Reserves"
-            value="9,000 DAI"
-            className="pr-6 pl-24"
-          />
-          <TableItem
-            title="Current Reserve Ratio"
-            value="144%"
-            className="pr-6 pl-24"
-          />
-          <TableItem title="Withdrawn" value="0 DAI" className="pr-6 pl-24" />
-          <TableItem
-            title="Upcoming Withdrawals"
-            value="0 DAI"
-            className="pr-6 pl-24"
-          />
-          <TableItem
-            title="Incurred Interests"
-            value="10%"
-            className="pr-6 pl-24"
-          />
-          <TableItem
-            title="Available for Withdrawal"
-            value="3 DAI"
-            className="pr-6 pl-24"
-          />
-        </div>
+              {tableData.map((item) => (
+                <TableRow key={item.wallet}>
+                  <TableCell justify="start">{item.lender}</TableCell>
+                  <TableCell justify="start">{item.txID}</TableCell>
+                  <TableCell justify="start">{item.dateSubmitted}</TableCell>
+                  <TableCell justify="start">{item.dateExecuted}</TableCell>
+                  <TableCell justify="end">{item.amount}</TableCell>
+                </TableRow>
+              ))}
+            </Table>
+            <div className="flex justify-center gap-x-1 text-xxs mt-6">
+              {numberToArray(4).map((item) => (
+                <button
+                  key={item}
+                  onClick={() => setIsActivePage(item)}
+                  className={`${isActivePage === item ? "font-bold" : ""}`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="flex w-full justify-between content-center">
-        <div className="text-base font-bold">Lenders</div>
+        <div className="text-base font-bold">Authorised Lenders</div>
         <div className="flex gap-x-2">
           <NewLendersModal />
           <RemoveLendersModal lenders={tableData} />
@@ -577,7 +620,7 @@ function VaultDetails() {
               className: "w-44",
             },
             {
-              title: "Wallet",
+              title: "Wallet Address",
               align: "start",
             },
             {
@@ -612,48 +655,36 @@ function VaultDetails() {
       </div>
 
       <div className="flex w-full justify-between content-center">
-        <div className="text-base font-bold">Market interaction history</div>
-        <Button
-          variant="outline"
+        <div className="text-base font-bold">Market Interaction History</div>
+        <button
           className="flex items-center gap-x-2"
-          onClick={() => toggleAccordion(2)}
+          onClick={() => toggleAccordion(3)}
         >
           <p className="text-xs font-normal underline cursor-pointer">
-            {accordionStates[2] ? "Hide History" : "Show History"}
+            {accordionStates[3] ? "Hide History" : "Show History"}
           </p>
-          {toggleAccordionIcon(2)}
-        </Button>
+          {toggleAccordionIcon(3)}
+        </button>
       </div>
-      {accordionStates[2] && (
+      {accordionStates[3] && (
         <Paper className="border-tint-10 mt-5 bg-white h-48 p-5 flex flex-col gap-y-6 overflow-auto">
           <div className="text-xs">
             <div>1 Sep 2023; 13:37:00</div>
-            Lender 0xdeadbeef deposited 10 DAI (example)
-          </div>
-          <div className="text-xs">
-            <div>28 Aug 2023; 14:24:38</div>
-            Borrower returned 1,000 DAI to market, new reserve ratio XX%
-            (example)
-          </div>
-          <div className="text-xs">
-            <div>28 Aug 2023; 14:24:38</div>
-            Lender 0xcatcafe made withdrawal request for 9,000 DAI: 4,000 DAI
-            added to the reserved assets pool, 5,000 DAI pending (example)
+            Will be adding in examples of text for all of the various events we
+            index soon.
           </div>
         </Paper>
       )}
 
-      <div className="text-base font-bold mt-14">
-        Market Controller / Some title
-      </div>
+      <div className="text-base font-bold mt-14">Market Controller</div>
       <div className="flex flex-wrap gap-x-7 mb-14 mt-5">
-        <FormItem className="w-72" label="Market type" tooltip="test">
+        <FormItem className="w-72" label="Market Type" tooltip="test">
           <NumberInput className="w-72" />
         </FormItem>
         <FormItem
           className="w-72"
-          label="Market contract address"
-          tooltip="test"
+          label="Market Controller Address"
+          tooltip="should be table of archcontroller, controller, factory addr"
         >
           <NumberInput className="w-72" />
         </FormItem>

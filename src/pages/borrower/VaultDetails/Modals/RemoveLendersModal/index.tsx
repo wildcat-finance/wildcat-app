@@ -25,7 +25,7 @@ export function RemoveLendersModal({ lenders }: RemoveLendersModalProps) {
 
   return (
     <Modal
-      buttonName="Remove lenders"
+      buttonName="Remove Lenders"
       buttonColor="red"
       onClose={clearInputOnClose}
     >

@@ -5,12 +5,10 @@ import { Select, TextInput, Button } from "../../../components/ui-components"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import VaultCard from "./VaultCard"
 
-import {
-  mockedVaults,
-  mockedUnderlyingAssets,
-  mockedStatuses,
-} from "../../../mocks/vaults"
+import { mockedUnderlyingAssets, mockedStatuses } from "../../../mocks/vaults"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
+import { useMarkets } from "./hooks/useMarkets"
+import { getMarketStatus } from "../../../utils/helpers"
 
 const mockedUnderlyingAssetsOptions: SelectOptionItem[] =
   mockedUnderlyingAssets.map((tokenSymbol) => ({
@@ -34,25 +32,34 @@ function MyVaults() {
     useState<SelectOptionItem | null>(null)
   const [selectedVaultStatus, setSelectedVaultStatus] =
     useState<SelectOptionItem | null>(null)
+  const { data: markets } = useMarkets()
 
   const handleFilterByName = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
     setFilterByName(value.toLowerCase())
   }
 
-  const filteredMockedVaults = mockedVaults
-    .filter((vault) => {
-      if (!filterByName) return true
-      return vault.name.toLowerCase().includes(filterByName)
-    })
-    .filter((vault) => {
-      if (!selectedUnderlyingAsset) return true
-      return vault.tokenSymbol === selectedUnderlyingAsset.value
-    })
-    .filter((vault) => {
-      if (!selectedVaultStatus) return true
-      return vault.status === selectedVaultStatus.value
-    })
+  const filteredMarkets = markets
+    ? markets
+        .filter((market) => {
+          if (!selectedVaultStatus) return true
+          return (
+            getMarketStatus(
+              market.isClosed,
+              market.isDelinquent,
+              market.isIncurringPenalties,
+            ) === selectedVaultStatus.value
+          )
+        })
+        .filter((market) => {
+          if (!filterByName) return true
+          return market.name.toLowerCase().includes(filterByName)
+        })
+        .filter((market) => {
+          if (!selectedUnderlyingAsset) return true
+          return market.symbol === selectedUnderlyingAsset.value
+        })
+    : []
 
   return (
     <div>
@@ -98,9 +105,9 @@ function MyVaults() {
       </div>
 
       <div className="flex w-full flex-wrap -mx-2.5 mt-5">
-        {filteredMockedVaults.map((vault) => (
-          <div key={vault.name} className="w-1/3 px-2.5 py-2.5">
-            <VaultCard vault={vault} className="w-full" />
+        {filteredMarkets.map((market) => (
+          <div key={market.name} className="w-1/3 px-2.5 py-2.5">
+            <VaultCard market={market} className="w-full" />
           </div>
         ))}
       </div>

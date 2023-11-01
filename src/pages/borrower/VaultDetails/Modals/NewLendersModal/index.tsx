@@ -60,12 +60,12 @@ export function NewLendersModal() {
 
   return (
     <Modal
-      buttonName="Onboard Lender"
+      buttonName="Onboard Lenders"
       buttonColor="blue"
       buttonClassName="w-24 whitespace-nowrap"
       onClose={clearInputOnClose}
     >
-      <div className="text-base font-bold px-8">Onboard new Lender(s)</div>
+      <div className="text-base font-bold px-8">Onboard New Lender/s</div>
 
       <div className="w-full border border-tint-10 my-3" />
 
@@ -75,7 +75,7 @@ export function NewLendersModal() {
           fulfill the params of doing this and make the text nice and
           descriptive but not too waffly.
         </div>
-        <FormItem className="w-full" label="New Lender name" tooltip="test">
+        <FormItem className="w-full" label="Lender Name" tooltip="test">
           <TextInput
             onChange={handleChangeInput}
             value={formValues.lenderName}
@@ -84,7 +84,11 @@ export function NewLendersModal() {
             placeholder="Enter name of Lender"
           />
         </FormItem>
-        <FormItem className="w-full" label="New Lender wallet" tooltip="test">
+        <FormItem
+          className="w-full"
+          label="Lender Wallet Address"
+          tooltip="test"
+        >
           <TextInput
             name="lenderWallet"
             value={formValues.lenderWallet}
