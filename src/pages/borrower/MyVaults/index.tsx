@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { Select, TextInput, Button } from "../../../components/ui-components"
@@ -11,6 +11,7 @@ import {
   mockedStatuses,
 } from "../../../mocks/vaults"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
+import { RSelect } from "../../../components/ui-components/Select/RSelect"
 
 const mockedUnderlyingAssetsOptions: SelectOptionItem[] =
   mockedUnderlyingAssets.map((tokenSymbol) => ({
@@ -83,6 +84,12 @@ function MyVaults() {
               selected={selectedUnderlyingAsset}
               placeholder="Underlying Asset"
               className="w-full"
+            />
+            <RSelect
+              options={mockedUnderlyingAssetsOptions}
+              onChange={setSelectedUnderlyingAsset}
+              placeholder="Underlying Asset (Test)"
+              noneOption
             />
           </div>
           <div className="w-1/3 px-2.5 py-2.5">
