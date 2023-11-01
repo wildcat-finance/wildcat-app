@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { Token } from "@wildcatfi/wildcat-sdk"
+import { MarketParameterConstraints, Token } from "@wildcatfi/wildcat-sdk"
 
-import { Text } from "react-aria-components"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import {
   Paper,
@@ -12,7 +11,6 @@ import {
   Select,
   TextInput,
   NumberInput,
-  Spinner,
 } from "../../../components/ui-components"
 import { TokenSelector } from "./TokenSelector"
 
@@ -25,6 +23,7 @@ import { useTokenMetadata } from "../hooks/useTokenMetaData"
 import { MarketPreviewModal } from "./MarketPreviewModal"
 import { useNewMarketForm } from "./hooks/useNewMarketForm"
 import { useGetController } from "../hooks/useGetController"
+import { NewMarketFormSchema } from "./validationSchema"
 
 const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
   (vaultType) => ({
@@ -33,6 +32,22 @@ const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
     value: vaultType,
   }),
 )
+
+function getMinMaxFromContraints(
+  constraints: MarketParameterConstraints | undefined,
+  field: keyof NewMarketFormSchema,
+) {
+  const fieldNameFormatted = `${field[0].toUpperCase()}${field.slice(1)}`
+  const minKey =
+    `minimum${fieldNameFormatted}` as keyof MarketParameterConstraints
+  const maxKey =
+    `maximum${fieldNameFormatted}` as keyof MarketParameterConstraints
+
+  return {
+    min: constraints ? constraints[minKey] / 100 : 0,
+    max: constraints ? constraints[maxKey] / 100 : undefined,
+  }
+}
 
 const AddNewVault = () => {
   const { handleSubmit, getValues, setValue, watch, register, formErrors } =
@@ -168,8 +183,7 @@ const AddNewVault = () => {
             errorText={formErrors.maxTotalSupply?.message}
             tooltip="Maximum quantity of underlying assets that you wish to borrow from lenders."
           >
-            {/* <NumberInput className="w-72" {...register("maxTotalSupply")} /> */}
-            <TextInput className="w-72" {...register("maxTotalSupply")} />
+            <NumberInput className="w-72" {...register("maxTotalSupply")} />
           </FormItem>
 
           <FormItem
@@ -185,8 +199,22 @@ const AddNewVault = () => {
                      amount of market tokens in circulation). You cannot withdraw reserved assets
                      from your vault, but you still pay interest on them."
           >
-            {/* <NumberInput {...register("reserveRatioBips")} decimalScale={2} /> */}
-            <TextInput className="w-72" {...register("reserveRatioBips")} />
+            <NumberInput
+              {...register("reserveRatioBips")}
+              decimalScale={2}
+              min={
+                getMinMaxFromContraints(
+                  controller?.constraints,
+                  "reserveRatioBips",
+                ).min
+              }
+              max={
+                getMinMaxFromContraints(
+                  controller?.constraints,
+                  "reserveRatioBips",
+                ).max
+              }
+            />
           </FormItem>
 
           <FormItem
@@ -202,12 +230,22 @@ const AddNewVault = () => {
                      Note that your actual interest rate might be higher than the APR
                      if you have selected a market type that imposes a protocol fee."
           >
-            {/* <NumberInput */}
-            {/*  {...register("annualInterestBips")} */}
-            {/*  decimalScale={2} */}
-            {/*  max={controller?.constraints?.maximumAnnualInterestBips} */}
-            {/* /> */}
-            <TextInput className="w-72" {...register("annualInterestBips")} />
+            <NumberInput
+              {...register("annualInterestBips")}
+              decimalScale={2}
+              min={
+                getMinMaxFromContraints(
+                  controller?.constraints,
+                  "annualInterestBips",
+                ).min
+              }
+              max={
+                getMinMaxFromContraints(
+                  controller?.constraints,
+                  "annualInterestBips",
+                ).max
+              }
+            />
           </FormItem>
 
           <FormItem
@@ -222,12 +260,22 @@ const AddNewVault = () => {
                       to the lender APR - in the event that your market reserves go
                       below your minimum reserve (i.e. delinquent).`}
           >
-            {/* <NumberInput */}
-            {/*  {...register("delinquencyFeeBips")} */}
-            {/*  decimalScale={2} */}
-            {/*  max={controller?.constraints?.maximumDelinquencyFeeBips} */}
-            {/* /> */}
-            <TextInput className="w-72" {...register("delinquencyFeeBips")} />
+            <NumberInput
+              {...register("delinquencyFeeBips")}
+              decimalScale={2}
+              min={
+                getMinMaxFromContraints(
+                  controller?.constraints,
+                  "delinquencyFeeBips",
+                ).min
+              }
+              max={
+                getMinMaxFromContraints(
+                  controller?.constraints,
+                  "delinquencyFeeBips",
+                ).max
+              }
+            />
           </FormItem>
 
           <FormItem
@@ -241,14 +289,21 @@ const AddNewVault = () => {
             tooltip="Rolling period for which you are allowed to have deposits below
                      your minimum reserve before the penalty rate is triggered."
           >
-            {/* <NumberInput */}
-            {/*  {...register("delinquencyGracePeriod")} */}
-            {/*  decimalScale={1} */}
-            {/*  max={controller?.constraints?.maximumDelinquencyGracePeriod} */}
-            {/* /> */}
-            <TextInput
-              className="w-72"
+            <NumberInput
               {...register("delinquencyGracePeriod")}
+              decimalScale={1}
+              min={
+                getMinMaxFromContraints(
+                  controller?.constraints,
+                  "delinquencyGracePeriod",
+                ).min
+              }
+              max={
+                getMinMaxFromContraints(
+                  controller?.constraints,
+                  "delinquencyGracePeriod",
+                ).max
+              }
             />
           </FormItem>
 
@@ -268,15 +323,21 @@ const AddNewVault = () => {
                      are not rolling: at the conclusion of one cycle, the next one will
                      not begin until the next withdrawal request."
           >
-            {/* <NumberInput */}
-            {/*  {...register("withdrawalBatchDuration")} */}
-            {/*  decimalScale={1} */}
-            {/*  max={controller?.constraints?.maximumWithdrawalBatchDuration} */}
-            {/* /> */}
-
-            <TextInput
-              className="w-72"
+            <NumberInput
               {...register("withdrawalBatchDuration")}
+              decimalScale={1}
+              min={
+                getMinMaxFromContraints(
+                  controller?.constraints,
+                  "withdrawalBatchDuration",
+                ).min
+              }
+              max={
+                getMinMaxFromContraints(
+                  controller?.constraints,
+                  "withdrawalBatchDuration",
+                ).max
+              }
             />
           </FormItem>
 
