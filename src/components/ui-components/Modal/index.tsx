@@ -8,7 +8,15 @@ import { Paper } from "../Paper"
 import closeIcon from "../icons/cancel_icon.svg"
 import { SignIcon } from "../icons"
 
-export function Modal({ children, sign, onClose, isOpen = false }: ModalProps) {
+export function Modal({
+  children,
+  sign,
+  onClose,
+  isOpen = false,
+  showFooter = true,
+  isLoading,
+  loadingText,
+}: ModalProps) {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog
@@ -50,32 +58,38 @@ export function Modal({ children, sign, onClose, isOpen = false }: ModalProps) {
                   </Button>
                   <Paper className="bg-white border-none py-5">
                     {children}
+                    {showFooter && (
+                      <div className="flex gap-x-3 justify-center mt-5">
+                        {!sign && (
+                          <Button
+                            variant="blue"
+                            className="w-28"
+                            onClick={sign}
+                          >
+                            Submit
+                          </Button>
+                        )}
 
-                    <div className="flex gap-x-3 justify-center mt-5">
-                      {!sign && (
-                        <Button variant="blue" className="w-28" onClick={sign}>
-                          Submit
-                        </Button>
-                      )}
+                        {sign && (
+                          <Button
+                            variant="blue"
+                            icon={<SignIcon />}
+                            onClick={sign}
+                            disabled={isLoading}
+                          >
+                            {isLoading && loadingText ? loadingText : "Sign"}
+                          </Button>
+                        )}
 
-                      {sign && (
                         <Button
-                          variant="blue"
-                          icon={<SignIcon />}
-                          onClick={sign}
+                          variant="grey"
+                          className="!text-black font-semibold w-28"
+                          onClick={onClose}
                         >
-                          Sign
+                          Cancel
                         </Button>
-                      )}
-
-                      <Button
-                        variant="grey"
-                        className="!text-black font-semibold w-28"
-                        onClick={onClose}
-                      >
-                        Cancel
-                      </Button>
-                    </div>
+                      </div>
+                    )}
                   </Paper>
                 </div>
               </Dialog.Panel>

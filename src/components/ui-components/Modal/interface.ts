@@ -3,4 +3,8 @@ export type ModalProps = {
   sign?: () => void
   onClose?: () => void
   isOpen?: boolean
+  showFooter?: boolean
+  isLoading?: boolean
+  loadingText?: string
 }
+

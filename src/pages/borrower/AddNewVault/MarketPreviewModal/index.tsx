@@ -1,5 +1,10 @@
 import { useState } from "react"
-import { Button, FormItem, Modal } from "../../../../components/ui-components"
+import {
+  Button,
+  FormItem,
+  Modal,
+  Spinner,
+} from "../../../../components/ui-components"
 import { MarketPreviewModalProps } from "./interface"
 
 export const MarketPreviewModal = ({
@@ -9,6 +14,7 @@ export const MarketPreviewModal = ({
   handleSubmit,
   disabled,
   validateForm,
+  isDeploying,
 }: MarketPreviewModalProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -34,7 +40,13 @@ export const MarketPreviewModal = ({
       </Button>
 
       {isModalOpen && (
-        <Modal sign={handleSubmit} isOpen={isModalOpen} onClose={onClose}>
+        <Modal
+          sign={handleSubmit}
+          isOpen={isModalOpen}
+          onClose={onClose}
+          isLoading={isDeploying}
+          loadingText="Deploying ..."
+        >
           <div className="text-center text-base font-bold">
             Pending Market Details
           </div>
