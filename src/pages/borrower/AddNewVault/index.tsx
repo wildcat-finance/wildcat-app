@@ -79,7 +79,7 @@ const AddNewVault = () => {
     setTokenAsset(assetData)
   }, [assetData])
 
-  const handleDeployMarket = () => {
+  const handleDeployMarket = handleSubmit(() => {
     const marketParams = getValues()
 
     if (assetData && tokenAsset) {
@@ -94,7 +94,7 @@ const AddNewVault = () => {
         asset: assetData,
       })
     }
-  }
+  })
 
   const isLoading = assetDataLoading || isDeploying || isControllerLoading
 
@@ -111,10 +111,7 @@ const AddNewVault = () => {
       <div className="text-green text-2xl font-bold mb-8 w-2/3">New Market</div>
 
       <Paper className="p-8 bg-tint-10 border-tint-8">
-        <form
-          className="flex flex-col items-start"
-          onSubmit={handleSubmit(handleDeployMarket)}
-        >
+        <form className="flex flex-col items-start">
           <FormItem
             label="Market Type"
             className="mb-5 pb-4"
@@ -376,7 +373,12 @@ const AddNewVault = () => {
           </div>
         </form>
 
-        <MarketPreviewModal newMarketParams={getValues()} token={tokenAsset} />
+        <MarketPreviewModal
+          newMarketParams={getValues()}
+          token={tokenAsset}
+          handleSubmit={handleDeployMarket}
+          isDeploying={isDeploying}
+        />
       </Paper>
 
       <ServiceAgreementCard
