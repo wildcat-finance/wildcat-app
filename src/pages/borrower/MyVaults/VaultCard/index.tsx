@@ -1,10 +1,14 @@
 import { useNavigate } from "react-router-dom"
 import cn from "classnames"
-import { formatUnits } from "ethers/lib/utils"
 
 import { Button, Chip, TableItem } from "../../../../components/ui-components"
 import { VaultCardProps } from "./interface"
-import { getMarketStatus, getVaultStatusColor } from "../../../../utils/helpers"
+import {
+  formatBps,
+  formatToken,
+  getMarketStatus,
+  getVaultStatusColor,
+} from "../../../../utils/helpers"
 
 function VaultCard({ market, className }: VaultCardProps) {
   const navigate = useNavigate()
@@ -36,24 +40,25 @@ function VaultCard({ market, className }: VaultCardProps) {
           title="Underlying Asset"
           value={`${market.underlyingToken.symbol}`}
         />
-        <TableItem title="Lender APR" value={`${market.annualInterestBips}%`} />
+        <TableItem
+          title="Lender APR"
+          value={`${formatBps(market.annualInterestBips)}%`}
+        />
         <TableItem
           title="Current Reserve Ratio"
-          value={`${market.reserveRatioBips}%`}
+          value={`${formatBps(market.reserveRatioBips)}%`}
         />
         <TableItem
           title="Total Credit Extended"
-          value={`${formatUnits(
-            market.maxTotalSupply.raw,
-            market.maxTotalSupply.decimals,
-          )} ${market.marketToken.symbol}`}
+          value={`${formatToken(market.maxTotalSupply.raw)} ${
+            market.marketToken.symbol
+          }`}
         />
         <TableItem
           title="Available To Borrow"
-          value={`${formatUnits(
-            market.totalSupply.raw,
-            market.maxTotalSupply.decimals,
-          )} ${market.marketToken.symbol}`}
+          value={`${formatToken(market.totalSupply.raw)} ${
+            market.marketToken.symbol
+          }`}
         />
       </div>
 
