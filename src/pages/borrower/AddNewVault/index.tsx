@@ -98,8 +98,10 @@ const AddNewVault = () => {
         annualInterestBips: Number(marketParams.annualInterestBips) * 100,
         delinquencyFeeBips: Number(marketParams.delinquencyFeeBips) * 100,
         reserveRatioBips: Number(marketParams.reserveRatioBips) * 100,
-        delinquencyGracePeriod: Number(marketParams.delinquencyGracePeriod),
-        withdrawalBatchDuration: Number(marketParams.withdrawalBatchDuration),
+        delinquencyGracePeriod:
+          Number(marketParams.delinquencyGracePeriod) * 60 * 60,
+        withdrawalBatchDuration:
+          Number(marketParams.withdrawalBatchDuration) * 60 * 60,
         maxTotalSupply: Number(marketParams.maxTotalSupply) * 100,
         asset: assetData,
       })

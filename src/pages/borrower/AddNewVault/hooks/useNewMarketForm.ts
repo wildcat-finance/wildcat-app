@@ -61,8 +61,6 @@ function getValidationSchema(constraints: MarketParameterConstraints) {
 export const useNewMarketForm = () => {
   const { data: controller } = useGetController()
 
-  console.log("CONSTRAINTS", controller?.constraints)
-
   const validationSchemaAsync = useMemo(() => {
     if (controller?.constraints) {
       return getValidationSchema(controller.constraints)
