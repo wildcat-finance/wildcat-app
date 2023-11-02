@@ -1,10 +1,13 @@
 import { Token } from "@wildcatfi/wildcat-sdk"
 
-import { NewMarketFormSchema } from "../validationSchema"
+import { useNewMarketForm } from "../hooks/useNewMarketForm"
 
 export type MarketPreviewModalProps = {
-  newMarketParams: NewMarketFormSchema
+  getValues: ReturnType<typeof useNewMarketForm>["getValues"]
+  validateForm: ReturnType<typeof useNewMarketForm>["trigger"]
+  selectedVaultType: string
   token?: Token
   handleSubmit: () => void
   isDeploying: boolean
+  disabled: boolean
 }

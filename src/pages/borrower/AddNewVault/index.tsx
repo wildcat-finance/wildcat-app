@@ -27,9 +27,9 @@ import { NewMarketFormSchema } from "./validationSchema"
 
 const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
   (vaultType) => ({
-    id: vaultType,
-    label: vaultType,
-    value: vaultType,
+    id: vaultType.value,
+    label: vaultType.label,
+    value: vaultType.value,
   }),
 )
 
@@ -50,8 +50,15 @@ function getMinMaxFromContraints(
 }
 
 const AddNewVault = () => {
-  const { handleSubmit, getValues, setValue, watch, register, formErrors } =
-    useNewMarketForm()
+  const {
+    handleSubmit,
+    getValues,
+    setValue,
+    watch,
+    register,
+    formState: { errors },
+    trigger,
+  } = useNewMarketForm()
   const { data: controller, isLoading: isControllerLoading } =
     useGetController()
   const [tokenAsset, setTokenAsset] = useState<Token | undefined>()
@@ -60,31 +67,34 @@ const AddNewVault = () => {
   const [selectedVault, setSelectedVault] = useState<SelectOptionItem | null>(
     null,
   )
+  const [signedAgreement, setSignedAgreement] = useState<boolean>(false)
 
   const handleClickMyVaults = () => {
     navigate("/borrower/my-vaults")
   }
 
-  const handleVaultSelect = (value: SelectOptionItem | null) => {
+  const handleMarketTypeSelect = (value: SelectOptionItem | null) => {
+    setValue("vaultType", value?.value || "")
     setSelectedVault(value)
   }
 
   const assetWatch = watch("asset")
 
-  const { data: assetData, isLoading: assetDataLoading } = useTokenMetadata({
-    address: assetWatch.toLowerCase(),
+  const { data: assetData } = useTokenMetadata({
+    address: assetWatch?.toLowerCase(),
   })
 
   useEffect(() => {
     setTokenAsset(assetData)
   }, [assetData])
 
-  const handleDeployMarket = handleSubmit(() => {
+  const handleDeployMarket = () => {
     const marketParams = getValues()
 
     if (assetData && tokenAsset) {
       deployNewMarket({
-        ...marketParams,
+        namePrefix: marketParams.namePrefix,
+        symbolPrefix: marketParams.symbolPrefix,
         annualInterestBips: Number(marketParams.annualInterestBips) * 100,
         delinquencyFeeBips: Number(marketParams.delinquencyFeeBips) * 100,
         reserveRatioBips: Number(marketParams.reserveRatioBips) * 100,
@@ -94,9 +104,9 @@ const AddNewVault = () => {
         asset: assetData,
       })
     }
-  })
+  }
 
-  const isLoading = assetDataLoading || isDeploying || isControllerLoading
+  const isLoading = isDeploying || isControllerLoading
 
   return (
     <div>
@@ -115,24 +125,23 @@ const AddNewVault = () => {
           <FormItem
             label="Market Type"
             className="mb-5 pb-4"
-            error={Boolean(formErrors.vaultType?.message)}
-            errorText={formErrors.vaultType?.message}
+            error={Boolean(errors.vaultType?.message)}
+            errorText={errors.vaultType?.message}
             tooltip="Dictates market logic and enforces minimum and maximum
                      values on the parameters you provide below."
           >
             <Select
               selected={selectedVault}
               options={mockedVaultTypesOptions}
-              onChange={handleVaultSelect}
-              noneOption={false}
+              onChange={handleMarketTypeSelect}
             />
           </FormItem>
 
           <FormItem
             label="Underlying Asset"
             className="mb-5 pb-4"
-            error={Boolean(formErrors.asset?.message)}
-            errorText={formErrors.asset?.message}
+            error={Boolean(errors.asset?.message)}
+            errorText={errors.asset?.message}
             tooltip="The token that you want to borrow, e.g. WETH, DAI, CRV."
           >
             <TokenSelector onChange={(value) => setValue("asset", value)} />
@@ -142,8 +151,8 @@ const AddNewVault = () => {
             label="Market Token Name Prefix"
             className="mb-5 pb-4"
             endDecorator={<Chip className="w-32 ml-3">Dai Stablecoin</Chip>}
-            error={Boolean(formErrors.namePrefix?.message)}
-            errorText={formErrors.namePrefix?.message}
+            error={Boolean(errors.namePrefix?.message)}
+            errorText={errors.namePrefix?.message}
             tooltip="The identifier that attaches to the front of the name of the underlying
                                 asset in order to distinguish the market token issued to lenders.
                                 For example, entering 'Test' here when the underlying asset is Dai
@@ -153,7 +162,7 @@ const AddNewVault = () => {
             <TextInput
               {...register("namePrefix")}
               className="w-72"
-              error={Boolean(formErrors.namePrefix?.message)}
+              error={Boolean(errors.namePrefix?.message)}
             />
           </FormItem>
 
@@ -161,14 +170,14 @@ const AddNewVault = () => {
             label="Market Token Symbol Prefix"
             className="mb-5 pb-4"
             endDecorator={<Chip className="w-32 ml-3">DAI</Chip>}
-            error={Boolean(formErrors.symbolPrefix?.message)}
-            errorText={formErrors.symbolPrefix?.message}
+            error={Boolean(errors.symbolPrefix?.message)}
+            errorText={errors.symbolPrefix?.message}
             tooltip="Symbol version of the market token to be issued to lenders (e.g. TSTDAI)."
           >
             <TextInput
               {...register("symbolPrefix")}
               className="w-72"
-              error={Boolean(formErrors.symbolPrefix?.message)}
+              error={Boolean(errors.symbolPrefix?.message)}
             />
           </FormItem>
 
@@ -176,8 +185,8 @@ const AddNewVault = () => {
             label="Market Capacity"
             className="mb-5 pb-4"
             endDecorator={<Chip className="w-32 ml-3">DAI</Chip>}
-            error={Boolean(formErrors.maxTotalSupply?.message)}
-            errorText={formErrors.maxTotalSupply?.message}
+            error={Boolean(errors.maxTotalSupply?.message)}
+            errorText={errors.maxTotalSupply?.message}
             tooltip="Maximum quantity of underlying assets that you wish to borrow from lenders."
           >
             <NumberInput className="w-72" {...register("maxTotalSupply")} />
@@ -189,8 +198,8 @@ const AddNewVault = () => {
             endDecorator={
               <Chip className="w-11 justify-center font-bold">%</Chip>
             }
-            error={Boolean(formErrors.reserveRatioBips?.message)}
-            errorText={formErrors.reserveRatioBips?.message}
+            error={Boolean(errors.reserveRatioBips?.message)}
+            errorText={errors.reserveRatioBips?.message}
             tooltip="Minimum deposits you need to keep within your market to avoid triggering
                      a penalty, calculated as a percentage of your outstanding debt (ie. total
                      amount of market tokens in circulation). You cannot withdraw reserved assets
@@ -220,8 +229,8 @@ const AddNewVault = () => {
             endDecorator={
               <Chip className="w-11 justify-center font-bold">%</Chip>
             }
-            error={Boolean(formErrors.annualInterestBips?.message)}
-            errorText={formErrors.annualInterestBips?.message}
+            error={Boolean(errors.annualInterestBips?.message)}
+            errorText={errors.annualInterestBips?.message}
             tooltip="Annual interest rate that you are offering to your lenders for 
                      depositing underlying assets into this market for you to borrow.
                      Note that your actual interest rate might be higher than the APR
@@ -251,8 +260,8 @@ const AddNewVault = () => {
             endDecorator={
               <Chip className="w-11 justify-center font-bold">%</Chip>
             }
-            error={Boolean(formErrors.delinquencyFeeBips?.message)}
-            errorText={formErrors.delinquencyFeeBips?.message}
+            error={Boolean(errors.delinquencyFeeBips?.message)}
+            errorText={errors.delinquencyFeeBips?.message}
             tooltip={`Annual interest rate that you are subject to pay - in addition
                       to the lender APR - in the event that your market reserves go
                       below your minimum reserve (i.e. delinquent).`}
@@ -281,8 +290,8 @@ const AddNewVault = () => {
             endDecorator={
               <Chip className="w-11 justify-center font-bold">Hours</Chip>
             }
-            error={Boolean(formErrors.delinquencyGracePeriod?.message)}
-            errorText={formErrors.delinquencyGracePeriod?.message}
+            error={Boolean(errors.delinquencyGracePeriod?.message)}
+            errorText={errors.delinquencyGracePeriod?.message}
             tooltip="Rolling period for which you are allowed to have deposits below
                      your minimum reserve before the penalty rate is triggered."
           >
@@ -310,8 +319,8 @@ const AddNewVault = () => {
             endDecorator={
               <Chip className="w-11 justify-center font-bold">hours</Chip>
             }
-            error={Boolean(formErrors.withdrawalBatchDuration?.message)}
-            errorText={formErrors.withdrawalBatchDuration?.message}
+            error={Boolean(errors.withdrawalBatchDuration?.message)}
+            errorText={errors.withdrawalBatchDuration?.message}
             tooltip="When no cycle is currently active and a lender submits a withdrawal
                      request, the withdrawal cycle starts. During the withdrawal cycle
                      duration, other lenders can submit their withdrawal requests. When
@@ -362,11 +371,11 @@ const AddNewVault = () => {
             </div>
 
             <Button
-              onClick={handleDeployMarket}
+              onClick={() => setSignedAgreement(true)}
               className="mt-5"
               variant="blue"
               icon={<SignIcon />}
-              disabled={isLoading}
+              disabled={signedAgreement}
             >
               Sign
             </Button>
@@ -374,10 +383,13 @@ const AddNewVault = () => {
         </form>
 
         <MarketPreviewModal
-          newMarketParams={getValues()}
+          selectedVaultType={selectedVault?.label || ""}
+          getValues={getValues}
           token={tokenAsset}
           handleSubmit={handleDeployMarket}
           isDeploying={isDeploying}
+          disabled={isLoading || !signedAgreement}
+          validateForm={trigger}
         />
       </Paper>
 

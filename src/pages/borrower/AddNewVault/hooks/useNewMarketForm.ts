@@ -9,11 +9,7 @@ import {
 } from "../validationSchema"
 import { useGetController } from "../../hooks/useGetController"
 
-const defaultVault: NewMarketFormSchema = {
-  vaultType: "",
-  asset: "",
-  namePrefix: "",
-  symbolPrefix: "",
+const defaultMarketForm: Partial<NewMarketFormSchema> = {
   maxTotalSupply: 0,
   annualInterestBips: 0,
   delinquencyFeeBips: 0,
@@ -65,6 +61,8 @@ function getValidationSchema(constraints: MarketParameterConstraints) {
 export const useNewMarketForm = () => {
   const { data: controller } = useGetController()
 
+  console.log("CONSTRAINTS", controller?.constraints)
+
   const validationSchemaAsync = useMemo(() => {
     if (controller?.constraints) {
       return getValidationSchema(controller.constraints)
@@ -73,25 +71,9 @@ export const useNewMarketForm = () => {
     return vschema
   }, [controller?.constraints])
 
-  const {
-    formState: { errors: formErrors },
-    handleSubmit,
-    getValues,
-    setValue,
-    watch,
-    register,
-  } = useForm<NewMarketFormSchema>({
-    defaultValues: defaultVault,
+  return useForm<NewMarketFormSchema>({
+    defaultValues: defaultMarketForm,
     resolver: zodResolver(validationSchemaAsync),
     mode: "onBlur",
   })
-
-  return {
-    handleSubmit,
-    getValues,
-    setValue,
-    watch,
-    register,
-    formErrors,
-  }
 }

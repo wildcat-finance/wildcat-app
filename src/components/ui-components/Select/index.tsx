@@ -9,7 +9,7 @@ const SelectOptionBaseClass =
   "relative z-50 border border-t-0 border-tint-8 cursor-default bg-white text-left w-full h-8 px-3 flex items-center "
 
 export function Select(props: SelectProps) {
-  const { options, selected, onChange, placeholder, noneOption = true } = props
+  const { options, selected, onChange, placeholder, noneOption } = props
 
   const rootCss = cn("ml-0 w-72 relative", props.className)
 

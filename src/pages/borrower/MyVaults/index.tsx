@@ -90,6 +90,7 @@ function MyVaults() {
               selected={selectedUnderlyingAsset}
               placeholder="Underlying Asset"
               className="w-full"
+              noneOption
             />
           </div>
           <div className="w-1/3 px-2.5 py-2.5">
@@ -99,6 +100,7 @@ function MyVaults() {
               selected={selectedVaultStatus}
               placeholder="Market Status"
               className="w-full"
+              noneOption
             />
           </div>
         </div>
