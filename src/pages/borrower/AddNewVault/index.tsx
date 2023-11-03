@@ -103,7 +103,7 @@ const AddNewVault = () => {
         withdrawalBatchDuration:
           Number(marketParams.withdrawalBatchDuration) * 60 * 60,
         maxTotalSupply: Number(marketParams.maxTotalSupply) * 100,
-        asset: assetData,
+        assetData: tokenAsset,
       })
     }
   }
@@ -191,7 +191,11 @@ const AddNewVault = () => {
             errorText={errors.maxTotalSupply?.message}
             tooltip="Maximum quantity of underlying assets that you wish to borrow from lenders."
           >
-            <NumberInput className="w-72" {...register("maxTotalSupply")} />
+            <NumberInput
+              className="w-72"
+              {...register("maxTotalSupply")}
+              decimalScale={2}
+            />
           </FormItem>
 
           <FormItem

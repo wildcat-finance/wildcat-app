@@ -20,9 +20,9 @@ export const useDeployMarket = () => {
         return
       }
 
-      const { namePrefix, symbolPrefix } = marketParams
+      const { assetData } = marketParams
 
-      const asset = await deployToken(signer, namePrefix, symbolPrefix)
+      const asset = await deployToken(signer, assetData.name, assetData.symbol)
 
       const maxTotalSupply = new TokenAmount(
         parseUnits(marketParams.maxTotalSupply.toString(), asset.decimals),
