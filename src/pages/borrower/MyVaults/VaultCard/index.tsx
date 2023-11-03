@@ -64,7 +64,9 @@ function VaultCard({ market, className }: VaultCardProps) {
 
       <div className="w-full p-3 bg-tint-10">
         <Button
-          onClick={() => navigate(`/borrower/market-details/${market.controller}`)}
+          onClick={() =>
+            navigate(`/borrower/market-details/${market.controller}`)
+          }
           className="w-full"
           variant="black"
         >
