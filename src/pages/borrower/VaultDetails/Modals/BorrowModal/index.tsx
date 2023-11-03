@@ -3,8 +3,8 @@ import { Modal } from "../../../../../components/ui-components"
 export const BorrowModal = () => (
   <Modal buttonName="Borrow" buttonColor="green" buttonClassName="w-64" sign>
     <div>
-      <div className="text-base font-bold px-8 w-80 text-center">
-        You are borrowing 0.00 DAI.
+      <div className="text-base font-bold px-8 w-100 text-center">
+        You are borrowing from your market.
       </div>
 
       <div className="w-full border border-tint-10 my-3" />

@@ -60,9 +60,9 @@ export function NewLendersModal() {
 
   return (
     <Modal
-      buttonName="Onboard Lenders"
+      buttonName="Authorise Lenders"
       buttonColor="blue"
-      buttonClassName="w-24 whitespace-nowrap"
+      buttonClassName="w-35 whitespace-nowrap"
       onClose={clearInputOnClose}
     >
       <div className="text-base font-bold px-8">Onboard New Lender/s</div>
@@ -71,9 +71,8 @@ export function NewLendersModal() {
 
       <div className="flex flex-col items-center gap-y-5 px-8">
         <div className="w-72 font-light text-xxs text-center ">
-          Some text about what you are about to get yourself into and can you
-          fulfill the params of doing this and make the text nice and
-          descriptive but not too waffly.
+          Please provide a reference name and wallet address for each new lender
+          you want to authorise for this market.
         </div>
         <FormItem className="w-full" label="Lender Name" tooltip="test">
           <TextInput

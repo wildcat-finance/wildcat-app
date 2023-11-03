@@ -3,8 +3,8 @@ import { Modal } from "../../../../../components/ui-components"
 export const RepayModal = () => (
   <Modal buttonName="Repay" buttonColor="green" buttonClassName="w-full" sign>
     <div>
-      <div className="text-base font-bold px-8 w-80 text-center">
-        You are repaying 0.00 DAI.
+      <div className="text-base font-bold px-8 w-100 text-center">
+        You are repaying to the market.
       </div>
 
       <div className="w-full border border-tint-10 my-3" />

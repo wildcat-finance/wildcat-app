@@ -25,7 +25,7 @@ export function RemoveLendersModal({ lenders }: RemoveLendersModalProps) {
 
   return (
     <Modal
-      buttonName="Remove Lenders"
+      buttonName="Deauthorise Lenders"
       buttonColor="red"
       onClose={clearInputOnClose}
     >
@@ -34,13 +34,17 @@ export function RemoveLendersModal({ lenders }: RemoveLendersModalProps) {
         <div className="w-full border border-tint-10 my-3" />
         <div className="px-8">
           <div className="w-72 font-light text-xxs text-center mx-auto">
-            Some text about what you are about to get yourself into and can you
-            fulfill the params of doing this and make the text nice and
-            descriptive but not too waffly.
+            Please select those lenders you want to deauthorise.
+          </div>
+          <div className="w-72 font-light text-xxs text-center mx-auto">
+            Note: any deauthorised lenders can still withdraw from your market,
+            but cannot deposit any further.
           </div>
           <div className="flex flex-col items-center gap-y-2 mt-3">
             <div className="w-full border border-tint-10" />
-            <div className="text-base font-bold">You have added:</div>
+            <div className="text-base font-bold">
+              Select lenders to deauthorise:
+            </div>
             {lenders.map((lender) => (
               <div className="flex gap-x-4 w-full" key={lender.wallet}>
                 <div className="flex flex-col w-full">
