@@ -11,7 +11,7 @@ export const BORROWER_PATHS = {
   AddNewVault: "add-new-vault",
   Agreement: "agreement",
   MyVaults: "my-vaults",
-  VaultDetails: "vault-details",
+  VaultDetails: "market-details/:marketControllerAddress",
 }
 
 export const BORROWER_ROUTES: RouteObject[] = [
