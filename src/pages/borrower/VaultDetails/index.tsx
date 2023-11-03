@@ -1,11 +1,6 @@
 import React, { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { DateValue } from "react-aria-components"
-
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-
-import { FormSchema, validationSchema } from "./validationSchema"
 
 import {
   Button,
@@ -20,6 +15,7 @@ import {
   NumberInput,
 } from "../../../components/ui-components"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
+import { VALIDATION_SCHEMA_FIELDS as SCHEMA_FIELDS } from "./validationSchema"
 
 import {
   CancelRound,
@@ -37,6 +33,9 @@ import {
   RepayModal,
   NewLendersModal,
 } from "./Modals"
+import { useGetMarket } from "./hooks/useGetMarket"
+import { useNewMarketForm } from "./hooks/useMarketForm"
+import { formatBps } from "../../../utils/helpers"
 
 const tableData = [
   {
@@ -104,13 +103,6 @@ const tableData = [
   },
 ]
 
-const defaultDetails: FormSchema = {
-  borrow: "",
-  repay: "",
-  annualInterestRate: "",
-  capacity: "",
-}
-
 function numberToArray(number: number) {
   const array = []
   for (let i = 1; i <= number; i += 1) {
@@ -129,6 +121,9 @@ function VaultDetails() {
   ])
   const [isActivePage, setIsActivePage] = useState(1)
   const [dateArray, setDateArray] = useState<DateValue[]>([])
+  const { marketControllerAddress } = useParams()
+  const { data: market } = useGetMarket(marketControllerAddress)
+  const { register } = useNewMarketForm()
 
   const isDatePicked = dateArray.length >= 1
 
@@ -160,16 +155,6 @@ function VaultDetails() {
     setDateArray([])
   }
 
-  const { setValue } = useForm<FormSchema>({
-    defaultValues: defaultDetails,
-    resolver: zodResolver(validationSchema),
-    mode: "onBlur",
-  })
-
-  const handleFieldChange = (field: string, value: string | number) => {
-    setValue(field as keyof typeof defaultDetails, String(value))
-  }
-
   const handleClickMyVaults = () => {
     navigate("/borrower/my-vaults")
   }
@@ -195,6 +180,7 @@ function VaultDetails() {
                 decimalScale={4}
                 className="w-full"
                 placeholder="00,000.00"
+                {...register(SCHEMA_FIELDS.borrow)}
               />
               <BorrowModal />
             </div>
@@ -214,6 +200,7 @@ function VaultDetails() {
                   placeholder="00,000.00"
                   min={0}
                   max={9000}
+                  {...register(SCHEMA_FIELDS.repay)}
                 />
                 <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
                   <span className="font-semibold">Outstanding Debt:</span>
@@ -242,6 +229,7 @@ function VaultDetails() {
                   placeholder="00.00%"
                   min={0}
                   max={100}
+                  {...register(SCHEMA_FIELDS.annualInterestRate)}
                 />
                 <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
                   <span className="font-semibold">Current Base Rate:</span>
@@ -265,6 +253,7 @@ function VaultDetails() {
                 className="w-full"
                 placeholder="10.00"
                 min={0}
+                {...register(SCHEMA_FIELDS.capacity)}
               />
               <CapacityModal />
             </div>
@@ -274,91 +263,98 @@ function VaultDetails() {
           </div>
         </div>
       </Paper>
-      <div>
-        <div className="text-base font-bold">Market Details</div>
-        <div className="flex w-full mt-5 mb-14">
-          <div className="w-full">
-            <TableItem
-              title="Contract Address"
-              value="0xdc8f...63cA"
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Maximum Capacity"
-              value="50,000 DAI"
-              className="pl-6 pr-24"
-            />
-            <TableItem title="Lender APR" value="4%" className="pl-6 pr-24" />
-            <TableItem
-              title="Protocol Fee APR"
-              value="0.8%"
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Penalty Rate APR"
-              value="10%"
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Minimum Reserve Ratio"
-              value="25%"
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Withdrawal Cycle Duration"
-              value="48:00:00"
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Maximum Grace Period"
-              value="24:00:00"
-              className="pl-6 pr-24"
-            />
-          </div>
-          <div className="w-full">
-            <TableItem
-              title="Available Grace Period"
-              value="23:12:38"
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Repayment To Minimum Reserves"
-              value="18,750 DAI"
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Available To Borrow"
-              value="0 DAI"
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Outstanding Debt"
-              value="30,000 DAI"
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Assets In Reserves"
-              value="0 DAI"
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Minimum Reserves Required"
-              value="7,500 DAI"
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Current Reserve Ratio"
-              value="0%"
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Lifetime Accrued Interest"
-              value="5 DAI"
-              className="pr-6 pl-24"
-            />
+
+      {market && (
+        <div>
+          <div className="text-base font-bold">Market Details</div>
+          <div className="flex w-full mt-5 mb-14">
+            <div className="w-full">
+              <TableItem
+                title="Contract Address"
+                value="0xdc8f...63cA"
+                className="pl-6 pr-24"
+              />
+              <TableItem
+                title="Maximum Capacity"
+                value="50,000 DAI"
+                className="pl-6 pr-24"
+              />
+              <TableItem
+                title="Lender APR"
+                value={`${formatBps(market.annualInterestBips)}%`}
+                className="pl-6 pr-24"
+              />
+              <TableItem
+                title="Protocol Fee APR"
+                value={`${formatBps(market.protocolFeeBips)}%`}
+                className="pl-6 pr-24"
+              />
+              <TableItem
+                title="Penalty Rate APR"
+                value="10%"
+                className="pl-6 pr-24"
+              />
+              <TableItem
+                title="Minimum Reserve Ratio"
+                value="25%"
+                className="pl-6 pr-24"
+              />
+              <TableItem
+                title="Withdrawal Cycle Duration"
+                value="48:00:00"
+                className="pl-6 pr-24"
+              />
+              <TableItem
+                title="Maximum Grace Period"
+                value="24:00:00"
+                className="pl-6 pr-24"
+              />
+            </div>
+            <div className="w-full">
+              <TableItem
+                title="Available Grace Period"
+                value="23:12:38"
+                className="pr-6 pl-24"
+              />
+              <TableItem
+                title="Repayment To Minimum Reserves"
+                value="18,750 DAI"
+                className="pr-6 pl-24"
+              />
+              <TableItem
+                title="Available To Borrow"
+                value="0 DAI"
+                className="pr-6 pl-24"
+              />
+              <TableItem
+                title="Outstanding Debt"
+                value="30,000 DAI"
+                className="pr-6 pl-24"
+              />
+              <TableItem
+                title="Assets In Reserves"
+                value="0 DAI"
+                className="pr-6 pl-24"
+              />
+              <TableItem
+                title="Minimum Reserves Required"
+                value="7,500 DAI"
+                className="pr-6 pl-24"
+              />
+              <TableItem
+                title="Current Reserve Ratio"
+                value={`${formatBps(market.reserveRatioBips)}%`}
+                className="pr-6 pl-24"
+              />
+              <TableItem
+                title="Lifetime Accrued Interest"
+                value="5 DAI"
+                className="pr-6 pl-24"
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
       <div className="mb-14">
         <div className="flex justify-between items-center mb-8">
           <div className="text-base font-bold">Lender Withdrawal Requests</div>

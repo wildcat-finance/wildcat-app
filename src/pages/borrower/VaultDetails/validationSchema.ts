@@ -1,10 +1,17 @@
 import { z } from "zod"
 
 export const validationSchema = z.object({
-  borrow: z.string(),
-  repay: z.string(),
-  annualInterestRate: z.string(),
-  capacity: z.string(),
+  borrow: z.coerce.number(),
+  repay: z.coerce.number(),
+  annualInterestRate: z.coerce.number(),
+  capacity: z.coerce.number(),
 })
 
-export type FormSchema = z.infer<typeof validationSchema>
+export enum VALIDATION_SCHEMA_FIELDS {
+  borrow = "borrow",
+  repay = "repay",
+  annualInterestRate = "annualInterestRate",
+  capacity = "capacity",
+}
+
+export type NewMarketFormSchema = z.infer<typeof validationSchema>

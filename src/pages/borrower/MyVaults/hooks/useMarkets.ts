@@ -1,23 +1,11 @@
-import { useQuery } from "@tanstack/react-query"
-import { getAllMarkets, Signer } from "@wildcatfi/wildcat-sdk"
-import { useEthersSigner } from "../../../../modules/hooks"
-import { useCurrentNetwork } from "../../../../hooks/useCurrentNetwork"
+import { useGetController } from "../../hooks/useGetController"
 
 export const GET_MARKETS_KEY = "markets"
 
 export const useMarkets = () => {
-  const signer = useEthersSigner()
-  const { isWrongNetwork } = useCurrentNetwork()
+  const { data } = useGetController()
 
-  async function getMarkets() {
-    const markets = await getAllMarkets(signer as Signer)
-    return markets || []
+  return {
+    data: data?.markets || [],
   }
-
-  return useQuery({
-    queryKey: [GET_MARKETS_KEY],
-    queryFn: getMarkets,
-    enabled: !!signer && !isWrongNetwork,
-    refetchOnMount: false,
-  })
 }
