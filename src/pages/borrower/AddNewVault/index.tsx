@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { MarketParameterConstraints, Token } from "@wildcatfi/wildcat-sdk"
+import { Token } from "@wildcatfi/wildcat-sdk"
 
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import {
@@ -22,9 +22,10 @@ import { useTokenMetadata } from "../hooks/useTokenMetaData"
 import { MarketPreviewModal } from "./MarketPreviewModal"
 import { defaultMarketForm, useNewMarketForm } from "./hooks/useNewMarketForm"
 import { useGetController } from "../hooks/useGetController"
-import { NewMarketFormSchema } from "./validationSchema"
+import { NewMarketFormSchema } from "./hooks/validationSchema"
 import { BASE_PATHS } from "../../../routes/constants"
 import { BORROWER_PATHS } from "../routes/constants"
+import { getMinMaxFromConstraints } from "../utils/borrowerFormUtils"
 
 export const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
   (vaultType) => ({
@@ -33,25 +34,6 @@ export const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
     value: vaultType.value,
   }),
 )
-
-function getMinMaxFromContraints(
-  constraints: MarketParameterConstraints | undefined,
-  field: keyof NewMarketFormSchema,
-) {
-  const fieldNameFormatted = `${field[0].toUpperCase()}${field.slice(1)}`
-  const minKey =
-    `minimum${fieldNameFormatted}` as keyof MarketParameterConstraints
-  const maxKey =
-    `maximum${fieldNameFormatted}` as keyof MarketParameterConstraints
-
-  return {
-    min: constraints && constraints[minKey] ? constraints[minKey] / 100 : 0,
-    max:
-      constraints && constraints[maxKey]
-        ? constraints[maxKey] / 100
-        : undefined,
-  }
-}
 
 const AddNewVault = () => {
   const {
@@ -138,11 +120,11 @@ const AddNewVault = () => {
 
   const getNumberFieldDefaultValue = (field: keyof NewMarketFormSchema) =>
     controller?.constraints
-      ? getMinMaxFromContraints(controller.constraints, field).min
+      ? getMinMaxFromConstraints(controller.constraints, field).min
       : defaultMarketForm[field]
 
-  const getNumberFieldConstraints = (field: keyof NewMarketFormSchema) =>
-    getMinMaxFromContraints(controller?.constraints, field)
+  const getNumberFieldConstraints = (field: string) =>
+    getMinMaxFromConstraints(controller?.constraints, field)
 
   return (
     <div>

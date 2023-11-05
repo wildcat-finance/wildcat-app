@@ -1,8 +1,16 @@
 import { useState } from "react"
 
 import { Button, Modal } from "../../../../../components/ui-components"
+import { BorrowModalProps } from "./interface"
 
-export const BorrowModal = () => {
+export const BorrowModal = ({
+  disabled,
+  borrowAmount,
+  leftBorrowAmount,
+  tokenSymbol,
+  isLoading,
+  borrow,
+}: BorrowModalProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const onClose = () => setIsModalOpen(false)
@@ -13,11 +21,17 @@ export const BorrowModal = () => {
         variant="green"
         className="w-64"
         onClick={() => setIsModalOpen(true)}
+        disabled={disabled}
       >
         Borrow
       </Button>
 
-      <Modal isOpen={isModalOpen} onClose={onClose}>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={onClose}
+        isLoading={isLoading}
+        sign={borrow}
+      >
         <div>
           <div className="text-base font-bold px-8 w-100 text-center">
             You are borrowing from your market.
@@ -30,11 +44,15 @@ export const BorrowModal = () => {
               You are borrowing the following amount from the market and
               transferring it into your wallet:
             </div>
-            <div className="w-72 font-bold text-xxs text-center">XX DAI</div>
+            <div className="w-72 font-bold text-xxs text-center">
+              {borrowAmount} {tokenSymbol}
+            </div>
             <div className="w-72 font-light text-xxs text-center">
               After this, your remaining borrowable amount becomes:
             </div>
-            <div className="w-72 font-bold text-xxs text-center">YY DAI</div>
+            <div className="w-72 font-bold text-xxs text-center">
+              {leftBorrowAmount} {tokenSymbol}
+            </div>
             <div className="w-72 font-light text-xxs text-center">
               NOTE: this text needs to change if trying to borrow too much.
             </div>

@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { utils } from "ethers"
-import { isLetterNumberSpace, isLetterNumber } from "../../../forms/validations"
+import { isLetterNumberSpace, isLetterNumber } from "../../../../forms/validations"
 
 export const validationSchema = z.object({
   vaultType: z.string().min(1),

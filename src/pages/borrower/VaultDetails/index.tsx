@@ -13,9 +13,9 @@ import {
   TableRow,
   TableCell,
   NumberInput,
+  Spinner,
 } from "../../../components/ui-components"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
-import { VALIDATION_SCHEMA_FIELDS as SCHEMA_FIELDS } from "./validationSchema"
 
 import {
   CancelRound,
@@ -29,13 +29,12 @@ import {
   RemoveLendersModal,
   ModalAPR,
   CapacityModal,
-  BorrowModal,
-  RepayModal,
   NewLendersModal,
 } from "./Modals"
-import { useGetMarket } from "./hooks/useGetMarket"
-import { useNewMarketForm } from "./hooks/useMarketForm"
+import { useGetMarket, useGetMarketAccount } from "./hooks/useGetMarket"
 import { formatBps } from "../../../utils/helpers"
+import BorrowAssets from "./BorrowAssets"
+import Repay from "./Repay"
 
 const tableData = [
   {
@@ -111,7 +110,7 @@ function numberToArray(number: number) {
   return array
 }
 
-function VaultDetails() {
+const VaultDetails = () => {
   const navigate = useNavigate()
   const [accordionStates, setAccordionStates] = useState([
     false,
@@ -121,9 +120,12 @@ function VaultDetails() {
   ])
   const [isActivePage, setIsActivePage] = useState(1)
   const [dateArray, setDateArray] = useState<DateValue[]>([])
-  const { marketControllerAddress } = useParams()
-  const { data: market } = useGetMarket(marketControllerAddress)
-  const { register } = useNewMarketForm()
+
+  const { marketAddress } = useParams()
+  const { data: market, isLoading: isMarketLoading } =
+    useGetMarket(marketAddress)
+  const { data: marketAccount, isLoading: isMarketAccountLoading } =
+    useGetMarketAccount(market)
 
   const isDatePicked = dateArray.length >= 1
 
@@ -159,6 +161,16 @@ function VaultDetails() {
     navigate("/borrower/my-vaults")
   }
 
+  const isLoading = isMarketLoading || isMarketAccountLoading
+
+  if (isLoading) {
+    return <Spinner isLoading={isLoading} />
+  }
+
+  if (!market || !marketAccount) {
+    return <div>Market not found</div>
+  }
+
   return (
     <div>
       <button
@@ -176,45 +188,22 @@ function VaultDetails() {
           <div className="w-full flex justify-between items-center">
             <div className="font-bold">Borrow Assets</div>
             <div className="flex gap-x-3.5 w-full max-w-lg">
-              <NumberInput
-                decimalScale={4}
-                className="w-full"
-                placeholder="00,000.00"
-                {...register(SCHEMA_FIELDS.borrow)}
+              <BorrowAssets
+                borrowableAssets={market.borrowableAssets}
+                marketAccount={marketAccount}
               />
-              <BorrowModal />
             </div>
           </div>
           <div className="text-xxs text-right mt-1.5 mr-48">
-            <span className="font-semibold">Available To Borrow: </span>
+            <span className="font-semibold">Available To Borrow:</span>{" "}
+            {market.borrowableAssets.toFixed()} {market.underlyingToken.symbol}
           </div>
         </div>
         <div>
           <div className="w-full flex justify-between">
             <div className="font-bold mt-3">Repay Debt</div>
             <div className="flex items-center gap-x-3.5 w-full max-w-lg">
-              <div className="w-full">
-                <NumberInput
-                  decimalScale={4}
-                  className="w-full"
-                  placeholder="00,000.00"
-                  min={0}
-                  max={9000}
-                  {...register(SCHEMA_FIELDS.repay)}
-                />
-                <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
-                  <span className="font-semibold">Outstanding Debt:</span>
-                </div>
-              </div>
-              <div className="w-44 flex flex-col gap-y-1.5">
-                <RepayModal />
-                <Button
-                  variant="green"
-                  className="w-full px-2 whitespace-nowrap"
-                >
-                  Repay To Minimum Reserves
-                </Button>
-              </div>
+              <Repay marketAccount={marketAccount} />
             </div>
           </div>
         </div>
@@ -229,10 +218,10 @@ function VaultDetails() {
                   placeholder="00.00%"
                   min={0}
                   max={100}
-                  {...register(SCHEMA_FIELDS.annualInterestRate)}
                 />
                 <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
-                  <span className="font-semibold">Current Base Rate:</span>
+                  <span className="font-semibold">Current Base Rate:</span>{" "}
+                  {market.annualInterestBips / 100}%
                 </div>
               </div>
               <div className="w-44 flex flex-col gap-y-1.5">
@@ -253,13 +242,13 @@ function VaultDetails() {
                 className="w-full"
                 placeholder="10.00"
                 min={0}
-                {...register(SCHEMA_FIELDS.capacity)}
               />
               <CapacityModal />
             </div>
           </div>
           <div className="text-xxs text-right mt-1.5 mr-48">
-            <span className="font-semibold">Current Capacity:</span>
+            <span className="font-semibold">Current Capacity:</span>{" "}
+            {market.maxTotalSupply.toFixed(2)}
           </div>
         </div>
       </Paper>

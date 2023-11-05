@@ -1,8 +1,16 @@
 import { useState } from "react"
 
 import { Modal, Button } from "../../../../../components/ui-components"
+import { RepayModalProps } from "./interface"
 
-export const RepayModal = () => {
+export const RepayModal = ({
+  disabled,
+  repayAmount,
+  newMarketReserve,
+  tokenSymbol,
+  isLoading,
+  repay,
+}: RepayModalProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const onClose = () => setIsModalOpen(false)
@@ -13,11 +21,17 @@ export const RepayModal = () => {
         variant="green"
         className="w-full"
         onClick={() => setIsModalOpen(true)}
+        disabled={disabled}
       >
         Repay
       </Button>
 
-      <Modal isOpen={isModalOpen} onClose={onClose}>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={onClose}
+        isLoading={isLoading}
+        sign={repay}
+      >
         <div>
           <div className="text-base font-bold px-8 w-100 text-center">
             You are repaying to the market.
@@ -30,11 +44,15 @@ export const RepayModal = () => {
               By confirming this transaction, you are transferring the below
               amount to the market reserves:
             </div>
-            <div className="w-72 font-bold text-xxs text-center">XX DAI</div>
+            <div className="w-72 font-bold text-xxs text-center">
+              {repayAmount} {tokenSymbol}
+            </div>
             <div className="w-72 font-light text-xxs text-center">
               Market reserves after this repayment will be:
             </div>
-            <div className="w-72 font-bold text-xxs text-center">YY DAI</div>
+            <div className="w-72 font-bold text-xxs text-center">
+              {newMarketReserve} {tokenSymbol}
+            </div>
           </div>
         </div>
       </Modal>

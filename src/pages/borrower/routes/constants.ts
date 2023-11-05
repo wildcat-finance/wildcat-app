@@ -3,5 +3,5 @@ export const BORROWER_PATHS = {
   AddNewVault: "add-new-vault",
   Agreement: "agreement",
   MyVaults: "my-vaults",
-  VaultDetails: "market-details/:marketControllerAddress",
+  VaultDetails: "market-details/:marketAddress",
 }

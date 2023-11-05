@@ -6,7 +6,7 @@ import { MarketParameterConstraints } from "@wildcatfi/wildcat-sdk"
 import {
   NewMarketFormSchema,
   validationSchema as vschema,
-} from "../validationSchema"
+} from "./validationSchema"
 import { useGetController } from "../../hooks/useGetController"
 import { mockedVaultTypes } from "../../../../mocks/vaults"
 
