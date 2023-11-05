@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useController, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Token } from "@wildcatfi/wildcat-sdk"
 
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import {
@@ -10,18 +11,20 @@ import {
   Button,
   FormItem,
   Select,
-  FormNumberInput,
   TextInput,
-  Modal,
+  NumberInput,
 } from "../../../components/ui-components"
 import { TokenSelector } from "./TokenSelector"
 
 import { SignIcon } from "../../../components/ui-components/icons"
 import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.svg"
 
-import { validationSchema, FormSchema } from "./validationSchema"
+import { validationSchema, NewMarketFormSchema } from "./validationSchema"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
 import { mockedVaultTypes } from "../../../mocks/vaults"
+import { useDeployMarket } from "./hooks/useDeployMarket"
+import { useTokenMetadata } from "../hooks/useTokenMetaData"
+import { MarketPreviewModal } from "./MarketPreviewModal"
 
 const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
   (vaultType) => ({
@@ -31,63 +34,85 @@ const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
   }),
 )
 
-const mockedNewMarket = {
-  vaultType: "Market Type",
-  underlyingToken: "DAI",
-  namePrefix: "Blossom Dai Stablecoin",
-  symbolPrefix: "blsmDAI",
-  maxAmount: 30000,
-  annualRate: 10,
-  penaltyRate: 10,
-  reserveRatio: 10,
-  gracePeriod: 24,
-  withdrawalCycle: 48,
-}
-
-const defaultVault: FormSchema = {
+const defaultVault: NewMarketFormSchema = {
   vaultType: "",
-  underlyingToken: "",
+  asset: "",
   namePrefix: "",
   symbolPrefix: "",
-  maxAmount: 0,
-  annualRate: 0,
-  penaltyRate: 0,
-  reserveRatio: 0,
-  gracePeriod: 0,
-  withdrawalCycle: 0,
+  maxTotalSupply: "0",
+  annualInterestBips: "0",
+  delinquencyFeeBips: "0",
+  reserveRatioBips: "0",
+  delinquencyGracePeriod: "0",
+  withdrawalBatchDuration: "0",
 }
 
 const AddNewVault = () => {
   const {
-    control,
     formState: { errors: formErrors },
-  } = useForm<FormSchema>({
+    handleSubmit,
+    getValues,
+    setValue,
+    watch,
+    register,
+  } = useForm<NewMarketFormSchema>({
     defaultValues: defaultVault,
     resolver: zodResolver(validationSchema),
     mode: "onBlur",
   })
+
+  const [tokenAsset, setTokenAsset] = useState<Token | undefined>()
+  const { deployNewMarket, isDeploying } = useDeployMarket()
   const navigate = useNavigate()
 
   const [selectedVault, setSelectedVault] = useState<SelectOptionItem | null>(
     null,
   )
 
+  watch()
+  console.log("VALUES", getValues())
+
   const handleClickMyVaults = () => {
     navigate("/borrower/my-vaults")
   }
 
-  const { field: namePrefixField } = useController({
-    name: "namePrefix",
-    control,
-  })
-
-  const { field: symbolPrefixField } = useController({
-    name: "symbolPrefix",
-    control,
-  })
-
   const handleVaultSelect = (value: SelectOptionItem | null) => {
     setSelectedVault(value)
+  }
+
+  const assetWatch = watch("asset")
+
+  const {
+    data: assetData,
+    isLoading: assetDataLoading,
+    error,
+  } = useTokenMetadata({
+    address: assetWatch.toLowerCase(),
+  })
+
+  useEffect(() => {
+    setTokenAsset(assetData)
+  }, [assetData])
+
+  const handleDeployMarket = () => {
+    const marketParams = getValues()
+
+    if (assetData && tokenAsset) {
+      deployNewMarket({
+        ...marketParams,
+        annualInterestBips: Number(marketParams.annualInterestBips) * 100,
+        delinquencyFeeBips: Number(marketParams.delinquencyFeeBips) * 100,
+        reserveRatioBips: Number(marketParams.reserveRatioBips) * 100,
+        delinquencyGracePeriod: Number(marketParams.delinquencyGracePeriod),
+        withdrawalBatchDuration: Number(marketParams.withdrawalBatchDuration),
+        maxTotalSupply: Number(marketParams.maxTotalSupply) * 100,
+        asset: assetData,
+      })
+    }
+  }
+
+  const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(evt)
   }
 
   return (
@@ -103,7 +128,10 @@ const AddNewVault = () => {
       <div className="text-green text-2xl font-bold mb-8 w-2/3">New Market</div>
 
       <Paper className="p-8 bg-tint-10 border-tint-8">
-        <form className="flex flex-col items-start">
+        <form
+          className="flex flex-col items-start"
+          onSubmit={handleSubmit(handleDeployMarket)}
+        >
           <FormItem
             label="Market Type"
             className="mb-5 pb-4"
@@ -123,11 +151,11 @@ const AddNewVault = () => {
           <FormItem
             label="Underlying Asset"
             className="mb-5 pb-4"
-            error={Boolean(formErrors.underlyingToken?.message)}
-            errorText={formErrors.underlyingToken?.message}
+            error={Boolean(formErrors.asset?.message)}
+            errorText={formErrors.asset?.message}
             tooltip="The token that you want to borrow, e.g. WETH, DAI, CRV."
           >
-            <TokenSelector />
+            <TokenSelector onChange={(value) => setValue("asset", value)} />
           </FormItem>
 
           <FormItem
@@ -143,7 +171,7 @@ const AddNewVault = () => {
                                 named Test Dai Stablecoin."
           >
             <TextInput
-              {...namePrefixField}
+              {...register("namePrefix")}
               className="w-72"
               error={Boolean(formErrors.namePrefix?.message)}
             />
@@ -158,99 +186,116 @@ const AddNewVault = () => {
             tooltip="Symbol version of the market token to be issued to lenders (e.g. TSTDAI)."
           >
             <TextInput
-              {...symbolPrefixField}
+              {...register("symbolPrefix")}
               className="w-72"
               error={Boolean(formErrors.symbolPrefix?.message)}
             />
           </FormItem>
 
-          <FormNumberInput
-            decimalScale={4}
+          <FormItem
             label="Market Capacity"
+            className="mb-5 pb-4"
             endDecorator={<Chip className="w-32 ml-3">DAI</Chip>}
-            control={control}
-            formErrors={formErrors}
-            name="maxAmount"
-            inputClass="w-72"
+            error={Boolean(formErrors.maxTotalSupply?.message)}
+            errorText={formErrors.maxTotalSupply?.message}
             tooltip="Maximum quantity of underlying assets that you wish to borrow from lenders."
-          />
+          >
+            <NumberInput className="w-72" {...register("maxTotalSupply")} />
+          </FormItem>
 
-          <FormNumberInput
-            decimalScale={2}
+          <FormItem
             label="Minimum Reserve Ratio"
+            className="mb-5 pb-4"
             endDecorator={
               <Chip className="w-11 justify-center font-bold">%</Chip>
             }
-            control={control}
-            formErrors={formErrors}
-            name="reserveRatio"
+            error={Boolean(formErrors.reserveRatioBips?.message)}
+            errorText={formErrors.reserveRatioBips?.message}
             tooltip="Minimum deposits you need to keep within your market to avoid triggering
-                     a penalty, calculated as a percentage of your outstanding debt (ie. total 
-                     amount of market tokens in circulation). You cannot withdraw reserved assets 
+                     a penalty, calculated as a percentage of your outstanding debt (ie. total
+                     amount of market tokens in circulation). You cannot withdraw reserved assets
                      from your vault, but you still pay interest on them."
-          />
+          >
+            <NumberInput {...register("reserveRatioBips")} decimalScale={2} />
+          </FormItem>
 
-          <FormNumberInput
-            decimalScale={2}
+          <FormItem
             label="APR"
-            max={100}
+            className="mb-5 pb-4"
             endDecorator={
               <Chip className="w-11 justify-center font-bold">%</Chip>
             }
-            control={control}
-            formErrors={formErrors}
-            name="annualRate"
+            error={Boolean(formErrors.annualInterestBips?.message)}
+            errorText={formErrors.annualInterestBips?.message}
             tooltip="Annual interest rate that you are offering to your lenders for 
                      depositing underlying assets into this market for you to borrow.
                      Note that your actual interest rate might be higher than the APR
                      if you have selected a market type that imposes a protocol fee."
-          />
+          >
+            <NumberInput
+              {...register("annualInterestBips")}
+              decimalScale={2}
+              max={100}
+            />
+          </FormItem>
 
-          <FormNumberInput
-            decimalScale={2}
+          <FormItem
             label="Penalty Rate:"
-            max={100}
+            className="mb-5 pb-4"
             endDecorator={
               <Chip className="w-11 justify-center font-bold">%</Chip>
             }
-            control={control}
-            formErrors={formErrors}
-            name="penaltyRate"
+            error={Boolean(formErrors.delinquencyFeeBips?.message)}
+            errorText={formErrors.delinquencyFeeBips?.message}
             tooltip={`Annual interest rate that you are subject to pay - in addition
                       to the lender APR - in the event that your market reserves go
                       below your minimum reserve (i.e. delinquent).`}
-          />
+          >
+            <NumberInput
+              {...register("delinquencyFeeBips")}
+              decimalScale={2}
+              max={100}
+            />
+          </FormItem>
 
-          <FormNumberInput
-            decimalScale={1}
+          <FormItem
             label="Grace Period Duration:"
+            className="mb-5 pb-4"
             endDecorator={
               <Chip className="w-11 justify-center font-bold">Hours</Chip>
             }
-            control={control}
-            formErrors={formErrors}
-            name="gracePeriod"
+            error={Boolean(formErrors.delinquencyGracePeriod?.message)}
+            errorText={formErrors.delinquencyGracePeriod?.message}
             tooltip="Rolling period for which you are allowed to have deposits below 
                      your minimum reserve before the penalty rate is triggered."
-          />
+          >
+            <NumberInput
+              {...register("delinquencyGracePeriod")}
+              decimalScale={1}
+            />
+          </FormItem>
 
-          <FormNumberInput
-            decimalScale={1}
+          <FormItem
             label="Withdrawal Cycle Duration"
+            className="mb-5 pb-4"
             endDecorator={
               <Chip className="w-11 justify-center font-bold">hours</Chip>
             }
-            control={control}
-            formErrors={formErrors}
-            name="withdrawalCycle"
-            tooltip="When no cycle is currently active and a lender submits a withdrawal 
+            error={Boolean(formErrors.withdrawalBatchDuration?.message)}
+            errorText={formErrors.withdrawalBatchDuration?.message}
+            tooltip="When no cycle is currently active and a lender submits a withdrawal
                      request, the withdrawal cycle starts. During the withdrawal cycle 
                      duration, other lenders can submit their withdrawal requests. When 
                      the withdrawal cycle concludes, withdrawal requests get paid in 
                      accordance with the rules of our Service Agreement. Withdrawal cycles 
                      are not rolling: at the conclusion of one cycle, the next one will 
                      not begin until the next withdrawal request."
-          />
+          >
+            <NumberInput
+              {...register("withdrawalBatchDuration")}
+              decimalScale={1}
+            />
+          </FormItem>
 
           <div>
             <div
@@ -275,100 +320,19 @@ const AddNewVault = () => {
               case you both prefer using your own off-platform agreements.
             </div>
 
-            <Button className="mt-5" variant="blue" icon={<SignIcon />}>
+            <Button
+              onClick={handleDeployMarket}
+              className="mt-5"
+              variant="blue"
+              icon={<SignIcon />}
+              disabled={isDeploying || assetDataLoading}
+            >
               Sign
             </Button>
           </div>
         </form>
-        <Modal
-          buttonClassName="mt-10"
-          buttonName="Submit and Create Market"
-          buttonColor="blue"
-          sign
-        >
-          <div className="text-center text-base font-bold">
-            Pending Market Details
-          </div>
-          <div className="w-full border border-tint-10 my-6" />
-          <div className="grid grid-rows-5 grid-cols-2 gap-x-8 gap-y-7 px-8">
-            <FormItem label="Market Type">
-              <input
-                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={mockedNewMarket.vaultType}
-                disabled
-              />
-            </FormItem>
-            <FormItem label="Underlying Asset">
-              <input
-                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={mockedNewMarket.underlyingToken}
-                disabled
-              />
-            </FormItem>
-            <FormItem label="Market Token Name">
-              <input
-                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={mockedNewMarket.namePrefix}
-                disabled
-              />
-            </FormItem>
-            <FormItem label="Market Token Symbol">
-              <input
-                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={mockedNewMarket.symbolPrefix}
-                disabled
-              />
-            </FormItem>
-            <FormItem label="Market Capacity">
-              <input
-                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={`${mockedNewMarket.maxAmount} ${mockedNewMarket.underlyingToken}`}
-                disabled
-              />
-            </FormItem>
-            <FormItem label="Minimum Reserve Ratio">
-              <input
-                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={`${mockedNewMarket.reserveRatio}%`}
-                disabled
-              />
-            </FormItem>
-            <FormItem label="APR">
-              <input
-                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={`${mockedNewMarket.annualRate}%`}
-                disabled
-              />
-            </FormItem>
-            <FormItem label="Penalty Rate">
-              <input
-                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={`${mockedNewMarket.penaltyRate}%`}
-                disabled
-              />
-            </FormItem>
-            <FormItem label="Grace Period Duration">
-              <input
-                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={`${mockedNewMarket.gracePeriod} Hours`}
-                disabled
-              />
-            </FormItem>
-            <FormItem label="Withdrawal Cycle Duration">
-              <input
-                className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={`${mockedNewMarket.withdrawalCycle} Hours`}
-                disabled
-              />
-            </FormItem>
-          </div>
-          <div className="w-full border border-tint-10 mt-9 mb-3.5" />
-          <div className="w-72 m-auto leading-3 font-light text-xxs text-center">
-            Please review your market parameters before confirming creation.
-            Note that once your market is created, you will only be able to
-            adjust your APR and market capacity.
-          </div>
-        </Modal>
+
+        <MarketPreviewModal newMarketParams={getValues()} token={tokenAsset} />
       </Paper>
 
       <ServiceAgreementCard

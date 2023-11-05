@@ -188,7 +188,7 @@ function VaultDetails() {
             <div className="flex gap-x-3.5 w-full max-w-lg">
               <NumberInput
                 decimalScale={4}
-                onChange={(value) => handleFieldChange("borrow", value)}
+                onValueChange={(value) => handleFieldChange("borrow", value)}
                 className="w-full"
                 placeholder="00,000.00"
               />
@@ -210,7 +210,7 @@ function VaultDetails() {
                   placeholder="00,000.00"
                   min={0}
                   max={9000}
-                  onChange={(value) => handleFieldChange("repay", value)}
+                  onValueChange={(value) => handleFieldChange("repay", value)}
                 />
                 <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
                   <span className="font-semibold">Repay up to </span>
@@ -239,7 +239,7 @@ function VaultDetails() {
                   placeholder="000,00"
                   min={0}
                   max={100}
-                  onChange={(value) =>
+                  onValueChange={(value) =>
                     handleFieldChange("annualInterestRate", value)
                   }
                 />
@@ -262,7 +262,7 @@ function VaultDetails() {
             <div className="flex gap-x-3.5 w-full max-w-lg">
               <NumberInput
                 decimalScale={4}
-                onChange={(value) => handleFieldChange("capacity", value)}
+                onValueChange={(value) => handleFieldChange("capacity", value)}
                 className="w-full"
                 placeholder="10.00"
                 min={0}

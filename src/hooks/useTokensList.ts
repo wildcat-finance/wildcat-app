@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useState, useMemo } from "react"
 
 import TOKENS_LIST from "../config/tokenlist.json"
 import { TokenMeta } from "../types/tokens"
+import { useCurrentNetwork } from "./useCurrentNetwork"
 
 function sortingFunctionByName(a: TokenMeta, b: TokenMeta) {
   const nameA = a.name.toLowerCase()
@@ -17,12 +18,18 @@ function sortingFunctionByName(a: TokenMeta, b: TokenMeta) {
 }
 
 export const useTokensList = () => {
-  const [allTokens] = useState<TokenMeta[]>(TOKENS_LIST.tokens)
+  const [initialTokensList] = useState<TokenMeta[]>(TOKENS_LIST.tokens)
   const [filteredTokens, setFilteredTokens] = useState<TokenMeta[]>([])
+  const { chainId } = useCurrentNetwork()
+
+  const tokensByChainId = useMemo(
+    () => initialTokensList.filter((token) => token.chainId === chainId),
+    [initialTokensList, chainId],
+  )
 
   const filterByName = (searchName: string) => {
     if (searchName.length > 1) {
-      const filtered = allTokens
+      const filtered = tokensByChainId
         .filter((token) =>
           token.name.toLowerCase().includes(searchName.toLowerCase()),
         )
@@ -37,6 +44,6 @@ export const useTokensList = () => {
   return {
     filterByName,
     filteredTokens,
-    allTokens,
+    allTokens: tokensByChainId,
   }
 }

@@ -7,7 +7,7 @@ export const useCurrentNetwork = () => {
   const isTestnet = chain?.id === NETWORKS.Sepolia.chainId
 
   return {
-    network: chain?.name,
+    chainId: chain?.id,
     isWrongNetwork: !isTestnet,
   }
 }

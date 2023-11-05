@@ -2,15 +2,15 @@ import { z } from "zod"
 
 export const validationSchema = z.object({
   vaultType: z.string(),
-  underlyingToken: z.string(),
+  asset: z.string(),
   namePrefix: z.string(),
   symbolPrefix: z.string(),
-  maxAmount: z.number().nonnegative(),
-  annualRate: z.number().gte(0).lte(100),
-  penaltyRate: z.number().gte(0).lte(100),
-  reserveRatio: z.number().gte(0).lte(100),
-  gracePeriod: z.number().nonnegative(),
-  withdrawalCycle: z.number().nonnegative(),
+  maxTotalSupply: z.string(),
+  annualInterestBips: z.string(),
+  delinquencyFeeBips: z.string(),
+  reserveRatioBips: z.string(),
+  delinquencyGracePeriod: z.string(),
+  withdrawalBatchDuration: z.string(),
 })
 
-export type FormSchema = z.infer<typeof validationSchema>
+export type NewMarketFormSchema = z.infer<typeof validationSchema>

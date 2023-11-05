@@ -71,6 +71,7 @@ export function Modal({
                     </Button>
                     <Paper className="bg-white border-none py-5">
                       {children}
+
                       <div className="flex gap-x-3 justify-center mt-5">
                         {!sign && (
                           <Button
@@ -81,6 +82,7 @@ export function Modal({
                             Submit
                           </Button>
                         )}
+
                         {sign && (
                           <Button
                             variant="blue"
@@ -90,6 +92,7 @@ export function Modal({
                             Sign
                           </Button>
                         )}
+
                         <Button
                           variant="grey"
                           className="!text-black font-semibold w-28"

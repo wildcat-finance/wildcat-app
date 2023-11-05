@@ -15,17 +15,22 @@ function tokensToOptions(tokens: TokenMeta[]) {
   }))
 }
 
-export function TokenSelector({ className }: TokenSelectorProps) {
+export function TokenSelector({ className, onChange }: TokenSelectorProps) {
   const [selectedTokenAddress, setSelectedTokenAddress] =
     useState<ComboboxItem | null>(null)
   const { filterByName, filteredTokens } = useTokensList()
 
   const options = tokensToOptions(filteredTokens)
 
+  const handleSelect = (option: ComboboxItem) => {
+    setSelectedTokenAddress(option)
+    onChange(option.value)
+  }
+
   return (
     <div className={className}>
       <Combobox
-        onSelect={(option) => setSelectedTokenAddress(option)}
+        onSelect={handleSelect}
         onSearch={filterByName}
         value={selectedTokenAddress}
         options={options}
