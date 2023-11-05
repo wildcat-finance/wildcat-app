@@ -3,7 +3,7 @@ import { getAllMarkets, Signer } from "@wildcatfi/wildcat-sdk"
 import { useEthersSigner } from "../../../../modules/hooks"
 import { useCurrentNetwork } from "../../../../hooks/useCurrentNetwork"
 
-export const GET_MARKETS_KEY = "markets"
+export const GET_MARKETS_KEY = "my_markets_list"
 
 export const useMarkets = () => {
   const signer = useEthersSigner()

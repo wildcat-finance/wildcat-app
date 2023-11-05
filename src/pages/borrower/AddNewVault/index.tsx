@@ -14,7 +14,6 @@ import {
 } from "../../../components/ui-components"
 import { TokenSelector } from "./TokenSelector"
 
-import { SignIcon } from "../../../components/ui-components/icons"
 import arrowBack from "../../../components/ui-components/icons/arrow_back_ios.svg"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
 import { mockedVaultTypes } from "../../../mocks/vaults"
@@ -51,7 +50,7 @@ function getMinMaxFromContraints(
 
 const AddNewVault = () => {
   const {
-    handleSubmit,
+    // handleSubmit,
     getValues,
     setValue,
     watch,
@@ -65,9 +64,8 @@ const AddNewVault = () => {
   const { deployNewMarket, isDeploying } = useDeployMarket()
   const navigate = useNavigate()
   const [selectedVault, setSelectedVault] = useState<SelectOptionItem | null>(
-    null,
+    mockedVaultTypesOptions[0],
   )
-  const [signedAgreement, setSignedAgreement] = useState<boolean>(false)
 
   const handleClickMyVaults = () => {
     navigate("/borrower/my-vaults")
@@ -352,40 +350,6 @@ const AddNewVault = () => {
               }
             />
           </FormItem>
-
-          <div>
-            <div
-              className="flex justify-between items-start mb-5"
-              style={{ width: "236px" }}
-            >
-              <label className="font-bold text-xxs">
-                Master Loan Agreement
-              </label>
-            </div>
-
-            <div className="text-xxs">
-              As a borrower, you must read and sign the
-              <span className="text-xxs font-bold">
-                {" "}
-                Wildcat Master Loan Agreement{" "}
-              </span>
-              for this market before creation. to create this market.
-            </div>
-            <div className="text-xxs">
-              Note that each lender signature of the MLA will be optional in
-              case you both prefer using your own off-platform agreements.
-            </div>
-
-            <Button
-              onClick={() => setSignedAgreement(true)}
-              className="mt-5"
-              variant="blue"
-              icon={<SignIcon />}
-              disabled={signedAgreement}
-            >
-              Sign
-            </Button>
-          </div>
         </form>
 
         <MarketPreviewModal
@@ -394,7 +358,7 @@ const AddNewVault = () => {
           token={tokenAsset}
           handleSubmit={handleDeployMarket}
           isDeploying={isDeploying}
-          disabled={isLoading || !signedAgreement}
+          disabled={isLoading}
           validateForm={trigger}
         />
       </Paper>
