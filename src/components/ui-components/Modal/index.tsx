@@ -85,6 +85,7 @@ export function Modal({
                           variant="grey"
                           className="!text-black font-semibold w-28"
                           onClick={onClose}
+                          disabled={isLoading}
                         >
                           Cancel
                         </Button>
