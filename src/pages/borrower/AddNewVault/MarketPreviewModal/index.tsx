@@ -14,9 +14,9 @@ export const MarketPreviewModal = ({
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleOpen = async () => {
-    const errors = await validateForm()
+    const isValid = await validateForm()
 
-    if (Object.keys(errors).length === 0) {
+    if (isValid) {
       setIsModalOpen(true)
     }
   }

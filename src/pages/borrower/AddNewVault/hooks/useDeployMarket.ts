@@ -10,10 +10,7 @@ import { useNavigate } from "react-router-dom"
 import { useGetController } from "../../hooks/useGetController"
 import { useEthersSigner } from "../../../../modules/hooks"
 import { DeployNewMarketParams } from "./interface"
-import {
-  toastifyError,
-  toastifyRequest,
-} from "../../../../components/toasts/intex"
+import { toastifyError, toastifyRequest } from "../../../../components/toasts"
 import { BORROWER_PATHS } from "../../routes/constants"
 import { BASE_PATHS } from "../../../../routes/constants"
 

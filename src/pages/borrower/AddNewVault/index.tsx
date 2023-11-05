@@ -20,11 +20,13 @@ import { mockedVaultTypes } from "../../../mocks/vaults"
 import { useDeployMarket } from "./hooks/useDeployMarket"
 import { useTokenMetadata } from "../hooks/useTokenMetaData"
 import { MarketPreviewModal } from "./MarketPreviewModal"
-import { useNewMarketForm } from "./hooks/useNewMarketForm"
+import { defaultMarketForm, useNewMarketForm } from "./hooks/useNewMarketForm"
 import { useGetController } from "../hooks/useGetController"
 import { NewMarketFormSchema } from "./validationSchema"
+import { BASE_PATHS } from "../../../routes/constants"
+import { BORROWER_PATHS } from "../routes/constants"
 
-const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
+export const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
   (vaultType) => ({
     id: vaultType.value,
     label: vaultType.label,
@@ -43,20 +45,24 @@ function getMinMaxFromContraints(
     `maximum${fieldNameFormatted}` as keyof MarketParameterConstraints
 
   return {
-    min: constraints ? constraints[minKey] / 100 : 0,
-    max: constraints ? constraints[maxKey] / 100 : undefined,
+    min: constraints && constraints[minKey] ? constraints[minKey] / 100 : 0,
+    max:
+      constraints && constraints[maxKey]
+        ? constraints[maxKey] / 100
+        : undefined,
   }
 }
 
 const AddNewVault = () => {
   const {
-    // handleSubmit,
+    handleSubmit,
     getValues,
     setValue,
     watch,
     register,
     formState: { errors },
     trigger,
+    setFocus,
   } = useNewMarketForm()
   const { data: controller, isLoading: isControllerLoading } =
     useGetController()
@@ -68,7 +74,7 @@ const AddNewVault = () => {
   )
 
   const handleClickMyVaults = () => {
-    navigate("/borrower/my-vaults")
+    navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.MyVaults}`)
   }
 
   const handleMarketTypeSelect = (value: SelectOptionItem | null) => {
@@ -86,7 +92,7 @@ const AddNewVault = () => {
     setTokenAsset(assetData)
   }, [assetData])
 
-  const handleDeployMarket = () => {
+  const handleDeployMarket = handleSubmit(() => {
     const marketParams = getValues()
 
     if (assetData && tokenAsset) {
@@ -104,9 +110,39 @@ const AddNewVault = () => {
         assetData: tokenAsset,
       })
     }
+  })
+
+  const handleValidateForm = async () => {
+    const isValid = await trigger()
+
+    if (!isValid) {
+      const firstErrorField = Object.keys(
+        errors,
+      )[0] as keyof NewMarketFormSchema
+
+      if (firstErrorField) setFocus(firstErrorField)
+    }
+
+    return isValid
   }
 
   const isLoading = isDeploying || isControllerLoading
+
+  const vaultTypeRegister = register("vaultType")
+  const assetRegister = register("asset")
+
+  const handleTokenSelect = async (value: string) => {
+    setValue("asset", value)
+    await trigger("asset")
+  }
+
+  const getNumberFieldDefaultValue = (field: keyof NewMarketFormSchema) =>
+    controller?.constraints
+      ? getMinMaxFromContraints(controller.constraints, field).min
+      : defaultMarketForm[field]
+
+  const getNumberFieldConstraints = (field: keyof NewMarketFormSchema) =>
+    getMinMaxFromContraints(controller?.constraints, field)
 
   return (
     <div>
@@ -125,12 +161,14 @@ const AddNewVault = () => {
           <FormItem
             label="Market Type"
             className="mb-5 pb-4"
-            error={Boolean(errors.vaultType?.message)}
+            error={Boolean(errors.vaultType)}
             errorText={errors.vaultType?.message}
             tooltip="Dictates market logic and enforces minimum and maximum
                      values on the parameters you provide below."
           >
             <Select
+              ref={vaultTypeRegister.ref}
+              onBlur={vaultTypeRegister.onBlur}
               selected={selectedVault}
               options={mockedVaultTypesOptions}
               onChange={handleMarketTypeSelect}
@@ -140,18 +178,23 @@ const AddNewVault = () => {
           <FormItem
             label="Underlying Asset"
             className="mb-5 pb-4"
-            error={Boolean(errors.asset?.message)}
+            error={Boolean(errors.asset)}
             errorText={errors.asset?.message}
             tooltip="The token that you want to borrow, e.g. WETH, DAI, CRV."
           >
-            <TokenSelector onChange={(value) => setValue("asset", value)} />
+            <TokenSelector
+              onChange={handleTokenSelect}
+              onBlur={assetRegister.onBlur}
+              error={Boolean(errors.asset)}
+              ref={assetRegister.ref}
+            />
           </FormItem>
 
           <FormItem
             label="Market Token Name Prefix"
             className="mb-5 pb-4"
             endDecorator={<Chip className="w-32 ml-3">Dai Stablecoin</Chip>}
-            error={Boolean(errors.namePrefix?.message)}
+            error={Boolean(errors.namePrefix)}
             errorText={errors.namePrefix?.message}
             tooltip="The identifier that attaches to the front of the name of the underlying
                                 asset in order to distinguish the market token issued to lenders.
@@ -162,7 +205,7 @@ const AddNewVault = () => {
             <TextInput
               {...register("namePrefix")}
               className="w-72"
-              error={Boolean(errors.namePrefix?.message)}
+              error={Boolean(errors.namePrefix)}
             />
           </FormItem>
 
@@ -170,14 +213,14 @@ const AddNewVault = () => {
             label="Market Token Symbol Prefix"
             className="mb-5 pb-4"
             endDecorator={<Chip className="w-32 ml-3">DAI</Chip>}
-            error={Boolean(errors.symbolPrefix?.message)}
+            error={Boolean(errors.symbolPrefix)}
             errorText={errors.symbolPrefix?.message}
             tooltip="Symbol version of the market token to be issued to lenders (e.g. TSTDAI)."
           >
             <TextInput
               {...register("symbolPrefix")}
               className="w-72"
-              error={Boolean(errors.symbolPrefix?.message)}
+              error={Boolean(errors.symbolPrefix)}
             />
           </FormItem>
 
@@ -185,13 +228,15 @@ const AddNewVault = () => {
             label="Market Capacity"
             className="mb-5 pb-4"
             endDecorator={<Chip className="w-32 ml-3">DAI</Chip>}
-            error={Boolean(errors.maxTotalSupply?.message)}
+            error={Boolean(errors.maxTotalSupply)}
             errorText={errors.maxTotalSupply?.message}
             tooltip="Maximum quantity of underlying assets that you wish to borrow from lenders."
           >
             <NumberInput
               className="w-72"
               {...register("maxTotalSupply")}
+              defaultValue={getNumberFieldDefaultValue("maxTotalSupply")}
+              error={Boolean(errors.maxTotalSupply)}
               decimalScale={2}
             />
           </FormItem>
@@ -202,7 +247,7 @@ const AddNewVault = () => {
             endDecorator={
               <Chip className="w-11 justify-center font-bold">%</Chip>
             }
-            error={Boolean(errors.reserveRatioBips?.message)}
+            error={Boolean(errors.reserveRatioBips)}
             errorText={errors.reserveRatioBips?.message}
             tooltip="Minimum deposits you need to keep within your market to avoid triggering
                      a penalty, calculated as a percentage of your outstanding debt (ie. total
@@ -211,19 +256,11 @@ const AddNewVault = () => {
           >
             <NumberInput
               {...register("reserveRatioBips")}
+              error={Boolean(errors.reserveRatioBips)}
               decimalScale={2}
-              min={
-                getMinMaxFromContraints(
-                  controller?.constraints,
-                  "reserveRatioBips",
-                ).min
-              }
-              max={
-                getMinMaxFromContraints(
-                  controller?.constraints,
-                  "reserveRatioBips",
-                ).max
-              }
+              defaultValue={getNumberFieldDefaultValue("reserveRatioBips")}
+              min={getNumberFieldConstraints("reserveRatioBips").min}
+              max={getNumberFieldConstraints("reserveRatioBips").max}
             />
           </FormItem>
 
@@ -233,7 +270,7 @@ const AddNewVault = () => {
             endDecorator={
               <Chip className="w-11 justify-center font-bold">%</Chip>
             }
-            error={Boolean(errors.annualInterestBips?.message)}
+            error={Boolean(errors.annualInterestBips)}
             errorText={errors.annualInterestBips?.message}
             tooltip="Annual interest rate that you are offering to your lenders for 
                      depositing underlying assets into this market for you to borrow.
@@ -242,19 +279,11 @@ const AddNewVault = () => {
           >
             <NumberInput
               {...register("annualInterestBips")}
+              error={Boolean(errors.annualInterestBips)}
               decimalScale={2}
-              min={
-                getMinMaxFromContraints(
-                  controller?.constraints,
-                  "annualInterestBips",
-                ).min
-              }
-              max={
-                getMinMaxFromContraints(
-                  controller?.constraints,
-                  "annualInterestBips",
-                ).max
-              }
+              defaultValue={getNumberFieldDefaultValue("annualInterestBips")}
+              min={getNumberFieldConstraints("annualInterestBips").min}
+              max={getNumberFieldConstraints("annualInterestBips").max}
             />
           </FormItem>
 
@@ -264,7 +293,7 @@ const AddNewVault = () => {
             endDecorator={
               <Chip className="w-11 justify-center font-bold">%</Chip>
             }
-            error={Boolean(errors.delinquencyFeeBips?.message)}
+            error={Boolean(errors.delinquencyFeeBips)}
             errorText={errors.delinquencyFeeBips?.message}
             tooltip={`Annual interest rate that you are subject to pay - in addition
                       to the lender APR - in the event that your market reserves go
@@ -272,19 +301,11 @@ const AddNewVault = () => {
           >
             <NumberInput
               {...register("delinquencyFeeBips")}
+              error={Boolean(errors.delinquencyFeeBips)}
               decimalScale={2}
-              min={
-                getMinMaxFromContraints(
-                  controller?.constraints,
-                  "delinquencyFeeBips",
-                ).min
-              }
-              max={
-                getMinMaxFromContraints(
-                  controller?.constraints,
-                  "delinquencyFeeBips",
-                ).max
-              }
+              defaultValue={getNumberFieldDefaultValue("delinquencyFeeBips")}
+              min={getNumberFieldConstraints("delinquencyFeeBips").min}
+              max={getNumberFieldConstraints("delinquencyFeeBips").max}
             />
           </FormItem>
 
@@ -294,26 +315,20 @@ const AddNewVault = () => {
             endDecorator={
               <Chip className="w-11 justify-center font-bold">Hours</Chip>
             }
-            error={Boolean(errors.delinquencyGracePeriod?.message)}
+            error={Boolean(errors.delinquencyGracePeriod)}
             errorText={errors.delinquencyGracePeriod?.message}
             tooltip="Rolling period for which you are allowed to have deposits below
                      your minimum reserve before the penalty rate is triggered."
           >
             <NumberInput
               {...register("delinquencyGracePeriod")}
+              error={Boolean(errors.delinquencyGracePeriod)}
               decimalScale={1}
-              min={
-                getMinMaxFromContraints(
-                  controller?.constraints,
-                  "delinquencyGracePeriod",
-                ).min
-              }
-              max={
-                getMinMaxFromContraints(
-                  controller?.constraints,
-                  "delinquencyGracePeriod",
-                ).max
-              }
+              defaultValue={getNumberFieldDefaultValue(
+                "delinquencyGracePeriod",
+              )}
+              min={getNumberFieldConstraints("delinquencyGracePeriod").min}
+              max={getNumberFieldConstraints("delinquencyGracePeriod").max}
             />
           </FormItem>
 
@@ -323,7 +338,7 @@ const AddNewVault = () => {
             endDecorator={
               <Chip className="w-11 justify-center font-bold">hours</Chip>
             }
-            error={Boolean(errors.withdrawalBatchDuration?.message)}
+            error={Boolean(errors.withdrawalBatchDuration)}
             errorText={errors.withdrawalBatchDuration?.message}
             tooltip="When no cycle is currently active and a lender submits a withdrawal
                      request, the withdrawal cycle starts. During the withdrawal cycle
@@ -335,19 +350,13 @@ const AddNewVault = () => {
           >
             <NumberInput
               {...register("withdrawalBatchDuration")}
+              error={Boolean(errors.withdrawalBatchDuration)}
               decimalScale={1}
-              min={
-                getMinMaxFromContraints(
-                  controller?.constraints,
-                  "withdrawalBatchDuration",
-                ).min
-              }
-              max={
-                getMinMaxFromContraints(
-                  controller?.constraints,
-                  "withdrawalBatchDuration",
-                ).max
-              }
+              defaultValue={getNumberFieldDefaultValue(
+                "withdrawalBatchDuration",
+              )}
+              min={getNumberFieldConstraints("withdrawalBatchDuration").min}
+              max={getNumberFieldConstraints("withdrawalBatchDuration").max}
             />
           </FormItem>
         </form>
@@ -359,7 +368,7 @@ const AddNewVault = () => {
           handleSubmit={handleDeployMarket}
           isDeploying={isDeploying}
           disabled={isLoading}
-          validateForm={trigger}
+          validateForm={handleValidateForm}
         />
       </Paper>
 
