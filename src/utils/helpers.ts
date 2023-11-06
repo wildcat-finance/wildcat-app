@@ -30,6 +30,8 @@ export function getVaultStatusColor(status: VaultStatus): ChipColorVariants {
   }
 }
 
-export const formatToken = (bigNum: BigNumber) =>
-  Number(formatUnits(bigNum, 18).toString()).toFixed(4)
+export const formatToken = (bigNum: BigNumber) => {
+  const numberValue = Number(formatUnits(bigNum, 18).toString())
+  return numberValue.toLocaleString("en-US", { minimumFractionDigits: 2 })
+}
 export const formatBps = (bps: number) => (bps / 100).toFixed(2)
