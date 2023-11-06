@@ -78,13 +78,13 @@ function MyVaults() {
             />
           </div>
           <div className="w-1/3 px-2.5 py-2.5">
-            <Select
-              options={mockedUnderlyingAssetsOptions}
-              onChange={setSelectedUnderlyingAsset}
-              selected={selectedUnderlyingAsset}
-              placeholder="Underlying Asset"
-              className="w-full"
-            />
+            {/* <Select */}
+            {/*  options={mockedUnderlyingAssetsOptions} */}
+            {/*  onChange={setSelectedUnderlyingAsset} */}
+            {/*  selected={selectedUnderlyingAsset} */}
+            {/*  placeholder="Underlying Asset" */}
+            {/*  className="w-full" */}
+            {/* /> */}
             <RSelect
               options={mockedUnderlyingAssetsOptions}
               onChange={setSelectedUnderlyingAsset}

@@ -10,7 +10,6 @@ import {
 } from "react-aria-components"
 
 import { ExpandMore } from "../../icons"
-
 import { SelectProps } from "./type"
 
 export const RSelect = ({
@@ -23,13 +22,10 @@ export const RSelect = ({
     className="flex flex-col w-full text-xxs"
     placeholder={placeholder}
     aria-label={placeholder}
-    // onSelectionChange={(key) => console.log("key", key)}
     onSelectionChange={(key) => {
-      const selected = options.find(
-        (option) => `react-aria-${option.id}` === key,
-      )
-      console.log("selected", selected)
-      onChange(selected || null)
+      const selectedKey = Number(key.toString().replace("react-aria-", ""))
+      const option = options[selectedKey - 2]
+      onChange(option)
     }}
   >
     <Button className="cursor-default bg-white text-left w-full h-8 pl-3 border border-tint-8 flex items-center justify-between pr-2">
