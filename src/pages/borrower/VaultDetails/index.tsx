@@ -35,6 +35,8 @@ import {
   CapacityModal,
   BorrowModal,
   RepayModal,
+  RepayToMinimumModal,
+  CloseModal,
   NewLendersModal,
 } from "./Modals"
 
@@ -221,12 +223,7 @@ function VaultDetails() {
               </div>
               <div className="w-44 flex flex-col gap-y-1.5">
                 <RepayModal />
-                <Button
-                  variant="green"
-                  className="w-full px-2 whitespace-nowrap"
-                >
-                  Repay To Minimum Reserves
-                </Button>
+                <RepayToMinimumModal />
               </div>
             </div>
           </div>
@@ -249,9 +246,7 @@ function VaultDetails() {
               </div>
               <div className="w-44 flex flex-col gap-y-1.5">
                 <ModalAPR />
-                <Button variant="red" className="w-44 px-2 whitespace-nowrap">
-                  Terminate Market
-                </Button>
+                <CloseModal />
               </div>
             </div>
           </div>

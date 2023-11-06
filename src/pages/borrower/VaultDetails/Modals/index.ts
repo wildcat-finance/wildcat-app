@@ -1,5 +1,7 @@
 export { RepayModal } from "./RepayModal"
+export { RepayToMinimumModal } from "./RepayToMinimumModal"
 export { CapacityModal } from "./CapacityModal"
+export { CloseModal } from "./CloseModal"
 export { BorrowModal } from "./BorrowModal"
 export { ModalAPR } from "./ModalAPR"
 export { NewLendersModal } from "./NewLendersModal"

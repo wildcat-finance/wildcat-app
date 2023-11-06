@@ -32,13 +32,13 @@ export const CapacityModal = () => {
             </div>
             <div className="w-72 font-bold text-xxs text-center">X% to Y%</div>
             <div className="w-72 font-light text-xxs text-center">
-              [ONLY SHOW IF RATE IS LOWER] The minimum reserve ratio of the market
-              will be temporarily changed to:
+              [ONLY SHOW IF RATE IS LOWER] The minimum reserve ratio of the
+              market will be temporarily changed to:
             </div>
             <div className="w-72 font-bold text-xxs text-center">M%</div>
             <div className="w-72 font-light text-xxs text-center">
-              To avoid surprises, please make sure you have aligned this change with
-              your active lenders before moving ahead.
+              To avoid surprises, please make sure you have aligned this change
+              with your active lenders before moving ahead.
             </div>
           </div>
         </div>
