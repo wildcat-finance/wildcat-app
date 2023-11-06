@@ -17,12 +17,14 @@ export function Modal({
   isLoading,
   loadingText,
 }: ModalProps) {
+  console.log("test", isLoading)
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog
         as="div"
         className="relative z-10"
-        onClose={() => onClose && onClose()}
+        onClose={() => !isLoading && onClose && onClose()}
       >
         <Transition.Child
           as={Fragment}
@@ -53,6 +55,7 @@ export function Modal({
                     onClick={onClose}
                     className="w-fit relative top-10 right-0"
                     variant="outline"
+                    disabled={isLoading}
                   >
                     <img src={closeIcon} alt="close" />
                   </Button>
