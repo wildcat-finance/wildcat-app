@@ -1,10 +1,5 @@
 import { useState } from "react"
-import {
-  Button,
-  FormItem,
-  Modal,
-  Spinner,
-} from "../../../../components/ui-components"
+import { Button, FormItem, Modal } from "../../../../components/ui-components"
 import { MarketPreviewModalProps } from "./interface"
 
 export const MarketPreviewModal = ({
@@ -19,9 +14,9 @@ export const MarketPreviewModal = ({
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleOpen = async () => {
-    const errors = await validateForm()
+    const isValid = await validateForm()
 
-    if (Object.keys(errors).length === 0) {
+    if (isValid) {
       setIsModalOpen(true)
     }
   }
@@ -32,7 +27,7 @@ export const MarketPreviewModal = ({
     <>
       <Button
         variant="blue"
-        className="mt-10"
+        className="mt-6"
         onClick={handleOpen}
         disabled={disabled}
       >

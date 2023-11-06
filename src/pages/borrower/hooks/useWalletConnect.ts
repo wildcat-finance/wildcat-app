@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { useAccount, useNetwork } from "wagmi"
+import { useAccount } from "wagmi"
 
 import { useWalletConnectModalStore } from "../../../store/useWalletConnectModalStore"
 import { BASE_PATHS } from "../../../routes/constants"

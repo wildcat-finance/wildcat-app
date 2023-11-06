@@ -1,0 +1,8 @@
+:root {
+    --toastify-color-info: #78BFC9;
+    --toastify-color-success: #7DA58A;
+    --toastify-color-warning: #F3A436;
+    --toastify-color-error: #CF2923;
+
+    --toastify-font-family: "F37Lineca", sans-serif;
+}

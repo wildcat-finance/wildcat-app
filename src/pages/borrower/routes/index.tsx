@@ -6,13 +6,7 @@ import ServiceAgreement from "../ServiceAgreement"
 import MyVaults from "../MyVaults"
 import VaultDetails from "../VaultDetails"
 
-export const BORROWER_PATHS = {
-  HomePage: "/",
-  AddNewVault: "add-new-vault",
-  Agreement: "agreement",
-  MyVaults: "my-vaults",
-  VaultDetails: "market-details/:marketControllerAddress",
-}
+import { BORROWER_PATHS } from "./constants"
 
 export const BORROWER_ROUTES: RouteObject[] = [
   {
