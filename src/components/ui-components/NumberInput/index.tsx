@@ -1,58 +1,57 @@
-import { useState } from "react"
+import { forwardRef } from "react"
 import { NumericFormat } from "react-number-format"
-import type { NumberFormatValues } from "react-number-format/types/types"
 
 import cn from "classnames"
 import { NumberInputProps } from "./interface"
 
-function processNumber(
-  input: string,
-  minNumber?: number,
-  maxValue?: number,
-): number {
-  if (minNumber !== undefined && Number(input) < minNumber) {
-    return minNumber
-  }
-  if (maxValue && Number(input) > maxValue) {
-    return maxValue
-  }
-  return parseFloat(input)
-}
+export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
+  (props, ref) => {
+    const { className, onChange, error, min = 0, max, ...rest } = props
 
-export function NumberInput(props: NumberInputProps) {
-  const { className, onChange, error, min = 0, max, value, ...rest } = props
+    const inputCssClass = cn(
+      "h-8 px-3 text-xxs border bg-white outline-none",
+      { "opacity-50": props.disabled },
+      { "border-red-border": error },
+      { "border-tint-9": !error },
+      className,
+    )
 
-  const [inputValue, setInputValue] = useState<string | number>("")
+    return (
+      <NumericFormat
+        onChange={onChange}
+        className={inputCssClass}
+        decimalSeparator="."
+        isAllowed={(values) => {
+          const { floatValue, value } = values
 
-  const handleChange = (values: NumberFormatValues) => {
-    const processedValue = value
-      ? processNumber(values.value, Number(min), Number(max))
-      : value
+          if (value.charAt(0) === "0") {
+            const secondChar = value.charAt(1)
 
-    if (onChange) {
-      onChange(processedValue || 0)
-    }
+            // Decimals are not allowed: don't allow zero ot be followed by a number
+            if (!rest.decimalScale && secondChar) {
+              return false
+            }
 
-    setInputValue(parseFloat(values.value))
-  }
+            // Decimals are allowed: allow zero followed only by dot
+            if (rest.decimalScale && secondChar && secondChar !== ".") {
+              return false
+            }
+          }
 
-  const inputCssClass = cn(
-    "h-8 px-3 text-xxs border bg-white outline-none",
-    { "opacity-50": props.disabled },
-    { "border-red-border": error },
-    { "border-tint-9": !error },
-    className,
-  )
+          // Check if the value is bigger than the max or smaller than the min
+          if (floatValue !== undefined) {
+            // }
+            const isBiggerThanMax = max !== undefined && floatValue > max
+            const isSmallerThanMin = min !== undefined && floatValue < min
 
-  return (
-    <NumericFormat
-      onValueChange={(values) => handleChange(values)}
-      value={inputValue}
-      className={inputCssClass}
-      decimalSeparator=","
-      allowNegative={false}
-      valueIsNumericString
-      {...rest}
-    />
-  )
-}
+            return !isBiggerThanMax && !isSmallerThanMin
+          }
+          return true
+        }}
+        allowNegative={false}
+        {...rest}
+        getInputRef={ref}
+      />
+    )
+  },
+)

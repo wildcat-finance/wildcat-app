@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { forwardRef, useState } from "react"
 
 import { Combobox } from "../../../../components/ui-components"
 import { useTokensList } from "../../../../hooks/useTokensList"
@@ -15,21 +15,31 @@ function tokensToOptions(tokens: TokenMeta[]) {
   }))
 }
 
-export function TokenSelector({ className }: TokenSelectorProps) {
-  const [selectedTokenAddress, setSelectedTokenAddress] =
-    useState<ComboboxItem | null>(null)
-  const { filterByName, filteredTokens } = useTokensList()
+export const TokenSelector = forwardRef<HTMLInputElement, TokenSelectorProps>(
+  ({ className, onChange, onBlur, error }, ref) => {
+    const [selectedTokenAddress, setSelectedTokenAddress] =
+      useState<ComboboxItem | null>(null)
+    const { filterByName, filteredTokens } = useTokensList()
 
-  const options = tokensToOptions(filteredTokens)
+    const options = tokensToOptions(filteredTokens)
 
-  return (
-    <div className={className}>
-      <Combobox
-        onSelect={(option) => setSelectedTokenAddress(option)}
-        onSearch={filterByName}
-        value={selectedTokenAddress}
-        options={options}
-      />
-    </div>
-  )
-}
+    const handleSelect = (option: ComboboxItem) => {
+      setSelectedTokenAddress(option)
+      onChange(option.value)
+    }
+
+    return (
+      <div className={className}>
+        <Combobox
+          ref={ref}
+          onSelect={handleSelect}
+          onSearch={filterByName}
+          onBlur={onBlur}
+          value={selectedTokenAddress}
+          error={error}
+          options={options}
+        />
+      </div>
+    )
+  },
+)

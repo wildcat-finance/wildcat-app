@@ -3,27 +3,20 @@ import cn from "classnames"
 
 import { Button, Chip, TableItem } from "../../../../components/ui-components"
 import { VaultCardProps } from "./interface"
-import { VaultStatus } from "../../../../types/vaults"
-import { ChipColorVariants } from "../../../../components/ui-components/Chip/interface"
+import {
+  formatBps,
+  formatToken,
+  getMarketStatus,
+  getVaultStatusColor,
+} from "../../../../utils/helpers"
 
-function getVaultStatusColor(status: VaultStatus): ChipColorVariants {
-  switch (status) {
-    case VaultStatus.ACTIVE:
-      return "green"
-    case VaultStatus.PENDING:
-      return "yellow"
-    case VaultStatus.DELINQUENT:
-    case VaultStatus.PENALTY:
-    case VaultStatus.REMOVED:
-      return "red"
-    case VaultStatus.TERMINATED:
-    default:
-      return "gray"
-  }
-}
-
-function VaultCard({ vault, className }: VaultCardProps) {
+function VaultCard({ market, className }: VaultCardProps) {
   const navigate = useNavigate()
+  const status = getMarketStatus(
+    market.isClosed,
+    market.isDelinquent,
+    market.isIncurringPenalties,
+  )
 
   return (
     <div
@@ -33,35 +26,47 @@ function VaultCard({ vault, className }: VaultCardProps) {
       )}
     >
       <div className="w-full flex justify-between items-center flex-row px-3 mb-4">
-        <div className="inline text-black text-xs font-bold">{vault.name}</div>
+        <div className="inline text-black text-xs font-bold">{market.name}</div>
         <Chip
-          color={getVaultStatusColor(vault.status)}
+          color={getVaultStatusColor(status)}
           className="h-auto justify-center px-1 p-1"
         >
-          {vault.status}
+          {status}
         </Chip>
       </div>
 
       <div>
-        <TableItem title="Underlying Asset" value={`${vault.tokenSymbol}`} />
-        <TableItem title="Lender APR" value={`${vault.annualInterestRate}%`} />
+        <TableItem
+          title="Underlying Asset"
+          value={`${market.underlyingToken.symbol}`}
+        />
+        <TableItem
+          title="Lender APR"
+          value={`${formatBps(market.annualInterestBips)}%`}
+        />
         <TableItem
           title="Current Reserve Ratio"
-          value={`${vault.reserveRatio}%`}
+          value={`${formatBps(market.reserveRatioBips)}%`}
         />
         <TableItem
           title="Total Credit Extended"
-          value={`${vault.maximumCapacity} DAI`}
+          value={`${formatToken(market.maxTotalSupply.raw)} ${
+            market.marketToken.symbol
+          }`}
         />
         <TableItem
           title="Available To Borrow"
-          value={`${vault.availableCapacity} DAI`}
+          value={`${formatToken(market.totalSupply.raw)} ${
+            market.marketToken.symbol
+          }`}
         />
       </div>
 
       <div className="w-full p-3 bg-tint-10">
         <Button
-          onClick={() => navigate("/borrower/vault-details")}
+          onClick={() =>
+            navigate(`/borrower/market-details/${market.controller}`)
+          }
           className="w-full"
           variant="black"
         >

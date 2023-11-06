@@ -1,6 +1,6 @@
-import { Vault } from "../../../../types/vaults"
+import { Market } from "@wildcatfi/wildcat-sdk"
 
 export type VaultCardProps = {
-  vault: Vault
+  market: Market
   className?: string
 }
