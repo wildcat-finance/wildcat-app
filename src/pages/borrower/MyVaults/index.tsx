@@ -57,7 +57,7 @@ function MyVaults() {
         })
         .filter((market) => {
           if (!selectedUnderlyingAsset) return true
-          return market.symbol === selectedUnderlyingAsset.value
+          return market.underlyingToken.symbol === selectedUnderlyingAsset.value
         })
     : []
 

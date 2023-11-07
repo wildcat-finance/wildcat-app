@@ -16,6 +16,7 @@ export function Modal({
   showFooter = true,
   isLoading,
   loadingText,
+  firstBtnText,
 }: ModalProps) {
   console.log("test", isLoading)
 
@@ -80,7 +81,9 @@ export function Modal({
                             onClick={sign}
                             disabled={isLoading}
                           >
-                            {isLoading && loadingText ? loadingText : "Sign"}
+                            {isLoading && loadingText
+                              ? loadingText
+                              : firstBtnText || "Sign"}
                           </Button>
                         )}
 
