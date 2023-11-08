@@ -18,8 +18,6 @@ export function Modal({
   loadingText,
   firstBtnText,
 }: ModalProps) {
-  console.log("test", isLoading)
-
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog

@@ -15,6 +15,7 @@ module.exports = {
         'xxs': '.65rem',
       },
       colors: {
+        'lavender': '#CAD5F4',
         'border-black': '#000000',
         'black': '#232323',
         'blue': '#78BFC9',
