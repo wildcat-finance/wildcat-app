@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, ChangeEvent } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
@@ -14,13 +14,14 @@ import {
   NewLenderFormSchema,
   newLenderValisationSchema,
 } from "./validationSchema"
-import { useGetController } from "../../../hooks/useGetController"
+import { useAuthorizedLenders } from "../../hooks/useVaultDetailActions"
+import { NewLendersModalProps } from "./interface"
 
 const newLenderFormDefaults: NewLenderFormSchema = {
   lenderWallet: "",
 }
 
-export function NewLendersModal() {
+export function NewLendersModal({ market }: NewLendersModalProps) {
   const { setValue, getValues, watch, reset } = useForm<NewLenderFormSchema>({
     resolver: zodResolver(newLenderValisationSchema),
     defaultValues: newLenderFormDefaults,
@@ -28,8 +29,10 @@ export function NewLendersModal() {
   })
   const [newLenders, setNewLenders] = useState<NewLenderFormSchema[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const lendersAddresses = newLenders.map((lender) => lender.lenderWallet)
+  const { mutate: authorize } = useAuthorizedLenders(lendersAddresses, market)
 
-  const handleChangeInput = (evt: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeInput = (evt: ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
     const name = evt.target.name as keyof NewLenderFormSchema
 
@@ -62,16 +65,6 @@ export function NewLendersModal() {
     setIsModalOpen(false)
   }
 
-  const { data } = useGetController()
-
-  console.log(data?.authorizedLenders)
-  const handleSubmit = async () => {
-    const res = await data?.authorizeLenders(
-      newLenders.map((lender) => lender.lenderWallet),
-    )
-    console.log(res)
-  }
-
   return (
     <>
       <Button
@@ -82,15 +75,15 @@ export function NewLendersModal() {
         Authorise Lenders
       </Button>
 
-      <Modal isOpen={isModalOpen} onClose={onModalClose}>
+      <Modal isOpen={isModalOpen} onClose={onModalClose} sign={authorize}>
         <div className="text-base font-bold px-8">Onboard New Lender/s</div>
 
         <div className="w-full border border-tint-10 my-3" />
 
         <div className="flex flex-col items-center gap-y-5 px-8">
           <div className="w-72 font-light text-xxs text-center ">
-            Please provide a reference name and wallet address for each new lender
-            you want to authorise for this market.
+            Please provide a reference name and wallet address for each new
+            lender you want to authorise for this market.
           </div>
           <FormItem
             className="w-full"
@@ -111,9 +104,11 @@ export function NewLendersModal() {
           <div className="flex flex-col gap-y-2 w-full">
             <div className="w-full border border-tint-10" />
 
-            <div className="text-base font-bold text-center">You have added:</div>
+            <div className="text-base font-bold text-center">
+              You have added:
+            </div>
             {newLenders.map((lender) => (
-              <div className="flex gap-x-4">
+              <div className="flex gap-x-4" key={lender.lenderWallet}>
                 <div className="flex flex-col justify-between w-full">
                   <div className="text-xs">{lender.lenderWallet}</div>
                 </div>

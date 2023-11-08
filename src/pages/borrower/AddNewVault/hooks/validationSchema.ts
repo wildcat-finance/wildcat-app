@@ -1,6 +1,9 @@
 import { z } from "zod"
 import { utils } from "ethers"
-import { isLetterNumberSpace, isLetterNumber } from "../../../../forms/validations"
+import {
+  isLetterNumberSpace,
+  isLetterNumber,
+} from "../../../../forms/validations"
 
 export const validationSchema = z.object({
   vaultType: z.string().min(1),
@@ -24,4 +27,4 @@ export const validationSchema = z.object({
   withdrawalBatchDuration: z.coerce.number(),
 })
 
-export type NewMarketFormSchema = z.infer<typeof validationSchema>
+export type ValidationSchemaType = z.infer<typeof validationSchema>

@@ -1,11 +1,18 @@
 import React, { useState } from "react"
 import { Button, Modal } from "../../../../../components/ui-components"
 
+import { useGetAuthorizedLenders } from "./hooks/useGetAuthorizedLenders"
+import { useDeauthorizedLenders } from "../../hooks/useVaultDetailActions"
 import { RemoveLendersModalProps } from "./interface"
 
-export function RemoveLendersModal({ lenders }: RemoveLendersModalProps) {
+export function RemoveLendersModal({ market }: RemoveLendersModalProps) {
   const [selectedLenders, setSelectedLenders] = useState<string[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { data: lenders } = useGetAuthorizedLenders()
+  const { mutate: deauthorize } = useDeauthorizedLenders(
+    selectedLenders,
+    market,
+  )
 
   const isSelected = (lenderWallet: string) =>
     selectedLenders.includes(lenderWallet)
@@ -34,7 +41,7 @@ export function RemoveLendersModal({ lenders }: RemoveLendersModalProps) {
         Deauthorise Lenders
       </Button>
 
-      <Modal isOpen={isModalOpen} onClose={onModalClose}>
+      <Modal isOpen={isModalOpen} onClose={onModalClose} sign={deauthorize}>
         <>
           <div className="text-base font-bold px-8">Remove Lenders</div>
           <div className="w-full border border-tint-10 my-3" />
@@ -51,20 +58,17 @@ export function RemoveLendersModal({ lenders }: RemoveLendersModalProps) {
               <div className="text-base font-bold">
                 Select lenders to deauthorise:
               </div>
-              {lenders.map((lender) => (
-                <div className="flex gap-x-4 w-full" key={lender.wallet}>
+              {lenders?.map((lender) => (
+                <div className="flex gap-x-4 w-full" key={lender}>
                   <div className="flex flex-col w-full">
-                    <div className="text-xs font-medium">{lender.lender}</div>
-                    <div className="text-xs">{lender.wallet}</div>
+                    <div className="text-xs">{lender}</div>
                   </div>
-                  <div className="mt-2">
-                    <input
-                      type="checkbox"
-                      name="RemoveLenderCheckbox"
-                      onChange={() => handleSelectLenderWallet(lender.wallet)}
-                      checked={isSelected(lender.wallet)}
-                    />
-                  </div>
+                  <input
+                    type="checkbox"
+                    name="RemoveLenderCheckbox"
+                    onChange={() => handleSelectLenderWallet(lender)}
+                    checked={isSelected(lender)}
+                  />
                 </div>
               ))}
             </div>

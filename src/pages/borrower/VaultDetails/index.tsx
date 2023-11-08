@@ -586,8 +586,8 @@ const VaultDetails = () => {
       <div className="flex w-full justify-between content-center">
         <div className="text-base font-bold">Authorised Lenders</div>
         <div className="flex gap-x-2">
-          <NewLendersModal />
-          <RemoveLendersModal lenders={tableData} />
+          <NewLendersModal market={marketAddress!} />
+          <RemoveLendersModal market={marketAddress!} />
         </div>
       </div>
       <div className="mt-5 mb-14">

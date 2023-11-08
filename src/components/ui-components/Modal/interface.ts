@@ -7,4 +7,3 @@ export type ModalProps = {
   isLoading?: boolean
   loadingText?: string
 }
-

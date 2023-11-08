@@ -4,13 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { MarketParameterConstraints } from "@wildcatfi/wildcat-sdk"
 
 import {
-  NewMarketFormSchema,
+  ValidationSchemaType,
   validationSchema as vschema,
 } from "./validationSchema"
 import { useGetController } from "../../hooks/useGetController"
 import { mockedVaultTypes } from "../../../../mocks/vaults"
 
-export const defaultMarketForm: Partial<NewMarketFormSchema> = {
+export const defaultMarketForm: Partial<ValidationSchemaType> = {
   vaultType: mockedVaultTypes[0].value,
   maxTotalSupply: 0,
   annualInterestBips: 0,
@@ -71,7 +71,7 @@ export const useNewMarketForm = () => {
     return vschema
   }, [controller?.constraints])
 
-  return useForm<NewMarketFormSchema>({
+  return useForm<ValidationSchemaType>({
     defaultValues: defaultMarketForm,
     resolver: zodResolver(validationSchemaAsync),
     mode: "onBlur",

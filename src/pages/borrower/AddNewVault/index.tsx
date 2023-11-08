@@ -22,7 +22,7 @@ import { useTokenMetadata } from "../hooks/useTokenMetaData"
 import { MarketPreviewModal } from "./MarketPreviewModal"
 import { defaultMarketForm, useNewMarketForm } from "./hooks/useNewMarketForm"
 import { useGetController } from "../hooks/useGetController"
-import { NewMarketFormSchema } from "./hooks/validationSchema"
+import { ValidationSchemaType } from "./hooks/validationSchema"
 import { BASE_PATHS } from "../../../routes/constants"
 import { BORROWER_PATHS } from "../routes/constants"
 import { getMinMaxFromConstraints } from "../utils/borrowerFormUtils"
@@ -100,7 +100,7 @@ const AddNewVault = () => {
     if (!isValid) {
       const firstErrorField = Object.keys(
         errors,
-      )[0] as keyof NewMarketFormSchema
+      )[0] as keyof ValidationSchemaType
 
       if (firstErrorField) setFocus(firstErrorField)
     }
@@ -118,7 +118,7 @@ const AddNewVault = () => {
     await trigger("asset")
   }
 
-  const getNumberFieldDefaultValue = (field: keyof NewMarketFormSchema) =>
+  const getNumberFieldDefaultValue = (field: keyof ValidationSchemaType) =>
     controller?.constraints
       ? getMinMaxFromConstraints(controller.constraints, field).min
       : defaultMarketForm[field]
@@ -254,7 +254,7 @@ const AddNewVault = () => {
             }
             error={Boolean(errors.annualInterestBips)}
             errorText={errors.annualInterestBips?.message}
-            tooltip="Annual interest rate that you are offering to your lenders for 
+            tooltip="Annual interest rate that you are offering to your lenders for
                      depositing underlying assets into this market for you to borrow.
                      Note that your actual interest rate might be higher than the APR
                      if you have selected a market type that imposes a protocol fee."
