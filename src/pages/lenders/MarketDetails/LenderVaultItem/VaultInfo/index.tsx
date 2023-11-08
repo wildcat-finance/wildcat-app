@@ -7,6 +7,7 @@ import { BluePaper } from "../../../../../components/ui-components/BluePaper"
 export function VaultInfo({ vault, showButtons }: VaultInfoProps) {
   return (
     <div>
+      <div className="text-base font-bold mb-5">Details</div>
       <TableItem className="grid grid-cols-2 gap-x-36">
         <div className="w-full flex px-3 items-center flex-row leading-8 justify-between">
           <div className="inline text-black text-xs font-bold">

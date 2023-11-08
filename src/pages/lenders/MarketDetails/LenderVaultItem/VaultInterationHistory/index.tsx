@@ -7,26 +7,12 @@ import { ServiceAgreementCard } from "../../../../../components/ServiceAgreement
 function VaultInterationHistory() {
   const [isExpanded, setIsExpanded] = useState(true)
 
-  const toggleAccordion = () => {
-    setIsExpanded(!isExpanded)
-  }
-
   const expandIcon = isExpanded ? expandLess : expandMore
 
   return (
-    <>
+    <div>
       <div className="flex w-full justify-between content-center">
         <div className="text-base font-bold">Market interaction history</div>
-        <Button
-          variant="outline"
-          className="flex items-center gap-x-2"
-          onClick={toggleAccordion}
-        >
-          <p className="text-xs font-normal underline cursor-pointer">
-            {isExpanded ? "Hide History" : "Show History"}
-          </p>
-          <img src={expandIcon} className="w-5" alt="Back" />
-        </Button>
       </div>
       {isExpanded && (
         <>
@@ -47,13 +33,13 @@ function VaultInterationHistory() {
             </div>
           </Paper>
           <ServiceAgreementCard
-            className="mt-10"
+            className="mt-8"
             title="Wildcat Service Agreement"
             description="You agreed to the Wildcat Service Agreement on 12-Sept-2023"
           />
         </>
       )}
-    </>
+    </div>
   )
 }
 

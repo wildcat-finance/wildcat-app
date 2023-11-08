@@ -8,13 +8,10 @@ import {
   Paper,
   Spinner,
 } from "../../../../components/ui-components"
-import expandMore from "../../../../components/ui-components/icons/expand_more.svg"
-import expandLess from "../../../../components/ui-components/icons/expand_less.svg"
 import { useWalletConnect } from "../../../borrower/hooks/useWalletConnect"
 import { useBorrowerRouting } from "../../../borrower/hooks/useBorrowerRouting"
 import { useCurrentNetwork } from "../../../../hooks/useCurrentNetwork"
 import VaultInterationHistory from "./VaultInterationHistory"
-import LendersServiceAgreement from "../../LendersServiceAgreement"
 import { VaultDeposit } from "./VaultDeposit"
 import { ServiceAgreementCard } from "../../../../components/ServiceAgreementCard"
 
@@ -32,7 +29,7 @@ export function MarketDetails() {
   }
 
   const vault = {
-    name: "Blossom Dai Stablecoin Vault",
+    name: "Blossom Dai Stablecoin",
     tokenSymbol: "DAI",
     maximumCapacity: "1000",
     reserveRatio: "20",
@@ -53,32 +50,27 @@ export function MarketDetails() {
   }
 
   return (
-    <Paper className="border-tint-8">
+    <div className="flex gap-8 flex-col ">
       <div className="flex justify-between items-center p-5">
-        <div className="flex items-center">
-          <div className="font-bold">{vault.name}</div>
-          <Chip className="h-auto justify-center p-1 ml-4 mr-3 bg-tint-11">
-            blsmDAI
-          </Chip>
-          <Button variant="blue" className="pl-1 w-16">
-            Add
-          </Button>
+        <div className="w-full flex items-center justify-between ">
+          <div className="text-green text-2xl font-bold">{vault.name}</div>
+          <div className="flex ">
+            <Chip className="h-auto justify-center p-1 ml-4 mr-3 bg-tint-11">
+              blsmDAI
+            </Chip>
+            <Button variant="blue" className="pl-1 w-16">
+              Add
+            </Button>
+          </div>
         </div>
-        <Button className="flex items-center gap-x-2 text-xxs underline cursor-pointer">
-          <img src={expandLess} className="w-5" alt="Back" />
-          ) : (
-          <img src={expandMore} className="w-5" alt="Back" />
-        </Button>
       </div>
-
+      <VaultDeposit />
       <VaultInfo vault={vault} showButtons />
       <VaultInterationHistory />
-      <VaultDeposit />
       <ServiceAgreementCard
-        className="mt-12"
         title="Wildcat Service Agreement"
         description="You agreed to the Wildcat Service Agreement on 12-Sept-2023"
       />
-    </Paper>
+    </div>
   )
 }
