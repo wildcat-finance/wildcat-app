@@ -6,11 +6,10 @@ import "react-toastify/dist/ReactToastify.css"
 
 import { WagmiProvider } from "./modules/wagmi/components"
 import Layout from "./pages/Layout"
-import { ActiveVaults } from "./pages"
-import LendersServiceAgreement from "./pages/lenders/LendersServiceAgreement"
 import "./styles/index.css"
 import BorrowerSection from "./pages/borrower"
 import { BASE_PATHS } from "./routes/constants"
+import LendersSection from "./pages/lenders"
 
 const queryClient = new QueryClient()
 
@@ -24,21 +23,8 @@ const router = createBrowserRouter([
         element: <BorrowerSection />,
       },
       {
-        path: "/lender",
-        children: [
-          {
-            path: "*",
-            element: <LendersServiceAgreement />,
-          },
-          {
-            path: "agreement",
-            element: <LendersServiceAgreement />,
-          },
-          {
-            path: "active-vaults",
-            element: <ActiveVaults />,
-          },
-        ],
+        path: `${BASE_PATHS.Lender}/*`,
+        element: <LendersSection />,
       },
     ],
   },

@@ -16,12 +16,13 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
     } = props
 
     const inputCssClass = cn(
-      "h-8 px-3 text-xxs border bg-white outline-none",
+      "h-8 px-3 text-xxs border bg-white outline-none w-full",
       { "opacity-50": props.disabled },
       { "border-red-border": error },
       { "border-tint-9": !error },
-      className,
     )
+
+    const wrapperCssClass = cn("relative", className)
 
     const handleMaxClick = (e: MouseEvent<HTMLButtonElement>) => {
       e.preventDefault()
@@ -29,7 +30,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
     }
 
     return (
-      <div className="relative">
+      <div className={wrapperCssClass}>
         <NumericFormat
           onChange={onChange}
           className={inputCssClass}
