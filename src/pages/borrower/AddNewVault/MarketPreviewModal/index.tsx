@@ -36,6 +36,7 @@ export const MarketPreviewModal = ({
 
       {isModalOpen && (
         <Modal
+          firstBtnText="Confirm"
           sign={handleSubmit}
           isOpen={isModalOpen}
           onClose={onClose}
@@ -103,7 +104,7 @@ export const MarketPreviewModal = ({
                 disabled
               />
             </FormItem>
-            <FormItem label="Grace Period Duration">
+            <FormItem label="FGrace Period Duration">
               <input
                 className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
                 value={`${getValues("delinquencyGracePeriod")} Hours`}

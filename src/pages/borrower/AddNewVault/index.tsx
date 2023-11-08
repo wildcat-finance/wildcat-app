@@ -143,7 +143,6 @@ const AddNewVault = () => {
 
   const getNumberFieldConstraints = (field: keyof NewMarketFormSchema) =>
     getMinMaxFromContraints(controller?.constraints, field)
-
   return (
     <div>
       <Button
@@ -193,7 +192,9 @@ const AddNewVault = () => {
           <FormItem
             label="Market Token Name Prefix"
             className="mb-5 pb-4"
-            endDecorator={<Chip className="w-32 ml-3">Dai Stablecoin</Chip>}
+            endDecorator={
+              <Chip className="w-32 ml-3">{tokenAsset?.symbol}</Chip>
+            }
             error={Boolean(errors.namePrefix)}
             errorText={errors.namePrefix?.message}
             tooltip="The identifier that attaches to the front of the name of the underlying
@@ -212,7 +213,9 @@ const AddNewVault = () => {
           <FormItem
             label="Market Token Symbol Prefix"
             className="mb-5 pb-4"
-            endDecorator={<Chip className="w-32 ml-3">DAI</Chip>}
+            endDecorator={
+              <Chip className="w-32 ml-3">{tokenAsset?.symbol}</Chip>
+            }
             error={Boolean(errors.symbolPrefix)}
             errorText={errors.symbolPrefix?.message}
             tooltip="Symbol version of the market token to be issued to lenders (e.g. TSTDAI)."
@@ -227,7 +230,9 @@ const AddNewVault = () => {
           <FormItem
             label="Market Capacity"
             className="mb-5 pb-4"
-            endDecorator={<Chip className="w-32 ml-3">DAI</Chip>}
+            endDecorator={
+              <Chip className="w-32 ml-3">{tokenAsset?.symbol}</Chip>
+            }
             error={Boolean(errors.maxTotalSupply)}
             errorText={errors.maxTotalSupply?.message}
             tooltip="Maximum quantity of underlying assets that you wish to borrow from lenders."
