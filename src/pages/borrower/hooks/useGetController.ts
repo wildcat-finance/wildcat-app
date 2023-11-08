@@ -24,3 +24,22 @@ export const useGetController = () => {
     refetchOnMount: false,
   })
 }
+
+export const useGetUpdatedController = () => {
+  const { address } = useAccount()
+  const signer = useEthersSigner()
+  const { isWrongNetwork } = useCurrentNetwork()
+
+  async function getControllerForBorrower() {
+    const controller = await getController(signer as Signer, address as string)
+    await controller.update()
+    return controller
+  }
+
+  return useQuery({
+    queryKey: [GET_CONTROLLER_FOR_BORROWER_KEY, address],
+    queryFn: getControllerForBorrower,
+    enabled: !!address && !!signer && !isWrongNetwork,
+    refetchOnMount: false,
+  })
+}

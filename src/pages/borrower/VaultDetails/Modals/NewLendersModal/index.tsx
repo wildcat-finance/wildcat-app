@@ -14,9 +14,9 @@ import {
   NewLenderFormSchema,
   newLenderValisationSchema,
 } from "./validationSchema"
+import { useGetController } from "../../../hooks/useGetController"
 
 const newLenderFormDefaults: NewLenderFormSchema = {
-  lenderName: "",
   lenderWallet: "",
 }
 
@@ -62,6 +62,16 @@ export function NewLendersModal() {
     setIsModalOpen(false)
   }
 
+  const { data } = useGetController()
+
+  console.log(data?.authorizedLenders)
+  const handleSubmit = async () => {
+    const res = await data?.authorizeLenders(
+      newLenders.map((lender) => lender.lenderWallet),
+    )
+    console.log(res)
+  }
+
   return (
     <>
       <Button
@@ -83,15 +93,6 @@ export function NewLendersModal() {
             fulfill the params of doing this and make the text nice and
             descriptive but not too waffly.
           </div>
-          <FormItem className="w-full" label="Lender Name" tooltip="test">
-            <TextInput
-              onChange={handleChangeInput}
-              value={formValues.lenderName}
-              name="lenderName"
-              className="w-full bg-tint-11"
-              placeholder="Enter name of Lender"
-            />
-          </FormItem>
           <FormItem
             className="w-full"
             label="Lender Wallet Address"
@@ -117,7 +118,6 @@ export function NewLendersModal() {
             {newLenders.map((lender) => (
               <div className="flex gap-x-4">
                 <div className="flex flex-col justify-between w-full">
-                  <div className="text-xs font-medium">{lender.lenderName}</div>
                   <div className="text-xs">{lender.lenderWallet}</div>
                 </div>
                 <Button
