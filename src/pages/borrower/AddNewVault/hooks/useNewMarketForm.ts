@@ -6,10 +6,12 @@ import { MarketParameterConstraints } from "@wildcatfi/wildcat-sdk"
 import {
   NewMarketFormSchema,
   validationSchema as vschema,
-} from "../validationSchema"
+} from "./validationSchema"
 import { useGetController } from "../../hooks/useGetController"
+import { mockedVaultTypes } from "../../../../mocks/vaults"
 
-const defaultMarketForm: Partial<NewMarketFormSchema> = {
+export const defaultMarketForm: Partial<NewMarketFormSchema> = {
+  vaultType: mockedVaultTypes[0].value,
   maxTotalSupply: 0,
   annualInterestBips: 0,
   delinquencyFeeBips: 0,
@@ -40,7 +42,7 @@ function getValidationSchema(constraints: MarketParameterConstraints) {
   } = constraints
 
   return vschema.extend({
-    deliquecyGracePeriod: vschema.shape.delinquencyGracePeriod
+    delinquencyGracePeriod: vschema.shape.delinquencyGracePeriod
       .min(getContrainNumber(minimumDelinquencyGracePeriod))
       .max(getContrainNumber(maximumDelinquencyGracePeriod)),
     reserveRatioBips: vschema.shape.reserveRatioBips

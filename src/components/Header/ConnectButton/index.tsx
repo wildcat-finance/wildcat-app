@@ -1,12 +1,6 @@
 import { RiWallet3Line, RiCloseLine } from "react-icons/ri"
 import { useCallback, useEffect, useMemo } from "react"
-import {
-  useAccount,
-  useConnect,
-  useDisconnect,
-  useNetwork,
-  useSwitchNetwork,
-} from "wagmi"
+import { useAccount, useConnect, useDisconnect, useSwitchNetwork } from "wagmi"
 import { Dialog, Modal } from "react-aria-components"
 
 import { Button } from "../../ui-components"

@@ -76,10 +76,10 @@ export function NewLendersModal() {
     <>
       <Button
         variant="blue"
-        className="w-24 whitespace-nowrap"
+        className="w-35 whitespace-nowrap"
         onClick={() => setIsModalOpen(true)}
       >
-        Onboard Lenders
+        Authorise Lenders
       </Button>
 
       <Modal isOpen={isModalOpen} onClose={onModalClose}>
@@ -89,9 +89,8 @@ export function NewLendersModal() {
 
         <div className="flex flex-col items-center gap-y-5 px-8">
           <div className="w-72 font-light text-xxs text-center ">
-            Some text about what you are about to get yourself into and can you
-            fulfill the params of doing this and make the text nice and
-            descriptive but not too waffly.
+            Please provide a reference name and wallet address for each new lender
+            you want to authorise for this market.
           </div>
           <FormItem
             className="w-full"
@@ -112,9 +111,7 @@ export function NewLendersModal() {
           <div className="flex flex-col gap-y-2 w-full">
             <div className="w-full border border-tint-10" />
 
-            <div className="text-base font-bold text-center">
-              You have added:
-            </div>
+            <div className="text-base font-bold text-center">You have added:</div>
             {newLenders.map((lender) => (
               <div className="flex gap-x-4">
                 <div className="flex flex-col justify-between w-full">

@@ -1,7 +1,7 @@
 import { useRef } from "react"
+import { useTextField } from "react-aria"
 import cn from "classnames"
 
-import { useTextField } from "react-aria"
 import { InputProps } from "./interface"
 import { Tooltip } from "../Tooltip"
 
@@ -32,9 +32,9 @@ export function FormItem(props: InputProps) {
         {endDecorator}
       </div>
       {error && errorText && (
-        <p className="text-red-error text-xxs mt-1 absolute bottom-0 left-0">
+        <div className="whitespace-nowrap text-red-error text-xxs mt-1 absolute bottom-0 left-0">
           {errorText}
-        </p>
+        </div>
       )}
     </div>
   )
