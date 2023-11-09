@@ -51,8 +51,8 @@ export function MarketDetails() {
 
   return (
     <div className="flex gap-8 flex-col ">
-      <div className="flex justify-between items-center p-5">
-        <div className="w-full flex items-center justify-between ">
+      <div className="flex justify-between items-center pt-5 pb-5">
+        <div className="w-full flex items-center justify-between">
           <div className="text-green text-2xl font-bold">{vault.name}</div>
           <div className="flex ">
             <Chip className="h-auto justify-center p-1 ml-4 mr-3 bg-tint-11">
