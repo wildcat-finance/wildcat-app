@@ -23,7 +23,7 @@ export function VaultDeposit({
             </div>
           </div>
         </div>
-        <div className="text-xxs text-right mt-1.5 mr-48">
+        <div className="text-xxs text-right mt-1.5 mr-40">
           <span className="font-semibold">Deposit up to </span>
           25,000 DAI
         </div>
