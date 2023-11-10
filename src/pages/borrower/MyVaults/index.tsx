@@ -8,7 +8,7 @@ import VaultCard from "./VaultCard"
 import { mockedUnderlyingAssets, mockedStatuses } from "../../../mocks/vaults"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
 import { useMyMarkets } from "./hooks/useMyMarkets"
-import { getMarketStatus } from "../../../utils/helpers"
+import { getMarketStatus } from "../../../utils/marketStatus"
 
 const mockedUnderlyingAssetsOptions: SelectOptionItem[] =
   mockedUnderlyingAssets.map((tokenSymbol) => ({

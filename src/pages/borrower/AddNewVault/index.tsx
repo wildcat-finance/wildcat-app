@@ -26,6 +26,7 @@ import { ValidationSchemaType } from "./hooks/validationSchema"
 import { BASE_PATHS } from "../../../routes/constants"
 import { BORROWER_PATHS } from "../routes/constants"
 import { getMinMaxFromConstraints } from "../utils/borrowerFormUtils"
+import { MARKET_BIPS_DECIMAL_SCALES } from "../../../utils/formatters"
 
 export const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
   (vaultType) => ({
@@ -219,7 +220,7 @@ const AddNewVault = () => {
               {...register("maxTotalSupply")}
               defaultValue={getNumberFieldDefaultValue("maxTotalSupply")}
               error={Boolean(errors.maxTotalSupply)}
-              decimalScale={2}
+              decimalScale={MARKET_BIPS_DECIMAL_SCALES.maxTotalSupply}
             />
           </FormItem>
 
@@ -239,7 +240,7 @@ const AddNewVault = () => {
             <NumberInput
               {...register("reserveRatioBips")}
               error={Boolean(errors.reserveRatioBips)}
-              decimalScale={2}
+              decimalScale={MARKET_BIPS_DECIMAL_SCALES.reserveRatioBips}
               defaultValue={getNumberFieldDefaultValue("reserveRatioBips")}
               min={getNumberFieldConstraints("reserveRatioBips").min}
               max={getNumberFieldConstraints("reserveRatioBips").max}
@@ -262,7 +263,7 @@ const AddNewVault = () => {
             <NumberInput
               {...register("annualInterestBips")}
               error={Boolean(errors.annualInterestBips)}
-              decimalScale={2}
+              decimalScale={MARKET_BIPS_DECIMAL_SCALES.annualInterestBips}
               defaultValue={getNumberFieldDefaultValue("annualInterestBips")}
               min={getNumberFieldConstraints("annualInterestBips").min}
               max={getNumberFieldConstraints("annualInterestBips").max}
@@ -284,7 +285,7 @@ const AddNewVault = () => {
             <NumberInput
               {...register("delinquencyFeeBips")}
               error={Boolean(errors.delinquencyFeeBips)}
-              decimalScale={2}
+              decimalScale={MARKET_BIPS_DECIMAL_SCALES.delinquencyFeeBips}
               defaultValue={getNumberFieldDefaultValue("delinquencyFeeBips")}
               min={getNumberFieldConstraints("delinquencyFeeBips").min}
               max={getNumberFieldConstraints("delinquencyFeeBips").max}
@@ -305,7 +306,7 @@ const AddNewVault = () => {
             <NumberInput
               {...register("delinquencyGracePeriod")}
               error={Boolean(errors.delinquencyGracePeriod)}
-              decimalScale={1}
+              decimalScale={MARKET_BIPS_DECIMAL_SCALES.delinquencyGracePeriod}
               defaultValue={getNumberFieldDefaultValue(
                 "delinquencyGracePeriod",
               )}
@@ -333,7 +334,7 @@ const AddNewVault = () => {
             <NumberInput
               {...register("withdrawalBatchDuration")}
               error={Boolean(errors.withdrawalBatchDuration)}
-              decimalScale={1}
+              decimalScale={MARKET_BIPS_DECIMAL_SCALES.withdrawalBatchDuration}
               defaultValue={getNumberFieldDefaultValue(
                 "withdrawalBatchDuration",
               )}
