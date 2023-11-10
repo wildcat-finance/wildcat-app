@@ -27,7 +27,10 @@ import {
 
 import { RemoveLendersModal, CapacityModal, NewLendersModal } from "./Modals"
 import { useGetMarket, useGetMarketAccount } from "./hooks/useGetMarket"
-import { formatBps, MARKET_BIPS_DECIMAL_SCALES } from "../../../utils/formatters"
+import {
+  formatBps,
+  MARKET_BIPS_DECIMAL_SCALES,
+} from "../../../utils/formatters"
 import BorrowAssets from "./BorrowAssets"
 import Repay from "./Repay"
 import AdjustAPR from "./AdjustAPR"
