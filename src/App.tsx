@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { ApolloProvider } from "@apollo/react-hooks"
 
 import { WagmiProvider } from "./modules/wagmi/components"
 import Layout from "./pages/Layout"
@@ -11,6 +12,7 @@ import LendersServiceAgreement from "./pages/lenders/LendersServiceAgreement"
 import "./styles/index.css"
 import BorrowerSection from "./pages/borrower"
 import { BASE_PATHS } from "./routes/constants"
+import { client } from "./client/client"
 
 const queryClient = new QueryClient()
 
@@ -46,11 +48,13 @@ const router = createBrowserRouter([
 
 export function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <WagmiProvider>
-        <RouterProvider router={router} />
-        <ToastContainer />
-      </WagmiProvider>
-    </QueryClientProvider>
+    <ApolloProvider client={client}>
+      <QueryClientProvider client={queryClient}>
+        <WagmiProvider>
+          <RouterProvider router={router} />
+          <ToastContainer />
+        </WagmiProvider>
+      </QueryClientProvider>
+    </ApolloProvider>
   )
 }
