@@ -45,3 +45,7 @@ export const toastifySuccess = (message: string) => {
 export const toastifyError = (message: string) => {
   toast.error(message, DEFAULT_TOAST_OPTIONS)
 }
+
+export const toastifyInfo = (message: string) => {
+  toast.info(message, DEFAULT_TOAST_OPTIONS)
+}

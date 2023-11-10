@@ -27,3 +27,6 @@ yarn-error.log*
 .idea
 .vscode
 
+src/generated/types.ts
+introspection.json
+

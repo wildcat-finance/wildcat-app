@@ -1,11 +1,8 @@
 import React, { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { DateValue } from "react-aria-components"
-
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-
-import { FormSchema, validationSchema } from "./validationSchema"
+import { formatEther, formatUnits } from "ethers/lib/utils"
+import { BigNumber } from "ethers"
 
 import {
   Button,
@@ -18,6 +15,7 @@ import {
   TableRow,
   TableCell,
   NumberInput,
+  Spinner,
 } from "../../../components/ui-components"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 
@@ -29,16 +27,20 @@ import {
   BackArrow,
 } from "../../../components/ui-components/icons/index"
 
+import { RemoveLendersModal, CapacityModal, NewLendersModal } from "./Modals"
+import { useGetMarket, useGetMarketAccount } from "./hooks/useGetMarket"
 import {
-  RemoveLendersModal,
-  ModalAPR,
-  CapacityModal,
-  BorrowModal,
-  RepayModal,
-  RepayToMinimumModal,
-  CloseModal,
-  NewLendersModal,
-} from "./Modals"
+  formatBps,
+  formatSecsToHours,
+  MARKET_PARAMS_DECIMALS,
+  numberifyTokenAmount,
+  stringifyTokenAmount,
+  TOKEN_AMOUNT_DECIMALS,
+  trimAddress,
+} from "../../../utils/formatters"
+import BorrowAssets from "./BorrowAssets"
+import Repay from "./Repay"
+import AdjustAPR from "./AdjustAPR"
 
 const tableData = [
   {
@@ -106,13 +108,6 @@ const tableData = [
   },
 ]
 
-const defaultDetails: FormSchema = {
-  borrow: "",
-  repay: "",
-  annualInterestRate: "",
-  capacity: "",
-}
-
 function numberToArray(number: number) {
   const array = []
   for (let i = 1; i <= number; i += 1) {
@@ -121,7 +116,7 @@ function numberToArray(number: number) {
   return array
 }
 
-function VaultDetails() {
+const VaultDetails = () => {
   const navigate = useNavigate()
   const [accordionStates, setAccordionStates] = useState([
     false,
@@ -131,6 +126,12 @@ function VaultDetails() {
   ])
   const [isActivePage, setIsActivePage] = useState(1)
   const [dateArray, setDateArray] = useState<DateValue[]>([])
+
+  const { marketAddress } = useParams()
+  const { data: market, isLoading: isMarketLoading } =
+    useGetMarket(marketAddress)
+  const { data: marketAccount, isLoading: isMarketAccountLoading } =
+    useGetMarketAccount(market)
 
   const isDatePicked = dateArray.length >= 1
 
@@ -162,19 +163,21 @@ function VaultDetails() {
     setDateArray([])
   }
 
-  const { setValue } = useForm<FormSchema>({
-    defaultValues: defaultDetails,
-    resolver: zodResolver(validationSchema),
-    mode: "onBlur",
-  })
-
-  const handleFieldChange = (field: string, value: string | number) => {
-    setValue(field as keyof typeof defaultDetails, String(value))
-  }
-
   const handleClickMyVaults = () => {
     navigate("/borrower/my-vaults")
   }
+
+  const isLoading = isMarketLoading || isMarketAccountLoading
+
+  if (isLoading) {
+    return <Spinner isLoading={isLoading} />
+  }
+
+  if (!market || !marketAccount) {
+    return <div>Market not found</div>
+  }
+
+  console.log("MARKET", marketAccount)
 
   return (
     <div>
@@ -186,45 +189,29 @@ function VaultDetails() {
         <p className="text-xs font-normal underline">My Markets</p>
       </button>
       <div className="text-green text-2xl font-bold mb-8 w-2/3">
-        Blossom Dai Stablecoin
+        {market.name}
       </div>
       <Paper className="flex flex-col gap-y-5 border-0 px-6 py-5 mb-14 bg-tint-10 border-tint-8 rounded-3xl">
         <div>
           <div className="w-full flex justify-between items-center">
             <div className="font-bold">Borrow Assets</div>
             <div className="flex gap-x-3.5 w-full max-w-lg">
-              <NumberInput
-                decimalScale={4}
-                className="w-full"
-                placeholder="00,000.00"
+              <BorrowAssets
+                borrowableAssets={market.borrowableAssets}
+                marketAccount={marketAccount}
               />
-              <BorrowModal />
             </div>
           </div>
           <div className="text-xxs text-right mt-1.5 mr-48">
-            <span className="font-semibold">Available To Borrow: </span>
+            <span className="font-semibold">Available To Borrow:</span>{" "}
+            {market.borrowableAssets.toFixed()} {market.underlyingToken.symbol}
           </div>
         </div>
         <div>
           <div className="w-full flex justify-between">
             <div className="font-bold mt-3">Repay Debt</div>
             <div className="flex items-center gap-x-3.5 w-full max-w-lg">
-              <div className="w-full">
-                <NumberInput
-                  decimalScale={4}
-                  className="w-full"
-                  placeholder="00,000.00"
-                  min={0}
-                  max={9000}
-                />
-                <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
-                  <span className="font-semibold">Outstanding Debt:</span>
-                </div>
-              </div>
-              <div className="w-44 flex flex-col gap-y-1.5">
-                <RepayModal />
-                <RepayToMinimumModal />
-              </div>
+              <Repay marketAccount={marketAccount} />
             </div>
           </div>
         </div>
@@ -232,22 +219,7 @@ function VaultDetails() {
           <div className="w-full flex justify-between">
             <div className="font-bold mt-3">Adjust Lender APR</div>
             <div className="flex items-center gap-x-3.5 w-full max-w-lg">
-              <div className="w-full">
-                <NumberInput
-                  decimalScale={2}
-                  className="w-full"
-                  placeholder="00.00%"
-                  min={0}
-                  max={100}
-                />
-                <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
-                  <span className="font-semibold">Current Base Rate:</span>
-                </div>
-              </div>
-              <div className="w-44 flex flex-col gap-y-1.5">
-                <ModalAPR />
-                <CloseModal />
-              </div>
+              <AdjustAPR marketAccount={marketAccount} />
             </div>
           </div>
         </div>
@@ -256,7 +228,7 @@ function VaultDetails() {
             <div className="font-bold">Adjust Maximum Capacity</div>
             <div className="flex gap-x-3.5 w-full max-w-lg">
               <NumberInput
-                decimalScale={4}
+                decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
                 className="w-full"
                 placeholder="10.00"
                 min={0}
@@ -265,95 +237,124 @@ function VaultDetails() {
             </div>
           </div>
           <div className="text-xxs text-right mt-1.5 mr-48">
-            <span className="font-semibold">Current Capacity:</span>
+            <span className="font-semibold">Current Capacity:</span>{" "}
+            {market.maxTotalSupply.toFixed(2)}
           </div>
         </div>
       </Paper>
-      <div>
-        <div className="text-base font-bold">Market Details</div>
-        <div className="flex w-full mt-5 mb-14">
-          <div className="w-full">
-            <TableItem
-              title="Contract Address"
-              value="0xdc8f...63cA"
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Maximum Capacity"
-              value="50,000 DAI"
-              className="pl-6 pr-24"
-            />
-            <TableItem title="Lender APR" value="4%" className="pl-6 pr-24" />
-            <TableItem
-              title="Protocol Fee APR"
-              value="0.8%"
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Penalty Rate APR"
-              value="10%"
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Minimum Reserve Ratio"
-              value="25%"
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Withdrawal Cycle Duration"
-              value="48:00:00"
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Maximum Grace Period"
-              value="24:00:00"
-              className="pl-6 pr-24"
-            />
-          </div>
-          <div className="w-full">
-            <TableItem
-              title="Available Grace Period"
-              value="23:12:38"
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Repayment To Minimum Reserves"
-              value="18,750 DAI"
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Available To Borrow"
-              value="0 DAI"
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Outstanding Debt"
-              value="30,000 DAI"
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Assets In Reserves"
-              value="0 DAI"
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Minimum Reserves Required"
-              value="7,500 DAI"
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Current Reserve Ratio"
-              value="0%"
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Lifetime Accrued Interest"
-              value="5 DAI"
-              className="pr-6 pl-24"
-            />
+
+      {market && (
+        <div>
+          <div className="text-base font-bold">Market Details</div>
+          <div className="flex w-full mt-5 mb-14">
+            <div className="w-full">
+              <TableItem
+                title="Contract Address"
+                value={trimAddress(market.address)}
+                className="pl-6 pr-24"
+              />
+              <TableItem
+                title="Maximum Capacity"
+                value={`${formatEther(market.maxTotalSupply.raw)} ${
+                  market.underlyingToken.symbol
+                }`}
+                className="pl-6 pr-24"
+              />
+              <TableItem
+                title="Lender APR"
+                value={`${formatBps(
+                  market.annualInterestBips,
+                  MARKET_PARAMS_DECIMALS.annualInterestBips,
+                )}%`}
+                className="pl-6 pr-24"
+              />
+              <TableItem
+                title="Protocol Fee APR"
+                value={`${formatBps(market.protocolFeeBips)}%`}
+                className="pl-6 pr-24"
+              />
+              <TableItem
+                title="Penalty Rate APR"
+                value={`${formatBps(
+                  market.delinquencyFeeBips,
+                  MARKET_PARAMS_DECIMALS.delinquencyFeeBips,
+                )}%`}
+                className="pl-6 pr-24"
+              />
+              <TableItem
+                title="Minimum Reserve Ratio"
+                value={`${formatBps(
+                  market.reserveRatioBips,
+                  MARKET_PARAMS_DECIMALS.reserveRatioBips,
+                )}%`}
+                className="pl-6 pr-24"
+              />
+              <TableItem
+                title="Withdrawal Cycle Duration"
+                value={formatSecsToHours(market.pendingWithdrawalExpiry)}
+                className="pl-6 pr-24"
+              />
+              <TableItem
+                title="Maximum Grace Period"
+                value={formatSecsToHours(market.delinquencyGracePeriod)}
+                className="pl-6 pr-24"
+              />
+            </div>
+            <div className="w-full">
+              <TableItem
+                title="Available Grace Period"
+                value="23:12:38"
+                className="pr-6 pl-24"
+              />
+              <TableItem
+                title="Repayment To Minimum Reserves"
+                value={`18,750 ${market.underlyingToken.name}`}
+                className="pr-6 pl-24"
+              />
+              <TableItem
+                title="Available To Borrow"
+                value={`${formatEther(market.maxTotalSupply.raw)} ${
+                  market.underlyingToken.symbol
+                }`}
+                className="pr-6 pl-24"
+              />
+              <TableItem
+                title="Outstanding Debt"
+                value={`${formatBps(
+                  market.outstandingDebt.raw.toNumber(),
+                  TOKEN_AMOUNT_DECIMALS,
+                )} ${market.underlyingToken.symbol}`}
+                className="pr-6 pl-24"
+              />
+              <TableItem
+                title="Assets In Reserves"
+                value={`${stringifyTokenAmount(
+                  market.totalAssets.raw,
+                  market.underlyingToken.decimals,
+                )} ${market.underlyingToken.symbol}`}
+                className="pr-6 pl-24"
+              />
+              <TableItem
+                title="Minimum Reserves Required"
+                value={`${formatEther(market.maxTotalSupply.raw)} ${
+                  market.underlyingToken.symbol
+                }`}
+                className="pr-6 pl-24"
+              />
+              <TableItem
+                title="Current Reserve Ratio"
+                value={`${formatBps(market.reserveRatioBips)}%`}
+                className="pr-6 pl-24"
+              />
+              <TableItem
+                title="Lifetime Accrued Interest"
+                value={`5 ${market.underlyingToken.name}`}
+                className="pr-6 pl-24"
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
       <div className="mb-14">
         <div className="flex justify-between items-center mb-8">
           <div className="text-base font-bold">Lender Withdrawal Requests</div>
@@ -596,8 +597,8 @@ function VaultDetails() {
       <div className="flex w-full justify-between content-center">
         <div className="text-base font-bold">Authorised Lenders</div>
         <div className="flex gap-x-2">
-          <NewLendersModal />
-          <RemoveLendersModal lenders={tableData} />
+          <NewLendersModal market={marketAddress!} />
+          <RemoveLendersModal market={marketAddress!} />
         </div>
       </div>
       <div className="mt-5 mb-14">
@@ -643,18 +644,6 @@ function VaultDetails() {
         </Table>
       </div>
 
-      <div className="flex w-full justify-between content-center">
-        <div className="text-base font-bold">Market Interaction History</div>
-        <button
-          className="flex items-center gap-x-2"
-          onClick={() => toggleAccordion(3)}
-        >
-          <p className="text-xs font-normal underline cursor-pointer">
-            {accordionStates[3] ? "Hide History" : "Show History"}
-          </p>
-          {toggleAccordionIcon(3)}
-        </button>
-      </div>
       {accordionStates[3] && (
         <Paper className="border-tint-10 mt-5 bg-white h-48 p-5 flex flex-col gap-y-6 overflow-auto">
           <div className="text-xs">

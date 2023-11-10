@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, ChangeEvent } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
@@ -14,13 +14,14 @@ import {
   NewLenderFormSchema,
   newLenderValisationSchema,
 } from "./validationSchema"
+import { useAuthorizedLenders } from "../../hooks/useVaultDetailActions"
+import { NewLendersModalProps } from "./interface"
 
 const newLenderFormDefaults: NewLenderFormSchema = {
-  lenderName: "",
   lenderWallet: "",
 }
 
-export function NewLendersModal() {
+export function NewLendersModal({ market }: NewLendersModalProps) {
   const { setValue, getValues, watch, reset } = useForm<NewLenderFormSchema>({
     resolver: zodResolver(newLenderValisationSchema),
     defaultValues: newLenderFormDefaults,
@@ -28,8 +29,10 @@ export function NewLendersModal() {
   })
   const [newLenders, setNewLenders] = useState<NewLenderFormSchema[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const lendersAddresses = newLenders.map((lender) => lender.lenderWallet)
+  const { mutate: authorize } = useAuthorizedLenders(lendersAddresses, market)
 
-  const handleChangeInput = (evt: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeInput = (evt: ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
     const name = evt.target.name as keyof NewLenderFormSchema
 
@@ -72,7 +75,7 @@ export function NewLendersModal() {
         Authorise Lenders
       </Button>
 
-      <Modal isOpen={isModalOpen} onClose={onModalClose}>
+      <Modal isOpen={isModalOpen} onClose={onModalClose} sign={authorize}>
         <div className="text-base font-bold px-8">Onboard New Lender/s</div>
 
         <div className="w-full border border-tint-10 my-3" />
@@ -82,15 +85,6 @@ export function NewLendersModal() {
             Please provide a reference name and wallet address for each new
             lender you want to authorise for this market.
           </div>
-          <FormItem className="w-full" label="Lender Name" tooltip="test">
-            <TextInput
-              onChange={handleChangeInput}
-              value={formValues.lenderName}
-              name="lenderName"
-              className="w-full bg-tint-11"
-              placeholder="Enter name of Lender"
-            />
-          </FormItem>
           <FormItem
             className="w-full"
             label="Lender Wallet Address"
@@ -114,9 +108,8 @@ export function NewLendersModal() {
               You have added:
             </div>
             {newLenders.map((lender) => (
-              <div className="flex gap-x-4">
+              <div className="flex gap-x-4" key={lender.lenderWallet}>
                 <div className="flex flex-col justify-between w-full">
-                  <div className="text-xs font-medium">{lender.lenderName}</div>
                   <div className="text-xs">{lender.lenderWallet}</div>
                 </div>
                 <Button

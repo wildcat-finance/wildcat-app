@@ -7,8 +7,8 @@ import VaultCard from "./VaultCard"
 
 import { mockedStatuses } from "../../../mocks/vaults"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
-import { useMarkets } from "./hooks/useMarkets"
-import { getMarketStatus } from "../../../utils/helpers"
+import { useMyMarkets } from "./hooks/useMyMarkets"
+import { getMarketStatus } from "../../../utils/marketStatus"
 import { useTokensList } from "../../../hooks/useTokensList"
 
 const mockedVaultStatusOptions: SelectOptionItem[] = mockedStatuses
@@ -26,7 +26,7 @@ function MyVaults() {
     useState<SelectOptionItem | null>(null)
   const [selectedVaultStatus, setSelectedVaultStatus] =
     useState<SelectOptionItem | null>(null)
-  const { data: markets } = useMarkets()
+  const { data: markets } = useMyMarkets()
   const { tokensByChainId } = useTokensList()
 
   const handleFilterByName = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +111,7 @@ function MyVaults() {
 
       <div className="flex w-full flex-wrap -mx-2.5 mt-5">
         {filteredMarkets.map((market) => (
-          <div key={market.name} className="w-1/3 px-2.5 py-2.5">
+          <div key={market.address} className="w-1/3 px-2.5 py-2.5">
             <VaultCard market={market} className="w-full" />
           </div>
         ))}

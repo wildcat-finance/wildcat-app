@@ -1,5 +1,3 @@
-import { BigNumber } from "ethers"
-import { formatUnits } from "ethers/lib/utils"
 import { VaultStatus } from "../types/vaults"
 import { ChipColorVariants } from "../components/ui-components/Chip/interface"
 
@@ -29,9 +27,3 @@ export function getVaultStatusColor(status: VaultStatus): ChipColorVariants {
       return "gray"
   }
 }
-
-export const formatToken = (bigNum: BigNumber) => {
-  const numberValue = Number(formatUnits(bigNum, 18).toString())
-  return numberValue.toLocaleString("en-US", { minimumFractionDigits: 2 })
-}
-export const formatBps = (bps: number) => (bps / 100).toFixed(2)

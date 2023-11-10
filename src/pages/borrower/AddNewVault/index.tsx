@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { MarketParameterConstraints, Token } from "@wildcatfi/wildcat-sdk"
+import { Token } from "@wildcatfi/wildcat-sdk"
 
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import {
@@ -22,9 +22,11 @@ import { useTokenMetadata } from "../hooks/useTokenMetaData"
 import { MarketPreviewModal } from "./MarketPreviewModal"
 import { defaultMarketForm, useNewMarketForm } from "./hooks/useNewMarketForm"
 import { useGetController } from "../hooks/useGetController"
-import { NewMarketFormSchema } from "./validationSchema"
+import { ValidationSchemaType } from "./hooks/validationSchema"
 import { BASE_PATHS } from "../../../routes/constants"
 import { BORROWER_PATHS } from "../routes/constants"
+import { getMinMaxFromConstraints } from "../utils/borrowerFormUtils"
+import { MARKET_PARAMS_DECIMALS } from "../../../utils/formatters"
 
 export const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
   (vaultType) => ({
@@ -33,25 +35,6 @@ export const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
     value: vaultType.value,
   }),
 )
-
-function getMinMaxFromContraints(
-  constraints: MarketParameterConstraints | undefined,
-  field: keyof NewMarketFormSchema,
-) {
-  const fieldNameFormatted = `${field[0].toUpperCase()}${field.slice(1)}`
-  const minKey =
-    `minimum${fieldNameFormatted}` as keyof MarketParameterConstraints
-  const maxKey =
-    `maximum${fieldNameFormatted}` as keyof MarketParameterConstraints
-
-  return {
-    min: constraints && constraints[minKey] ? constraints[minKey] / 100 : 0,
-    max:
-      constraints && constraints[maxKey]
-        ? constraints[maxKey] / 100
-        : undefined,
-  }
-}
 
 const AddNewVault = () => {
   const {
@@ -118,7 +101,7 @@ const AddNewVault = () => {
     if (!isValid) {
       const firstErrorField = Object.keys(
         errors,
-      )[0] as keyof NewMarketFormSchema
+      )[0] as keyof ValidationSchemaType
 
       if (firstErrorField) setFocus(firstErrorField)
     }
@@ -136,13 +119,14 @@ const AddNewVault = () => {
     await trigger("asset")
   }
 
-  const getNumberFieldDefaultValue = (field: keyof NewMarketFormSchema) =>
+  const getNumberFieldDefaultValue = (field: keyof ValidationSchemaType) =>
     controller?.constraints
-      ? getMinMaxFromContraints(controller.constraints, field).min
+      ? getMinMaxFromConstraints(controller.constraints, field).min
       : defaultMarketForm[field]
 
-  const getNumberFieldConstraints = (field: keyof NewMarketFormSchema) =>
-    getMinMaxFromContraints(controller?.constraints, field)
+  const getNumberFieldConstraints = (field: string) =>
+    getMinMaxFromConstraints(controller?.constraints, field)
+
   return (
     <div>
       <Button
@@ -242,7 +226,7 @@ const AddNewVault = () => {
               {...register("maxTotalSupply")}
               defaultValue={getNumberFieldDefaultValue("maxTotalSupply")}
               error={Boolean(errors.maxTotalSupply)}
-              decimalScale={2}
+              decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
             />
           </FormItem>
 
@@ -262,7 +246,7 @@ const AddNewVault = () => {
             <NumberInput
               {...register("reserveRatioBips")}
               error={Boolean(errors.reserveRatioBips)}
-              decimalScale={2}
+              decimalScale={MARKET_PARAMS_DECIMALS.reserveRatioBips}
               defaultValue={getNumberFieldDefaultValue("reserveRatioBips")}
               min={getNumberFieldConstraints("reserveRatioBips").min}
               max={getNumberFieldConstraints("reserveRatioBips").max}
@@ -277,7 +261,7 @@ const AddNewVault = () => {
             }
             error={Boolean(errors.annualInterestBips)}
             errorText={errors.annualInterestBips?.message}
-            tooltip="Annual interest rate that you are offering to your lenders for 
+            tooltip="Annual interest rate that you are offering to your lenders for
                      depositing underlying assets into this market for you to borrow.
                      Note that your actual interest rate might be higher than the APR
                      if you have selected a market type that imposes a protocol fee."
@@ -285,7 +269,7 @@ const AddNewVault = () => {
             <NumberInput
               {...register("annualInterestBips")}
               error={Boolean(errors.annualInterestBips)}
-              decimalScale={2}
+              decimalScale={MARKET_PARAMS_DECIMALS.annualInterestBips}
               defaultValue={getNumberFieldDefaultValue("annualInterestBips")}
               min={getNumberFieldConstraints("annualInterestBips").min}
               max={getNumberFieldConstraints("annualInterestBips").max}
@@ -307,7 +291,7 @@ const AddNewVault = () => {
             <NumberInput
               {...register("delinquencyFeeBips")}
               error={Boolean(errors.delinquencyFeeBips)}
-              decimalScale={2}
+              decimalScale={MARKET_PARAMS_DECIMALS.delinquencyFeeBips}
               defaultValue={getNumberFieldDefaultValue("delinquencyFeeBips")}
               min={getNumberFieldConstraints("delinquencyFeeBips").min}
               max={getNumberFieldConstraints("delinquencyFeeBips").max}
@@ -328,7 +312,7 @@ const AddNewVault = () => {
             <NumberInput
               {...register("delinquencyGracePeriod")}
               error={Boolean(errors.delinquencyGracePeriod)}
-              decimalScale={1}
+              decimalScale={MARKET_PARAMS_DECIMALS.delinquencyGracePeriod}
               defaultValue={getNumberFieldDefaultValue(
                 "delinquencyGracePeriod",
               )}
@@ -356,7 +340,7 @@ const AddNewVault = () => {
             <NumberInput
               {...register("withdrawalBatchDuration")}
               error={Boolean(errors.withdrawalBatchDuration)}
-              decimalScale={1}
+              decimalScale={MARKET_PARAMS_DECIMALS.withdrawalBatchDuration}
               defaultValue={getNumberFieldDefaultValue(
                 "withdrawalBatchDuration",
               )}

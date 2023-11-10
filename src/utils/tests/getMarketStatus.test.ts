@@ -1,4 +1,4 @@
-import { getMarketStatus } from "../helpers"
+import { getMarketStatus } from "../marketStatus"
 import { VaultStatus } from "../../types/vaults"
 
 describe("getMarketStatus", () => {
