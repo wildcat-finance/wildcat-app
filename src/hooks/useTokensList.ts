@@ -42,6 +42,7 @@ export const useTokensList = () => {
   }
 
   return {
+    tokensByChainId,
     filterByName,
     filteredTokens,
     allTokens: tokensByChainId,

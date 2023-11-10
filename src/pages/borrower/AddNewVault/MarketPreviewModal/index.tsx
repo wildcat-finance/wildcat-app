@@ -36,6 +36,7 @@ export const MarketPreviewModal = ({
 
       {isModalOpen && (
         <Modal
+          firstBtnText="Confirm"
           sign={handleSubmit}
           isOpen={isModalOpen}
           onClose={onClose}
@@ -103,7 +104,7 @@ export const MarketPreviewModal = ({
                 disabled
               />
             </FormItem>
-            <FormItem label="Grace Period Duration">
+            <FormItem label="FGrace Period Duration">
               <input
                 className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
                 value={`${getValues("delinquencyGracePeriod")} Hours`}
@@ -120,7 +121,7 @@ export const MarketPreviewModal = ({
           </div>
           <div className="w-full border border-tint-10 mt-9 mb-3.5" />
           <div className="w-72 m-auto leading-3 font-light text-xxs text-center">
-            Please reviewget your market parameters before confirming creation.
+            Please review your market parameters before confirming creation.
             Note that once your market is created, you will only be able to
             adjust your APR and market capacity.
           </div>
