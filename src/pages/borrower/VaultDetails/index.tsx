@@ -644,18 +644,6 @@ const VaultDetails = () => {
         </Table>
       </div>
 
-      <div className="flex w-full justify-between content-center">
-        <div className="text-base font-bold">Market Interaction History</div>
-        <button
-          className="flex items-center gap-x-2"
-          onClick={() => toggleAccordion(3)}
-        >
-          <p className="text-xs font-normal underline cursor-pointer">
-            {accordionStates[3] ? "Hide History" : "Show History"}
-          </p>
-          {toggleAccordionIcon(3)}
-        </button>
-      </div>
       {accordionStates[3] && (
         <Paper className="border-tint-10 mt-5 bg-white h-48 p-5 flex flex-col gap-y-6 overflow-auto">
           <div className="text-xs">
