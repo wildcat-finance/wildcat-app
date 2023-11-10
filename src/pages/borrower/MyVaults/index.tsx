@@ -8,7 +8,7 @@ import VaultCard from "./VaultCard"
 import { mockedStatuses } from "../../../mocks/vaults"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
 import { useMyMarkets } from "./hooks/useMyMarkets"
-import { getMarketStatus } from "../../../utils/helpers"
+import { getMarketStatus } from "../../../utils/marketStatus"
 import { useTokensList } from "../../../hooks/useTokensList"
 
 const mockedVaultStatusOptions: SelectOptionItem[] = mockedStatuses

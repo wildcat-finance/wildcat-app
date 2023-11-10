@@ -2,12 +2,11 @@ import cn from "classnames"
 
 import { Button, Chip, TableItem } from "../../../../components/ui-components"
 import { VaultCardProps } from "./interface"
+import { formatBps, formatToken } from "../../../../utils/formatters"
 import {
-  formatBps,
-  formatToken,
   getMarketStatus,
   getVaultStatusColor,
-} from "../../../../utils/helpers"
+} from "../../../../utils/marketStatus"
 
 function VaultCard({ market, className }: VaultCardProps) {
   const status = getMarketStatus(

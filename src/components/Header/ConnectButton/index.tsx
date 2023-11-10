@@ -7,6 +7,7 @@ import { Button } from "../../ui-components"
 import { useWalletConnectModalStore } from "../../../store/useWalletConnectModalStore"
 import { NETWORKS } from "../../../config/networks"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
+import { trimAddress } from "../../../utils/formatters"
 
 function ConnectButton() {
   const { isOpen, setIsWalletModalOpen } = useWalletConnectModalStore()

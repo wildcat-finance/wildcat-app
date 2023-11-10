@@ -5,7 +5,7 @@ import { Select, TextInput } from "../../../components/ui-components"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
 import { useTokensList } from "../../../hooks/useTokensList"
 import { mockedStatuses } from "../../../mocks/vaults"
-import { getMarketStatus } from "../../../utils/helpers"
+import { getMarketStatus } from "../../../utils/marketStatus"
 import { useLendersMarkets } from "./hooks/useLendersMarkets"
 
 import VaultCard from "./VaultCard"
