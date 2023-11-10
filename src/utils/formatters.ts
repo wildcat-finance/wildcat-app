@@ -25,6 +25,12 @@ export const formatBps = (bps: number, fixed?: number) =>
 // <---- TOKEN PARAMETERS FORMATTERS ---->
 export const trimAddress = (address: string) =>
   `${address.slice(0, 2)}..${address.slice(-4, address.length)}`
+export const getTokenAmount = (amount: BigNumber, decimals: number) =>
+  amount.div(BigNumber.from(decimals))
+export const stringifyTokenAmount = (amount: BigNumber, decimals: number) =>
+  getTokenAmount(amount, decimals).toString()
+export const numberifyTokenAmount = (amount: BigNumber, decimals: number) =>
+  getTokenAmount(amount, decimals).toNumber()
 
 // <---- HOURS PARAMETERS FORMATTERS ---->
 export const formatSecsToHours = (seconds: number) => {
