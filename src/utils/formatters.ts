@@ -2,13 +2,17 @@ import { BigNumber } from "ethers"
 import { formatUnits } from "ethers/lib/utils"
 import { MarketParameters } from "@wildcatfi/wildcat-sdk"
 
-export const MARKET_BIPS_DECIMAL_SCALES: Partial<{
+// <---- MARKET PARAMETERS FORMATTERS ---->
+export const TOKEN_AMOUNT_DECIMALS = 4
+export const MARKET_PERCENTAGE_PARAM_DECIMALS = 2
+
+export const MARKET_PARAMS_DECIMALS: Partial<{
   [key in keyof MarketParameters]: number
 }> = {
-  maxTotalSupply: 2,
-  reserveRatioBips: 2,
-  annualInterestBips: 2,
-  delinquencyFeeBips: 2,
+  maxTotalSupply: TOKEN_AMOUNT_DECIMALS,
+  reserveRatioBips: MARKET_PERCENTAGE_PARAM_DECIMALS,
+  annualInterestBips: MARKET_PERCENTAGE_PARAM_DECIMALS,
+  delinquencyFeeBips: MARKET_PERCENTAGE_PARAM_DECIMALS,
   delinquencyGracePeriod: 1,
   withdrawalBatchDuration: 1,
 }
@@ -17,3 +21,14 @@ export const formatToken = (bigNum: BigNumber) =>
   Number(formatUnits(bigNum, 18).toString()).toFixed(4)
 export const formatBps = (bps: number, fixed?: number) =>
   (bps / 100).toFixed(fixed || 2)
+
+// <---- TOKEN PARAMETERS FORMATTERS ---->
+export const trimAddress = (address: string) =>
+  `${address.slice(0, 2)}..${address.slice(-4, address.length)}`
+
+// <---- HOURS PARAMETERS FORMATTERS ---->
+export const formatSecsToHours = (seconds: number) => {
+  const hours = seconds / 60 / 60
+
+  return hours.toFixed(1)
+}

@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { DateValue } from "react-aria-components"
 
+import { BigNumber } from "ethers"
 import {
   Button,
   FormItem,
@@ -29,7 +30,10 @@ import { RemoveLendersModal, CapacityModal, NewLendersModal } from "./Modals"
 import { useGetMarket, useGetMarketAccount } from "./hooks/useGetMarket"
 import {
   formatBps,
-  MARKET_BIPS_DECIMAL_SCALES,
+  formatSecsToHours,
+  MARKET_PARAMS_DECIMALS,
+  TOKEN_AMOUNT_DECIMALS,
+  trimAddress,
 } from "../../../utils/formatters"
 import BorrowAssets from "./BorrowAssets"
 import Repay from "./Repay"
@@ -170,6 +174,8 @@ const VaultDetails = () => {
     return <div>Market not found</div>
   }
 
+  console.log("MARKET", marketAccount)
+
   return (
     <div>
       <button
@@ -219,7 +225,7 @@ const VaultDetails = () => {
             <div className="font-bold">Adjust Maximum Capacity</div>
             <div className="flex gap-x-3.5 w-full max-w-lg">
               <NumberInput
-                decimalScale={MARKET_BIPS_DECIMAL_SCALES.maxTotalSupply}
+                decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
                 className="w-full"
                 placeholder="10.00"
                 min={0}
@@ -241,19 +247,22 @@ const VaultDetails = () => {
             <div className="w-full">
               <TableItem
                 title="Contract Address"
-                value={market.address.toLowerCase()}
+                value={trimAddress(market.address)}
                 className="pl-6 pr-24"
               />
               <TableItem
                 title="Maximum Capacity"
-                value={`${market.maxTotalSupply.toFixed(2)} ${
-                  market.underlyingToken.symbol
-                }`}
+                value={`${market.maxTotalSupply.toFixed(
+                  MARKET_PARAMS_DECIMALS.maxTotalSupply,
+                )} ${market.underlyingToken.symbol}`}
                 className="pl-6 pr-24"
               />
               <TableItem
                 title="Lender APR"
-                value={`${formatBps(market.annualInterestBips)}%`}
+                value={`${formatBps(
+                  market.annualInterestBips,
+                  MARKET_PARAMS_DECIMALS.annualInterestBips,
+                )}%`}
                 className="pl-6 pr-24"
               />
               <TableItem
@@ -263,22 +272,28 @@ const VaultDetails = () => {
               />
               <TableItem
                 title="Penalty Rate APR"
-                value={`${formatBps(market.penaltyFee)}%`}
+                value={`${formatBps(
+                  market.delinquencyFeeBips,
+                  MARKET_PARAMS_DECIMALS.delinquencyFeeBips,
+                )}%`}
                 className="pl-6 pr-24"
               />
               <TableItem
                 title="Minimum Reserve Ratio"
-                value={`${formatBps(market.reserveRatioBips)}%`}
+                value={`${formatBps(
+                  market.reserveRatioBips,
+                  MARKET_PARAMS_DECIMALS.reserveRatioBips,
+                )}%`}
                 className="pl-6 pr-24"
               />
               <TableItem
                 title="Withdrawal Cycle Duration"
-                value="48:00:00"
+                value={formatSecsToHours(market.pendingWithdrawalExpiry)}
                 className="pl-6 pr-24"
               />
               <TableItem
                 title="Maximum Grace Period"
-                value="24:00:00"
+                value={formatSecsToHours(market.delinquencyGracePeriod)}
                 className="pl-6 pr-24"
               />
             </div>
@@ -295,22 +310,34 @@ const VaultDetails = () => {
               />
               <TableItem
                 title="Available To Borrow"
-                value="0 DAI"
+                value={`${formatBps(
+                  market.borrowableAssets.raw.toNumber(),
+                  TOKEN_AMOUNT_DECIMALS,
+                )} ${market.underlyingToken.symbol}`}
                 className="pr-6 pl-24"
               />
               <TableItem
                 title="Outstanding Debt"
-                value="30,000 DAI"
+                value={`${formatBps(
+                  market.outstandingDebt.raw.toNumber(),
+                  TOKEN_AMOUNT_DECIMALS,
+                )} ${market.underlyingToken.symbol}`}
                 className="pr-6 pl-24"
               />
               <TableItem
                 title="Assets In Reserves"
-                value="0 DAI"
+                value={`${formatBps(
+                  market.totalAssets.raw.toNumber(),
+                  TOKEN_AMOUNT_DECIMALS,
+                )} ${market.underlyingToken.symbol}`}
                 className="pr-6 pl-24"
               />
               <TableItem
                 title="Minimum Reserves Required"
-                value="7,500 DAI"
+                value={`${formatBps(
+                  market.maxTotalSupply.raw.toNumber(),
+                  TOKEN_AMOUNT_DECIMALS,
+                )} ${market.underlyingToken.symbol}`}
                 className="pr-6 pl-24"
               />
               <TableItem

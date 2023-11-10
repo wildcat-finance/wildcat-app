@@ -7,7 +7,7 @@ import {
   useTerminateMarket,
 } from "../hooks/useVaultDetailActions"
 import { AdjustAprProps } from "./interface"
-import { MARKET_BIPS_DECIMAL_SCALES } from "../../../../utils/formatters"
+import { MARKET_PARAMS_DECIMALS } from "../../../../utils/formatters"
 
 const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
   const { mutate, isLoading: adjustAprLoading } = useAdjustAPR(marketAccount)
@@ -36,7 +36,7 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
     <>
       <div className="w-full">
         <NumberInput
-          decimalScale={MARKET_BIPS_DECIMAL_SCALES.annualInterestBips}
+          decimalScale={MARKET_PARAMS_DECIMALS.annualInterestBips}
           className="w-full"
           placeholder="00,000.00"
           value={apr}

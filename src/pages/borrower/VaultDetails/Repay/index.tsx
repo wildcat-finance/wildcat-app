@@ -8,7 +8,7 @@ import {
   useRepayOutstandingDebt,
 } from "../hooks/useVaultDetailActions"
 import { RepayProps } from "./interface"
-import { MARKET_BIPS_DECIMAL_SCALES } from "../../../../utils/formatters"
+import { MARKET_PARAMS_DECIMALS } from "../../../../utils/formatters"
 
 const Repay = ({ marketAccount }: RepayProps) => {
   const { market } = marketAccount
@@ -45,7 +45,7 @@ const Repay = ({ marketAccount }: RepayProps) => {
     <>
       <div className="w-full">
         <NumberInput
-          decimalScale={MARKET_BIPS_DECIMAL_SCALES.maxTotalSupply}
+          decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
           className="w-full"
           placeholder="00,000.00"
           onChange={handleRepayAmountChange}

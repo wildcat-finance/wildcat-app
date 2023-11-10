@@ -46,10 +46,7 @@ function ConnectButton() {
   }, [isConnected, address, isWrongNetwork])
 
   const shortenedAddress = useMemo(
-    () =>
-      address
-        ? `${address.slice(0, 2)}..${address.slice(-4, address.length)}`
-        : null,
+    () => (address ? trimAddress(address) : null),
     [address],
   )
 
