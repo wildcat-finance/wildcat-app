@@ -26,6 +26,7 @@ import { ValidationSchemaType } from "./hooks/validationSchema"
 import { BASE_PATHS } from "../../../routes/constants"
 import { BORROWER_PATHS } from "../routes/constants"
 import { getMinMaxFromConstraints } from "../utils/borrowerFormUtils"
+import { MARKET_PARAMS_DECIMALS } from "../../../utils/formatters"
 
 export const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
   (vaultType) => ({
@@ -175,7 +176,9 @@ const AddNewVault = () => {
           <FormItem
             label="Market Token Name Prefix"
             className="mb-5 pb-4"
-            endDecorator={<Chip className="w-32 ml-3">Dai Stablecoin</Chip>}
+            endDecorator={
+              <Chip className="w-32 ml-3">{tokenAsset?.symbol}</Chip>
+            }
             error={Boolean(errors.namePrefix)}
             errorText={errors.namePrefix?.message}
             tooltip="The identifier that attaches to the front of the name of the underlying
@@ -194,7 +197,9 @@ const AddNewVault = () => {
           <FormItem
             label="Market Token Symbol Prefix"
             className="mb-5 pb-4"
-            endDecorator={<Chip className="w-32 ml-3">DAI</Chip>}
+            endDecorator={
+              <Chip className="w-32 ml-3">{tokenAsset?.symbol}</Chip>
+            }
             error={Boolean(errors.symbolPrefix)}
             errorText={errors.symbolPrefix?.message}
             tooltip="Symbol version of the market token to be issued to lenders (e.g. TSTDAI)."
@@ -209,7 +214,9 @@ const AddNewVault = () => {
           <FormItem
             label="Market Capacity"
             className="mb-5 pb-4"
-            endDecorator={<Chip className="w-32 ml-3">DAI</Chip>}
+            endDecorator={
+              <Chip className="w-32 ml-3">{tokenAsset?.symbol}</Chip>
+            }
             error={Boolean(errors.maxTotalSupply)}
             errorText={errors.maxTotalSupply?.message}
             tooltip="Maximum quantity of underlying assets that you wish to borrow from lenders."
@@ -219,7 +226,7 @@ const AddNewVault = () => {
               {...register("maxTotalSupply")}
               defaultValue={getNumberFieldDefaultValue("maxTotalSupply")}
               error={Boolean(errors.maxTotalSupply)}
-              decimalScale={2}
+              decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
             />
           </FormItem>
 
@@ -239,7 +246,7 @@ const AddNewVault = () => {
             <NumberInput
               {...register("reserveRatioBips")}
               error={Boolean(errors.reserveRatioBips)}
-              decimalScale={2}
+              decimalScale={MARKET_PARAMS_DECIMALS.reserveRatioBips}
               defaultValue={getNumberFieldDefaultValue("reserveRatioBips")}
               min={getNumberFieldConstraints("reserveRatioBips").min}
               max={getNumberFieldConstraints("reserveRatioBips").max}
@@ -262,7 +269,7 @@ const AddNewVault = () => {
             <NumberInput
               {...register("annualInterestBips")}
               error={Boolean(errors.annualInterestBips)}
-              decimalScale={2}
+              decimalScale={MARKET_PARAMS_DECIMALS.annualInterestBips}
               defaultValue={getNumberFieldDefaultValue("annualInterestBips")}
               min={getNumberFieldConstraints("annualInterestBips").min}
               max={getNumberFieldConstraints("annualInterestBips").max}
@@ -284,7 +291,7 @@ const AddNewVault = () => {
             <NumberInput
               {...register("delinquencyFeeBips")}
               error={Boolean(errors.delinquencyFeeBips)}
-              decimalScale={2}
+              decimalScale={MARKET_PARAMS_DECIMALS.delinquencyFeeBips}
               defaultValue={getNumberFieldDefaultValue("delinquencyFeeBips")}
               min={getNumberFieldConstraints("delinquencyFeeBips").min}
               max={getNumberFieldConstraints("delinquencyFeeBips").max}
@@ -305,7 +312,7 @@ const AddNewVault = () => {
             <NumberInput
               {...register("delinquencyGracePeriod")}
               error={Boolean(errors.delinquencyGracePeriod)}
-              decimalScale={1}
+              decimalScale={MARKET_PARAMS_DECIMALS.delinquencyGracePeriod}
               defaultValue={getNumberFieldDefaultValue(
                 "delinquencyGracePeriod",
               )}
@@ -333,7 +340,7 @@ const AddNewVault = () => {
             <NumberInput
               {...register("withdrawalBatchDuration")}
               error={Boolean(errors.withdrawalBatchDuration)}
-              decimalScale={1}
+              decimalScale={MARKET_PARAMS_DECIMALS.withdrawalBatchDuration}
               defaultValue={getNumberFieldDefaultValue(
                 "withdrawalBatchDuration",
               )}

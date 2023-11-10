@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { MarketAccount, TokenAmount } from "@wildcatfi/wildcat-sdk"
 import { parseUnits } from "ethers/lib/utils"
 import { BigNumber } from "ethers"
+
 import { useEthersSigner } from "../../../../modules/hooks"
 import {
   toastifyError,
@@ -75,6 +76,52 @@ export const useRepayOutstandingDebt = (marketAccount: MarketAccount) => {
     },
     onSuccess() {
       toastifyInfo("Repaying in progress... Check your wallet transaction")
+      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+    },
+    onError(error) {
+      console.log(error)
+    },
+  })
+}
+
+export const useAdjustAPR = (marketAccount: MarketAccount) => {
+  const signer = useEthersSigner()
+  const client = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (amount: number) => {
+      if (!marketAccount || !signer) {
+        return
+      }
+
+      await marketAccount.setAPR(amount)
+    },
+    onSuccess() {
+      toastifyInfo("APR adjust in progress... Check your wallet transaction")
+      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+    },
+    onError(error) {
+      console.log(error)
+    },
+  })
+}
+
+export const useTerminateMarket = () => {
+  const signer = useEthersSigner()
+  const client = useQueryClient()
+
+  return useMutation({
+    mutationFn: async () => {
+      if (!signer) {
+        return
+      }
+
+      await new Promise((resolve) => {
+        setTimeout(resolve, 3000)
+      })
+    },
+    onSuccess() {
+      toastifyInfo("Market is closing... Check your wallet transaction")
       client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
     },
     onError(error) {

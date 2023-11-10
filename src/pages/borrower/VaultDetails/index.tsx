@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { DateValue } from "react-aria-components"
 
+import { BigNumber } from "ethers"
 import {
   Button,
   FormItem,
@@ -25,16 +26,18 @@ import {
   BackArrow,
 } from "../../../components/ui-components/icons/index"
 
-import {
-  RemoveLendersModal,
-  ModalAPR,
-  CapacityModal,
-  NewLendersModal,
-} from "./Modals"
+import { RemoveLendersModal, CapacityModal, NewLendersModal } from "./Modals"
 import { useGetMarket, useGetMarketAccount } from "./hooks/useGetMarket"
-import { formatBps } from "../../../utils/helpers"
+import {
+  formatBps,
+  formatSecsToHours,
+  MARKET_PARAMS_DECIMALS,
+  TOKEN_AMOUNT_DECIMALS,
+  trimAddress,
+} from "../../../utils/formatters"
 import BorrowAssets from "./BorrowAssets"
 import Repay from "./Repay"
+import AdjustAPR from "./AdjustAPR"
 
 const tableData = [
   {
@@ -171,6 +174,8 @@ const VaultDetails = () => {
     return <div>Market not found</div>
   }
 
+  console.log("MARKET", marketAccount)
+
   return (
     <div>
       <button
@@ -211,25 +216,7 @@ const VaultDetails = () => {
           <div className="w-full flex justify-between">
             <div className="font-bold mt-3">Adjust Lender APR</div>
             <div className="flex items-center gap-x-3.5 w-full max-w-lg">
-              <div className="w-full">
-                <NumberInput
-                  decimalScale={2}
-                  className="w-full"
-                  placeholder="00.00%"
-                  min={0}
-                  max={100}
-                />
-                <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
-                  <span className="font-semibold">Current Base Rate:</span>{" "}
-                  {market.annualInterestBips / 100}%
-                </div>
-              </div>
-              <div className="w-44 flex flex-col gap-y-1.5">
-                <ModalAPR />
-                <Button variant="red" className="w-44 px-2 whitespace-nowrap">
-                  Terminate Market
-                </Button>
-              </div>
+              <AdjustAPR marketAccount={marketAccount} />
             </div>
           </div>
         </div>
@@ -238,7 +225,7 @@ const VaultDetails = () => {
             <div className="font-bold">Adjust Maximum Capacity</div>
             <div className="flex gap-x-3.5 w-full max-w-lg">
               <NumberInput
-                decimalScale={4}
+                decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
                 className="w-full"
                 placeholder="10.00"
                 min={0}
@@ -260,17 +247,22 @@ const VaultDetails = () => {
             <div className="w-full">
               <TableItem
                 title="Contract Address"
-                value="0xdc8f...63cA"
+                value={trimAddress(market.address)}
                 className="pl-6 pr-24"
               />
               <TableItem
                 title="Maximum Capacity"
-                value="50,000 DAI"
+                value={`${market.maxTotalSupply.toFixed(
+                  MARKET_PARAMS_DECIMALS.maxTotalSupply,
+                )} ${market.underlyingToken.symbol}`}
                 className="pl-6 pr-24"
               />
               <TableItem
                 title="Lender APR"
-                value={`${formatBps(market.annualInterestBips)}%`}
+                value={`${formatBps(
+                  market.annualInterestBips,
+                  MARKET_PARAMS_DECIMALS.annualInterestBips,
+                )}%`}
                 className="pl-6 pr-24"
               />
               <TableItem
@@ -280,22 +272,28 @@ const VaultDetails = () => {
               />
               <TableItem
                 title="Penalty Rate APR"
-                value="10%"
+                value={`${formatBps(
+                  market.delinquencyFeeBips,
+                  MARKET_PARAMS_DECIMALS.delinquencyFeeBips,
+                )}%`}
                 className="pl-6 pr-24"
               />
               <TableItem
                 title="Minimum Reserve Ratio"
-                value="25%"
+                value={`${formatBps(
+                  market.reserveRatioBips,
+                  MARKET_PARAMS_DECIMALS.reserveRatioBips,
+                )}%`}
                 className="pl-6 pr-24"
               />
               <TableItem
                 title="Withdrawal Cycle Duration"
-                value="48:00:00"
+                value={formatSecsToHours(market.pendingWithdrawalExpiry)}
                 className="pl-6 pr-24"
               />
               <TableItem
                 title="Maximum Grace Period"
-                value="24:00:00"
+                value={formatSecsToHours(market.delinquencyGracePeriod)}
                 className="pl-6 pr-24"
               />
             </div>
@@ -312,22 +310,34 @@ const VaultDetails = () => {
               />
               <TableItem
                 title="Available To Borrow"
-                value="0 DAI"
+                value={`${formatBps(
+                  market.borrowableAssets.raw.toNumber(),
+                  TOKEN_AMOUNT_DECIMALS,
+                )} ${market.underlyingToken.symbol}`}
                 className="pr-6 pl-24"
               />
               <TableItem
                 title="Outstanding Debt"
-                value="30,000 DAI"
+                value={`${formatBps(
+                  market.outstandingDebt.raw.toNumber(),
+                  TOKEN_AMOUNT_DECIMALS,
+                )} ${market.underlyingToken.symbol}`}
                 className="pr-6 pl-24"
               />
               <TableItem
                 title="Assets In Reserves"
-                value="0 DAI"
+                value={`${formatBps(
+                  market.totalAssets.raw.toNumber(),
+                  TOKEN_AMOUNT_DECIMALS,
+                )} ${market.underlyingToken.symbol}`}
                 className="pr-6 pl-24"
               />
               <TableItem
                 title="Minimum Reserves Required"
-                value="7,500 DAI"
+                value={`${formatBps(
+                  market.maxTotalSupply.raw.toNumber(),
+                  TOKEN_AMOUNT_DECIMALS,
+                )} ${market.underlyingToken.symbol}`}
                 className="pr-6 pl-24"
               />
               <TableItem

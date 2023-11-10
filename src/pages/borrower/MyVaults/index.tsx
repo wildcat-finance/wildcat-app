@@ -1,21 +1,15 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { Select, TextInput, Button } from "../../../components/ui-components"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import VaultCard from "./VaultCard"
 
-import { mockedUnderlyingAssets, mockedStatuses } from "../../../mocks/vaults"
+import { mockedStatuses } from "../../../mocks/vaults"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
 import { useMyMarkets } from "./hooks/useMyMarkets"
-import { getMarketStatus } from "../../../utils/helpers"
-
-const mockedUnderlyingAssetsOptions: SelectOptionItem[] =
-  mockedUnderlyingAssets.map((tokenSymbol) => ({
-    id: tokenSymbol,
-    label: tokenSymbol,
-    value: tokenSymbol,
-  }))
+import { getMarketStatus } from "../../../utils/marketStatus"
+import { useTokensList } from "../../../hooks/useTokensList"
 
 const mockedVaultStatusOptions: SelectOptionItem[] = mockedStatuses
   .sort()
@@ -33,6 +27,7 @@ function MyVaults() {
   const [selectedVaultStatus, setSelectedVaultStatus] =
     useState<SelectOptionItem | null>(null)
   const { data: markets } = useMyMarkets()
+  const { tokensByChainId } = useTokensList()
 
   const handleFilterByName = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
@@ -57,9 +52,17 @@ function MyVaults() {
         })
         .filter((market) => {
           if (!selectedUnderlyingAsset) return true
-          return market.symbol === selectedUnderlyingAsset.value
+          return market.underlyingToken.symbol === selectedUnderlyingAsset.value
         })
     : []
+
+  const mockedUnderlyingAssetsOptions: SelectOptionItem[] = tokensByChainId.map(
+    (token) => ({
+      id: token.address,
+      label: token.symbol,
+      value: token.symbol,
+    }),
+  )
 
   return (
     <div>

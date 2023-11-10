@@ -1,5 +1,5 @@
 export type RepayModalProps = {
-  disabled: boolean
+  disabled?: boolean
   repayAmount: string
   newMarketReserve: string
   tokenSymbol: string

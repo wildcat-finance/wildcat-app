@@ -5,6 +5,7 @@ import { NumberInput } from "../../../../components/ui-components"
 import { BorrowModal } from "../Modals"
 import { useBorrow } from "../hooks/useVaultDetailActions"
 import { BorrowAssetProps } from "./interface"
+import { TOKEN_AMOUNT_DECIMALS } from "../../../../utils/formatters"
 
 const BorrowAssets = ({
   borrowableAssets,
@@ -36,7 +37,7 @@ const BorrowAssets = ({
   return (
     <>
       <NumberInput
-        decimalScale={4}
+        decimalScale={TOKEN_AMOUNT_DECIMALS}
         className="w-full"
         placeholder="00,000.00"
         value={borrowAmount}

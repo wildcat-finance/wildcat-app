@@ -7,6 +7,7 @@ import { Button } from "../../ui-components"
 import { useWalletConnectModalStore } from "../../../store/useWalletConnectModalStore"
 import { NETWORKS } from "../../../config/networks"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
+import { trimAddress } from "../../../utils/formatters"
 
 function ConnectButton() {
   const { isOpen, setIsWalletModalOpen } = useWalletConnectModalStore()
@@ -46,10 +47,7 @@ function ConnectButton() {
   }, [isConnected, address, isWrongNetwork])
 
   const shortenedAddress = useMemo(
-    () =>
-      address
-        ? `${address.slice(0, 2)}..${address.slice(-4, address.length)}`
-        : null,
+    () => (address ? trimAddress(address) : null),
     [address],
   )
 

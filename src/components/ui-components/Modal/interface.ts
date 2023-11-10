@@ -6,4 +6,5 @@ export type ModalProps = {
   showFooter?: boolean
   isLoading?: boolean
   loadingText?: string
+  firstBtnText?: string
 }

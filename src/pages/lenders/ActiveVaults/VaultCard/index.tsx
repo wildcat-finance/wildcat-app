@@ -1,16 +1,14 @@
-import { useNavigate } from "react-router-dom"
 import cn from "classnames"
 
 import { Button, Chip, TableItem } from "../../../../components/ui-components"
 import { VaultCardProps } from "./interface"
+import { formatBps, formatToken } from "../../../../utils/formatters"
 import {
   getMarketStatus,
   getVaultStatusColor,
 } from "../../../../utils/marketStatus"
-import { formatBps, formatToken } from "../../../../utils/formatters"
 
 function VaultCard({ market, className }: VaultCardProps) {
-  const navigate = useNavigate()
   const status = getMarketStatus(
     market.isClosed,
     market.isDelinquent,
@@ -36,35 +34,21 @@ function VaultCard({ market, className }: VaultCardProps) {
 
       <div>
         <TableItem
-          title="Underlying Asset"
-          value={`${market.underlyingToken.symbol}`}
+          title="Annual Interest Rate"
+          value={`${formatBps(market.annualInterestBips)}%`}
         />
         <TableItem
-          title="Lender APR"
-          value={`${formatBps(market.annualInterestBips)}%`}
+          title="Maximum Capacity"
+          value={`${formatToken(market.maxTotalSupply.raw)}`}
         />
         <TableItem
           title="Current Reserve Ratio"
           value={`${formatBps(market.reserveRatioBips)}%`}
         />
-        <TableItem
-          title="Total Credit Extended"
-          value={`${formatToken(market.maxTotalSupply.raw)}`}
-        />
-        <TableItem
-          title="Available To Borrow"
-          value={`${formatToken(market.totalSupply.raw)}`}
-        />
       </div>
 
       <div className="w-full p-3 bg-tint-10">
-        <Button
-          onClick={() =>
-            navigate(`/borrower/market-details/${market.address.toLowerCase()}`)
-          }
-          className="w-full"
-          variant="black"
-        >
+        <Button className="w-full" variant="black">
           Go To Market
         </Button>
       </div>
