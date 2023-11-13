@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react"
+import { useState, ChangeEvent, useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
@@ -30,7 +30,11 @@ export function NewLendersModal({ market }: NewLendersModalProps) {
   const [newLenders, setNewLenders] = useState<NewLenderFormSchema[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const lendersAddresses = newLenders.map((lender) => lender.lenderWallet)
-  const { mutate: authorize } = useAuthorizedLenders(lendersAddresses, market)
+  const {
+    mutate: authorize,
+    isLoading,
+    isSuccess,
+  } = useAuthorizedLenders(lendersAddresses, market)
 
   const handleChangeInput = (evt: ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
@@ -65,17 +69,29 @@ export function NewLendersModal({ market }: NewLendersModalProps) {
     setIsModalOpen(false)
   }
 
+  useEffect(() => {
+    if (isSuccess) {
+      onModalClose()
+    }
+  }, [isSuccess])
+
   return (
     <>
       <Button
         variant="blue"
         className="w-35 whitespace-nowrap"
+        disabled={isLoading}
         onClick={() => setIsModalOpen(true)}
       >
         Authorise Lenders
       </Button>
 
-      <Modal isOpen={isModalOpen} onClose={onModalClose} sign={authorize}>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={onModalClose}
+        sign={authorize}
+        isLoading={isLoading}
+      >
         <div className="text-base font-bold px-8">Onboard New Lender/s</div>
 
         <div className="w-full border border-tint-10 my-3" />
@@ -98,7 +114,12 @@ export function NewLendersModal({ market }: NewLendersModalProps) {
               placeholder="eg: 0x987234oiwef8u234892384824309ljw0975a"
             />
           </FormItem>
-          <Button variant="blue" className="w-28" onClick={handleAddLender}>
+          <Button
+            disabled={isLoading}
+            variant="blue"
+            className="w-28"
+            onClick={handleAddLender}
+          >
             Add
           </Button>
           <div className="flex flex-col gap-y-2 w-full">
@@ -107,6 +128,7 @@ export function NewLendersModal({ market }: NewLendersModalProps) {
             <div className="text-base font-bold text-center">
               You have added:
             </div>
+
             {newLenders.map((lender) => (
               <div className="flex gap-x-4" key={lender.lenderWallet}>
                 <div className="flex flex-col justify-between w-full">
@@ -115,6 +137,7 @@ export function NewLendersModal({ market }: NewLendersModalProps) {
                 <Button
                   onClick={() => handleCancelLender(lender)}
                   variant="outline"
+                  disabled={isLoading}
                 >
                   <img
                     className="w-5 h-5"

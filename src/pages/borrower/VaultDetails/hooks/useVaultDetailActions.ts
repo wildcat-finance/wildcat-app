@@ -8,6 +8,7 @@ import { useEthersSigner } from "../../../../modules/hooks"
 import {
   toastifyError,
   toastifyInfo,
+  toastifyRequest,
   toastifySuccess,
 } from "../../../../components/toasts"
 import { GET_MARKET_ACCOUNT_KEY } from "./useGetMarket"
@@ -138,19 +139,23 @@ async function updateLenderAuthorizationForAll(
   market: string,
 ) {
   if (controller) {
-    try {
-      // Используйте Promise.all для выполнения запроса для всех элементов массива параллельно
-      await Promise.all(
+    await toastifyRequest(
+      Promise.all(
         lenders.map(async (lender) => {
-          await controller.updateLenderAuthorization(lender, [market])
-          console.log(`Success: ${lender}`)
+          const tx = await controller.updateLenderAuthorization(
+            lender.toLowerCase(),
+            [market],
+          )
+
+          await tx.wait()
         }),
-      )
-    } catch (error) {
-      console.error("Error:", error)
-    }
-  } else {
-    console.error("Error: controller is undefined")
+      ),
+      {
+        pending: "Step 2. Authorizing lenders in markets...",
+        success: "Step 2. Lenders successfully authorized",
+        error: "Error authorizing lenders",
+      },
+    )
   }
 }
 
@@ -161,15 +166,23 @@ export const useAuthorizedLenders = (lenders: string[], market: string) => {
   return useMutation({
     mutationFn: async () => {
       if (!lenders.length) {
-        toastifyError("add lenders")
+        toastifyError("Add lenders")
         return
       }
-      const tx = await controller?.authorizeLenders(lenders)
-      await tx?.wait()
+      const authoriseLenders = async () => {
+        const tx = await controller?.authorizeLenders(lenders)
+        await tx?.wait()
+      }
+
+      await toastifyRequest(authoriseLenders(), {
+        pending: "Step 1. Authorizing lenders on controller...",
+        success: "Step 1. Lenders successfully authorized",
+        error: "Error authorizing lenders",
+      })
+
       await updateLenderAuthorizationForAll(controller, lenders, market)
     },
     onSuccess() {
-      toastifySuccess("lenders successfully authorized")
       client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
       client.invalidateQueries({ queryKey: [GET_LENDERS_BY_MARKET_KEY] })
     },
@@ -189,7 +202,7 @@ export const useDeauthorizedLenders = (
   return useMutation({
     mutationFn: async () => {
       if (!authorizedLenders.length) {
-        toastifyError("select lenders")
+        toastifyError("Please add lenders address")
         return
       }
       const tx = await controller?.deauthorizeLenders(authorizedLenders)
@@ -201,12 +214,13 @@ export const useDeauthorizedLenders = (
       )
     },
     onSuccess() {
-      toastifySuccess("lenders successfully deauthorized")
-      client.invalidateQueries({ queryKey: [GET_AUTHORIZED_LENDERS_KEY] })
-      client.invalidateQueries({ queryKey: [GET_LENDERS_BY_MARKET_KEY] })
+      toastifySuccess("Lenders successfully removed")
+      client.invalidateQueries({
+        queryKey: [GET_AUTHORIZED_LENDERS_KEY, GET_LENDERS_BY_MARKET_KEY],
+      })
     },
     onError(error) {
-      toastifyError(`deauthorize lenders error: ${error}`)
+      toastifyError(`Removing lenders error: ${error}`)
     },
   })
 }

@@ -17,7 +17,9 @@ const defaultOptions: DefaultOptions = {
 }
 
 export const link = createHttpLink({
-  uri: process.env.REACT_APP_APOLLO_SERVER_URL,
+  // TODO: setup env for deployment
+  // uri: process.env.REACT_APP_APOLLO_SERVER_URL,
+  uri: "https://api.studio.thegraph.com/query/56451/wildcat-finance/v0.0.16",
 })
 
 export const client = new ApolloClient({
