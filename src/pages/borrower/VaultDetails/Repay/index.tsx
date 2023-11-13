@@ -8,7 +8,10 @@ import {
   useRepayOutstandingDebt,
 } from "../hooks/useVaultDetailActions"
 import { RepayProps } from "./interface"
-import { MARKET_PARAMS_DECIMALS } from "../../../../utils/formatters"
+import {
+  MARKET_PARAMS_DECIMALS,
+  TOKEN_FORMAT_DECIMALS,
+} from "../../../../utils/formatters"
 
 const Repay = ({ marketAccount }: RepayProps) => {
   const { market } = marketAccount
@@ -52,7 +55,7 @@ const Repay = ({ marketAccount }: RepayProps) => {
         />
         <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
           <span className="font-semibold">Outstanding Debt:</span>{" "}
-          {outstandingDebt.raw.toString()} {underlyingToken.symbol}
+          {outstandingDebt.format(TOKEN_FORMAT_DECIMALS, true)}
         </div>
       </div>
       <div className="w-44 flex flex-col gap-y-1.5">

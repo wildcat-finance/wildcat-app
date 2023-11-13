@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useState, useMemo } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { Select, TextInput, Button } from "../../../components/ui-components"
@@ -10,6 +10,8 @@ import { SelectOptionItem } from "../../../components/ui-components/Select/inter
 import { useMyMarkets } from "./hooks/useMyMarkets"
 import { getMarketStatus } from "../../../utils/marketStatus"
 import { useTokensList } from "../../../hooks/useTokensList"
+
+// import { useAllMarkets } from "./hooks/useAllMarkets"
 
 const mockedVaultStatusOptions: SelectOptionItem[] = mockedStatuses
   .sort()
@@ -27,7 +29,6 @@ function MyVaults() {
   const [selectedVaultStatus, setSelectedVaultStatus] =
     useState<SelectOptionItem | null>(null)
   const { data: markets } = useMyMarkets()
-  const { tokensByChainId } = useTokensList()
 
   const handleFilterByName = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
@@ -36,9 +37,11 @@ function MyVaults() {
 
   const filterUnderlyingOptions = useMemo(() => {
     if (!markets) return []
+
     const options = markets
       .map((market) => market.underlyingToken.symbol)
       .filter((value, index, self) => self.indexOf(value) === index)
+
     return options.map((option) => ({
       id: option,
       label: option,
@@ -67,14 +70,6 @@ function MyVaults() {
           return market.underlyingToken.symbol === selectedUnderlyingAsset.value
         })
     : []
-
-  const mockedUnderlyingAssetsOptions: SelectOptionItem[] = tokensByChainId.map(
-    (token) => ({
-      id: token.address,
-      label: token.symbol,
-      value: token.symbol,
-    }),
-  )
 
   return (
     <div>
