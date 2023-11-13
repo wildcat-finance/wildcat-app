@@ -1,8 +1,6 @@
 import React, { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { DateValue } from "react-aria-components"
-import { formatEther, formatUnits } from "ethers/lib/utils"
-import { BigNumber } from "ethers"
 
 import {
   Button,
@@ -33,9 +31,8 @@ import {
   formatBps,
   formatSecsToHours,
   MARKET_PARAMS_DECIMALS,
-  numberifyTokenAmount,
-  stringifyTokenAmount,
-  TOKEN_AMOUNT_DECIMALS,
+  formatTokenAmount,
+  TOKEN_FORMAT_DECIMALS,
   trimAddress,
 } from "../../../utils/formatters"
 import BorrowAssets from "./BorrowAssets"
@@ -179,6 +176,8 @@ const VaultDetails = () => {
 
   console.log("MARKET", marketAccount)
 
+  const underlyingTokenDecimals = market.underlyingToken.decimals
+
   return (
     <div>
       <button
@@ -238,7 +237,11 @@ const VaultDetails = () => {
           </div>
           <div className="text-xxs text-right mt-1.5 mr-48">
             <span className="font-semibold">Current Capacity:</span>{" "}
-            {market.maxTotalSupply.toFixed(2)}
+            {formatTokenAmount(
+              market.maxTotalSupply.raw,
+              underlyingTokenDecimals,
+              TOKEN_FORMAT_DECIMALS,
+            )}
           </div>
         </div>
       </Paper>
@@ -255,9 +258,11 @@ const VaultDetails = () => {
               />
               <TableItem
                 title="Maximum Capacity"
-                value={`${formatEther(market.maxTotalSupply.raw)} ${
-                  market.underlyingToken.symbol
-                }`}
+                value={`${formatTokenAmount(
+                  market.maxTotalSupply.raw,
+                  underlyingTokenDecimals,
+                  TOKEN_FORMAT_DECIMALS,
+                )} ${market.underlyingToken.symbol}`}
                 className="pl-6 pr-24"
               />
               <TableItem
@@ -313,32 +318,38 @@ const VaultDetails = () => {
               />
               <TableItem
                 title="Available To Borrow"
-                value={`${formatEther(market.maxTotalSupply.raw)} ${
-                  market.underlyingToken.symbol
-                }`}
+                value={`${formatTokenAmount(
+                  market.maxTotalSupply.raw,
+                  underlyingTokenDecimals,
+                  TOKEN_FORMAT_DECIMALS,
+                )} ${market.underlyingToken.symbol}`}
                 className="pr-6 pl-24"
               />
               <TableItem
                 title="Outstanding Debt"
-                value={`${formatBps(
-                  market.outstandingDebt.raw.toNumber(),
-                  TOKEN_AMOUNT_DECIMALS,
+                value={`${formatTokenAmount(
+                  market.outstandingDebt.raw,
+                  underlyingTokenDecimals,
+                  TOKEN_FORMAT_DECIMALS,
                 )} ${market.underlyingToken.symbol}`}
                 className="pr-6 pl-24"
               />
               <TableItem
                 title="Assets In Reserves"
-                value={`${stringifyTokenAmount(
+                value={`${formatTokenAmount(
                   market.totalAssets.raw,
-                  market.underlyingToken.decimals,
+                  underlyingTokenDecimals,
+                  TOKEN_FORMAT_DECIMALS,
                 )} ${market.underlyingToken.symbol}`}
                 className="pr-6 pl-24"
               />
               <TableItem
                 title="Minimum Reserves Required"
-                value={`${formatEther(market.maxTotalSupply.raw)} ${
-                  market.underlyingToken.symbol
-                }`}
+                value={`${formatTokenAmount(
+                  market.maxTotalSupply.raw,
+                  underlyingTokenDecimals,
+                  TOKEN_FORMAT_DECIMALS,
+                )} ${market.underlyingToken.symbol}`}
                 className="pr-6 pl-24"
               />
               <TableItem

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { Select, TextInput, Button } from "../../../components/ui-components"
@@ -7,9 +7,11 @@ import VaultCard from "./VaultCard"
 
 import { mockedStatuses } from "../../../mocks/vaults"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
-import { useMyMarkets } from "./hooks/useMyMarkets"
+// import { useMyMarkets } from "./hooks/useMyMarkets"
 import { getMarketStatus } from "../../../utils/marketStatus"
 import { useTokensList } from "../../../hooks/useTokensList"
+
+import { useAllMarkets } from "./hooks/useAllMarkets"
 
 const mockedVaultStatusOptions: SelectOptionItem[] = mockedStatuses
   .sort()
@@ -26,7 +28,7 @@ function MyVaults() {
     useState<SelectOptionItem | null>(null)
   const [selectedVaultStatus, setSelectedVaultStatus] =
     useState<SelectOptionItem | null>(null)
-  const { data: markets } = useMyMarkets()
+  const { data: markets } = useAllMarkets()
   const { tokensByChainId } = useTokensList()
 
   const handleFilterByName = (evt: React.ChangeEvent<HTMLInputElement>) => {
