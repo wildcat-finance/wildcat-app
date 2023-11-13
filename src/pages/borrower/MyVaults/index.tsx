@@ -7,11 +7,10 @@ import VaultCard from "./VaultCard"
 
 import { mockedStatuses } from "../../../mocks/vaults"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
-// import { useMyMarkets } from "./hooks/useMyMarkets"
+import { useMyMarkets } from "./hooks/useMyMarkets"
 import { getMarketStatus } from "../../../utils/marketStatus"
-import { useTokensList } from "../../../hooks/useTokensList"
 
-import { useAllMarkets } from "./hooks/useAllMarkets"
+// import { useAllMarkets } from "./hooks/useAllMarkets"
 
 const mockedVaultStatusOptions: SelectOptionItem[] = mockedStatuses
   .sort()
@@ -28,7 +27,7 @@ function MyVaults() {
     useState<SelectOptionItem | null>(null)
   const [selectedVaultStatus, setSelectedVaultStatus] =
     useState<SelectOptionItem | null>(null)
-  const { data: markets } = useAllMarkets()
+  const { data: markets } = useMyMarkets()
 
   const handleFilterByName = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
