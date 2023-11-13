@@ -1,6 +1,6 @@
 import { BigNumber } from "ethers"
 import { formatUnits } from "ethers/lib/utils"
-import { MarketParameters } from "@wildcatfi/wildcat-sdk"
+import { MarketParameters, stripTrailingZeroes } from "@wildcatfi/wildcat-sdk"
 
 // <---- MARKET PARAMETERS FORMATTERS ---->
 export const TOKEN_FORMAT_DECIMALS = 4
@@ -22,8 +22,11 @@ export const formatToken = (bigNum: BigNumber) =>
     minimumFractionDigits: 2,
   })
 
-export const formatBps = (bps: number, fixed?: number) =>
-  (bps / 100).toFixed(fixed || 2)
+export const formatBps = (bps: number, fixed?: number) => {
+  const fixedNum = (bps / 100).toFixed(fixed || 2)
+
+  return stripTrailingZeroes(fixedNum)
+}
 
 // <---- TOKEN PARAMETERS FORMATTERS ---->
 export const trimAddress = (address: string) =>
