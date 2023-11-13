@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { useGetUpdatedController } from "../../../../hooks/useGetController"
+import { useGetUpdatedController } from "../../../../../../hooks/useGetController"
 
 export const GET_AUTHORIZED_LENDERS_KEY = "controllerForBorrower"
 

@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { DateValue } from "react-aria-components"
 
 import {
-  Button,
-  FormItem,
   Paper,
   TableItem,
   Chip,
@@ -18,7 +16,6 @@ import {
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 
 import {
-  CancelRound,
   CancelRoundBlack,
   ExpandMore,
   Search,
@@ -31,13 +28,13 @@ import {
   formatBps,
   formatSecsToHours,
   MARKET_PARAMS_DECIMALS,
-  formatTokenAmount,
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
 } from "../../../utils/formatters"
 import BorrowAssets from "./BorrowAssets"
 import Repay from "./Repay"
 import AdjustAPR from "./AdjustAPR"
+import { useGetAuthorisedLenders } from "./hooks/useGetAuthorisedLenders"
 
 const tableData = [
   {
@@ -129,6 +126,7 @@ const VaultDetails = () => {
     useGetMarket(marketAddress)
   const { data: marketAccount, isLoading: isMarketAccountLoading } =
     useGetMarketAccount(market)
+  const { data: authorisedLenders } = useGetAuthorisedLenders(marketAddress)
 
   const isDatePicked = dateArray.length >= 1
 
@@ -616,57 +614,16 @@ const VaultDetails = () => {
             },
           ]}
         >
-          {tableData.map((item, index) => (
-            // Todo: add key
-            // eslint-disable-next-line react/no-array-index-key
-            <TableRow key={index}>
-              <TableCell justify="start">{item.lender}</TableCell>
-              <TableCell justify="start">{item.wallet}</TableCell>
-              <TableCell justify="center">
-                {item.status === "Pending" && (
-                  <Button
-                    variant="white-brown"
-                    className="max-h-5 w-24 gap-x-2.5"
-                  >
-                    Pending
-                    <div className="flex items-center w-3 h-3">
-                      <CancelRound />
-                    </div>
-                  </Button>
-                )}
-              </TableCell>
+          {authorisedLenders?.map((lender) => (
+            <TableRow key={lender.lender}>
+              <TableCell justify="start">{}</TableCell>
+              <TableCell justify="start">{lender.lender}</TableCell>
+              <TableCell justify="center">{}</TableCell>
             </TableRow>
           ))}
         </Table>
       </div>
-      {accordionStates[3] && (
-        <Paper className="border-tint-10 mt-5 bg-white h-48 p-5 flex flex-col gap-y-6 overflow-auto">
-          <div className="text-xs">
-            <div>1 Sep 2023; 13:37:00</div>
-            Will be adding in examples of text for all of the various events we
-            index soon.
-          </div>
-        </Paper>
-      )}
-      <div className="text-base font-bold mt-14">Market Controller</div>
-      <div className="flex flex-wrap gap-x-7 mb-14 mt-5">
-        <FormItem className="w-72" label="Market Type" tooltip="test">
-          <NumberInput className="w-72" />
-        </FormItem>
-        <FormItem
-          className="w-72"
-          label="Market Controller Address"
-          tooltip="should be table of archcontroller, controller, factory addr"
-        >
-          <NumberInput className="w-72" />
-        </FormItem>
-      </div>
-      <div className="flex justify-between items-center">
-        <ServiceAgreementCard
-          title="Market Master Loan Agreement"
-          description="You signed the blsmDAI Master Loan Agreement on 17-Sept-2023"
-        />
-      </div>
+
       <ServiceAgreementCard
         className="mt-10"
         title="Wildcat Service Agreement"

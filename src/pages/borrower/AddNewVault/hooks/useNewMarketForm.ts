@@ -7,7 +7,7 @@ import {
   ValidationSchemaType,
   validationSchema as vschema,
 } from "./validationSchema"
-import { useGetController } from "../../hooks/useGetController"
+import { useGetController } from "../../../../hooks/useGetController"
 import { mockedVaultTypes } from "../../../../mocks/vaults"
 
 export const defaultMarketForm: Partial<ValidationSchemaType> = {

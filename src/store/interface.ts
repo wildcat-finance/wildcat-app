@@ -1,4 +1,4 @@
-export type BorrowerAgreementStore = {
+export type AgreementStore = {
   hasSignedAgreement: boolean
   setSignedAgreement: (isSigned: boolean) => void
 }

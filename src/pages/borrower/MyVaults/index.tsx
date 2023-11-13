@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { Select, TextInput, Button } from "../../../components/ui-components"
@@ -7,11 +7,11 @@ import VaultCard from "./VaultCard"
 
 import { mockedStatuses } from "../../../mocks/vaults"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
-// import { useMyMarkets } from "./hooks/useMyMarkets"
+import { useMyMarkets } from "./hooks/useMyMarkets"
 import { getMarketStatus } from "../../../utils/marketStatus"
 import { useTokensList } from "../../../hooks/useTokensList"
 
-import { useAllMarkets } from "./hooks/useAllMarkets"
+// import { useAllMarkets } from "./hooks/useAllMarkets"
 
 const mockedVaultStatusOptions: SelectOptionItem[] = mockedStatuses
   .sort()
@@ -28,13 +28,26 @@ function MyVaults() {
     useState<SelectOptionItem | null>(null)
   const [selectedVaultStatus, setSelectedVaultStatus] =
     useState<SelectOptionItem | null>(null)
-  const { data: markets } = useAllMarkets()
-  const { tokensByChainId } = useTokensList()
+  const { data: markets } = useMyMarkets()
 
   const handleFilterByName = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
     setFilterByName(value.toLowerCase())
   }
+
+  const filterUnderlyingOptions = useMemo(() => {
+    if (!markets) return []
+
+    const options = markets
+      .map((market) => market.underlyingToken.symbol)
+      .filter((value, index, self) => self.indexOf(value) === index)
+
+    return options.map((option) => ({
+      id: option,
+      label: option,
+      value: option,
+    }))
+  }, [markets])
 
   const filteredMarkets = markets
     ? markets
@@ -57,14 +70,6 @@ function MyVaults() {
           return market.underlyingToken.symbol === selectedUnderlyingAsset.value
         })
     : []
-
-  const mockedUnderlyingAssetsOptions: SelectOptionItem[] = tokensByChainId.map(
-    (token) => ({
-      id: token.address,
-      label: token.symbol,
-      value: token.symbol,
-    }),
-  )
 
   return (
     <div>
@@ -90,7 +95,7 @@ function MyVaults() {
           </div>
           <div className="w-1/3 px-2.5 py-2.5">
             <Select
-              options={mockedUnderlyingAssetsOptions}
+              options={filterUnderlyingOptions}
               onChange={setSelectedUnderlyingAsset}
               selected={selectedUnderlyingAsset}
               placeholder="Underlying Asset"

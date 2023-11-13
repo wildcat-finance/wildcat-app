@@ -6,28 +6,26 @@ import {
   Signer,
 } from "@wildcatfi/wildcat-sdk"
 
-import { useEthersSigner } from "../../../modules/hooks"
-import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
+import { useEthersSigner } from "../modules/hooks"
+import { useCurrentNetwork } from "./useCurrentNetwork"
 
-export const GET_CONTROLLER_FOR_BORROWER_KEY = "controllerForBorrower"
-export const GET_CONTROLLER_CONTRACT_FOR_BORROWER_KEY =
-  "controllerContractForBorrower"
-export const GET_CONTROLLER_UPDATED_FOR_BORROWER_KEY =
-  "controllerUpdatedForBorrower"
+export const GET_CONTROLLER_KEY = "controller"
+export const GET_CONTROLLER_CONTRACT_KEY = "controllerContract"
+export const GET_CONTROLLER_UPDATED_KEY = "controllerUpdated"
 
 export const useGetController = () => {
   const { address } = useAccount()
   const signer = useEthersSigner()
   const { isWrongNetwork } = useCurrentNetwork()
 
-  async function getControllerForBorrower() {
+  async function getUserController() {
     const controller = await getController(signer as Signer, address as string)
     return controller
   }
 
   return useQuery({
-    queryKey: [GET_CONTROLLER_FOR_BORROWER_KEY, address],
-    queryFn: getControllerForBorrower,
+    queryKey: [GET_CONTROLLER_KEY, address],
+    queryFn: getUserController,
     enabled: !!address && !!signer && !isWrongNetwork,
     refetchOnMount: false,
   })
@@ -37,7 +35,7 @@ export const useGetControllerContract = () => {
   const { address } = useAccount()
   const signer = useEthersSigner()
   const { isWrongNetwork } = useCurrentNetwork()
-  async function getControllerForBorrower() {
+  async function getUserController() {
     const controller = getControllerContract(
       signer as Signer,
       address as string,
@@ -46,8 +44,8 @@ export const useGetControllerContract = () => {
   }
 
   return useQuery({
-    queryKey: [GET_CONTROLLER_CONTRACT_FOR_BORROWER_KEY, address],
-    queryFn: getControllerForBorrower,
+    queryKey: [GET_CONTROLLER_CONTRACT_KEY, address],
+    queryFn: getUserController,
     enabled: !!address && !!signer && !isWrongNetwork,
     refetchOnMount: false,
   })
@@ -58,7 +56,7 @@ export const useGetUpdatedController = () => {
   const signer = useEthersSigner()
   const { isWrongNetwork } = useCurrentNetwork()
 
-  async function getControllerForBorrower() {
+  async function getUserController() {
     const controller = await getController(signer as Signer, address as string)
     await controller.update()
     console.log(controller)
@@ -66,8 +64,8 @@ export const useGetUpdatedController = () => {
   }
 
   return useQuery({
-    queryKey: [GET_CONTROLLER_UPDATED_FOR_BORROWER_KEY, address],
-    queryFn: getControllerForBorrower,
+    queryKey: [GET_CONTROLLER_UPDATED_KEY, address],
+    queryFn: getUserController,
     enabled: !!address && !!signer && !isWrongNetwork,
     refetchOnMount: false,
   })
