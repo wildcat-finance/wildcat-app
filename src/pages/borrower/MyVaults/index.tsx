@@ -35,15 +35,15 @@ function MyVaults() {
   }
 
   const filterUnderlyingOptions = useMemo(() => {
-      if(!markets) return []
-      const options = markets.map((market) => {
-          return market.underlyingToken.symbol
-      }).filter((value, index, self) => self.indexOf(value) === index)
-      return options.map((option) => ({
-          id: option,
-          label: option,
-          value: option,
-      }))
+    if (!markets) return []
+    const options = markets
+      .map((market) => market.underlyingToken.symbol)
+      .filter((value, index, self) => self.indexOf(value) === index)
+    return options.map((option) => ({
+      id: option,
+      label: option,
+      value: option,
+    }))
   }, [markets])
 
   const filteredMarkets = markets

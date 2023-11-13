@@ -4,13 +4,16 @@ import { NavItemProps } from "./interface"
 function NavItem({ link, name, linkName }: NavItemProps) {
   console.log("NavItemProps", link, name)
 
-  const { pathname} = useLocation();
-  const isActive = pathname.includes(linkName);
+  const { pathname } = useLocation()
+  const isActive = pathname.includes(linkName)
 
   return (
-  <Link to={link} className={`text-sm font-bold text-white ${isActive? "underline" : ""}`}>
-    {name}
-  </Link>
+    <Link
+      to={link}
+      className={`text-sm font-bold text-white ${isActive ? "underline" : ""}`}
+    >
+      {name}
+    </Link>
   )
 }
 
