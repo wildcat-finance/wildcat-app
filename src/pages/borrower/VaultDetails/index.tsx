@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { DateValue } from "react-aria-components"
 
@@ -203,7 +203,7 @@ const VaultDetails = () => {
           </div>
           <div className="text-xxs text-right mt-1.5 mr-48">
             <span className="font-semibold">Available To Borrow:</span>{" "}
-            {market.borrowableAssets.toFixed()} {market.underlyingToken.symbol}
+            {market.borrowableAssets.format(TOKEN_FORMAT_DECIMALS, true)}
           </div>
         </div>
         <div>
@@ -237,135 +237,118 @@ const VaultDetails = () => {
           </div>
           <div className="text-xxs text-right mt-1.5 mr-48">
             <span className="font-semibold">Current Capacity:</span>{" "}
-            {formatTokenAmount(
-              market.maxTotalSupply.raw,
-              underlyingTokenDecimals,
-              TOKEN_FORMAT_DECIMALS,
-            )}
+            {market.maxTotalSupply.format(TOKEN_FORMAT_DECIMALS)}{" "}
+            {market.underlyingToken.symbol}
           </div>
         </div>
       </Paper>
 
-      {market && (
-        <div>
-          <div className="text-base font-bold">Market Details</div>
-          <div className="flex w-full mt-5 mb-14">
-            <div className="w-full">
-              <TableItem
-                title="Contract Address"
-                value={trimAddress(market.address)}
-                className="pl-6 pr-24"
-              />
-              <TableItem
-                title="Maximum Capacity"
-                value={`${formatTokenAmount(
-                  market.maxTotalSupply.raw,
-                  underlyingTokenDecimals,
-                  TOKEN_FORMAT_DECIMALS,
-                )} ${market.underlyingToken.symbol}`}
-                className="pl-6 pr-24"
-              />
-              <TableItem
-                title="Lender APR"
-                value={`${formatBps(
-                  market.annualInterestBips,
-                  MARKET_PARAMS_DECIMALS.annualInterestBips,
-                )}%`}
-                className="pl-6 pr-24"
-              />
-              <TableItem
-                title="Protocol Fee APR"
-                value={`${formatBps(market.protocolFeeBips)}%`}
-                className="pl-6 pr-24"
-              />
-              <TableItem
-                title="Penalty Rate APR"
-                value={`${formatBps(
-                  market.delinquencyFeeBips,
-                  MARKET_PARAMS_DECIMALS.delinquencyFeeBips,
-                )}%`}
-                className="pl-6 pr-24"
-              />
-              <TableItem
-                title="Minimum Reserve Ratio"
-                value={`${formatBps(
-                  market.reserveRatioBips,
-                  MARKET_PARAMS_DECIMALS.reserveRatioBips,
-                )}%`}
-                className="pl-6 pr-24"
-              />
-              <TableItem
-                title="Withdrawal Cycle Duration"
-                value={formatSecsToHours(market.pendingWithdrawalExpiry)}
-                className="pl-6 pr-24"
-              />
-              <TableItem
-                title="Maximum Grace Period"
-                value={formatSecsToHours(market.delinquencyGracePeriod)}
-                className="pl-6 pr-24"
-              />
-            </div>
-            <div className="w-full">
-              <TableItem
-                title="Available Grace Period"
-                value="23:12:38"
-                className="pr-6 pl-24"
-              />
-              <TableItem
-                title="Repayment To Minimum Reserves"
-                value={`18,750 ${market.underlyingToken.name}`}
-                className="pr-6 pl-24"
-              />
-              <TableItem
-                title="Available To Borrow"
-                value={`${formatTokenAmount(
-                  market.maxTotalSupply.raw,
-                  underlyingTokenDecimals,
-                  TOKEN_FORMAT_DECIMALS,
-                )} ${market.underlyingToken.symbol}`}
-                className="pr-6 pl-24"
-              />
-              <TableItem
-                title="Outstanding Debt"
-                value={`${formatTokenAmount(
-                  market.outstandingDebt.raw,
-                  underlyingTokenDecimals,
-                  TOKEN_FORMAT_DECIMALS,
-                )} ${market.underlyingToken.symbol}`}
-                className="pr-6 pl-24"
-              />
-              <TableItem
-                title="Assets In Reserves"
-                value={`${formatTokenAmount(
-                  market.totalAssets.raw,
-                  underlyingTokenDecimals,
-                  TOKEN_FORMAT_DECIMALS,
-                )} ${market.underlyingToken.symbol}`}
-                className="pr-6 pl-24"
-              />
-              <TableItem
-                title="Minimum Reserves Required"
-                value={`${formatTokenAmount(
-                  market.maxTotalSupply.raw,
-                  underlyingTokenDecimals,
-                  TOKEN_FORMAT_DECIMALS,
-                )} ${market.underlyingToken.symbol}`}
-                className="pr-6 pl-24"
-              />
-              <TableItem
-                title="Current Reserve Ratio"
-                value={`${formatBps(market.reserveRatioBips)}%`}
-                className="pr-6 pl-24"
-              />
-              <TableItem
-                title="Lifetime Accrued Interest"
-                value={`5 ${market.underlyingToken.name}`}
-                className="pr-6 pl-24"
-              />
-            </div>
+      <div>
+        <div className="text-base font-bold">Market Details</div>
+        <div className="flex w-full mt-5 mb-14">
+          <div className="w-full">
+            <TableItem
+              title="Contract Address"
+              value={trimAddress(market.address)}
+              className="pl-6 pr-24"
+            />
+            <TableItem
+              title="Maximum Capacity"
+              value={`${market.maxTotalSupply.format(TOKEN_FORMAT_DECIMALS)} ${
+                market.underlyingToken.symbol
+              }`}
+              className="pl-6 pr-24"
+            />
+            <TableItem
+              title="Lender APR"
+              value={`${formatBps(
+                market.annualInterestBips,
+                MARKET_PARAMS_DECIMALS.annualInterestBips,
+              )}%`}
+              className="pl-6 pr-24"
+            />
+            <TableItem
+              title="Protocol Fee APR"
+              value={`${formatBps(market.protocolFeeBips)}%`}
+              className="pl-6 pr-24"
+            />
+            <TableItem
+              title="Penalty Rate APR"
+              value={`${formatBps(
+                market.delinquencyFeeBips,
+                MARKET_PARAMS_DECIMALS.delinquencyFeeBips,
+              )}%`}
+              className="pl-6 pr-24"
+            />
+            <TableItem
+              title="Minimum Reserve Ratio"
+              value={`${formatBps(
+                market.reserveRatioBips,
+                MARKET_PARAMS_DECIMALS.reserveRatioBips,
+              )}%`}
+              className="pl-6 pr-24"
+            />
+            <TableItem
+              title="Withdrawal Cycle Duration"
+              value={formatSecsToHours(market.pendingWithdrawalExpiry)}
+              className="pl-6 pr-24"
+            />
+            <TableItem
+              title="Maximum Grace Period"
+              value={formatSecsToHours(market.delinquencyGracePeriod)}
+              className="pl-6 pr-24"
+            />
+          </div>
+          <div className="w-full">
+            <TableItem
+              title="Available Grace Period"
+              value="23:12:38"
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Repayment To Minimum Reserves"
+              value={market.delinquentDebt.format(TOKEN_FORMAT_DECIMALS, true)}
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Available To Borrow"
+              value={market.borrowableAssets.format(
+                TOKEN_FORMAT_DECIMALS,
+                true,
+              )}
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Outstanding Debt"
+              value={market.outstandingDebt.format(TOKEN_FORMAT_DECIMALS, true)}
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Assets In Reserves"
+              value={market.totalAssets.format(TOKEN_FORMAT_DECIMALS, true)}
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Minimum Reserves Required"
+              value={market.coverageLiquidity.format(
+                TOKEN_FORMAT_DECIMALS,
+                true,
+              )}
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Current Reserve Ratio"
+              value={`${formatBps(market.reserveRatioBips)}%`}
+              className="pr-6 pl-24"
+            />
+            <TableItem
+              title="Lifetime Accrued Interest"
+              value={`5 ${market.underlyingToken.name}`}
+              className="pr-6 pl-24"
+            />
           </div>
         </div>
-      )}
+      </div>
       <div className="mb-14">
         <div className="flex justify-between items-center mb-8">
           <div className="text-base font-bold">Lender Withdrawal Requests</div>
@@ -542,6 +525,7 @@ const VaultDetails = () => {
                 </button>
               </div>
             </div>
+
             {isDatePicked && (
               <Chip className="bg-white w-fit mb-3">
                 {dateArray[0]?.toString()} – {dateArray[1]?.toString()}
@@ -551,7 +535,9 @@ const VaultDetails = () => {
                 />
               </Chip>
             )}
+
             {!isDatePicked && <div className="h-8 w-8 mb-3" />}
+
             <Table
               headers={[
                 {
@@ -604,7 +590,6 @@ const VaultDetails = () => {
           </div>
         )}
       </div>
-
       <div className="flex w-full justify-between content-center">
         <div className="text-base font-bold">Authorised Lenders</div>
         <div className="flex gap-x-2">
@@ -654,7 +639,6 @@ const VaultDetails = () => {
           ))}
         </Table>
       </div>
-
       {accordionStates[3] && (
         <Paper className="border-tint-10 mt-5 bg-white h-48 p-5 flex flex-col gap-y-6 overflow-auto">
           <div className="text-xs">
@@ -664,7 +648,6 @@ const VaultDetails = () => {
           </div>
         </Paper>
       )}
-
       <div className="text-base font-bold mt-14">Market Controller</div>
       <div className="flex flex-wrap gap-x-7 mb-14 mt-5">
         <FormItem className="w-72" label="Market Type" tooltip="test">
@@ -678,14 +661,12 @@ const VaultDetails = () => {
           <NumberInput className="w-72" />
         </FormItem>
       </div>
-
       <div className="flex justify-between items-center">
         <ServiceAgreementCard
           title="Market Master Loan Agreement"
           description="You signed the blsmDAI Master Loan Agreement on 17-Sept-2023"
         />
       </div>
-
       <ServiceAgreementCard
         className="mt-10"
         title="Wildcat Service Agreement"
