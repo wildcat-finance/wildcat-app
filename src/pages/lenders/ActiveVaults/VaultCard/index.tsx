@@ -1,5 +1,6 @@
 import cn from "classnames"
 
+import { useNavigate } from "react-router-dom"
 import { Button, Chip, TableItem } from "../../../../components/ui-components"
 import { VaultCardProps } from "./interface"
 import { formatBps, formatToken } from "../../../../utils/formatters"
@@ -14,6 +15,8 @@ function VaultCard({ market, className }: VaultCardProps) {
     market.isDelinquent,
     market.isIncurringPenalties,
   )
+
+  const navigate = useNavigate()
 
   return (
     <div
@@ -52,7 +55,13 @@ function VaultCard({ market, className }: VaultCardProps) {
       </div>
 
       <div className="w-full p-3 bg-tint-10">
-        <Button className="w-full" variant="black">
+        <Button
+          className="w-full"
+          variant="black"
+          onClick={() =>
+            navigate(`/lender/market-details/${market.address.toLowerCase()}`)
+          }
+        >
           Go To Market
         </Button>
       </div>
