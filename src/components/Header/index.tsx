@@ -9,8 +9,8 @@ export function Header() {
     <div className="h-20 bg-black px-8 py-4 flex items-center justify-between bg-">
       <WildcartLogo className="h-full" />
       <div className="flex flex-1 items-center justify-center gap-10">
-        <NavItem name="Borrowers" link="/borrower" />
-        <NavItem name="Lenders" link="/lender/agreement" />
+        <NavItem name="Borrowers" link="/borrower" linkName="borrower" />
+        <NavItem name="Lenders" link="/lender/agreement" linkName="lender" />
       </div>
 
       <ConnectButton />
