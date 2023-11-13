@@ -24,7 +24,7 @@ function ServiceAgreement() {
         </span>
       </BluePaper>
 
-      <Paper className="max-h-3xl flex flex-col">
+      <Paper className="bg-white max-h-3xl flex flex-col">
         <div className="overflow-scroll mt-5 pr-14 pl-8 flex-grow-1">
           <div className="font-bold text-xs">
             <p className="mb-4">
@@ -295,13 +295,6 @@ function ServiceAgreement() {
           </Button>
         </div>
       </Paper>
-
-      <div
-        className="flex items-center justify-center mt-8"
-        onClick={() => navigate("/borrower/my-vaults")}
-      >
-        <Button variant="black">Continue to Markets</Button>
-      </div>
     </>
   )
 }

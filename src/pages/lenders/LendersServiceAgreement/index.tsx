@@ -5,6 +5,7 @@ import { Paper } from "../../../components/ui-components/Paper"
 import { BluePaper } from "../../../components/ui-components/BluePaper"
 import { Button } from "../../../components/ui-components/Button"
 import { useAgreementStore } from "../../../store/useAgreementStore"
+import { DownloadIcon, SignIcon } from "../../../components/ui-components/icons"
 
 function LendersServiceAgreement() {
   const navigate = useNavigate()
@@ -284,27 +285,18 @@ function LendersServiceAgreement() {
 
         <div className="flex items-center gap-8 justify-center mb-9 mt-9">
           <Button
-            variant="green"
-            className="w-40"
+            variant="blue"
+            icon={<SignIcon />}
             onClick={() => setSignedAgreement(true)}
           >
             Sign
           </Button>
 
-          <Button variant="brown" className="w-40">
+          <Button variant="gold" icon={<DownloadIcon />}>
             Download
           </Button>
         </div>
       </Paper>
-
-      <div
-        className="flex items-center justify-center mt-8"
-        onClick={() => navigate("/lender/active-vaults")}
-      >
-        <Button variant="black" className="w-40">
-          Continue to Vaults
-        </Button>
-      </div>
     </>
   )
 }
