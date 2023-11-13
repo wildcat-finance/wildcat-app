@@ -18,7 +18,10 @@ export const MARKET_PARAMS_DECIMALS: Partial<{
 }
 
 export const formatToken = (bigNum: BigNumber) =>
-  Number(formatUnits(bigNum, 18).toString()).toFixed(4)
+  Number(formatUnits(bigNum, 18).toString()).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+  })
+
 export const formatBps = (bps: number, fixed?: number) =>
   (bps / 100).toFixed(fixed || 2)
 

@@ -34,16 +34,20 @@ function VaultCard({ market, className }: VaultCardProps) {
 
       <div>
         <TableItem
-          title="Annual Interest Rate"
-          value={`${formatBps(market.annualInterestBips)}%`}
+          title="Underlying Asset"
+          value={`${market.underlyingToken.symbol}`}
         />
         <TableItem
-          title="Maximum Capacity"
-          value={`${formatToken(market.maxTotalSupply.raw)}`}
+          title="Lender APR"
+          value={`${formatBps(market.annualInterestBips)}%`}
         />
         <TableItem
           title="Current Reserve Ratio"
           value={`${formatBps(market.reserveRatioBips)}%`}
+        />
+        <TableItem
+          title="Total Credit Extended"
+          value={`${formatToken(market.maxTotalSupply.raw)}`}
         />
       </div>
 
