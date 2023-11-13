@@ -1,14 +1,14 @@
 import { useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 
-import { useBorrowerAgreementStore } from "../../../store/useBorrowerStore"
-import { useGetController } from "./useGetController"
+import { useAgreementStore } from "../../../store/useAgreementStore"
+import { useGetController } from "../../../hooks/useGetController"
 import { BASE_PATHS } from "../../../routes/constants"
 import { BORROWER_PATHS } from "../routes/constants"
 
 export const useBorrowerRouting = () => {
   const { data, isLoading, isSuccess } = useGetController()
-  const { hasSignedAgreement } = useBorrowerAgreementStore()
+  const { hasSignedAgreement } = useAgreementStore()
   const navigate = useNavigate()
   const { pathname } = useLocation()
 

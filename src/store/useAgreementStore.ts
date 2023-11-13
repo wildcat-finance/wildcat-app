@@ -1,9 +1,9 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
-import { BorrowerAgreementStore } from "./interface"
+import { AgreementStore } from "./interface"
 
-export const useBorrowerAgreementStore = create<BorrowerAgreementStore>()(
+export const useAgreementStore = create<AgreementStore>()(
   persist(
     (set) => ({
       hasSignedAgreement: false,
@@ -11,7 +11,7 @@ export const useBorrowerAgreementStore = create<BorrowerAgreementStore>()(
         set({ hasSignedAgreement }),
     }),
     {
-      name: "borrower-agreement",
+      name: "signed-agreement",
     },
   ),
 )

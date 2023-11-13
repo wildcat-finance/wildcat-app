@@ -1,23 +1,23 @@
 import { Routes, Route } from "react-router-dom"
 
 import { LENDERS_ROUTES } from "./routes"
-// import { Spinner } from "../../components/ui-components"
+import { Spinner } from "../../components/ui-components"
 import { useCurrentNetwork } from "../../hooks/useCurrentNetwork"
 import { useWalletConnect } from "../borrower/hooks/useWalletConnect"
-// import {useBorrowerRouting} from "../borrower/hooks/useBorrowerRouting";
+import { useLenderRouting } from "./hooks/useLenderRoutes"
 
 const LendersSection = () => {
   const { isConnected } = useWalletConnect()
-  // const { isLoading } = useBorrowerRouting()
+  const { isLoading } = useLenderRouting()
   const { isWrongNetwork } = useCurrentNetwork()
 
   if (!isConnected || isWrongNetwork) {
     return <div />
   }
 
-  // if (isLoading) {
-  //   return <Spinner isLoading={isLoading} />
-  // }
+  if (isLoading) {
+    return <Spinner isLoading={isLoading} />
+  }
 
   return (
     <Routes>

@@ -10,7 +10,7 @@ import {
   toastifySuccess,
 } from "../../../../components/toasts"
 import { GET_MARKET_ACCOUNT_KEY } from "./useGetMarket"
-import { useGetControllerContract } from "../../hooks/useGetController"
+import { useGetControllerContract } from "../../../../hooks/useGetController"
 import { GET_AUTHORIZED_LENDERS_KEY } from "../Modals/RemoveLendersModal/hooks/useGetAuthorizedLenders"
 
 export const useBorrow = (marketAccount: MarketAccount) => {

@@ -1,4 +1,4 @@
-import { useGetController } from "../../hooks/useGetController"
+import { useGetController } from "../../../../hooks/useGetController"
 
 export const useMyMarkets = () => {
   const { data } = useGetController()
