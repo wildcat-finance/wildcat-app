@@ -4,9 +4,11 @@ import { AiOutlineExclamationCircle } from "react-icons/ai"
 import { Paper } from "../../../components/ui-components/Paper"
 import { BluePaper } from "../../../components/ui-components/BluePaper"
 import { Button } from "../../../components/ui-components/Button"
+import { useAgreementStore } from "../../../store/useAgreementStore"
 
 function LendersServiceAgreement() {
   const navigate = useNavigate()
+  const { setSignedAgreement } = useAgreementStore()
 
   return (
     <>
@@ -281,7 +283,11 @@ function LendersServiceAgreement() {
         </div>
 
         <div className="flex items-center gap-8 justify-center mb-9 mt-9">
-          <Button variant="green" className="w-40">
+          <Button
+            variant="green"
+            className="w-40"
+            onClick={() => setSignedAgreement(true)}
+          >
             Sign
           </Button>
 
