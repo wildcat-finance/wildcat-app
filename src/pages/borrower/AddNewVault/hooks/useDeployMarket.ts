@@ -7,7 +7,7 @@ import {
 import { parseUnits } from "ethers/lib/utils"
 
 import { useNavigate } from "react-router-dom"
-import { useGetController } from "../../hooks/useGetController"
+import { useGetController } from "../../../../hooks/useGetController"
 import { useEthersSigner } from "../../../../modules/hooks"
 import { DeployNewMarketParams } from "./interface"
 import { toastifyError, toastifyRequest } from "../../../../components/toasts"

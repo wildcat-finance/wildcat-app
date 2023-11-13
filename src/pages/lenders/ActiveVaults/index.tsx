@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import { Select, TextInput } from "../../../components/ui-components"
@@ -43,30 +43,38 @@ function ActiveVaults() {
       value: status,
     }))
 
-  const filteredMarkets = lendersMarkets
-    ? lendersMarkets
-        .filter((lendersMarket) => {
-          if (!selectedVaultStatus) return true
-          return (
-            getMarketStatus(
-              lendersMarket.market.isClosed,
-              lendersMarket.market.isDelinquent,
-              lendersMarket.market.isIncurringPenalties,
-            ) === selectedVaultStatus.value
-          )
-        })
-        .filter((market) => {
-          if (!filterByName) return true
-          return market.market.name.toLowerCase().includes(filterByName)
-        })
-        .filter((market) => {
-          if (!selectedUnderlyingAsset) return true
-          return (
-            market.market.underlyingToken.symbol ===
-            selectedUnderlyingAsset.value
-          )
-        })
-    : []
+  const filteredMarkets = useMemo(() => {
+    if (!lendersMarkets) {
+      return []
+    }
+
+    return lendersMarkets
+      .filter((lendersMarket) => {
+        if (!selectedVaultStatus) return true
+        return (
+          getMarketStatus(
+            lendersMarket.market.isClosed,
+            lendersMarket.market.isDelinquent,
+            lendersMarket.market.isIncurringPenalties,
+          ) === selectedVaultStatus.value
+        )
+      })
+      .filter((market) => {
+        if (!filterByName) return true
+        return market.market.name.toLowerCase().includes(filterByName)
+      })
+      .filter((market) => {
+        if (!selectedUnderlyingAsset) return true
+        return (
+          market.market.underlyingToken.symbol === selectedUnderlyingAsset.value
+        )
+      })
+  }, [
+    lendersMarkets,
+    selectedVaultStatus,
+    filterByName,
+    selectedUnderlyingAsset,
+  ])
 
   return (
     <>
@@ -109,7 +117,10 @@ function ActiveVaults() {
 
       <div className="flex w-full flex-wrap -mx-2.5 mt-5">
         {filteredMarkets.map((lendersMarket) => (
-          <div key={lendersMarket.market.name} className="w-1/3 px-2.5 py-2.5">
+          <div
+            key={lendersMarket.market.address}
+            className="w-1/3 px-2.5 py-2.5"
+          >
             <VaultCard market={lendersMarket.market} className="w-full" />
           </div>
         ))}

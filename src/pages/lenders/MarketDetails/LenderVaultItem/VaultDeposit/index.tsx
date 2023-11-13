@@ -1,14 +1,6 @@
 import { Button, NumberInput } from "../../../../../components/ui-components"
 
-export function VaultDeposit({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  nextStep,
-}: {
-  // eslint-disable-next-line react/require-default-props
-  nextStep?: () => void
-  // eslint-disable-next-line react/no-unused-prop-types,react/require-default-props
-  previousStep?: () => void
-}) {
+export function VaultDeposit() {
   return (
     <div className="rounded-2xl bg-tint-10">
       <div className="px-5 pt-8 pb-12">
@@ -61,7 +53,7 @@ export function VaultDeposit({
               <Button variant="green" className="w-36">
                 Withdraw
               </Button>
-              <Button variant="green" className="w-36" onClick={nextStep}>
+              <Button variant="green" className="w-36">
                 Claim from Vault
               </Button>
             </div>
