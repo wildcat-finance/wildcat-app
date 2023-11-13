@@ -1,11 +1,9 @@
 import React, { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { DateValue } from "react-aria-components"
-import { formatEther, formatUnits } from "ethers/lib/utils"
-import { BigNumber } from "ethers"
+import { formatEther } from "ethers/lib/utils"
 
 import {
-  Button,
   FormItem,
   Paper,
   TableItem,
@@ -20,7 +18,6 @@ import {
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 
 import {
-  CancelRound,
   CancelRoundBlack,
   ExpandMore,
   Search,
@@ -33,7 +30,6 @@ import {
   formatBps,
   formatSecsToHours,
   MARKET_PARAMS_DECIMALS,
-  numberifyTokenAmount,
   stringifyTokenAmount,
   TOKEN_AMOUNT_DECIMALS,
   trimAddress,
@@ -41,6 +37,7 @@ import {
 import BorrowAssets from "./BorrowAssets"
 import Repay from "./Repay"
 import AdjustAPR from "./AdjustAPR"
+import { useGetAuthorisedLenders } from "./hooks/useGetAuthorisedLenders"
 
 const tableData = [
   {
@@ -132,6 +129,7 @@ const VaultDetails = () => {
     useGetMarket(marketAddress)
   const { data: marketAccount, isLoading: isMarketAccountLoading } =
     useGetMarketAccount(market)
+  const { data: authorisedLenders } = useGetAuthorisedLenders(marketAddress)
 
   const isDatePicked = dateArray.length >= 1
 
@@ -176,8 +174,6 @@ const VaultDetails = () => {
   if (!market || !marketAccount) {
     return <div>Market not found</div>
   }
-
-  console.log("MARKET", marketAccount)
 
   return (
     <div>
@@ -620,25 +616,11 @@ const VaultDetails = () => {
             },
           ]}
         >
-          {tableData.map((item, index) => (
-            // Todo: add key
-            // eslint-disable-next-line react/no-array-index-key
-            <TableRow key={index}>
-              <TableCell justify="start">{item.lender}</TableCell>
-              <TableCell justify="start">{item.wallet}</TableCell>
-              <TableCell justify="center">
-                {item.status === "Pending" && (
-                  <Button
-                    variant="white-brown"
-                    className="max-h-5 w-24 gap-x-2.5"
-                  >
-                    Pending
-                    <div className="flex items-center w-3 h-3">
-                      <CancelRound />
-                    </div>
-                  </Button>
-                )}
-              </TableCell>
+          {authorisedLenders?.map((lender) => (
+            <TableRow key={lender.lender}>
+              <TableCell justify="start">{}</TableCell>
+              <TableCell justify="start">{lender.lender}</TableCell>
+              <TableCell justify="center">{}</TableCell>
             </TableRow>
           ))}
         </Table>

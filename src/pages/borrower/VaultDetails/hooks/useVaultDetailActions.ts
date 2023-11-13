@@ -3,6 +3,7 @@ import { MarketAccount, TokenAmount } from "@wildcatfi/wildcat-sdk"
 import { parseUnits } from "ethers/lib/utils"
 import { BigNumber } from "ethers"
 
+import { WildcatMarketController } from "@wildcatfi/wildcat-sdk/dist/typechain"
 import { useEthersSigner } from "../../../../modules/hooks"
 import {
   toastifyError,
@@ -12,6 +13,7 @@ import {
 import { GET_MARKET_ACCOUNT_KEY } from "./useGetMarket"
 import { useGetControllerContract } from "../../hooks/useGetController"
 import { GET_AUTHORIZED_LENDERS_KEY } from "../Modals/RemoveLendersModal/hooks/useGetAuthorizedLenders"
+import { GET_LENDERS_BY_MARKET_KEY } from "./useGetAuthorisedLenders"
 
 export const useBorrow = (marketAccount: MarketAccount) => {
   const signer = useEthersSigner()
@@ -130,6 +132,28 @@ export const useTerminateMarket = () => {
   })
 }
 
+async function updateLenderAuthorizationForAll(
+  controller: WildcatMarketController | undefined,
+  lenders: string[],
+  market: string,
+) {
+  if (controller) {
+    try {
+      // Используйте Promise.all для выполнения запроса для всех элементов массива параллельно
+      await Promise.all(
+        lenders.map(async (lender) => {
+          await controller.updateLenderAuthorization(lender, [market])
+          console.log(`Success: ${lender}`)
+        }),
+      )
+    } catch (error) {
+      console.error("Error:", error)
+    }
+  } else {
+    console.error("Error: controller is undefined")
+  }
+}
+
 export const useAuthorizedLenders = (lenders: string[], market: string) => {
   const { data: controller } = useGetControllerContract()
   const client = useQueryClient()
@@ -140,12 +164,14 @@ export const useAuthorizedLenders = (lenders: string[], market: string) => {
         toastifyError("add lenders")
         return
       }
-      await controller?.authorizeLenders(lenders)
-      await controller?.updateLenderAuthorization(lenders[0], [market])
+      const tx = await controller?.authorizeLenders(lenders)
+      await tx?.wait()
+      await updateLenderAuthorizationForAll(controller, lenders, market)
     },
     onSuccess() {
       toastifySuccess("lenders successfully authorized")
       client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+      client.invalidateQueries({ queryKey: [GET_LENDERS_BY_MARKET_KEY] })
     },
     onError(error) {
       toastifyError(`authorize lenders error: ${error}`)
@@ -166,14 +192,18 @@ export const useDeauthorizedLenders = (
         toastifyError("select lenders")
         return
       }
-      await controller?.deauthorizeLenders(authorizedLenders)
-      await controller?.updateLenderAuthorization(authorizedLenders[0], [
+      const tx = await controller?.deauthorizeLenders(authorizedLenders)
+      await tx?.wait()
+      await updateLenderAuthorizationForAll(
+        controller,
+        authorizedLenders,
         market,
-      ])
+      )
     },
     onSuccess() {
       toastifySuccess("lenders successfully deauthorized")
       client.invalidateQueries({ queryKey: [GET_AUTHORIZED_LENDERS_KEY] })
+      client.invalidateQueries({ queryKey: [GET_LENDERS_BY_MARKET_KEY] })
     },
     onError(error) {
       toastifyError(`deauthorize lenders error: ${error}`)
