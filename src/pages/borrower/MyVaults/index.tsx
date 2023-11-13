@@ -34,6 +34,18 @@ function MyVaults() {
     setFilterByName(value.toLowerCase())
   }
 
+  const filterUnderlyingOptions = useMemo(() => {
+    if (!markets) return []
+    const options = markets
+      .map((market) => market.underlyingToken.symbol)
+      .filter((value, index, self) => self.indexOf(value) === index)
+    return options.map((option) => ({
+      id: option,
+      label: option,
+      value: option,
+    }))
+  }, [markets])
+
   const filteredMarkets = markets
     ? markets
         .filter((market) => {
@@ -88,7 +100,7 @@ function MyVaults() {
           </div>
           <div className="w-1/3 px-2.5 py-2.5">
             <Select
-              options={mockedUnderlyingAssetsOptions}
+              options={filterUnderlyingOptions}
               onChange={setSelectedUnderlyingAsset}
               selected={selectedUnderlyingAsset}
               placeholder="Underlying Asset"

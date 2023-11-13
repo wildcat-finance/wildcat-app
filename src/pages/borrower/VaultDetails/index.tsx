@@ -626,37 +626,6 @@ const VaultDetails = () => {
         </Table>
       </div>
 
-      {accordionStates[3] && (
-        <Paper className="border-tint-10 mt-5 bg-white h-48 p-5 flex flex-col gap-y-6 overflow-auto">
-          <div className="text-xs">
-            <div>1 Sep 2023; 13:37:00</div>
-            Will be adding in examples of text for all of the various events we
-            index soon.
-          </div>
-        </Paper>
-      )}
-
-      <div className="text-base font-bold mt-14">Market Controller</div>
-      <div className="flex flex-wrap gap-x-7 mb-14 mt-5">
-        <FormItem className="w-72" label="Market Type" tooltip="test">
-          <NumberInput className="w-72" />
-        </FormItem>
-        <FormItem
-          className="w-72"
-          label="Market Controller Address"
-          tooltip="should be table of archcontroller, controller, factory addr"
-        >
-          <NumberInput className="w-72" />
-        </FormItem>
-      </div>
-
-      <div className="flex justify-between items-center">
-        <ServiceAgreementCard
-          title="Market Master Loan Agreement"
-          description="You signed the blsmDAI Master Loan Agreement on 17-Sept-2023"
-        />
-      </div>
-
       <ServiceAgreementCard
         className="mt-10"
         title="Wildcat Service Agreement"
