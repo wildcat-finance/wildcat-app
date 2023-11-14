@@ -81,7 +81,7 @@ function ActiveVaults() {
       <div className="text-xs flex-col">
         <div className="text-xs font-normal underline">My Markets</div>
         <div className="text-green text-2xl font-bold mt-8">
-          Active Markets for lender {user}
+          All Markets For Lender: {user}
         </div>
 
         <div className="flex w-full flex-wrap -mx-2.5 mt-8">
