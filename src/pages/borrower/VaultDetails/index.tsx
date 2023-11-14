@@ -1,16 +1,10 @@
-import React, { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { DateValue } from "react-aria-components"
-import { formatEther, formatUnits } from "ethers/lib/utils"
-import { BigNumber } from "ethers"
+import { formatEther } from "ethers/lib/utils"
 
 import {
   Button,
-  FormItem,
   Paper,
   TableItem,
-  Chip,
-  DatePickerInput,
   Table,
   TableRow,
   TableCell,
@@ -21,9 +15,6 @@ import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 
 import {
   CancelRound,
-  CancelRoundBlack,
-  ExpandMore,
-  Search,
   BackArrow,
 } from "../../../components/ui-components/icons/index"
 
@@ -33,7 +24,6 @@ import {
   formatBps,
   formatSecsToHours,
   MARKET_PARAMS_DECIMALS,
-  numberifyTokenAmount,
   stringifyTokenAmount,
   TOKEN_AMOUNT_DECIMALS,
   trimAddress,
@@ -41,6 +31,8 @@ import {
 import BorrowAssets from "./BorrowAssets"
 import Repay from "./Repay"
 import AdjustAPR from "./AdjustAPR"
+import LenderMarketDetails from "./LenderMarketDetails";
+import PaymentHistory from "./PaymentHistory";
 
 const tableData = [
   {
@@ -108,61 +100,13 @@ const tableData = [
   },
 ]
 
-function numberToArray(number: number) {
-  const array = []
-  for (let i = 1; i <= number; i += 1) {
-    array.push(i)
-  }
-  return array
-}
-
 const VaultDetails = () => {
   const navigate = useNavigate()
-  const [accordionStates, setAccordionStates] = useState([
-    false,
-    false,
-    true,
-    true,
-  ])
-  const [isActivePage, setIsActivePage] = useState(1)
-  const [dateArray, setDateArray] = useState<DateValue[]>([])
-
   const { marketAddress } = useParams()
   const { data: market, isLoading: isMarketLoading } =
     useGetMarket(marketAddress)
   const { data: marketAccount, isLoading: isMarketAccountLoading } =
     useGetMarketAccount(market)
-
-  const isDatePicked = dateArray.length >= 1
-
-  const toggleAccordion = (index: number) => {
-    const newAccordionStates = [...accordionStates]
-    newAccordionStates[index] = !newAccordionStates[index]
-    setAccordionStates(newAccordionStates)
-  }
-
-  const toggleAccordionIcon = (index: number) =>
-    accordionStates[index] ? (
-      <ExpandMore
-        className="transform rotate-180"
-        onClick={() => toggleAccordion(index)}
-      />
-    ) : (
-      <ExpandMore onClick={() => toggleAccordion(index)} />
-    )
-
-  const handleFirstDateChange = (date: DateValue) => {
-    setDateArray([date, dateArray[1]])
-  }
-
-  const handleSecondDateChange = (date: DateValue) => {
-    setDateArray([dateArray[0], date])
-  }
-
-  const handleDateReset = () => {
-    setDateArray([])
-  }
-
   const handleClickMyVaults = () => {
     navigate("/borrower/my-vaults")
   }
@@ -355,244 +299,10 @@ const VaultDetails = () => {
           </div>
         </div>
       )}
-      <div className="mb-14">
-        <div className="flex justify-between items-center mb-8">
-          <div className="text-base font-bold">Lender Withdrawal Requests</div>
-          <div className="flex gap-x-7 items-center">
-            <Chip color="green" className="w-fit !h-6 text-white">
-              Ongoing Cycle
-            </Chip>
-            <div className="flex gap-x-2">
-              <div className="inline text-black text-xs font-bold">Start</div>
-              <div className="text-black text-xs"> </div>
-            </div>
-            <div className="flex gap-x-2">
-              <div className="inline text-black text-xs font-bold">End</div>
-              <div className="text-black text-xs"> </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-between items-center mb-4 pr-6">
-          <div className="inline text-black text-xs font-bold">
-            Total Withdrawal Requests Outstanding
-          </div>
-          <Chip className="w-20 flex justify-center">15,000 DAI</Chip>
-        </div>
-        <div className="h-12 flex justify-between items-center bg-tint-10 px-6">
-          <div className="inline text-black text-xs font-bold">
-            Requests Made In This Cycle
-          </div>
-          <div className="flex gap-x-4 items-center">
-            {toggleAccordionIcon(0)}
-            <Chip className="w-20 flex justify-center">5,000 DAI</Chip>
-          </div>
-        </div>
-        {accordionStates[0] && (
-          <Table
-            headers={[
-              {
-                title: "Lender",
-                align: "start",
-                className: "w-40",
-              },
-              {
-                title: "Transaction ID",
-                align: "start",
-                className: "w-72",
-              },
-              {
-                title: "Date Submitted",
-                align: "start",
-                className: "w-52",
-              },
-              {
-                title: "",
-                align: "center",
-                className: "w-28",
-              },
-              {
-                title: "Amount",
-                align: "end",
-              },
-            ]}
-          >
-            {tableData.map((item) => (
-              <TableRow key={item.wallet}>
-                <TableCell justify="start">{item.lender}</TableCell>
-                <TableCell justify="start">{item.txID}</TableCell>
-                <TableCell justify="start">{item.dateExecuted}</TableCell>
-                <TableCell justify="end">
-                  <div />
-                </TableCell>
-                <TableCell justify="end">{item.amount}</TableCell>
-              </TableRow>
-            ))}
-          </Table>
-        )}
-        <div className="h-12 flex justify-between items-center bg-tint-10 px-6 mt-6">
-          <div className="inline text-black text-xs font-bold">
-            Requests Made In Previous Cycles
-          </div>
-          <div className="flex gap-x-4 items-center">
-            {toggleAccordionIcon(1)}
-            <Chip className="w-20 flex justify-center">10,000 DAI</Chip>
-          </div>
-        </div>
-        {accordionStates[1] && (
-          <Table
-            headers={[
-              {
-                title: "Lender",
-                align: "start",
-                className: "w-40",
-              },
-              {
-                title: "Transaction ID",
-                align: "start",
-                className: "w-72",
-              },
-              {
-                title: "Date Submitted",
-                align: "start",
-                className: "w-52",
-              },
-              {
-                title: "Date Queued",
-                align: "start",
-                className: "w-28",
-              },
-              {
-                title: "Amount",
-                align: "end",
-              },
-            ]}
-          >
-            {tableData.map((item) => (
-              <TableRow key={item.wallet}>
-                <TableCell justify="start">{item.lender}</TableCell>
-                <TableCell justify="start">{item.txID}</TableCell>
-                <TableCell justify="start">{item.dateExecuted}</TableCell>
-                <TableCell justify="start">{item.dateExecuted}</TableCell>
-                <TableCell justify="end">{item.amount}</TableCell>
-              </TableRow>
-            ))}
-          </Table>
-        )}
-      </div>
-      <div className="mb-14">
-        {/* <div className="text-base font-bold mb-8"></div> */}
-        <div className="flex w-full justify-between content-center mb-8">
-          <div className="text-base font-bold">Borrower Payment History</div>
-          <button
-            className="flex items-center gap-x-2"
-            onClick={() => toggleAccordion(2)}
-          >
-            <p className="text-xs font-normal underline cursor-pointer">
-              {accordionStates[2] ? "Hide History" : "Show History"}
-            </p>
-            {toggleAccordionIcon(2)}
-          </button>
-        </div>
-        {accordionStates[2] && (
-          <div>
-            <div className="flex justify-between items-center mb-5">
-              <div className="flex">
-                <button onClick={handleClickMyVaults}>
-                  <BackArrow />
-                </button>
-                <div className="flex gap-x-5">
-                  <div className="text-black text-xs underline">
-                    19-20 Dec-2023
-                  </div>
-                  <div className="text-black text-xs underline">
-                    21-22-Dec-2023
-                  </div>
-                  <div className="text-black text-xs underline">
-                    21-22-Dec-2023
-                  </div>
-                  <div className="inline text-black text-xs font-bold">
-                    Current Cycle
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-x-3">
-                <DatePickerInput
-                  placeholder="Date From"
-                  onChange={handleFirstDateChange}
-                  value={dateArray[0]}
-                />
-                <DatePickerInput
-                  placeholder="Date To"
-                  onChange={handleSecondDateChange}
-                  value={dateArray[1]}
-                />
-                <button onClick={handleClickMyVaults}>
-                  <Search className="h-6 w-6" />
-                </button>
-              </div>
-            </div>
-            {isDatePicked && (
-              <Chip className="bg-white w-fit mb-3">
-                {dateArray[0]?.toString()} – {dateArray[1]?.toString()}
-                <CancelRoundBlack
-                  className="ml-2 cursor-pointer"
-                  onClick={handleDateReset}
-                />
-              </Chip>
-            )}
-            {!isDatePicked && <div className="h-8 w-8 mb-3" />}
-            <Table
-              headers={[
-                {
-                  title: "Lender",
-                  align: "start",
-                  className: "w-40",
-                },
-                {
-                  title: "Transaction ID",
-                  align: "start",
-                  className: "w-72",
-                },
-                {
-                  title: "Date Submitted",
-                  align: "start",
-                  className: "w-52",
-                },
-                {
-                  title: "Date Processed",
-                  align: "start",
-                  className: "w-28",
-                },
-                {
-                  title: "Amount",
-                  align: "end",
-                },
-              ]}
-            >
-              {tableData.map((item) => (
-                <TableRow key={item.wallet}>
-                  <TableCell justify="start">{item.lender}</TableCell>
-                  <TableCell justify="start">{item.txID}</TableCell>
-                  <TableCell justify="start">{item.dateSubmitted}</TableCell>
-                  <TableCell justify="start">{item.dateExecuted}</TableCell>
-                  <TableCell justify="end">{item.amount}</TableCell>
-                </TableRow>
-              ))}
-            </Table>
-            <div className="flex justify-center gap-x-1 text-xxs mt-6">
-              {numberToArray(4).map((item) => (
-                <button
-                  key={item}
-                  onClick={() => setIsActivePage(item)}
-                  className={`${isActivePage === item ? "font-bold" : ""}`}
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
+
+      <LenderMarketDetails tableData={tableData} />
+
+      <PaymentHistory tableData={tableData} />
 
       <div className="flex w-full justify-between content-center">
         <div className="text-base font-bold">Authorised Lenders</div>
