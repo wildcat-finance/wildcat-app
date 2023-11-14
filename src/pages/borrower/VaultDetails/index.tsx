@@ -31,8 +31,8 @@ import {
 import BorrowAssets from "./BorrowAssets"
 import Repay from "./Repay"
 import AdjustAPR from "./AdjustAPR"
-import LenderMarketDetails from "./LenderMarketDetails";
-import PaymentHistory from "./PaymentHistory";
+import LenderMarketDetails from "./LenderMarketDetails"
+import PaymentHistory from "./PaymentHistory"
 
 const tableData = [
   {
