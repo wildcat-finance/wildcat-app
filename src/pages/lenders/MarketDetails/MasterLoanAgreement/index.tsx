@@ -1,6 +1,6 @@
-import { Paper } from "../../../../../components/ui-components/Paper"
+import { Paper } from "../../../../components/ui-components/Paper"
 
-import { Button } from "../../../../../components/ui-components/Button"
+import { Button } from "../../../../components/ui-components/Button"
 
 function MasterLoanAgreement({
   nextStep,

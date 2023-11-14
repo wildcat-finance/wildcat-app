@@ -1,6 +1,7 @@
-import { Button, NumberInput } from "../../../../../components/ui-components"
+import { Button, NumberInput } from "../../../../components/ui-components"
+import { MarketProps } from "../VaultInfo/interface"
 
-export function VaultDeposit() {
+export function VaultDeposit({ market }: MarketProps) {
   return (
     <div className="rounded-2xl bg-tint-10">
       <div className="px-5 pt-8 pb-12">
@@ -17,7 +18,7 @@ export function VaultDeposit() {
         </div>
         <div className="text-xxs text-right mt-1.5 mr-40">
           <span className="font-semibold">Deposit up to </span>
-          25,000 DAI
+          {market.underlyingToken.symbol}
         </div>
       </div>
 
@@ -30,21 +31,21 @@ export function VaultDeposit() {
               <div className="text-xxs text-right mt-1.5 flex-col flex">
                 <p className="mb-3.5">
                   <span className="font-semibold">Withdraw up to </span>
-                  25,000 DAI
+                  {market.underlyingToken.symbol}
                 </p>
                 <p>
                   <span className="font-semibold">
                     WReserved assets awaiting cycle:{" "}
                   </span>
-                  25,000 DAI
+                  {market.underlyingToken.symbol}
                 </p>
                 <p className="mb-3.5">
                   <span className="font-semibold">Pending withdrawals: </span>
-                  25,000 DAI
+                  {market.underlyingToken.symbol}
                 </p>
                 <p>
                   <span className="font-semibold">Claimable from vault: </span>
-                  25,000 DAI
+                  {market.underlyingToken.symbol}
                 </p>
               </div>
             </div>

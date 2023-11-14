@@ -4,7 +4,7 @@ import * as React from "react"
 import { LENDERS_PATH } from "./constants"
 import LendersServiceAgreement from "../LendersServiceAgreement"
 import ActiveVaults from "../ActiveVaults"
-import { MarketDetails } from "../MarketDetails/LenderVaultItem"
+import { MarketDetails } from "../MarketDetails"
 
 export const LENDERS_ROUTES: RouteObject[] = [
   {

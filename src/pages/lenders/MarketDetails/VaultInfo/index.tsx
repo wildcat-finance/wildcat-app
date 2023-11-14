@@ -1,10 +1,14 @@
-import { AiOutlineExclamationCircle } from "react-icons/ai"
-import { VaultInfoProps } from "./interface"
+import { MarketProps } from "./interface"
 
-import { Button, TableItem } from "../../../../../components/ui-components"
-import { BluePaper } from "../../../../../components/ui-components/BluePaper"
+import { TableItem } from "../../../../components/ui-components"
+import {
+  formatBps,
+  formatSecsToHours,
+  MARKET_PARAMS_DECIMALS,
+  TOKEN_FORMAT_DECIMALS,
+} from "../../../../utils/formatters"
 
-export function VaultInfo({ vault, showButtons }: VaultInfoProps) {
+export function VaultInfo({ market }: MarketProps) {
   return (
     <div>
       <div className="text-base font-bold mb-5">Details</div>
@@ -14,7 +18,7 @@ export function VaultInfo({ vault, showButtons }: VaultInfoProps) {
             Annual Interest Rate
           </div>
           <div className="inline text-black text-xs">
-            {vault.annualInterestRate}%
+            {market.annualInterestBips}%
           </div>
         </div>
 
@@ -22,9 +26,7 @@ export function VaultInfo({ vault, showButtons }: VaultInfoProps) {
           <div className="inline text-black text-xs font-bold">
             Grace Period
           </div>
-          <div className="inline text-black text-xs">
-            {vault.annualInterestRate} hours
-          </div>
+          <div className="inline text-black text-xs">23:12:38</div>
         </div>
       </TableItem>
       <TableItem className="grid grid-cols-2 gap-x-36">
@@ -33,7 +35,8 @@ export function VaultInfo({ vault, showButtons }: VaultInfoProps) {
             Maximum Capacity
           </div>
           <div className="inline text-black text-xs">
-            {vault.maximumCapacity} {vault.tokenSymbol}
+            {market.maxTotalSupply.format(TOKEN_FORMAT_DECIMALS)}{" "}
+            {market.underlyingToken.symbol}
           </div>
         </div>
 
@@ -42,16 +45,14 @@ export function VaultInfo({ vault, showButtons }: VaultInfoProps) {
             Withdrawal Cycle
           </div>
           <div className="inline text-black text-xs">
-            {vault.withdrawalCycle} hours
+            {formatSecsToHours(market.pendingWithdrawalExpiry)} hours
           </div>
         </div>
       </TableItem>
       <TableItem className="grid grid-cols-2 gap-x-36">
         <div className="w-full flex px-3 items-center flex-row leading-8 justify-between">
           <div className="inline text-black text-xs font-bold">Deposits</div>
-          <div className="inline text-black text-xs">
-            {vault.deposits} {vault.tokenSymbol}
-          </div>
+          <div className="inline text-black text-xs" />
         </div>
 
         <div className="w-full flex px-3 items-center flex-row leading-8 justify-between">
@@ -59,7 +60,8 @@ export function VaultInfo({ vault, showButtons }: VaultInfoProps) {
             Reserved Assets
           </div>
           <div className="inline text-black text-xs">
-            {vault.reservedAssets} {vault.tokenSymbol}
+            {String(market.borrowableAssets.raw)}{" "}
+            {market.underlyingToken.symbol}
           </div>
         </div>
       </TableItem>
@@ -68,9 +70,7 @@ export function VaultInfo({ vault, showButtons }: VaultInfoProps) {
           <div className="inline text-black text-xs font-bold">
             Amount Borrowed
           </div>
-          <div className="inline text-black text-xs">
-            {vault.amountBorrowed} {vault.tokenSymbol}
-          </div>
+          <div className="inline text-black text-xs" />
         </div>
 
         <div className="w-full flex px-3 items-center flex-row leading-8 justify-between">
@@ -78,7 +78,7 @@ export function VaultInfo({ vault, showButtons }: VaultInfoProps) {
             Pending Withdrawals
           </div>
           <div className="inline text-black text-xs">
-            {vault.pendingWithdrawals} {vault.tokenSymbol}
+            {formatSecsToHours(market.pendingWithdrawalExpiry)}
           </div>
         </div>
       </TableItem>
@@ -88,7 +88,8 @@ export function VaultInfo({ vault, showButtons }: VaultInfoProps) {
             Current Reserves
           </div>
           <div className="inline text-black text-xs">
-            {vault.currentReserves} {vault.tokenSymbol}
+            {`${formatBps(market.temporaryReserveRatioExpiry)}`}{" "}
+            {market.underlyingToken.symbol}
           </div>
         </div>
 
@@ -97,7 +98,7 @@ export function VaultInfo({ vault, showButtons }: VaultInfoProps) {
             Accured Protocol Fees
           </div>
           <div className="inline text-black text-xs">
-            {vault.accruedProtocolFees} {vault.tokenSymbol}
+            {`5 ${market.underlyingToken.symbol}`}
           </div>
         </div>
       </TableItem>
@@ -107,7 +108,7 @@ export function VaultInfo({ vault, showButtons }: VaultInfoProps) {
             Current Reserve Ratio
           </div>
           <div className="inline text-black text-xs">
-            {vault.currentReserveRatio}%
+            {formatBps(market.reserveRatioBips)}%
           </div>
         </div>
 
@@ -115,10 +116,7 @@ export function VaultInfo({ vault, showButtons }: VaultInfoProps) {
           <div className="inline text-black text-xs font-bold">
             Withdrawal Cycle Countdown
           </div>
-          <div className="inline text-black text-xs">
-            {vault.withdrawalCycleCountdown.hours} hrs{" "}
-            {vault.withdrawalCycleCountdown.minutes} min
-          </div>
+          <div className="inline text-black text-xs">23:12:38</div>
         </div>
       </TableItem>
       <TableItem className="grid grid-cols-2 gap-x-36">
@@ -127,7 +125,7 @@ export function VaultInfo({ vault, showButtons }: VaultInfoProps) {
             Required Reserves
           </div>
           <div className="inline text-black text-xs">
-            {vault.requiredReserves} {vault.tokenSymbol}
+            {market.coverageLiquidity.format(TOKEN_FORMAT_DECIMALS, true)}
           </div>
         </div>
 
@@ -135,9 +133,7 @@ export function VaultInfo({ vault, showButtons }: VaultInfoProps) {
           <div className="inline text-black text-xs font-bold">
             Master Loan Agreement
           </div>
-          <div className="inline text-black text-xs">
-            {vault.masterLoanAgreement === "true" ? "Acceptable" : "N/A"}
-          </div>
+          <div className="inline text-black text-xs" />
         </div>
       </TableItem>
       <TableItem className="grid grid-cols-2 gap-x-36">
@@ -146,7 +142,10 @@ export function VaultInfo({ vault, showButtons }: VaultInfoProps) {
             Minimum Reserve Ratio
           </div>
           <div className="inline text-black text-xs">
-            {vault.minimumReserveRatio}%
+            {`${formatBps(
+              market.reserveRatioBips,
+              MARKET_PARAMS_DECIMALS.reserveRatioBips,
+            )}%`}
           </div>
         </div>
       </TableItem>
