@@ -28,6 +28,7 @@ import {
   formatBps,
   formatSecsToHours,
   MARKET_PARAMS_DECIMALS,
+  MARKET_PERCENTAGE_PARAM_DECIMALS,
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
 } from "../../../utils/formatters"
@@ -174,8 +175,6 @@ const VaultDetails = () => {
 
   console.log("MARKET", marketAccount)
 
-  const underlyingTokenDecimals = market.underlyingToken.decimals
-
   return (
     <div>
       <button
@@ -318,7 +317,9 @@ const VaultDetails = () => {
             />
             <TableItem
               title="Outstanding Debt"
-              value={market.outstandingDebt.format(TOKEN_FORMAT_DECIMALS, true)}
+              value={`${market.totalSupply.format(TOKEN_FORMAT_DECIMALS)} ${
+                market.underlyingToken.symbol
+              }`}
               className="pr-6 pl-24"
             />
             <TableItem
@@ -336,12 +337,14 @@ const VaultDetails = () => {
             />
             <TableItem
               title="Current Reserve Ratio"
-              value={`${formatBps(market.reserveRatioBips)}%`}
+              value={`${market.collateralization.actualRatio.toFixed(
+                MARKET_PERCENTAGE_PARAM_DECIMALS,
+              )}%`}
               className="pr-6 pl-24"
             />
             <TableItem
               title="Lifetime Accrued Interest"
-              value={`5 ${market.underlyingToken.name}`}
+              value="-"
               className="pr-6 pl-24"
             />
           </div>
