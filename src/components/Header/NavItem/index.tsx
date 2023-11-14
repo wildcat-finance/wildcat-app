@@ -2,8 +2,6 @@ import { Link, useLocation } from "react-router-dom"
 import { NavItemProps } from "./interface"
 
 function NavItem({ link, name, linkName }: NavItemProps) {
-  console.log("NavItemProps", link, name)
-
   const { pathname } = useLocation()
   const isActive = pathname.includes(linkName)
 
