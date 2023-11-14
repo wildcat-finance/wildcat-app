@@ -46,6 +46,7 @@ const AddNewVault = () => {
     formState: { errors },
     trigger,
     setFocus,
+    setError,
   } = useNewMarketForm()
   const { data: controller, isLoading: isControllerLoading } =
     useGetController()
@@ -70,6 +71,13 @@ const AddNewVault = () => {
   const { data: assetData } = useTokenMetadata({
     address: assetWatch?.toLowerCase(),
   })
+
+  const setTokenSelectError = (message: string) => {
+    setError("asset", {
+      type: "manual",
+      message,
+    })
+  }
 
   useEffect(() => {
     setTokenAsset(assetData)
@@ -170,6 +178,7 @@ const AddNewVault = () => {
               onBlur={assetRegister.onBlur}
               error={Boolean(errors.asset)}
               ref={assetRegister.ref}
+              setError={setTokenSelectError}
             />
           </FormItem>
 
