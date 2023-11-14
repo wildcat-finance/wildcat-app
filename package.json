@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@apollo/react-hooks": "^4.0.0",
+    "@apollo/client": "^3.8.7",
     "@headlessui/react": "^1.7.17",
     "@hookform/resolvers": "^3.3.1",
     "@tailwindcss/typography": "^0.5.10",
@@ -17,7 +17,6 @@
     "@types/react-dom": "^18.0.4",
     "@wildcatfi/subgraph-hooks": "^1.0.0",
     "@wildcatfi/wildcat-sdk": "^2.0.3",
-    "apollo-boost": "^0.4.9",
     "classnames": "^2.3.2",
     "ethers": "^5.7.0",
     "framer-motion": "^6.2.9",
@@ -66,12 +65,12 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@graphql-codegen/cli": "^5.0.0",
     "@graphql-codegen/client-preset": "^4.1.0",
     "@graphql-codegen/introspection": "^4.0.0",
     "@graphql-codegen/typescript": "^4.0.1",
     "@graphql-codegen/typescript-react-apollo": "^3.3.7",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@typescript-eslint/eslint-plugin": "^6.8.0",
     "@typescript-eslint/parser": "^6.8.0",
     "eslint": "^8.2.0",

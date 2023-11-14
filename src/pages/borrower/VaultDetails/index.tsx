@@ -298,7 +298,7 @@ const VaultDetails = () => {
       </div>
 
       <LenderMarketDetails tableData={tableData} />
-      <PaymentHistory tableData={tableData} />
+      <PaymentHistory marketAddress={market.address} />
 
       <div className="flex w-full justify-between content-center">
         <div className="text-base font-bold">Authorised Lenders</div>

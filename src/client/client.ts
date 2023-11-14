@@ -3,15 +3,11 @@ import {
   createHttpLink,
   DefaultOptions,
   InMemoryCache,
-} from "@apollo/react-hooks"
+} from "@apollo/client"
 
 const defaultOptions: DefaultOptions = {
-  watchQuery: {
-    fetchPolicy: "no-cache",
-    errorPolicy: "ignore",
-  },
   query: {
-    fetchPolicy: "no-cache",
+    fetchPolicy: "network-only",
     errorPolicy: "all",
   },
 }

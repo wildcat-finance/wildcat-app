@@ -1,6 +1,7 @@
+import React, { useState, useMemo } from "react"
 import { useNavigate } from "react-router-dom"
-import React, { useState } from "react"
 import { DateValue } from "react-aria-components"
+
 import {
   Chip,
   DatePickerInput,
@@ -9,29 +10,56 @@ import {
   TableRow,
 } from "../../../../components/ui-components"
 import {
-  BackArrow,
   CancelRoundBlack,
   ExpandMore,
   Search,
 } from "../../../../components/ui-components/icons"
 import { PaymentHistoryDetailsProps } from "./type"
+import { useGetBorrowerRepayments } from "../hooks/useGetBorrowerRepayments"
 
-const PaymentHistory = ({ tableData }: PaymentHistoryDetailsProps) => {
+function getFromToTimestamps(dateArray: DateValue[]) {
+  const fromTimestamp = dateArray[0]
+    ? Math.floor(dateArray[0].toDate("UTC").getTime() / 1000)
+    : 0
+  const toTimestamp = dateArray[1]
+    ? Math.floor(dateArray[1].toDate("UTC").getTime() / 1000)
+    : Math.floor(Date.now() / 1000)
+
+  return { fromTimestamp, toTimestamp }
+}
+
+const PaymentHistory = ({ marketAddress }: PaymentHistoryDetailsProps) => {
   const [showHistory, setShowHistory] = useState(true)
   const [dateArray, setDateArray] = useState<DateValue[]>([])
-  const isDatePicked = dateArray.length >= 1
   const navigate = useNavigate()
+
+  const { fromTimestamp, toTimestamp } = useMemo(
+    () => getFromToTimestamps(dateArray),
+    [dateArray],
+  )
+
+  const { data } = useGetBorrowerRepayments(
+    marketAddress,
+    fromTimestamp,
+    toTimestamp,
+  )
+
+  const isDatePicked = dateArray.length >= 1
+
   const handleClickMyVaults = () => {
     navigate("/borrower/my-vaults")
   }
-  const [isActivePage, setIsActivePage] = useState(1)
-  function numberToArray(number: number) {
-    const array = []
-    for (let i = 1; i <= number; i += 1) {
-      array.push(i)
-    }
-    return array
-  }
+
+  // const [isActivePage, setIsActivePage] = useState(1)
+  //
+  // function numberToArray(number: number) {
+  //   const array = []
+  //   for (let i = 1; i <= number; i += 1) {
+  //     array.push(i)
+  //   }
+  //   return array
+  // }
+
   const handleDateReset = () => {
     setDateArray([])
   }
@@ -69,26 +97,7 @@ const PaymentHistory = ({ tableData }: PaymentHistoryDetailsProps) => {
       </div>
       {showHistory && (
         <div>
-          <div className="flex justify-between items-center mb-5">
-            <div className="flex">
-              <button onClick={handleClickMyVaults}>
-                <BackArrow />
-              </button>
-              <div className="flex gap-x-5">
-                <div className="text-black text-xs underline">
-                  19-20 Dec-2023
-                </div>
-                <div className="text-black text-xs underline">
-                  21-22-Dec-2023
-                </div>
-                <div className="text-black text-xs underline">
-                  21-22-Dec-2023
-                </div>
-                <div className="inline text-black text-xs font-bold">
-                  Current Cycle
-                </div>
-              </div>
-            </div>
+          <div className="flex justify-end items-center mb-5">
             <div className="flex items-center gap-x-3">
               <DatePickerInput
                 placeholder="Date From"
@@ -99,22 +108,25 @@ const PaymentHistory = ({ tableData }: PaymentHistoryDetailsProps) => {
                 placeholder="Date To"
                 onChange={handleSecondDateChange}
                 value={dateArray[1]}
+                minValue={dateArray[0]}
               />
-              <button onClick={handleClickMyVaults}>
-                <Search className="h-6 w-6" />
-              </button>
             </div>
           </div>
+
           {isDatePicked && (
-            <Chip className="bg-white w-fit mb-3">
-              {dateArray[0]?.toString()} – {dateArray[1]?.toString()}
-              <CancelRoundBlack
-                className="ml-2 cursor-pointer"
-                onClick={handleDateReset}
-              />
-            </Chip>
+            <div className="flex justify-end items-center mb-5">
+              <Chip className="bg-white w-fit mb-3">
+                {dateArray[0]?.toString()} – {dateArray[1]?.toString()}
+                <CancelRoundBlack
+                  className="ml-2 cursor-pointer"
+                  onClick={handleDateReset}
+                />
+              </Chip>
+            </div>
           )}
+
           {!isDatePicked && <div className="h-8 w-8 mb-3" />}
+
           <Table
             headers={[
               {
@@ -143,27 +155,34 @@ const PaymentHistory = ({ tableData }: PaymentHistoryDetailsProps) => {
               },
             ]}
           >
-            {tableData.map((item) => (
-              <TableRow key={item.wallet}>
-                <TableCell justify="start">{item.lender}</TableCell>
-                <TableCell justify="start">{item.txID}</TableCell>
-                <TableCell justify="start">{item.dateSubmitted}</TableCell>
-                <TableCell justify="start">{item.dateExecuted}</TableCell>
-                <TableCell justify="end">{item.amount}</TableCell>
-              </TableRow>
-            ))}
+            {data &&
+              data.map((repayment) => (
+                <TableRow key={repayment.blockTimestamp}>
+                  <TableCell justify="start">{repayment.from}</TableCell>
+                  <TableCell justify="start">
+                    {repayment.transactionHash}
+                  </TableCell>
+                  <TableCell justify="start">
+                    {repayment.blockTimestamp}
+                  </TableCell>
+                  <TableCell justify="start">
+                    {repayment.blockTimestamp}
+                  </TableCell>
+                  <TableCell justify="end">{repayment.assetAmount}</TableCell>
+                </TableRow>
+              ))}
           </Table>
-          <div className="flex justify-center gap-x-1 text-xxs mt-6">
-            {numberToArray(4).map((item) => (
-              <button
-                key={item}
-                onClick={() => setIsActivePage(item)}
-                className={`${isActivePage === item ? "font-bold" : ""}`}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
+          {/* <div className="flex justify-center gap-x-1 text-xxs mt-6"> */}
+          {/*  {numberToArray(4).map((item) => ( */}
+          {/*    <button */}
+          {/*      key={item} */}
+          {/*      onClick={() => setIsActivePage(item)} */}
+          {/*      className={`${isActivePage === item ? "font-bold" : ""}`} */}
+          {/*    > */}
+          {/*      {item} */}
+          {/*    </button> */}
+          {/*  ))} */}
+          {/* </div> */}
         </div>
       )}
     </div>

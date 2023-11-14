@@ -42,6 +42,7 @@ export function DatePickerInput<T extends DateValue>({
             )}
           </DateInput>
         )}
+
         {isPlaceholderShown && (
           <div className="flex flex-1 py-2 text-xxs">{placeholder}</div>
         )}
