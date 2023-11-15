@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import {
   Button,
@@ -26,11 +26,19 @@ export function DatePickerInput<T extends DateValue>({
   placeholder,
   ...props
 }: DatePickerProps<T>) {
+  const { value } = props
   const [isPlaceholderShown, setPlaceholder] = useState(true)
 
   const handleChooseDate = () => {
     setPlaceholder(false)
   }
+  useEffect(() => {
+    if (!value) {
+      setPlaceholder(true)
+    }
+  }, [value])
+
+  console.log(Boolean(value))
 
   return (
     <DatePicker
@@ -78,7 +86,7 @@ export function DatePickerInput<T extends DateValue>({
                 {(date) => (
                   <CalendarCell
                     date={date}
-                    className="w-9 h-9 data-[outside-month=true]:text-white outline-none cursor-pointer flex items-center justify-center hover:font-bold focus-visible:font-bold"
+                    className="w-9 h-9 data-[outside-month=true]:text-white data-[disabled=true]:opacity-40 outline-none cursor-pointer flex items-center justify-center hover:font-bold focus-visible:font-bold"
                   />
                 )}
               </CalendarGridBody>
