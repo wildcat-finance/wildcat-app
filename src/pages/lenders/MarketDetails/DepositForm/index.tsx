@@ -1,24 +1,30 @@
 import { useState } from "react"
 import { BigNumber } from "ethers"
+import { TokenAmount } from "@wildcatfi/wildcat-sdk"
+import { parseUnits } from "ethers/lib/utils"
 import { Button, NumberInput } from "../../../../components/ui-components"
 import {
   MARKET_PARAMS_DECIMALS,
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
-import { useDeposit } from "../hooks/useVaultDetailActions"
+import { useDeposit } from "../../../borrower/VaultDetails/hooks/useVaultDetailActions"
 import { DepositFormProps } from "./interface"
 
 const DepositForm = ({ marketAccount }: DepositFormProps) => {
   const { mutate, isLoading } = useDeposit(marketAccount)
   const [depositValue, setDepositValue] = useState("0")
 
-  const depositValueBigNum = depositValue
-    ? BigNumber.from(depositValue)
-    : BigNumber.from("0")
+  const depositValueBigNum = new TokenAmount(
+    parseUnits(
+      depositValue || "0",
+      marketAccount.market.underlyingToken.decimals,
+    ),
+    marketAccount.market.underlyingToken,
+  )
 
   const disabled =
-    depositValueBigNum.isZero() ||
-    depositValueBigNum.gt(marketAccount.maximumDeposit.raw) ||
+    depositValueBigNum.raw.isZero() ||
+    depositValueBigNum.raw.gt(marketAccount.market.maximumDeposit.raw) ||
     isLoading
 
   const handleDeposit = () => {
@@ -38,8 +44,8 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
         />
         <div className="text-xxs text-right">
           <span className="font-semibold">Deposit up to</span>{" "}
-          {marketAccount.maximumDeposit.format(TOKEN_FORMAT_DECIMALS)}{" "}
-          {marketAccount.underlyingBalance.symbol}
+          {marketAccount.market.maximumDeposit.format(TOKEN_FORMAT_DECIMALS)}{" "}
+          {marketAccount.market.underlyingToken.symbol}
         </div>
       </div>
       <Button
