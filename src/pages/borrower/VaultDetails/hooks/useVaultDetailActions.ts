@@ -11,7 +11,7 @@ import {
   toastifyRequest,
   toastifySuccess,
 } from "../../../../components/toasts"
-import { GET_MARKET_ACCOUNT_KEY } from "./useGetMarket"
+import { GET_MARKET_ACCOUNT_KEY } from "../../../../hooks/useGetMarket"
 import { useGetControllerContract } from "../../../../hooks/useGetController"
 import { GET_AUTHORIZED_LENDERS_KEY } from "../Modals/RemoveLendersModal/hooks/useGetAuthorizedLenders"
 import { GET_LENDERS_BY_MARKET_KEY } from "./useGetAuthorisedLenders"

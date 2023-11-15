@@ -1,18 +1,13 @@
 import React from "react"
-
 import { useParams } from "react-router-dom"
-import { VaultInfo } from "./VaultInfo"
 
+import { VaultInfo } from "./VaultInfo"
 import { Button, Chip, Spinner } from "../../../components/ui-components"
-import { useWalletConnect } from "../../borrower/hooks/useWalletConnect"
+import { useWalletConnect } from "../../../hooks/useWalletConnect"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 import { VaultDeposit } from "./VaultDeposit"
-import {
-  useGetMarket,
-  useGetMarketAccount,
-} from "../../borrower/VaultDetails/hooks/useGetMarket"
-import { WithdrawalsControlPanel } from "./WithdrawalsControlPanel"
-import { tableDataMock } from "../../../mocks/vaults"
+import { useGetMarket, useGetMarketAccount } from "../../../hooks/useGetMarket"
+import WithdrawalRequests from "./WithdrawalRequests"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import PaymentHistory from "../../../components/PaymentHistory"
 
@@ -40,8 +35,6 @@ export function MarketDetails() {
     return <div>Market not found</div>
   }
 
-  console.log("MARKET", marketAccount)
-
   return (
     <div className="flex gap-8 flex-col ">
       <div className="flex justify-between items-center pt-5 pb-5">
@@ -57,10 +50,12 @@ export function MarketDetails() {
           </div>
         </div>
       </div>
+
       <VaultDeposit market={market} />
-      <WithdrawalsControlPanel tableData={tableDataMock} />
+      <WithdrawalRequests market={market} />
       <PaymentHistory market={market} />
       <VaultInfo market={market} />
+
       <ServiceAgreementCard
         className="mt-10"
         title="Wildcat Service Agreement"

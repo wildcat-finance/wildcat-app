@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { gql, useApolloClient } from "@apollo/client"
 import { SubgraphDebtRepaid } from "@wildcatfi/subgraph-hooks"
 
-export const GET_REPAYMENTS_KEY = "get_repayments"
+export const GET_REPAYMENTS_KEY = "get_market_repayments"
 
 const GET_REPAYMENTS = gql`
   query getRepayments($marketId: String!, $from: Int!, $to: Int!) {

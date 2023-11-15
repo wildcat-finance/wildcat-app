@@ -7,8 +7,8 @@ import {
 import { useQuery } from "@tanstack/react-query"
 
 import { useAccount } from "wagmi"
-import { useEthersSigner } from "../../../../modules/hooks"
-import { useCurrentNetwork } from "../../../../hooks/useCurrentNetwork"
+import { useEthersSigner } from "../modules/hooks"
+import { useCurrentNetwork } from "./useCurrentNetwork"
 
 const GET_MARKET_KEY = "get-market"
 

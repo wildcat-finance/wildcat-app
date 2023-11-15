@@ -14,7 +14,7 @@ import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import { BackArrow } from "../../../components/ui-components/icons/index"
 
 import { RemoveLendersModal, CapacityModal, NewLendersModal } from "./Modals"
-import { useGetMarket, useGetMarketAccount } from "./hooks/useGetMarket"
+import { useGetMarket, useGetMarketAccount } from "../../../hooks/useGetMarket"
 import {
   formatBps,
   formatSecsToHours,
@@ -26,10 +26,9 @@ import {
 import BorrowAssets from "./BorrowAssets"
 import Repay from "./Repay"
 import AdjustAPR from "./AdjustAPR"
-import LenderMarketDetails from "./LenderMarketDetails"
+import LenderWithdrawalRequests from "./LenderWithdrawalRequests"
 import PaymentHistory from "../../../components/PaymentHistory"
 import { useGetAuthorisedLenders } from "./hooks/useGetAuthorisedLenders"
-import { tableDataMock } from "../../../mocks/vaults"
 
 const VaultDetails = () => {
   const navigate = useNavigate()
@@ -53,8 +52,6 @@ const VaultDetails = () => {
   if (!market || !marketAccount) {
     return <div>Market not found</div>
   }
-
-  console.log("MARKET", marketAccount)
 
   return (
     <div>
@@ -232,7 +229,7 @@ const VaultDetails = () => {
         </div>
       </div>
 
-      <LenderMarketDetails tableData={tableDataMock} />
+      <LenderWithdrawalRequests market={market} />
       <PaymentHistory market={market} />
 
       <div className="flex w-full justify-between content-center">

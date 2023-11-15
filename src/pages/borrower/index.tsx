@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom"
 import { BORROWER_ROUTES } from "./routes"
 import { Spinner } from "../../components/ui-components"
 import { useBorrowerRouting } from "./hooks/useBorrowerRouting"
-import { useWalletConnect } from "./hooks/useWalletConnect"
+import { useWalletConnect } from "../../hooks/useWalletConnect"
 import { useCurrentNetwork } from "../../hooks/useCurrentNetwork"
 
 const BorrowerSection = () => {

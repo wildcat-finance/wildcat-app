@@ -2,9 +2,9 @@ import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAccount } from "wagmi"
 
-import { useWalletConnectModalStore } from "../../../store/useWalletConnectModalStore"
-import { BASE_PATHS } from "../../../routes/constants"
-import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
+import { useWalletConnectModalStore } from "../store/useWalletConnectModalStore"
+import { BASE_PATHS } from "../routes/constants"
+import { useCurrentNetwork } from "./useCurrentNetwork"
 
 export const useWalletConnect = () => {
   const { isConnected } = useAccount()

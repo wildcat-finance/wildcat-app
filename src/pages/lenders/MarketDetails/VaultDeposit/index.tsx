@@ -1,7 +1,7 @@
 import { Button } from "../../../../components/ui-components"
 import { MarketProps } from "../VaultInfo/interface"
 import DepositForm from "../DepositForm"
-import { useGetMarketAccount } from "../../../borrower/VaultDetails/hooks/useGetMarket"
+import { useGetMarketAccount } from "../../../../hooks/useGetMarket"
 import WithdrawalForm from "../WithdrawalForm"
 import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
 

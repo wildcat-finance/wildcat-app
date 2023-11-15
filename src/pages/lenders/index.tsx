@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom"
 import { LENDERS_ROUTES } from "./routes"
 import { Spinner } from "../../components/ui-components"
 import { useCurrentNetwork } from "../../hooks/useCurrentNetwork"
-import { useWalletConnect } from "../borrower/hooks/useWalletConnect"
+import { useWalletConnect } from "../../hooks/useWalletConnect"
 import { useLenderRouting } from "./hooks/useLenderRoutes"
 
 const LendersSection = () => {
