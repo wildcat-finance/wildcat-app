@@ -38,8 +38,6 @@ export function DatePickerInput<T extends DateValue>({
     }
   }, [value])
 
-  console.log(Boolean(value))
-
   return (
     <DatePicker
       className="group flex flex-col gap-1 w-36"
