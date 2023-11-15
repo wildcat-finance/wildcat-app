@@ -59,7 +59,7 @@ export const useGetUpdatedController = () => {
   async function getUserController() {
     const controller = await getController(signer as Signer, address as string)
     await controller.update()
-    console.log(controller)
+
     return controller
   }
 
