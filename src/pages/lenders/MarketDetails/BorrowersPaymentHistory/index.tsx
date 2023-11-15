@@ -77,7 +77,7 @@ export const BorrowersPaymentHistory = ({
 
   return (
     <div>
-      <div className="flex w-full justify-between content-center">
+      <div className="flex w-full justify-between content-center mb-8">
         <div className="text-base font-bold">Borrower Payment History</div>
         <button
           className="flex items-center gap-x-2"
