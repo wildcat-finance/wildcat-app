@@ -1,27 +1,29 @@
 import { useState } from "react"
-import { BigNumber } from "ethers"
+import { TokenAmount } from "@wildcatfi/wildcat-sdk"
+import { parseUnits } from "ethers/lib/utils"
 import { Button, NumberInput } from "../../../../components/ui-components"
 import {
   MARKET_PARAMS_DECIMALS,
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
 import { WithdrawalFormProps } from "./interface"
-import { useWithdraw } from "../hooks/useVaultDetailActions"
+import { useWithdraw } from "../../../borrower/VaultDetails/hooks/useVaultDetailActions"
 
-const WithdrawalForm = ({
-  marketAccount,
-  totalSupply,
-}: WithdrawalFormProps) => {
+const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
   const { mutate, isLoading } = useWithdraw(marketAccount)
   const [withdrawalValue, setWithdrawalValue] = useState("0")
 
-  const withdrawalValueBigNum = withdrawalValue
-    ? BigNumber.from(withdrawalValue)
-    : BigNumber.from("0")
+  const withdrawalValueBigNum = new TokenAmount(
+    parseUnits(
+      withdrawalValue || "0",
+      marketAccount.market.underlyingToken.decimals,
+    ),
+    marketAccount.market.underlyingToken,
+  )
 
   const disabled =
-    withdrawalValueBigNum.isZero() ||
-    withdrawalValueBigNum.gt(totalSupply.raw) ||
+    withdrawalValueBigNum.raw.isZero() ||
+    withdrawalValueBigNum.gt(marketAccount.market.totalSupply.raw) ||
     isLoading
 
   const handleWithdraw = () => {
@@ -41,8 +43,8 @@ const WithdrawalForm = ({
         />
         <div className="text-xxs text-right">
           <span className="font-semibold">Request up to</span>{" "}
-          {totalSupply.format(TOKEN_FORMAT_DECIMALS)}{" "}
-          {marketAccount.marketBalance.symbol}
+          {marketAccount.market.totalSupply.format(TOKEN_FORMAT_DECIMALS)}{" "}
+          {marketAccount.market.underlyingToken.symbol}
         </div>
       </div>
       <Button

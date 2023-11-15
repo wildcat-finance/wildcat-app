@@ -46,6 +46,7 @@ export const useBorrow = (marketAccount: MarketAccount) => {
 export const useDeposit = (marketAccount: MarketAccount) => {
   const signer = useEthersSigner()
   const client = useQueryClient()
+  // TODO: add call canDeposit
 
   return useMutation({
     mutationFn: async (amount: string) => {
@@ -73,6 +74,7 @@ export const useDeposit = (marketAccount: MarketAccount) => {
 export const useWithdraw = (marketAccount: MarketAccount) => {
   const signer = useEthersSigner()
   const client = useQueryClient()
+  // TODO: add call canWithdraw
 
   return useMutation({
     mutationFn: async (amount: string) => {
