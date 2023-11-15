@@ -10,8 +10,6 @@ import { useLendersMarkets } from "./hooks/useLendersMarkets"
 
 import VaultCard from "./VaultCard"
 
-const user = "plums.eth"
-
 function ActiveVaults() {
   const [filterByName, setFilterByName] = useState<string>("")
   const [selectedUnderlyingAsset, setSelectedUnderlyingAsset] =
@@ -81,7 +79,7 @@ function ActiveVaults() {
       <div className="text-xs flex-col">
         <div className="text-xs font-normal underline">My Markets</div>
         <div className="text-green text-2xl font-bold mt-8">
-          All Markets For Lender: {user}
+          All Markets For Lender
         </div>
 
         <div className="flex w-full flex-wrap -mx-2.5 mt-8">
