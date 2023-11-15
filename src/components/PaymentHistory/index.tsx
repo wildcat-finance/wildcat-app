@@ -9,18 +9,15 @@ import {
   Table,
   TableCell,
   TableRow,
-} from "../../../../components/ui-components"
-import {
-  CancelRoundBlack,
-  ExpandMore,
-} from "../../../../components/ui-components/icons"
+} from "../ui-components"
+import { CancelRoundBlack, ExpandMore } from "../ui-components/icons"
 import { PaymentHistoryDetailsProps } from "./type"
-import { useGetBorrowerRepayments } from "../hooks/useGetBorrowerRepayments"
+import { useGetRepayments } from "./useGetRepayments"
 import {
   formatTokenAmount,
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
-} from "../../../../utils/formatters"
+} from "../../utils/formatters"
 
 function getFromToTimestamps(dateArray: DateValue[]) {
   const fromTimestamp = dateArray[0]
@@ -44,11 +41,7 @@ const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
     [dateArray],
   )
 
-  const { data } = useGetBorrowerRepayments(
-    market.address,
-    fromTimestamp,
-    toTimestamp,
-  )
+  const { data } = useGetRepayments(market.address, fromTimestamp, toTimestamp)
 
   const isDatePicked = dateArray.length >= 1
 
