@@ -38,7 +38,6 @@
         "react/jsx-filename-extension": [1, { "extensions": [ ".tsx" ]} ],
         "import/extensions": "off",
         "react/react-in-jsx-scope": "off",
-        "prettier/prettier": "error",
         "no-shadow": "off",
         "no-param-reassign": "off",
         "react/jsx-props-no-spreading": "off",
@@ -52,7 +51,11 @@
         "react/require-default-props": "off",
         "react/button-has-type": "off",
         "react/function-component-definition": "off",
-        "@typescript-eslint/no-unused-vars": "warn"
+        "@typescript-eslint/no-unused-vars": "warn",
+        "prettier/prettier": ["error", {
+            "semi": false,
+            "endOfLine": "auto"
+        }]
     },
     "settings": {
         "import/extensions": [

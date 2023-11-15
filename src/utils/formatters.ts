@@ -29,12 +29,16 @@ export const formatBps = (bps: number, fixed?: number) => {
 }
 
 // <---- TOKEN PARAMETERS FORMATTERS ---->
-export const trimAddress = (address: string) =>
-  `${address.slice(0, 2)}..${address.slice(-4, address.length)}`
+export const trimAddress = (
+  address: string,
+  maxLength: number | undefined = 6,
+) =>
+  `${address.slice(0, 2)}..${address.slice(-(maxLength - 2), address.length)}`
+
 export const formatTokenAmount = (
   amount: BigNumber,
   tokenDecimals: number,
-  formatDecimalsLimit: number | undefined,
+  formatDecimalsLimit: number | undefined = 2,
 ) => {
   const formattedAmount = formatUnits(amount, tokenDecimals)
 

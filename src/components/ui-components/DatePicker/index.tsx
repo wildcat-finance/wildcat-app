@@ -33,7 +33,11 @@ export function DatePickerInput<T extends DateValue>({
   }
 
   return (
-    <DatePicker className="group flex flex-col gap-1 w-36" {...props}>
+    <DatePicker
+      className="group flex flex-col gap-1 w-36"
+      {...props}
+      aria-label="Select date"
+    >
       <Group className="flex bg-white/90 transition pl-3 text-black border border-tint-11">
         {!isPlaceholderShown && (
           <DateInput className="flex flex-1 py-2">

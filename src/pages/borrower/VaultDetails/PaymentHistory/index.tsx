@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from "react"
-import { useNavigate } from "react-router-dom"
 import { DateValue } from "react-aria-components"
+import dayjs from "dayjs"
 
+import { BigNumber } from "ethers"
 import {
   Chip,
   DatePickerInput,
@@ -12,10 +13,14 @@ import {
 import {
   CancelRoundBlack,
   ExpandMore,
-  Search,
 } from "../../../../components/ui-components/icons"
 import { PaymentHistoryDetailsProps } from "./type"
 import { useGetBorrowerRepayments } from "../hooks/useGetBorrowerRepayments"
+import {
+  formatTokenAmount,
+  TOKEN_FORMAT_DECIMALS,
+  trimAddress,
+} from "../../../../utils/formatters"
 
 function getFromToTimestamps(dateArray: DateValue[]) {
   const fromTimestamp = dateArray[0]
@@ -28,10 +33,11 @@ function getFromToTimestamps(dateArray: DateValue[]) {
   return { fromTimestamp, toTimestamp }
 }
 
-const PaymentHistory = ({ marketAddress }: PaymentHistoryDetailsProps) => {
+const DATE_FORMAT = "DD-MMM-YYYY"
+
+const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
   const [showHistory, setShowHistory] = useState(true)
   const [dateArray, setDateArray] = useState<DateValue[]>([])
-  const navigate = useNavigate()
 
   const { fromTimestamp, toTimestamp } = useMemo(
     () => getFromToTimestamps(dateArray),
@@ -39,16 +45,12 @@ const PaymentHistory = ({ marketAddress }: PaymentHistoryDetailsProps) => {
   )
 
   const { data } = useGetBorrowerRepayments(
-    marketAddress,
+    market.address,
     fromTimestamp,
     toTimestamp,
   )
 
   const isDatePicked = dateArray.length >= 1
-
-  const handleClickMyVaults = () => {
-    navigate("/borrower/my-vaults")
-  }
 
   // const [isActivePage, setIsActivePage] = useState(1)
   //
@@ -72,6 +74,8 @@ const PaymentHistory = ({ marketAddress }: PaymentHistoryDetailsProps) => {
   const toggleAccordion = () => {
     setShowHistory(!showHistory)
   }
+
+  const { underlyingToken } = market
 
   return (
     <div className="mb-14">
@@ -158,17 +162,40 @@ const PaymentHistory = ({ marketAddress }: PaymentHistoryDetailsProps) => {
             {data &&
               data.map((repayment) => (
                 <TableRow key={repayment.blockTimestamp}>
-                  <TableCell justify="start">{repayment.from}</TableCell>
                   <TableCell justify="start">
-                    {repayment.transactionHash}
+                    <a
+                      className="hover:underline"
+                      href={`https://sepolia.etherscan.io/address/${repayment.from}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {trimAddress(repayment.from)}
+                    </a>
                   </TableCell>
                   <TableCell justify="start">
-                    {repayment.blockTimestamp}
+                    <a
+                      className="hover:underline"
+                      href={`https://sepolia.etherscan.io/tx/${repayment.transactionHash}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {trimAddress(repayment.transactionHash, 24)}
+                    </a>
                   </TableCell>
                   <TableCell justify="start">
-                    {repayment.blockTimestamp}
+                    {dayjs(repayment.blockTimestamp * 1000).format(DATE_FORMAT)}
                   </TableCell>
-                  <TableCell justify="end">{repayment.assetAmount}</TableCell>
+                  <TableCell justify="start">
+                    {dayjs(repayment.blockTimestamp * 1000).format(DATE_FORMAT)}
+                  </TableCell>
+                  <TableCell justify="end">
+                    {formatTokenAmount(
+                      BigNumber.from(repayment.assetAmount),
+                      underlyingToken.decimals,
+                      TOKEN_FORMAT_DECIMALS,
+                    )}{" "}
+                    {underlyingToken.symbol}
+                  </TableCell>
                 </TableRow>
               ))}
           </Table>

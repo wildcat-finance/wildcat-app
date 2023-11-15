@@ -1,3 +1,5 @@
+import { Market } from "@wildcatfi/wildcat-sdk"
+
 export type PaymentHistoryDetailsProps = {
-  marketAddress: string
+  market: Market
 }

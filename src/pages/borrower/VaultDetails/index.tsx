@@ -233,7 +233,7 @@ const VaultDetails = () => {
       </div>
 
       <LenderMarketDetails tableData={tableDataMock} />
-      <PaymentHistory marketAddress={market.address} />
+      <PaymentHistory market={market} />
 
       <div className="flex w-full justify-between content-center">
         <div className="text-base font-bold">Authorised Lenders</div>

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { gql, useLazyQuery } from "@apollo/client"
+import { gql, useApolloClient } from "@apollo/client"
 import { SubgraphDebtRepaid } from "@wildcatfi/subgraph-hooks"
 
 export const GET_BORROWER_REPAYMENTS_KEY = "get_borrower_repayments"
@@ -20,10 +20,8 @@ const GET_BORROWER_REPAYMENTS = gql`
 `
 
 type QueryResponse = {
-  getBorrowerRepayments: {
-    market: {
-      repaymentRecords: SubgraphDebtRepaid[]
-    }
+  market: {
+    repaymentRecords: SubgraphDebtRepaid[]
   }
 }
 
@@ -38,12 +36,11 @@ export const useGetBorrowerRepayments = (
   fromTimestamp: number,
   toTimestamp: number,
 ) => {
-  const [fetch] = useLazyQuery<QueryResponse, QueryVariables>(
-    GET_BORROWER_REPAYMENTS,
-  )
+  const client = useApolloClient()
 
   async function getBorrowerRepayments() {
-    const res = await fetch({
+    const res = await client.query<QueryResponse, QueryVariables>({
+      query: GET_BORROWER_REPAYMENTS,
       variables: {
         marketId: marketId.toLowerCase(),
         from: fromTimestamp,
@@ -51,7 +48,7 @@ export const useGetBorrowerRepayments = (
       },
     })
 
-    return res.data?.getBorrowerRepayments.market?.repaymentRecords
+    return res.data?.market?.repaymentRecords
   }
 
   return useQuery({
