@@ -28,6 +28,8 @@ import LenderMarketDetails from "./LenderMarketDetails"
 import PaymentHistory from "./PaymentHistory"
 import { useGetAuthorisedLenders } from "./hooks/useGetAuthorisedLenders"
 import { tableDataMock } from "../../../mocks/vaults"
+import DepositForm from "./DepositForm"
+import WithdrawalForm from "./WithdrawalForm"
 
 const VaultDetails = () => {
   const navigate = useNavigate()
@@ -67,45 +69,14 @@ const VaultDetails = () => {
       <Paper className="flex flex-col gap-y-5 border-0 px-6 py-5 mb-14 bg-tint-10 border-tint-8 rounded-3xl">
         <div className="w-full flex justify-between">
           <div className="font-bold text-sm">New deposit</div>
-          <div className="flex gap-x-3.5 w-full max-w-lg">
-            <div className="flex flex-col w-full">
-              <NumberInput
-                decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
-                className="w-full"
-                placeholder="10.00"
-                min={0}
-              />
-              <div className="text-xxs text-right">
-                <span className="font-semibold">Deposit up to</span>{" "}
-                {market.maximumDeposit.format(TOKEN_FORMAT_DECIMALS)}{" "}
-                {market.marketToken.symbol}
-              </div>
-            </div>
-            <Button variant="green" className="w-64">
-              Deposit
-            </Button>
-          </div>
+          <DepositForm marketAccount={marketAccount} />
         </div>
         <div className="w-full flex justify-between">
           <div className="font-bold text-sm">Request withdrawal</div>
-          <div className="flex gap-x-3.5 w-full max-w-lg">
-            <div className="flex flex-col w-full">
-              <NumberInput
-                decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
-                className="w-full"
-                placeholder="10.00"
-                min={0}
-              />
-              <div className="text-xxs text-right">
-                <span className="font-semibold">Request up to</span>{" "}
-                {market.totalSupply.format(TOKEN_FORMAT_DECIMALS)}{" "}
-                {market.underlyingToken.symbol}
-              </div>
-            </div>
-            <Button variant="green" className="w-64">
-              Request
-            </Button>
-          </div>
+          <WithdrawalForm
+            marketAccount={marketAccount}
+            totalSupply={market.totalSupply}
+          />
         </div>
         <div className="w-full flex justify-between mt-1">
           <div className="font-bold text-sm">Claim available withdrawals</div>

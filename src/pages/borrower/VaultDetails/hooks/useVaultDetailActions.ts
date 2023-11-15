@@ -43,6 +43,60 @@ export const useBorrow = (marketAccount: MarketAccount) => {
   })
 }
 
+export const useDeposit = (marketAccount: MarketAccount) => {
+  const signer = useEthersSigner()
+  const client = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (amount: string) => {
+      if (!marketAccount || !signer) {
+        return
+      }
+
+      const tokenAmount = new TokenAmount(
+        parseUnits(amount, marketAccount.market.underlyingToken.decimals),
+        marketAccount.market.underlyingToken,
+      )
+
+      await marketAccount.deposit(tokenAmount)
+    },
+    onSuccess() {
+      toastifyInfo("Deposit in progress... Check your wallet transaction")
+      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+    },
+    onError(error) {
+      console.log(error)
+    },
+  })
+}
+
+export const useWithdraw = (marketAccount: MarketAccount) => {
+  const signer = useEthersSigner()
+  const client = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (amount: string) => {
+      if (!marketAccount || !signer) {
+        return
+      }
+
+      const tokenAmount = new TokenAmount(
+        parseUnits(amount, marketAccount.market.underlyingToken.decimals),
+        marketAccount.market.underlyingToken,
+      )
+
+      await marketAccount.queueWithdrawal(tokenAmount)
+    },
+    onSuccess() {
+      toastifyInfo("Withdrawal in progress... Check your wallet transaction")
+      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+    },
+    onError(error) {
+      console.log(error)
+    },
+  })
+}
+
 export const useRepay = (marketAccount: MarketAccount) => {
   const signer = useEthersSigner()
   const client = useQueryClient()
