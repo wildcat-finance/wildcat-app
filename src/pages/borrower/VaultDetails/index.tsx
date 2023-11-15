@@ -8,13 +8,12 @@ import {
   TableCell,
   NumberInput,
   Spinner,
-  Button,
 } from "../../../components/ui-components"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 
 import { BackArrow } from "../../../components/ui-components/icons/index"
 
-import { RemoveLendersModal, NewLendersModal } from "./Modals"
+import { RemoveLendersModal, CapacityModal, NewLendersModal } from "./Modals"
 import { useGetMarket, useGetMarketAccount } from "./hooks/useGetMarket"
 import {
   formatBps,
@@ -24,12 +23,13 @@ import {
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
 } from "../../../utils/formatters"
+import BorrowAssets from "./BorrowAssets"
+import Repay from "./Repay"
+import AdjustAPR from "./AdjustAPR"
 import LenderMarketDetails from "./LenderMarketDetails"
 import PaymentHistory from "./PaymentHistory"
 import { useGetAuthorisedLenders } from "./hooks/useGetAuthorisedLenders"
 import { tableDataMock } from "../../../mocks/vaults"
-import DepositForm from "./DepositForm"
-import WithdrawalForm from "./WithdrawalForm"
 
 const VaultDetails = () => {
   const navigate = useNavigate()
@@ -54,6 +54,8 @@ const VaultDetails = () => {
     return <div>Market not found</div>
   }
 
+  console.log("MARKET", marketAccount)
+
   return (
     <div>
       <button
@@ -67,30 +69,54 @@ const VaultDetails = () => {
         {market.name}
       </div>
       <Paper className="flex flex-col gap-y-5 border-0 px-6 py-5 mb-14 bg-tint-10 border-tint-8 rounded-3xl">
-        <div className="w-full flex justify-between">
-          <div className="font-bold text-sm">New deposit</div>
-          <DepositForm marketAccount={marketAccount} />
-        </div>
-        <div className="w-full flex justify-between">
-          <div className="font-bold text-sm">Request withdrawal</div>
-          <WithdrawalForm
-            marketAccount={marketAccount}
-            totalSupply={market.totalSupply}
-          />
-        </div>
-        <div className="w-full flex justify-between mt-1">
-          <div className="font-bold text-sm">Claim available withdrawals</div>
-          <div className="flex gap-x-3.5 w-full max-w-lg items-center">
-            <div className="text-xxs text-right w-full">
-              <span className="font-semibold">Claimable from vault:</span>{" "}
-              {market.normalizedUnclaimedWithdrawals.format(
-                TOKEN_FORMAT_DECIMALS,
-              )}{" "}
-              {market.underlyingToken.symbol}
+        <div>
+          <div className="w-full flex justify-between items-center">
+            <div className="font-bold">Borrow Assets</div>
+            <div className="flex gap-x-3.5 w-full max-w-lg">
+              <BorrowAssets
+                borrowableAssets={market.borrowableAssets}
+                marketAccount={marketAccount}
+              />
             </div>
-            <Button variant="green" className="w-64">
-              Claim
-            </Button>
+          </div>
+          <div className="text-xxs text-right mt-1.5 mr-48">
+            <span className="font-semibold">Available To Borrow:</span>{" "}
+            {market.borrowableAssets.format(TOKEN_FORMAT_DECIMALS, true)}
+          </div>
+        </div>
+        <div>
+          <div className="w-full flex justify-between">
+            <div className="font-bold mt-3">Repay Debt</div>
+            <div className="flex items-center gap-x-3.5 w-full max-w-lg">
+              <Repay marketAccount={marketAccount} />
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="w-full flex justify-between">
+            <div className="font-bold mt-3">Adjust Lender APR</div>
+            <div className="flex items-center gap-x-3.5 w-full max-w-lg">
+              <AdjustAPR marketAccount={marketAccount} />
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="w-full flex justify-between items-center">
+            <div className="font-bold">Adjust Maximum Capacity</div>
+            <div className="flex gap-x-3.5 w-full max-w-lg">
+              <NumberInput
+                decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
+                className="w-full"
+                placeholder="10.00"
+                min={0}
+              />
+              <CapacityModal />
+            </div>
+          </div>
+          <div className="text-xxs text-right mt-1.5 mr-48">
+            <span className="font-semibold">Current Capacity:</span>{" "}
+            {market.maxTotalSupply.format(TOKEN_FORMAT_DECIMALS)}{" "}
+            {market.underlyingToken.symbol}
           </div>
         </div>
       </Paper>
