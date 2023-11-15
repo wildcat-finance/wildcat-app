@@ -40,6 +40,7 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
           placeholder="10.00"
           onChange={(e) => setWithdrawalValue(e.target.value)}
           min={0}
+          max={marketAccount.market.totalSupply.format(TOKEN_FORMAT_DECIMALS)}
         />
         <div className="text-xxs text-right">
           <span className="font-semibold">Request up to</span>{" "}
