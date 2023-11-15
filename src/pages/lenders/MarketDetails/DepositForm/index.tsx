@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { BigNumber } from "ethers"
 import { TokenAmount } from "@wildcatfi/wildcat-sdk"
 import { parseUnits } from "ethers/lib/utils"
 import { Button, NumberInput } from "../../../../components/ui-components"
@@ -41,6 +40,9 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
           placeholder="10.00"
           onChange={(e) => setDepositValue(e.target.value)}
           min={0}
+          max={marketAccount.market.maximumDeposit.format(
+            TOKEN_FORMAT_DECIMALS,
+          )}
         />
         <div className="text-xxs text-right">
           <span className="font-semibold">Deposit up to</span>{" "}
