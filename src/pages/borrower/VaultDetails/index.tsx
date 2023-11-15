@@ -27,7 +27,7 @@ import BorrowAssets from "./BorrowAssets"
 import Repay from "./Repay"
 import AdjustAPR from "./AdjustAPR"
 import LenderMarketDetails from "./LenderMarketDetails"
-import PaymentHistory from "./PaymentHistory"
+import PaymentHistory from "../../../components/PaymentHistory"
 import { useGetAuthorisedLenders } from "./hooks/useGetAuthorisedLenders"
 import { tableDataMock } from "../../../mocks/vaults"
 

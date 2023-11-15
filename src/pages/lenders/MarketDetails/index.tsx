@@ -13,8 +13,8 @@ import {
 } from "../../borrower/VaultDetails/hooks/useGetMarket"
 import { WithdrawalsControlPanel } from "./WithdrawalsControlPanel"
 import { tableDataMock } from "../../../mocks/vaults"
-import { BorrowersPaymentHistory } from "./BorrowersPaymentHistory"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
+import PaymentHistory from "../../../components/PaymentHistory"
 
 export function MarketDetails() {
   const { isConnected } = useWalletConnect()
@@ -59,7 +59,7 @@ export function MarketDetails() {
       </div>
       <VaultDeposit market={market} />
       <WithdrawalsControlPanel tableData={tableDataMock} />
-      <BorrowersPaymentHistory marketAddress={market.address} />
+      <PaymentHistory market={market} />
       <VaultInfo market={market} />
       <ServiceAgreementCard
         className="mt-10"

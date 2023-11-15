@@ -2,10 +2,10 @@ import { useQuery } from "@tanstack/react-query"
 import { gql, useApolloClient } from "@apollo/client"
 import { SubgraphDebtRepaid } from "@wildcatfi/subgraph-hooks"
 
-export const GET_BORROWER_REPAYMENTS_KEY = "get_borrower_repayments"
+export const GET_REPAYMENTS_KEY = "get_repayments"
 
-const GET_BORROWER_REPAYMENTS = gql`
-  query getBorrowerRepayments($marketId: String!, $from: Int!, $to: Int!) {
+const GET_REPAYMENTS = gql`
+  query getRepayments($marketId: String!, $from: Int!, $to: Int!) {
     market(id: $marketId) {
       repaymentRecords(
         where: { blockTimestamp_gte: $from, blockTimestamp_lte: $to }
@@ -31,16 +31,16 @@ type QueryVariables = {
   to: number
 }
 
-export const useGetBorrowerRepayments = (
+export const useGetRepayments = (
   marketId: string,
   fromTimestamp: number,
   toTimestamp: number,
 ) => {
   const client = useApolloClient()
 
-  async function getBorrowerRepayments() {
+  async function getRepayments() {
     const res = await client.query<QueryResponse, QueryVariables>({
-      query: GET_BORROWER_REPAYMENTS,
+      query: GET_REPAYMENTS,
       variables: {
         marketId: marketId.toLowerCase(),
         from: fromTimestamp,
@@ -52,13 +52,8 @@ export const useGetBorrowerRepayments = (
   }
 
   return useQuery({
-    queryKey: [
-      GET_BORROWER_REPAYMENTS_KEY,
-      marketId,
-      toTimestamp,
-      fromTimestamp,
-    ],
-    queryFn: getBorrowerRepayments,
+    queryKey: [GET_REPAYMENTS_KEY, marketId, toTimestamp, fromTimestamp],
+    queryFn: getRepayments,
     refetchOnMount: false,
   })
 }
