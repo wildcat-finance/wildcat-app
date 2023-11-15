@@ -24,7 +24,8 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
   const disabled =
     depositValueBigNum.raw.isZero() ||
     depositValueBigNum.raw.gt(marketAccount.market.maximumDeposit.raw) ||
-    isLoading
+    isLoading ||
+    !marketAccount?.canDeposit
 
   const handleDeposit = () => {
     mutate(depositValue)

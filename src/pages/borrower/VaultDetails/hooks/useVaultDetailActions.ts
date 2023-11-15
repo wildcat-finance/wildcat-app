@@ -59,10 +59,19 @@ export const useDeposit = (marketAccount: MarketAccount) => {
         marketAccount.market.underlyingToken,
       )
 
-      await marketAccount.deposit(tokenAmount)
+      const deposit = async () => {
+        const tx = await marketAccount.deposit(tokenAmount)
+        await tx.wait()
+      }
+
+      await toastifyRequest(deposit(), {
+        pending: "Depositing...",
+        success: `${amount} successfully deposited`,
+        error: "Error",
+      })
     },
-    onSuccess() {
-      toastifyInfo("Deposit in progress... Check your wallet transaction")
+    onSuccess(_, amount) {
+      toastifyInfo(`${amount} successfully deposited`)
       client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
     },
     onError(error) {
@@ -86,15 +95,22 @@ export const useWithdraw = (marketAccount: MarketAccount) => {
         parseUnits(amount, marketAccount.market.underlyingToken.decimals),
         marketAccount.market.underlyingToken,
       )
+      const withdraw = async () => {
+        await marketAccount.queueWithdrawal(tokenAmount)
+      }
 
-      await marketAccount.queueWithdrawal(tokenAmount)
+      await toastifyRequest(withdraw(), {
+        pending: `Add ${amount} to withdrawal queue`,
+        success: `${amount} successfully added to withdrawal queue`,
+        error: "Error",
+      })
     },
-    onSuccess() {
-      toastifyInfo("Withdrawal in progress... Check your wallet transaction")
+    onSuccess(_, amount) {
+      toastifyInfo(`${amount} successfully added to withdrawal queue`)
       client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
     },
-    onError(error) {
-      console.log(error)
+    onError(error, amount) {
+      console.log(error, amount)
     },
   })
 }

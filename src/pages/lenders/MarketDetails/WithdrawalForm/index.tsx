@@ -24,7 +24,8 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
   const disabled =
     withdrawalValueBigNum.raw.isZero() ||
     withdrawalValueBigNum.gt(marketAccount.market.totalSupply.raw) ||
-    isLoading
+    isLoading ||
+    !marketAccount?.canWithdraw
 
   const handleWithdraw = () => {
     mutate(withdrawalValue)
