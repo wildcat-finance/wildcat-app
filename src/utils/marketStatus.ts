@@ -9,7 +9,7 @@ export const getMarketStatus = (
   if (isIncurringPenalties) return VaultStatus.PENALTY
   if (isDelinquent) return VaultStatus.DELINQUENT
   if (isClosed) return VaultStatus.REMOVED
-  return VaultStatus.TERMINATED
+  return VaultStatus.ACTIVE
 }
 
 export function getVaultStatusColor(status: VaultStatus): ChipColorVariants {
