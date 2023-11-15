@@ -14,6 +14,7 @@ import {
 import { WithdrawalsControlPanel } from "./WithdrawalsControlPanel"
 import { tableDataMock } from "../../../mocks/vaults"
 import { BorrowersPaymentHistory } from "./BorrowersPaymentHistory"
+import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 
 export function MarketDetails() {
   const { isConnected } = useWalletConnect()
@@ -60,6 +61,11 @@ export function MarketDetails() {
       <WithdrawalsControlPanel tableData={tableDataMock} />
       <BorrowersPaymentHistory marketAddress={market.address} />
       <VaultInfo market={market} />
+      <ServiceAgreementCard
+        className="mt-10"
+        title="Wildcat Service Agreement"
+        description="You agreed to the Wildcat Service Agreement on 12-Sept-2023"
+      />
     </div>
   )
 }

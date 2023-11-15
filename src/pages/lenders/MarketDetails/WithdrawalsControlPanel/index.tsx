@@ -23,7 +23,7 @@ export const WithdrawalsControlPanel = ({
   }
 
   return (
-    <div className="mb-14">
+    <div>
       <div className="flex justify-between items-center mb-8">
         <div className="text-base font-bold">Withdrawals control panel</div>
         <div className="flex gap-x-7 items-center">
