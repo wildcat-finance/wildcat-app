@@ -96,14 +96,7 @@ export function VaultInfo({ market }: MarketProps) {
           </div>
         </div>
 
-        <div className="w-full flex px-3 items-center flex-row leading-8 justify-between">
-          <div className="inline text-black text-xs font-bold">
-            Accrued Protocol Fees
-          </div>
-          <div className="inline text-black text-xs">
-            {`5 ${market.underlyingToken.symbol}`}
-          </div>
-        </div>
+        <div className="w-full flex px-3 items-center flex-row leading-8 justify-between" />
       </TableItem>
       <TableItem className="grid grid-cols-2 gap-x-36">
         <div className="w-full flex px-3 items-center flex-row leading-8 justify-between">
@@ -115,12 +108,7 @@ export function VaultInfo({ market }: MarketProps) {
           </div>
         </div>
 
-        <div className="w-full flex px-3 items-center flex-row leading-8 justify-between">
-          <div className="inline text-black text-xs font-bold">
-            Withdrawal Cycle Countdown
-          </div>
-          <div className="inline text-black text-xs">23:12:38</div>
-        </div>
+        <div className="w-full flex px-3 items-center flex-row leading-8 justify-between" />
       </TableItem>
       <TableItem className="grid grid-cols-2 gap-x-36">
         <div className="w-full flex px-3 items-center flex-row leading-8 justify-between">
@@ -132,12 +120,7 @@ export function VaultInfo({ market }: MarketProps) {
           </div>
         </div>
 
-        <div className="w-full flex px-3 items-center flex-row leading-8 justify-between">
-          <div className="inline text-black text-xs font-bold">
-            Master Loan Agreement
-          </div>
-          <div className="inline text-black text-xs" />
-        </div>
+        <div className="w-full flex px-3 items-center flex-row leading-8 justify-between" />
       </TableItem>
       <TableItem className="grid grid-cols-2 gap-x-36">
         <div className="w-full flex px-3 items-center flex-row leading-8 justify-between">
