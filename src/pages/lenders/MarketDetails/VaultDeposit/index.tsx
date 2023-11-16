@@ -11,7 +11,7 @@ export function VaultDeposit({ market }: MarketProps) {
   const { mutate: claim } = useClaim(market, "1")
 
   return (
-    <div className="rounded-2xl bg-tint-10">
+    <div className="rounded-2xl bg-tint-10 mb-14">
       <div className="px-5 pt-8 pb-12">
         <div className="w-full flex justify-between items-center">
           <div className="font-bold text-sm">New deposit</div>

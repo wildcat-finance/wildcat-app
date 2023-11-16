@@ -1,11 +1,23 @@
 import { SpinnerProps } from "./interface"
 
-export const Spinner = ({ isLoading }: SpinnerProps) =>
-  isLoading ? (
-    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
+export const Spinner = ({
+  isLoading,
+  fixedDisable,
+  className,
+}: SpinnerProps) => {
+  const svgClass = `w-10 h-10 mr-2 text-tint-6 animate-spin fill-tint-1 ${
+    className || ""
+  }`
+
+  const spinnerClass = fixedDisable
+    ? "inline-flex items-center justify-center w-full"
+    : "fixed top-0 left-0 w-full h-full flex items-center justify-center z-50"
+
+  return isLoading ? (
+    <div className={spinnerClass}>
       <svg
         aria-hidden="true"
-        className="w-10 h-10 mr-2 text-tint-6 animate-spin fill-tint-1"
+        className={svgClass}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -21,3 +33,4 @@ export const Spinner = ({ isLoading }: SpinnerProps) =>
       </svg>
     </div>
   ) : null
+}

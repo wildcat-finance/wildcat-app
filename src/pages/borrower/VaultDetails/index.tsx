@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
 
+import { useMemo } from "react"
 import {
   Paper,
   TableItem,
@@ -14,7 +15,11 @@ import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import { BackArrow } from "../../../components/ui-components/icons/index"
 
 import { RemoveLendersModal, CapacityModal, NewLendersModal } from "./Modals"
-import { useGetMarket, useGetMarketAccount } from "../../../hooks/useGetMarket"
+import {
+  useGetMarket,
+  useGetMarketAccount,
+  useGetMarketAccountForBorrowerLegacy,
+} from "../../../hooks/useGetMarket"
 import {
   formatBps,
   formatSecsToHours,
@@ -35,8 +40,13 @@ const VaultDetails = () => {
   const { marketAddress } = useParams()
   const { data: market, isLoadingInitial: isMarketLoading } =
     useGetMarket(marketAddress)
-  const { data: marketAccount, isLoadingInitial: isMarketAccountLoading } =
-    useGetMarketAccount(market)
+
+  // Temp solution to keep object the same
+  // and prevent Loader blinking
+  const memoisedMarket = useMemo(() => market, [market?.address])
+
+  const { data: marketAccount, isLoading: isMarketAccountLoading } =
+    useGetMarketAccountForBorrowerLegacy(memoisedMarket)
   const { data: authorisedLenders } = useGetAuthorisedLenders(marketAddress)
 
   const handleClickMyVaults = () => {
