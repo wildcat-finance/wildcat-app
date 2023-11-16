@@ -18,7 +18,7 @@ export function VaultInfo({ market }: MarketProps) {
             Annual Interest Rate
           </div>
           <div className="inline text-black text-xs">
-            {market.annualInterestBips}%
+            {market.annualInterestBips / 100}%
           </div>
         </div>
 
@@ -45,14 +45,17 @@ export function VaultInfo({ market }: MarketProps) {
             Withdrawal Cycle
           </div>
           <div className="inline text-black text-xs">
-            {formatSecsToHours(market.pendingWithdrawalExpiry)} hours
+            {formatSecsToHours(market.withdrawalBatchDuration)} hours
           </div>
         </div>
       </TableItem>
       <TableItem className="grid grid-cols-2 gap-x-36">
         <div className="w-full flex px-3 items-center flex-row leading-8 justify-between">
           <div className="inline text-black text-xs font-bold">Deposits</div>
-          <div className="inline text-black text-xs" />
+          <div className="inline text-black text-xs">
+            {market.totalSupply.format(TOKEN_FORMAT_DECIMALS)}{" "}
+            {market.underlyingToken.symbol}
+          </div>
         </div>
 
         <div className="w-full flex px-3 items-center flex-row leading-8 justify-between">
@@ -95,7 +98,7 @@ export function VaultInfo({ market }: MarketProps) {
 
         <div className="w-full flex px-3 items-center flex-row leading-8 justify-between">
           <div className="inline text-black text-xs font-bold">
-            Accured Protocol Fees
+            Accrued Protocol Fees
           </div>
           <div className="inline text-black text-xs">
             {`5 ${market.underlyingToken.symbol}`}
