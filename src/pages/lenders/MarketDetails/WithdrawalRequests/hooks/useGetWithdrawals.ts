@@ -1,100 +1,236 @@
+// import { useAccount } from "wagmi"
+// import { Market } from "@wildcatfi/wildcat-sdk"
+// import {
+//   useGetLenderWithdrawals,
+//   GET_LENDER_WITHDRAWALS_KEY,
+// } from "../../../../../hooks/useGetLenderWithdrawals"
+
+// export { GET_LENDER_WITHDRAWALS_KEY }
+
+// export const useGetWithdrawals = (market: Market) => {
+//   const { address } = useAccount()
+//   return useGetLenderWithdrawals({
+//     lender: address,
+//     market,
+//     enabled: true,
+//   })
+// }
+
+/* eslint-disable no-plusplus */
+/* eslint-disable no-restricted-syntax */
 import { useQuery } from "@tanstack/react-query"
-import { gql, useApolloClient } from "@apollo/client"
 import {
-  SubgraphWithdrawalBatch,
-  SubgraphWithdrawalRequest,
-} from "@wildcatfi/subgraph-hooks"
-import { BigNumber } from "ethers"
+  GetLenderWithdrawalsForMarketDocument,
+  SubgraphGetLenderWithdrawalsForMarketQuery,
+  SubgraphGetLenderWithdrawalsForMarketQueryVariables,
+} from "@wildcatfi/wildcat-sdk/dist/gql/graphql"
+import {
+  Market,
+  SubgraphClient,
+  getLensContract,
+  WithdrawalBatch,
+  LenderWithdrawalStatus,
+  TwoStepQueryHookResult,
+  TokenAmount,
+  BatchStatus,
+} from "@wildcatfi/wildcat-sdk"
+import { logger } from "@wildcatfi/wildcat-sdk/dist/utils/logger"
+import { useMemo } from "react"
 import { useAccount } from "wagmi"
+
+export type LenderWithdrawalsForMarketResult = {
+  completeWithdrawals: LenderWithdrawalStatus[]
+  expiredPendingWithdrawals: LenderWithdrawalStatus[]
+  activeWithdrawal: LenderWithdrawalStatus | undefined
+  expiredTotalPendingAmount: TokenAmount
+  activeTotalPendingAmount: TokenAmount
+}
 
 export const GET_LENDER_WITHDRAWALS_KEY = "get_lender_withdrawals"
 
-const GET_LENDER_WITHDRAWALS = gql`
-  query getLenderWithdrawals($marketId: String!, $lender: String!) {
-    market(id: $marketId) {
-      lenders(where: { address: $lender }) {
-        withdrawals {
-          isExpired
-          scaledTotalAmount
-
-          batch {
-            id
-            blockTimestamp
-            transactionHash
-            scaledAmount
-            account {
-              address
-            }
-          }
-        }
-      }
-    }
-  }
-`
-
-type QueryResponse = {
-  market: {
-    withdrawalBatches: {
-      isExpired: SubgraphWithdrawalBatch["isExpired"]
-      scaledTotalAmount: SubgraphWithdrawalBatch["scaledTotalAmount"]
-      requests: SubgraphWithdrawalRequest[]
-    }[]
-  }
-}
-
-type QueryVariables = {
-  marketId: string
-}
-
-export const useGetWithdrawals = (marketId: string) => {
-  const client = useApolloClient()
+export function useGetWithdrawals(
+  market: Market | undefined,
+): TwoStepQueryHookResult<LenderWithdrawalsForMarketResult> {
   const { address } = useAccount()
-
-  async function getLenderWithdrawals() {
-    const res = await client.query<QueryResponse, QueryVariables>({
-      query: GET_LENDER_WITHDRAWALS,
-      variables: {
-        marketId: marketId.toLowerCase(),
-      },
+  const lender = address?.toLowerCase()
+  const marketAddress = market?.address.toLowerCase()
+  async function queryLenderWithdrawals() {
+    if (!lender || !market || !marketAddress) throw Error()
+    logger.debug(`Getting lender withdrawals...`)
+    const result = await SubgraphClient.query<
+      SubgraphGetLenderWithdrawalsForMarketQuery,
+      SubgraphGetLenderWithdrawalsForMarketQueryVariables
+    >({
+      query: GetLenderWithdrawalsForMarketDocument,
+      variables: { market: marketAddress, lender },
     })
-
-    let expiredScaledTotalAmount = BigNumber.from(0)
-    let activeTotalAmount = BigNumber.from(0)
-    const expiredBatches: SubgraphWithdrawalRequest[] = []
-    const activeBatches: SubgraphWithdrawalRequest[] = []
-
-    // eslint-disable-next-line array-callback-return
-    res.data?.market?.withdrawalBatches.map((batch) => {
-      // eslint-disable-next-line array-callback-return
-      batch.requests.map((request) => {
-        if (batch.isExpired) {
-          expiredBatches.push(request)
-        } else {
-          activeBatches.push(request)
-        }
-      })
-
-      if (batch.isExpired) {
-        expiredScaledTotalAmount = expiredScaledTotalAmount.add(
-          batch.scaledTotalAmount,
+    const lenderData = result.data.market?.lenders[0]
+    const completeWithdrawals =
+      lenderData?.completeWithdrawals.map((data) => {
+        const batch = WithdrawalBatch.fromSubgraphWithdrawalBatch(
+          market,
+          data.batch,
         )
-      } else {
-        activeTotalAmount = activeTotalAmount.add(batch.scaledTotalAmount)
-      }
-    })
-
+        return LenderWithdrawalStatus.fromSubgraphLenderWithdrawalStatus(
+          market,
+          batch,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          data as any,
+          lender,
+        )
+      }) ?? []
+    const incompleteWithdrawals =
+      lenderData?.incompleteWithdrawals.map((data) => {
+        const batch = WithdrawalBatch.fromSubgraphWithdrawalBatch(
+          market,
+          data.batch,
+        )
+        return LenderWithdrawalStatus.fromSubgraphLenderWithdrawalStatus(
+          market,
+          batch,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          data as any,
+          lender,
+        )
+      }) ?? []
+    logger.debug(`Got ${completeWithdrawals.length} complete withdrawals...`)
+    logger.debug(
+      `Got ${incompleteWithdrawals.length} incomplete withdrawals...`,
+    )
+    for (const withdrawal of incompleteWithdrawals) {
+      console.log(
+        `Withdrawal ${withdrawal.expiry} ${withdrawal.requests.length} requests`,
+      )
+    }
+    const activeWithdrawal = incompleteWithdrawals.find(
+      (w) => w.status === BatchStatus.Pending,
+    )
+    const activeTotalPendingAmount =
+      activeWithdrawal?.normalizedAmountOwed ??
+      market.underlyingToken.getAmount(0)
+    const expiredPendingWithdrawals = incompleteWithdrawals.filter(
+      (w) => w.status !== BatchStatus.Pending,
+    )
+    const expiredTotalPendingAmount = expiredPendingWithdrawals.reduce(
+      (acc, w) => acc.add(w.normalizedAmountOwed),
+      market.underlyingToken.getAmount(0),
+    )
     return {
-      expiredScaledTotalAmount,
-      activeTotalAmount,
-      expiredBatches,
-      activeBatches,
+      activeWithdrawal,
+      completeWithdrawals,
+      expiredPendingWithdrawals,
+      activeTotalPendingAmount,
+      expiredTotalPendingAmount,
     }
   }
 
-  return useQuery({
-    queryKey: [GET_LENDER_WITHDRAWALS_KEY, marketId],
-    queryFn: getLenderWithdrawals,
-    enabled: !!address,
+  const {
+    data,
+    isLoading: isLoadingInitial,
+    refetch: refetchInitial,
+    isError: isErrorInitial,
+    failureReason: errorInitial,
+  } = useQuery({
+    queryKey: [GET_LENDER_WITHDRAWALS_KEY, "initial", lender, market],
+    queryFn: queryLenderWithdrawals,
+    enabled: !!lender && !!market,
     refetchOnMount: false,
   })
+
+  const withdrawals = data ?? {
+    completeWithdrawals: [],
+    expiredPendingWithdrawals: [],
+    activeWithdrawal: undefined,
+    expiredTotalPendingAmount: market?.underlyingToken.getAmount(0),
+    activeTotalPendingAmount: market?.underlyingToken.getAmount(0),
+  }
+
+  async function updateWithdrawals() {
+    if (!lender || !market || !marketAddress) throw Error()
+    const lens = getLensContract(market.provider)
+    const incompleteWithdrawals = [
+      ...(withdrawals.activeWithdrawal ? [withdrawals.activeWithdrawal] : []),
+      ...(withdrawals.expiredPendingWithdrawals ?? []),
+    ]
+    const withdrawalUpdates =
+      await lens.getWithdrawalBatchesDataWithLenderStatus(
+        marketAddress,
+        [...withdrawals.completeWithdrawals, ...incompleteWithdrawals].map(
+          (w) => w.expiry,
+        ),
+        lender,
+      )
+    let i = 0
+    for (const withdrawal of withdrawals.completeWithdrawals) {
+      const update = withdrawalUpdates[i++]
+      withdrawal.batch.applyLensUpdate(update.batch)
+      withdrawal.updateWith(update.lenderStatus)
+    }
+    for (const withdrawal of incompleteWithdrawals) {
+      const update = withdrawalUpdates[i++]
+      withdrawal.batch.applyLensUpdate(update.batch)
+      withdrawal.updateWith(update.lenderStatus)
+    }
+    logger.debug(
+      `Updated ${withdrawals.completeWithdrawals.length} complete withdrawals...`,
+    )
+    logger.debug(
+      `Updated ${incompleteWithdrawals.length} incomplete withdrawals...`,
+    )
+
+    const activeTotalPendingAmount =
+      withdrawals.activeWithdrawal?.normalizedAmountOwed ??
+      market.underlyingToken.getAmount(0)
+
+    const expiredTotalPendingAmount = withdrawals.expiredPendingWithdrawals
+      .filter((w) => w.expiry !== market.pendingWithdrawalExpiry)
+      .reduce(
+        (acc, w) => acc.add(w.normalizedAmountOwed),
+        market.underlyingToken.getAmount(0),
+      )
+    return {
+      ...withdrawals,
+      activeTotalPendingAmount,
+      expiredTotalPendingAmount,
+    }
+  }
+
+  const updateQueryKeys = useMemo(
+    () => [
+      ...withdrawals.completeWithdrawals.map((b) => [b.expiry]),
+      ...(withdrawals.activeWithdrawal
+        ? [withdrawals.activeWithdrawal.expiry]
+        : []),
+      ...(withdrawals.expiredPendingWithdrawals?.map((b) => [b.expiry]) ?? []),
+    ],
+    [withdrawals],
+  )
+
+  const {
+    data: updatedWithdrawals,
+    isLoading: isLoadingUpdate,
+    isPaused: isPendingUpdate,
+    refetch: refetchUpdate,
+    isError: isErrorUpdate,
+    failureReason: errorUpdate,
+  } = useQuery({
+    queryKey: [GET_LENDER_WITHDRAWALS_KEY, "update", updateQueryKeys],
+    queryFn: updateWithdrawals,
+    enabled: !!data,
+    refetchOnMount: false,
+  })
+
+  return {
+    data: (updatedWithdrawals ??
+      withdrawals) as LenderWithdrawalsForMarketResult,
+    isLoadingInitial,
+    isErrorInitial,
+    errorInitial: errorInitial as Error | null,
+    refetchInitial,
+    isLoadingUpdate,
+    isPendingUpdate,
+    isErrorUpdate,
+    errorUpdate: errorUpdate as Error | null,
+    refetchUpdate,
+  }
 }
