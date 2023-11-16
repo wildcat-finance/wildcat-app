@@ -14,7 +14,11 @@ import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import { BackArrow } from "../../../components/ui-components/icons/index"
 
 import { RemoveLendersModal, CapacityModal, NewLendersModal } from "./Modals"
-import { useGetMarket, useGetMarketAccount } from "../../../hooks/useGetMarket"
+import {
+  useGetMarket,
+  useGetMarketAccount,
+  useGetMarketAccountForBorrowerLegacy,
+} from "../../../hooks/useGetMarket"
 import {
   formatBps,
   formatSecsToHours,
@@ -35,8 +39,8 @@ const VaultDetails = () => {
   const { marketAddress } = useParams()
   const { data: market, isLoadingInitial: isMarketLoading } =
     useGetMarket(marketAddress)
-  const { data: marketAccount, isLoadingInitial: isMarketAccountLoading } =
-    useGetMarketAccount(market)
+  const { data: marketAccount, isLoading: isMarketAccountLoading } =
+    useGetMarketAccountForBorrowerLegacy(market)
   const { data: authorisedLenders } = useGetAuthorisedLenders(marketAddress)
 
   const handleClickMyVaults = () => {
