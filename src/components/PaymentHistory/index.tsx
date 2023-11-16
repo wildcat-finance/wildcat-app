@@ -72,8 +72,7 @@ const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
 
   return (
     <div className="mb-14">
-      <div className="text-base font-bold mb-8" />
-      <div className="flex w-full justify-between content-center mb-8">
+      <div className="flex w-full justify-between content-center">
         <div className="text-base font-bold">Borrower Payment History</div>
         <button
           className="flex items-center gap-x-2"
@@ -93,7 +92,7 @@ const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
         </button>
       </div>
       {showHistory && (
-        <div>
+        <div className="mt-8">
           <div className="flex justify-end items-center mb-5">
             <div className="flex items-center gap-x-3">
               <DatePickerInput

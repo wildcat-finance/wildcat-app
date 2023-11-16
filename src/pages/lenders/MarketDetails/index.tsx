@@ -1,5 +1,5 @@
 import React from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 import { VaultInfo } from "./VaultInfo"
 import { Button, Chip, Spinner } from "../../../components/ui-components"
@@ -10,8 +10,10 @@ import { useGetMarket, useGetMarketAccount } from "../../../hooks/useGetMarket"
 import WithdrawalRequests from "./WithdrawalRequests"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import PaymentHistory from "../../../components/PaymentHistory"
+import { BackArrow } from "../../../components/ui-components/icons"
 
 export function MarketDetails() {
+  const navigate = useNavigate()
   const { isConnected } = useWalletConnect()
   const { isWrongNetwork } = useCurrentNetwork()
 
@@ -22,6 +24,10 @@ export function MarketDetails() {
     useGetMarketAccount(market)
 
   const isLoading = isMarketLoading || isMarketAccountLoading
+
+  const handleClickMyMarkets = () => {
+    navigate("/lender/active-vaults")
+  }
 
   if (!isConnected || isWrongNetwork) {
     return <div />
@@ -36,9 +42,16 @@ export function MarketDetails() {
   }
 
   return (
-    <div className="flex gap-8 flex-col ">
-      <div className="flex justify-between items-center pt-5 pb-5">
-        <div className="w-full flex items-center justify-between">
+    <div className="flex flex-col">
+      <button
+        className="flex items-center gap-x-2 px-0 mb-8"
+        onClick={handleClickMyMarkets}
+      >
+        <BackArrow />
+        <p className="text-xs font-normal underline">My Markets</p>
+      </button>
+      <div className="flex justify-between items-center">
+        <div className="w-full flex items-center justify-between mb-8">
           <div className="text-green text-2xl font-bold">{market.name}</div>
           <div className="flex ">
             <Chip className="h-auto justify-center p-1 ml-4 mr-3 bg-tint-11">
