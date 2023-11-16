@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
 
+import { useMemo } from "react"
 import {
   Paper,
   TableItem,
@@ -39,8 +40,13 @@ const VaultDetails = () => {
   const { marketAddress } = useParams()
   const { data: market, isLoadingInitial: isMarketLoading } =
     useGetMarket(marketAddress)
+
+  // Temp solution to keep object the same
+  // and prevent Loader blinking
+  const memoisedMarket = useMemo(() => market, [market?.address])
+
   const { data: marketAccount, isLoading: isMarketAccountLoading } =
-    useGetMarketAccountForBorrowerLegacy(market)
+    useGetMarketAccountForBorrowerLegacy(memoisedMarket)
   const { data: authorisedLenders } = useGetAuthorisedLenders(marketAddress)
 
   const handleClickMyVaults = () => {

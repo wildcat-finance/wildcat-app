@@ -57,5 +57,6 @@ export const useGetMarketAccountForBorrowerLegacy = (
     queryFn: getMarketAccountFn,
     enabled: !!market && !!address && !!signer && !isWrongNetwork,
     refetchOnMount: false,
+    refetchOnWindowFocus: false,
   })
 }
