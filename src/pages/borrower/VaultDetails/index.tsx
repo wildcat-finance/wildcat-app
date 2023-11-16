@@ -33,9 +33,9 @@ import { useGetAuthorisedLenders } from "./hooks/useGetAuthorisedLenders"
 const VaultDetails = () => {
   const navigate = useNavigate()
   const { marketAddress } = useParams()
-  const { data: market, isLoading: isMarketLoading } =
+  const { data: market, isLoadingInitial: isMarketLoading } =
     useGetMarket(marketAddress)
-  const { data: marketAccount, isLoading: isMarketAccountLoading } =
+  const { data: marketAccount, isLoadingInitial: isMarketAccountLoading } =
     useGetMarketAccount(market)
   const { data: authorisedLenders } = useGetAuthorisedLenders(marketAddress)
 
