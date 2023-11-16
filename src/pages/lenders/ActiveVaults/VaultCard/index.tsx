@@ -50,7 +50,7 @@ function VaultCard({ market, className }: VaultCardProps) {
         />
         <TableItem
           title="Total Credit Extended"
-          value={`${formatToken(market.maxTotalSupply.raw)}`}
+          value={`${formatToken(market.totalSupply.raw)}`}
         />
       </div>
 
