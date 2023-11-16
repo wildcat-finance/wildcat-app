@@ -4,9 +4,11 @@ import DepositForm from "../DepositForm"
 import { useGetMarketAccount } from "../../../../hooks/useGetMarket"
 import WithdrawalForm from "../WithdrawalForm"
 import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
+import { useClaim } from "../../../borrower/VaultDetails/hooks/useVaultDetailActions"
 
 export function VaultDeposit({ market }: MarketProps) {
   const { data: marketAccount } = useGetMarketAccount(market)
+  const { mutate: claim } = useClaim(market, "1")
 
   return (
     <div className="rounded-2xl bg-tint-10">
@@ -35,7 +37,7 @@ export function VaultDeposit({ market }: MarketProps) {
                 {market.underlyingToken.symbol}
               </div>
             </div>
-            <Button variant="green" className="w-64">
+            <Button variant="green" className="w-64" onClick={claim}>
               Claim
             </Button>
           </div>

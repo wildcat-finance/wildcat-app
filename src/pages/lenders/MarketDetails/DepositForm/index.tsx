@@ -6,11 +6,19 @@ import {
   MARKET_PARAMS_DECIMALS,
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
-import { useDeposit } from "../../../borrower/VaultDetails/hooks/useVaultDetailActions"
+import {
+  useApprove,
+  useDeposit,
+} from "../../../borrower/VaultDetails/hooks/useVaultDetailActions"
 import { DepositFormProps } from "./interface"
+import { getDepositButtonAction, getDepositButtonText } from "./utils/utils"
 
 const DepositForm = ({ marketAccount }: DepositFormProps) => {
-  const { mutate, isLoading } = useDeposit(marketAccount)
+  const { mutate: deposit, isLoading } = useDeposit(marketAccount)
+  const { mutate: approve } = useApprove(
+    marketAccount.market.underlyingToken,
+    marketAccount.market,
+  )
   const [depositValue, setDepositValue] = useState("0")
 
   const depositValueBigNum = new TokenAmount(
@@ -27,9 +35,18 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
     isLoading ||
     !marketAccount?.canDeposit
 
-  const handleDeposit = () => {
-    mutate(depositValue)
+  const handleSubmit = () => {
+    const buttonAction = getDepositButtonAction(
+      marketAccount.checkDepositStep(depositValueBigNum),
+      deposit,
+      approve,
+    )
+    buttonAction(depositValue)
   }
+
+  const buttonText = getDepositButtonText(
+    marketAccount.checkDepositStep(depositValueBigNum),
+  )
 
   return (
     <div className="flex gap-x-3.5 w-full max-w-lg">
@@ -54,10 +71,10 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
       <Button
         variant="green"
         className="w-64"
-        onClick={handleDeposit}
+        onClick={handleSubmit}
         disabled={disabled}
       >
-        Deposit
+        {buttonText}
       </Button>
     </div>
   )
