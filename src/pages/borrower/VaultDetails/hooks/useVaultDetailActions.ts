@@ -21,6 +21,7 @@ import { GET_MARKET_ACCOUNT_KEY } from "../../../../hooks/useGetMarket"
 import { useGetControllerContract } from "../../../../hooks/useGetController"
 import { GET_AUTHORIZED_LENDERS_KEY } from "../Modals/RemoveLendersModal/hooks/useGetAuthorizedLenders"
 import { GET_LENDERS_BY_MARKET_KEY } from "./useGetAuthorisedLenders"
+import { useGetWithdrawalForLender } from "../../../../hooks/useGetWithdrawalForLender"
 
 export const useBorrow = (marketAccount: MarketAccount) => {
   const signer = useEthersSigner()
@@ -153,21 +154,19 @@ export const useClaim = (
 ) => {
   const client = useQueryClient()
   const { address } = useAccount()
+  const { data: withdrawalForLender } = useGetWithdrawalForLender(
+    market,
+    Number(expiry),
+  )
 
   return useMutation({
     mutationFn: async () => {
-      if (!market || !expiry || !address) {
+      if (!market || !expiry || !address || !withdrawalForLender) {
         return
       }
-      BigNumber.from(expiry)
-
-      const tokenAmount = BigNumber.from(expiry)
 
       const claim = async () => {
-        const tx = await market.contract.executeWithdrawal(
-          address.toLowerCase(),
-          tokenAmount,
-        )
+        const tx = await withdrawalForLender.execute()
         await tx?.wait()
       }
 

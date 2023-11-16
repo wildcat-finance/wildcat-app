@@ -19,7 +19,6 @@ export const useGetWithdrawalForLender = (
       expiry as number,
       address as string,
     )
-    console.log(withdrawalForLender)
     return withdrawalForLender
   }
 
