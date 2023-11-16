@@ -16,9 +16,9 @@ export function MarketDetails() {
   const { isWrongNetwork } = useCurrentNetwork()
 
   const { marketAddress } = useParams()
-  const { data: market, isLoading: isMarketLoading } =
+  const { data: market, isLoadingInitial: isMarketLoading } =
     useGetMarket(marketAddress)
-  const { data: marketAccount, isLoading: isMarketAccountLoading } =
+  const { data: marketAccount, isLoadingInitial: isMarketAccountLoading } =
     useGetMarketAccount(market)
 
   const isLoading = isMarketLoading || isMarketAccountLoading
