@@ -1,3 +1,5 @@
 export type SpinnerProps = {
-  isLoading: boolean
+  isLoading: boolean,
+  fixedDisable?: boolean,
+  className?: string,
 }

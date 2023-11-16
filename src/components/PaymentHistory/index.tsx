@@ -5,7 +5,7 @@ import dayjs from "dayjs"
 import { BigNumber } from "ethers"
 import {
   Chip,
-  DatePickerInput,
+  DatePickerInput, Spinner,
   Table,
   TableCell,
   TableRow,
@@ -192,6 +192,7 @@ const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
                 </TableRow>
               ))}
           </Table>
+          <Spinner isLoading={!Boolean(data)} fixedDisable={true} className="w-5 h-5 mt-3"/>
           {/* <div className="flex justify-center gap-x-1 text-xxs mt-6"> */}
           {/*  {numberToArray(4).map((item) => ( */}
           {/*    <button */}
