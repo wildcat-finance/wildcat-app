@@ -11,7 +11,7 @@ import { ComboboxItem } from "../../../../../components/ui-components/Combobox/i
 
 function tokensToOptions(tokens: TokenMeta[]) {
   return tokens.map((token) => ({
-    id: token.address,
+    id: token.symbol,
     label: token.name,
     value: token.address,
     icon: token.logoURI,
@@ -39,7 +39,7 @@ export const useTokenSelector = (
       Token.getTokenData(input, signer as Signer)
         .then((tokenData) => {
           const newToken = {
-            id: tokenData.address,
+            id: tokenData.symbol,
             label: tokenData.name,
             value: tokenData.address,
             icon: "",
@@ -52,12 +52,14 @@ export const useTokenSelector = (
         })
     } else if (input.toLowerCase().startsWith("0x")) {
       const optionData = tokensToOptions(tokensByChainId)?.filter((option) =>
-        option.value.toLowerCase().startsWith(input.toLowerCase()),
+        option.value.toLowerCase().includes(input.toLowerCase()),
       )
       setOptions(optionData)
     } else {
-      const optionData = tokensToOptions(tokensByChainId)?.filter((option) =>
-        option.label.toLowerCase().startsWith(input.toLowerCase()),
+      const optionData = tokensToOptions(tokensByChainId)?.filter(
+        (option) =>
+          option.id.toLowerCase().includes(input.toLowerCase()) ||
+          option.label.toLowerCase().includes(input.toLowerCase()),
       )
       setOptions(optionData)
     }
