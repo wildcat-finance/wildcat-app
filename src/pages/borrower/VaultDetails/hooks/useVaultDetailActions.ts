@@ -23,6 +23,7 @@ import { useGetControllerContract } from "../../../../hooks/useGetController"
 import { GET_AUTHORIZED_LENDERS_KEY } from "../Modals/RemoveLendersModal/hooks/useGetAuthorizedLenders"
 import { GET_LENDERS_BY_MARKET_KEY } from "./useGetAuthorisedLenders"
 import { useGetWithdrawalForLender } from "../../../../hooks/useGetWithdrawalForLender"
+import { useGetWithdrawals } from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
 
 export const useBorrow = (marketAccount: MarketAccount) => {
   const signer = useEthersSigner()
@@ -187,18 +188,22 @@ export const useClaim = (
   })
 }
 
-export const useClaimSeveral = (
-  market: Market | undefined,
-  withdrawals: { lender: string; expiry: number }[],
-) => {
+export const useClaimSeveral = (market: Market | undefined) => {
   const client = useQueryClient()
   const { address } = useAccount()
+  const { data } = useGetWithdrawals(market!.address)
+  console.log(data?.expiredBatches)
 
   return useMutation({
     mutationFn: async () => {
-      if (!market || !address || !withdrawals.length) {
+      if (!market || !address || !data?.expiredBatches.length) {
         return
       }
+
+      const withdrawals = data?.expiredBatches.map((expiredBatch) => ({
+        expiry: expiredBatch.blockTimestamp,
+        lender: address.toLowerCase(),
+      }))
 
       const claim = async () => {
         const tx = await market.executeWithdrawals(withdrawals)
