@@ -12,7 +12,7 @@ import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import PaymentHistory from "../../../components/PaymentHistory"
 import { BackArrow } from "../../../components/ui-components/icons"
 
-export function MarketDetails() {
+export function LenderMarketDetails() {
   const navigate = useNavigate()
   const { isConnected } = useWalletConnect()
   const { isWrongNetwork } = useCurrentNetwork()

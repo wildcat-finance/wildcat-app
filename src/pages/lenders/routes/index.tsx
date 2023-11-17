@@ -4,7 +4,7 @@ import * as React from "react"
 import { LENDERS_PATH } from "./constants"
 import LendersServiceAgreement from "../LendersServiceAgreement"
 import ActiveVaults from "../ActiveVaults"
-import { MarketDetails } from "../MarketDetails"
+import { LenderMarketDetails } from "../LenderMarketDetails"
 
 export const LENDERS_ROUTES: RouteObject[] = [
   {
@@ -22,6 +22,6 @@ export const LENDERS_ROUTES: RouteObject[] = [
   },
   {
     path: LENDERS_PATH.MarketDetails,
-    element: <MarketDetails />,
+    element: <LenderMarketDetails />,
   },
 ]
