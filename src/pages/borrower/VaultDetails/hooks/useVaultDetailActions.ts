@@ -185,6 +185,39 @@ export const useClaim = (
   })
 }
 
+export const useClaimSeveral = (
+  market: Market | undefined,
+  withdrawals: { lender: string; expiry: number }[],
+) => {
+  const client = useQueryClient()
+  const { address } = useAccount()
+
+  return useMutation({
+    mutationFn: async () => {
+      if (!market || !address || !withdrawals.length) {
+        return
+      }
+
+      const claim = async () => {
+        const tx = await market.executeWithdrawals(withdrawals)
+        await tx?.wait()
+      }
+
+      await toastifyRequest(claim(), {
+        pending: "Executing withdrawals...",
+        success: "Successfully executed",
+        error: `Error`,
+      })
+    },
+    onSuccess() {
+      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+    },
+    onError(error) {
+      console.log(error)
+    },
+  })
+}
+
 export const useWithdraw = (marketAccount: MarketAccount) => {
   const { address } = useAccount()
   const client = useQueryClient()
@@ -275,7 +308,7 @@ export const useAdjustAPR = (marketAccount: MarketAccount) => {
         return
       }
 
-      await marketAccount.setAPR(amount)
+      await marketAccount.setAnnualInterestBips(amount)
     },
     onSuccess() {
       toastifyInfo("APR adjust in progress... Check your wallet transaction")
@@ -287,7 +320,7 @@ export const useAdjustAPR = (marketAccount: MarketAccount) => {
   })
 }
 
-export const useTerminateMarket = () => {
+export const useTerminateMarket = (marketAccount: MarketAccount) => {
   const signer = useEthersSigner()
   const client = useQueryClient()
 
@@ -297,9 +330,7 @@ export const useTerminateMarket = () => {
         return
       }
 
-      await new Promise((resolve) => {
-        setTimeout(resolve, 3000)
-      })
+      await marketAccount.closeMarket()
     },
     onSuccess() {
       toastifyInfo("Market is closing... Check your wallet transaction")
