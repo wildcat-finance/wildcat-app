@@ -75,7 +75,7 @@ function MyVaults() {
       <div className="text-xs flex-col">
         <div className="text-xs font-normal underline">My Markets</div>
         <div className="text-green text-2xl font-bold justify-between items-center flex mt-8">
-          All Markets For Borrower: peaches.eth
+          All Markets For Borrower
           <Button
             onClick={() => navigate("/borrower/add-new-vault")}
             variant="blue"
