@@ -44,6 +44,7 @@ export type LenderWithdrawalsForMarketResult = {
   activeWithdrawal: LenderWithdrawalStatus | undefined
   expiredTotalPendingAmount: TokenAmount
   activeTotalPendingAmount: TokenAmount
+  totalClaimableAmount: TokenAmount
 }
 
 export const GET_LENDER_WITHDRAWALS_KEY = "get_lender_withdrawals"
@@ -115,12 +116,17 @@ export function useGetWithdrawals(
       (acc, w) => acc.add(w.normalizedAmountOwed),
       market.underlyingToken.getAmount(0),
     )
+    const totalClaimableAmount = expiredPendingWithdrawals.reduce(
+      (acc, w) => acc.add(w.availableWithdrawalAmount),
+      market.underlyingToken.getAmount(0),
+    )
     return {
       activeWithdrawal,
       completeWithdrawals,
       expiredPendingWithdrawals,
       activeTotalPendingAmount,
       expiredTotalPendingAmount,
+      totalClaimableAmount,
     }
   }
 
@@ -143,6 +149,7 @@ export function useGetWithdrawals(
     activeWithdrawal: undefined,
     expiredTotalPendingAmount: market?.underlyingToken.getAmount(0),
     activeTotalPendingAmount: market?.underlyingToken.getAmount(0),
+    totalClaimableAmount: market?.underlyingToken.getAmount(0),
   }
 
   async function updateWithdrawals() {
@@ -182,16 +189,26 @@ export function useGetWithdrawals(
       withdrawals.activeWithdrawal?.normalizedAmountOwed ??
       market.underlyingToken.getAmount(0)
 
-    const expiredTotalPendingAmount = withdrawals.expiredPendingWithdrawals
+    const { expiredPendingWithdrawals } = withdrawals
+
+    const expiredTotalPendingAmount = expiredPendingWithdrawals
       .filter((w) => w.expiry !== market.pendingWithdrawalExpiry)
       .reduce(
         (acc, w) => acc.add(w.normalizedAmountOwed),
         market.underlyingToken.getAmount(0),
       )
+    const totalClaimableAmount = (
+      expiredPendingWithdrawals as LenderWithdrawalStatus[]
+    ).reduce(
+      (acc, w) => acc.add(w.availableWithdrawalAmount.raw),
+      market.underlyingToken.getAmount(0),
+    )
+
     return {
       ...withdrawals,
       activeTotalPendingAmount,
       expiredTotalPendingAmount,
+      totalClaimableAmount,
     }
   }
 

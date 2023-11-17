@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import {
+  LenderWithdrawalStatus,
   Market,
   MarketAccount,
   Token,
@@ -149,24 +150,25 @@ export const useDeposit = (marketAccount: MarketAccount) => {
 }
 
 export const useClaim = (
-  market: Market | undefined,
-  expiry: string | undefined,
+  market: Market,
+  withdrawals: LenderWithdrawalStatus[],
 ) => {
   const client = useQueryClient()
   const { address } = useAccount()
-  const { data: withdrawalForLender } = useGetWithdrawalForLender(
-    market,
-    Number(expiry),
-  )
-
   return useMutation({
     mutationFn: async () => {
-      if (!market || !expiry || !address || !withdrawalForLender) {
+      const claimableWithdrawals = withdrawals.filter((w) =>
+        w.availableWithdrawalAmount.gt(0),
+      )
+      if (!market || !claimableWithdrawals.length || !address) {
         return
       }
 
       const claim = async () => {
-        const tx = await withdrawalForLender.execute()
+        const tx =
+          claimableWithdrawals.length === 1
+            ? await market.executeWithdrawal(claimableWithdrawals[0])
+            : await market.executeWithdrawals(claimableWithdrawals)
         await tx?.wait()
       }
 

@@ -5,10 +5,16 @@ import { useGetMarketAccount } from "../../../../hooks/useGetMarket"
 import WithdrawalForm from "../WithdrawalForm"
 import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
 import { useClaim } from "../../../borrower/VaultDetails/hooks/useVaultDetailActions"
+import { useGetWithdrawals } from "../WithdrawalRequests/hooks/useGetWithdrawals"
 
 export function VaultDeposit({ market }: MarketProps) {
   const { data: marketAccount } = useGetMarketAccount(market)
-  const { mutate: claim } = useClaim(market, "1")
+  const { data: withdrawals } = useGetWithdrawals(market)
+
+  const { mutate: claim } = useClaim(
+    market,
+    withdrawals.expiredPendingWithdrawals,
+  )
 
   return (
     <div className="rounded-2xl bg-tint-10 mb-14">
@@ -31,7 +37,7 @@ export function VaultDeposit({ market }: MarketProps) {
             <div className="flex flex-col w-full">
               <div className="text-xxs text-right">
                 <span className="font-semibold">Claimable from vault: </span>
-                {market.normalizedUnclaimedWithdrawals.format(
+                {withdrawals.totalClaimableAmount.format(
                   TOKEN_FORMAT_DECIMALS,
                 )}{" "}
                 {market.underlyingToken.symbol}
