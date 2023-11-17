@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useState } from "react"
 
+import { CloseMarketStatus, SetAprStatus } from "@wildcatfi/wildcat-sdk"
 import { Button, NumberInput } from "../../../../components/ui-components"
 import { AdjustAPRModal } from "../Modals"
 import {
@@ -12,7 +13,7 @@ import { MARKET_PARAMS_DECIMALS } from "../../../../utils/formatters"
 const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
   const { mutate, isLoading: adjustAprLoading } = useAdjustAPR(marketAccount)
   const { mutate: terminateMarket, isLoading: terminateMarketLoading } =
-    useTerminateMarket()
+    useTerminateMarket(marketAccount)
   const [apr, setApr] = useState("0")
 
   const { market } = marketAccount
@@ -20,6 +21,20 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
   const handleAprChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
     setApr(value)
+    // @todo display new temporary reserve ratio (and actual asset amount required)
+    // that will be in place if APR is changed to this value. if the new reserve ratio
+    // is equal to `market.reserveRatio`, then this doesn't need to be displayed
+
+    // const temporaryReserveRatioForChange = market.getReserveRatioForNewAPR(
+    //   +value,
+    // )
+    // const newReservesRequiredForChange =
+    //   market.calculateLiquidityCoverageForReserveRatio(
+    //     temporaryReserveRatioForChange,
+    //   )
+
+    // If status is not `Ready`, show error message
+    const setAPRStep = marketAccount.checkSetAPRStep(+value)
   }
 
   const handleAdjustAPR = () => {
@@ -28,6 +43,9 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
 
   const handleTerminateMarket = () => {
     terminateMarket()
+    // @todo handle approval when status is InsufficientApproval
+    // otherwise, if status not `Ready`, show error message
+    const terminateMarketStep = marketAccount.checkCloseMarketStep()
   }
 
   const isLoading = adjustAprLoading || terminateMarketLoading
