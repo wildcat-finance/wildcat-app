@@ -16,6 +16,8 @@ export function VaultDeposit({ market }: MarketProps) {
     withdrawals.expiredPendingWithdrawals,
   )
 
+  const disabled = withdrawals.totalClaimableAmount.raw.isZero()
+
   return (
     <div className="rounded-2xl bg-tint-10 mb-14">
       <div className="px-5 pt-8 pb-12">
@@ -43,7 +45,12 @@ export function VaultDeposit({ market }: MarketProps) {
                 {market.underlyingToken.symbol}
               </div>
             </div>
-            <Button variant="green" className="w-64" onClick={claim}>
+            <Button
+              disabled={disabled}
+              variant="green"
+              className="w-64"
+              onClick={claim}
+            >
               Claim
             </Button>
           </div>

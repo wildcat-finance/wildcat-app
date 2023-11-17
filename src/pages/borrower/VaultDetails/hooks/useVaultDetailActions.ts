@@ -315,10 +315,17 @@ export const useAdjustAPR = (marketAccount: MarketAccount) => {
         return
       }
 
-      await marketAccount.setAnnualInterestBips(amount)
+      const setApr = async () => {
+        const tx = await marketAccount.setAnnualInterestBips(amount * 100)
+        tx.wait()
+      }
+
+      await toastifyRequest(setApr(), {
+        pending: `APR adjust in progress... Check your wallet transaction`,
+        success: `APR successfully changed`,
+      })
     },
     onSuccess() {
-      toastifyInfo("APR adjust in progress... Check your wallet transaction")
       client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
     },
     onError(error) {

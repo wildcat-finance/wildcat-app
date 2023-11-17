@@ -1,6 +1,5 @@
 import React, { ChangeEvent, useState } from "react"
 
-import { CloseMarketStatus, SetAprStatus } from "@wildcatfi/wildcat-sdk"
 import { Button, NumberInput } from "../../../../components/ui-components"
 import { AdjustAPRModal } from "../Modals"
 import {
