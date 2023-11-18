@@ -22,23 +22,23 @@ export function VaultDeposit({ market }: MarketProps) {
     <div className="rounded-2xl bg-tint-10 mb-14">
       <div className="px-5 pt-8 pb-12">
         <div className="w-full flex justify-between items-center">
-          <div className="font-bold text-sm">New deposit</div>
+          <div className="font-bold text-sm">New Deposit</div>
           <DepositForm marketAccount={marketAccount!} />
         </div>
       </div>
       <div className="px-5 pt-8 pb-12">
         <div className="w-full flex justify-between items-center">
-          <div className="font-bold text-sm">Request withdrawal</div>
+          <div className="font-bold text-sm">Request Withdrawal</div>
           <WithdrawalForm marketAccount={marketAccount!} />
         </div>
       </div>
       <div className="px-5 pt-8 pb-12">
         <div className="w-full flex justify-between items-center">
-          <div className="font-bold text-sm">Claim available withdrawals</div>
+          <div className="font-bold text-sm">Claim Available Withdrawals</div>
           <div className="flex gap-x-3.5 w-full max-w-lg items-center">
             <div className="flex flex-col w-full">
               <div className="text-xxs text-right">
-                <span className="font-semibold">Claimable from vault: </span>
+                <span className="font-semibold">Claimable: </span>
                 {withdrawals.totalClaimableAmount.format(
                   TOKEN_FORMAT_DECIMALS,
                 )}{" "}
