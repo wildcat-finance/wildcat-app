@@ -246,13 +246,15 @@ export const useWithdraw = (marketAccount: MarketAccount) => {
         await marketAccount.queueWithdrawal(tokenAmount)
       }
 
-      const { symbol } = marketAccount.market.underlyingToken
+      // const { symbol } = marketAccount.market.underlyingToken
 
-      await toastifyRequest(withdraw(), {
-        pending: `Add ${amount} ${symbol} to withdrawal queue`,
-        success: `${amount} ${symbol} successfully added to withdrawal queue`,
-        error: "Error adding to withdrawal queue",
-      })
+      await withdraw()
+
+      // await toastifyRequest(withdraw(), {
+      //   pending: `Add ${amount} ${symbol} to withdrawal queue`,
+      //   success: `${amount} ${symbol} successfully added to withdrawal queue`,
+      //   error: "Error adding to withdrawal queue",
+      // })
     },
     onSuccess(_, amount) {
       toastifyInfo(`${amount} successfully added to withdrawal queue`)
