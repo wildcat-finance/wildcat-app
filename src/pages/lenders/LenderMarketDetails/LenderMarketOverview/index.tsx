@@ -147,7 +147,6 @@ const LenderMarketOverview = ({
             title="Max. Available to Withdraw"
             value={`${marketAccount.maximumWithdrawal.format(
               TOKEN_FORMAT_DECIMALS,
-              true,
             )}
             ${market.underlyingToken.symbol}`}
             className="pr-6 pl-24"
