@@ -101,9 +101,9 @@ export const useApprove = (token: Token, market: Market) => {
       }
 
       await toastifyRequest(approve(), {
-        pending: "Approving...",
-        success: `${amount} successfully approved`,
-        error: `Error`,
+        pending: `Approving ${amount} ${token.symbol} ...`,
+        success: ` ${amount} ${token.symbol} successfully approved`,
+        error: `Error approving ${token.symbol}`,
       })
     },
     onSuccess() {
@@ -112,13 +112,18 @@ export const useApprove = (token: Token, market: Market) => {
   })
 }
 
-export const useDeposit = (marketAccount: MarketAccount) => {
+export const useDeposit = (
+  marketAccount: MarketAccount,
+  onSuccess?: () => void,
+) => {
   const signer = useEthersSigner()
   const client = useQueryClient()
 
   return useMutation({
     mutationFn: async (amount: string) => {
       if (!marketAccount || !signer) throw Error()
+
+      const tokenSymbol = marketAccount.market.underlyingToken.symbol
 
       const tokenAmount = new TokenAmount(
         parseUnits(amount, marketAccount.market.underlyingToken.decimals),
@@ -133,13 +138,13 @@ export const useDeposit = (marketAccount: MarketAccount) => {
       }
 
       await toastifyRequest(deposit(), {
-        pending: "Depositing...",
-        success: `${amount} successfully deposited`,
+        pending: `Depositing ${amount} ${tokenSymbol}...`,
+        success: `${amount} ${tokenSymbol} successfully deposited`,
         error: `Error: ${checkCanDeposit.status}`,
       })
     },
-    onSuccess(_, amount) {
-      toastifyInfo(`${amount} successfully deposited`)
+    onSuccess() {
+      if (onSuccess) onSuccess()
       client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
     },
     onError(error) {
@@ -241,10 +246,12 @@ export const useWithdraw = (marketAccount: MarketAccount) => {
         await marketAccount.queueWithdrawal(tokenAmount)
       }
 
+      const { symbol } = marketAccount.market.underlyingToken
+
       await toastifyRequest(withdraw(), {
-        pending: `Add ${amount} to withdrawal queue`,
-        success: `${amount} successfully added to withdrawal queue`,
-        error: "Error",
+        pending: `Add ${amount} ${symbol} to withdrawal queue`,
+        success: `${amount} ${symbol} successfully added to withdrawal queue`,
+        error: "Error adding to withdrawal queue",
       })
     },
     onSuccess(_, amount) {

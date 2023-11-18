@@ -14,12 +14,14 @@ import { DepositFormProps } from "./interface"
 import { getDepositButtonAction, getDepositButtonText } from "./utils/utils"
 
 const DepositForm = ({ marketAccount }: DepositFormProps) => {
-  const { mutate: deposit, isLoading } = useDeposit(marketAccount)
   const { mutate: approve } = useApprove(
     marketAccount.market.underlyingToken,
     marketAccount.market,
   )
   const [depositValue, setDepositValue] = useState("0")
+  const { mutate: deposit, isLoading } = useDeposit(marketAccount, () => {
+    setDepositValue("0")
+  })
 
   const depositValueBigNum = new TokenAmount(
     parseUnits(
@@ -58,9 +60,6 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
           placeholder="10.00"
           onChange={(e) => setDepositValue(e.target.value)}
           min={0}
-          max={marketAccount.market.maximumDeposit.format(
-            TOKEN_FORMAT_DECIMALS,
-          )}
         />
         <div className="text-xxs text-right">
           <span className="font-semibold">Deposit up to</span>{" "}

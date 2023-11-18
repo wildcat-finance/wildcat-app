@@ -45,7 +45,7 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
         />
         <div className="text-xxs text-right">
           <span className="font-semibold">Request up to</span>{" "}
-          {marketAccount.market.totalSupply.format(TOKEN_FORMAT_DECIMALS)}{" "}
+          {marketAccount.maximumWithdrawal.format(TOKEN_FORMAT_DECIMALS)}{" "}
           {marketAccount.market.underlyingToken.symbol}
         </div>
       </div>

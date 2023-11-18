@@ -1,5 +1,5 @@
 import { Market } from "@wildcatfi/wildcat-sdk"
 
-export type VaultDepositProps = {
+export type LenderMarketActionsProps = {
   market: Market
 }

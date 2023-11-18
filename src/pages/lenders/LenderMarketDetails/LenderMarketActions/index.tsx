@@ -6,9 +6,9 @@ import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
 import { useClaim } from "../../../borrower/VaultDetails/hooks/useVaultDetailActions"
 import { useGetWithdrawals } from "../WithdrawalRequests/hooks/useGetWithdrawals"
 
-import type { VaultDepositProps } from "./interface"
+import type { LenderMarketActionsProps } from "./interface"
 
-export function VaultDeposit({ market }: VaultDepositProps) {
+export function LenderMarketActions({ market }: LenderMarketActionsProps) {
   const { data: marketAccount } = useGetMarketAccount(market)
   const { data: withdrawals } = useGetWithdrawals(market)
 
