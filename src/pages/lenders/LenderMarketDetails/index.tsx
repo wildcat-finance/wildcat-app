@@ -1,7 +1,5 @@
-import React, { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
-import { VaultInfo } from "./VaultInfo"
 import { Button, Chip, Spinner } from "../../../components/ui-components"
 import { useWalletConnect } from "../../../hooks/useWalletConnect"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
@@ -11,6 +9,7 @@ import WithdrawalRequests from "./WithdrawalRequests"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import PaymentHistory from "../../../components/PaymentHistory"
 import { BackArrow } from "../../../components/ui-components/icons"
+import LenderMarketOverview from "./LenderMarketOverview"
 
 export function LenderMarketDetails() {
   const navigate = useNavigate()
@@ -65,9 +64,11 @@ export function LenderMarketDetails() {
       </div>
 
       <VaultDeposit market={market} />
+
+      <LenderMarketOverview marketAccount={marketAccount} />
+
       <WithdrawalRequests market={market} />
       <PaymentHistory market={market} />
-      <VaultInfo market={market} />
 
       <ServiceAgreementCard
         className="mt-10"

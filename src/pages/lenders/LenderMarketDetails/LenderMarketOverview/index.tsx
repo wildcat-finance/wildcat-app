@@ -9,6 +9,7 @@ import {
 } from "../../../../utils/formatters"
 
 import type { BorrowerMarketOverviewProps } from "./interface"
+import { useGetWithdrawals } from "../WithdrawalRequests/hooks/useGetWithdrawals"
 
 function getMinReserveRatio(
   reserveRatioBips: number,
@@ -25,7 +26,10 @@ function getMinReserveRatio(
   )
 }
 
-const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
+const LenderMarketOverview = ({
+  marketAccount,
+}: BorrowerMarketOverviewProps) => {
+  const { marketBalance, market } = marketAccount
   const {
     address,
     underlyingToken,
@@ -39,9 +43,10 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
     marketToken,
     withdrawalBatchDuration,
     delinquencyFeeBips,
-    borrowableAssets,
     totalAssets,
   } = market
+
+  const { data: withdrawals } = useGetWithdrawals(market)
 
   const minReserveRatio = getMinReserveRatio(
     reserveRatioBips,
@@ -132,8 +137,18 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
             className="pr-6 pl-24"
           />
           <TableItem
-            title="Available to Borrow"
-            value={borrowableAssets.format(TOKEN_FORMAT_DECIMALS, true)}
+            title="My Loaned Amount"
+            value={`${marketBalance.format(TOKEN_FORMAT_DECIMALS)} ${
+              underlyingToken.symbol
+            }`}
+            className="pr-6 pl-24"
+          />
+          <TableItem
+            title="Max. Available to Withdraw"
+            value={`${withdrawals.totalClaimableAmount.format(
+              TOKEN_FORMAT_DECIMALS,
+            )}
+            ${market.underlyingToken.symbol}`}
             className="pr-6 pl-24"
           />
           <TableItem
@@ -151,11 +166,10 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
             value={reservedOwed.format(TOKEN_FORMAT_DECIMALS, true)}
             className="pr-6 pl-24"
           />
-          <TableItem title="" className="pr-6 pl-24" />
         </div>
       </div>
     </div>
   )
 }
 
-export default BorrowerMarketOverview
+export default LenderMarketOverview

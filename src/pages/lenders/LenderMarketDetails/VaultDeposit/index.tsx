@@ -1,5 +1,4 @@
 import { Button } from "../../../../components/ui-components"
-import { MarketProps } from "../VaultInfo/interface"
 import DepositForm from "../DepositForm"
 import { useGetMarketAccount } from "../../../../hooks/useGetMarket"
 import WithdrawalForm from "../WithdrawalForm"
@@ -7,7 +6,9 @@ import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
 import { useClaim } from "../../../borrower/VaultDetails/hooks/useVaultDetailActions"
 import { useGetWithdrawals } from "../WithdrawalRequests/hooks/useGetWithdrawals"
 
-export function VaultDeposit({ market }: MarketProps) {
+import type { VaultDepositProps } from "./interface"
+
+export function VaultDeposit({ market }: VaultDepositProps) {
   const { data: marketAccount } = useGetMarketAccount(market)
   const { data: withdrawals } = useGetWithdrawals(market)
 
