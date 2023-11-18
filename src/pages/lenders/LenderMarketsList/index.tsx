@@ -10,7 +10,7 @@ import { useLendersMarkets } from "./hooks/useLendersMarkets"
 
 import VaultCard from "./VaultCard"
 
-function ActiveVaults() {
+function LenderMarketsList() {
   const [filterByName, setFilterByName] = useState<string>("")
   const [selectedUnderlyingAsset, setSelectedUnderlyingAsset] =
     useState<SelectOptionItem | null>(null)
@@ -133,4 +133,4 @@ function ActiveVaults() {
   )
 }
 
-export default ActiveVaults
+export default LenderMarketsList

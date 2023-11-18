@@ -1,1 +1,1 @@
-export { default as ActiveVaults } from "./lenders/ActiveVaults"
+export { default as ActiveVaults } from "./lenders/LenderMarketsList"
