@@ -1,6 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom"
 
 import { useMemo } from "react"
+import { TokenAmount } from "@wildcatfi/wildcat-sdk"
+import { parseUnits } from "ethers/lib/utils"
 import {
   Paper,
   Table,

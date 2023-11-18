@@ -24,6 +24,7 @@ import { GET_AUTHORIZED_LENDERS_KEY } from "../Modals/RemoveLendersModal/hooks/u
 import { GET_LENDERS_BY_MARKET_KEY } from "./useGetAuthorisedLenders"
 import { useGetWithdrawalForLender } from "../../../../hooks/useGetWithdrawalForLender"
 import { useGetWithdrawals } from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
+import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
 
 export const useBorrow = (marketAccount: MarketAccount) => {
   const signer = useEthersSigner()
@@ -271,15 +272,27 @@ export const useRepay = (marketAccount: MarketAccount) => {
   const client = useQueryClient()
 
   return useMutation({
-    mutationFn: async (amount: BigNumber) => {
+    mutationFn: async (amount: TokenAmount) => {
       if (!marketAccount || !signer) {
         return
       }
 
-      await marketAccount.repay(amount)
+      const repay = async () => {
+        const tx = await marketAccount.repay(amount.raw)
+        await tx?.wait()
+      }
+
+      const { symbol } = marketAccount.market.underlyingToken
+
+      const tokenAmountFormatted = amount.format(TOKEN_FORMAT_DECIMALS)
+
+      await toastifyRequest(repay(), {
+        pending: `Repaying ${tokenAmountFormatted} ${symbol} in progress...`,
+        success: `Successfully repaid ${tokenAmountFormatted} ${symbol}`,
+        error: `Error repaying ${tokenAmountFormatted} ${symbol}`,
+      })
     },
     onSuccess() {
-      toastifyInfo("Repaying in progress... Check your wallet transaction")
       client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
     },
     onError(error) {
@@ -298,7 +311,16 @@ export const useRepayOutstandingDebt = (marketAccount: MarketAccount) => {
         return
       }
 
-      await marketAccount.repayOutstandingDebt()
+      const repayOutstandingDebt = async () => {
+        const tx = await marketAccount.repayOutstandingDebt()
+        await tx?.wait()
+      }
+
+      await toastifyRequest(repayOutstandingDebt(), {
+        pending: "Executing outstanding debt repayment...",
+        success: "Successfully repaid outstanding debt",
+        error: `Error repaying outstanding debt`,
+      })
     },
     onSuccess() {
       toastifyInfo("Repaying in progress... Check your wallet transaction")

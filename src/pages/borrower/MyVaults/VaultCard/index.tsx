@@ -7,7 +7,11 @@ import {
   getMarketStatus,
   getVaultStatusColor,
 } from "../../../../utils/marketStatus"
-import { formatBps, formatToken } from "../../../../utils/formatters"
+import {
+  formatBps,
+  formatToken,
+  TOKEN_FORMAT_DECIMALS,
+} from "../../../../utils/formatters"
 
 function VaultCard({ market, className }: VaultCardProps) {
   const navigate = useNavigate()
@@ -53,7 +57,7 @@ function VaultCard({ market, className }: VaultCardProps) {
         />
         <TableItem
           title="Available To Borrow"
-          value={`${formatToken(market.totalSupply.raw)}`}
+          value={market.borrowableAssets.format(TOKEN_FORMAT_DECIMALS, true)}
         />
       </div>
 
