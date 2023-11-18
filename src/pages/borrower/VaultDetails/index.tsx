@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useMemo } from "react"
 import {
   Paper,
-  TableItem,
   Table,
   TableRow,
   TableCell,
@@ -17,16 +16,11 @@ import { BackArrow } from "../../../components/ui-components/icons/index"
 import { RemoveLendersModal, CapacityModal, NewLendersModal } from "./Modals"
 import {
   useGetMarket,
-  useGetMarketAccount,
   useGetMarketAccountForBorrowerLegacy,
 } from "../../../hooks/useGetMarket"
 import {
-  formatBps,
-  formatSecsToHours,
   MARKET_PARAMS_DECIMALS,
-  MARKET_PERCENTAGE_PARAM_DECIMALS,
   TOKEN_FORMAT_DECIMALS,
-  trimAddress,
 } from "../../../utils/formatters"
 import BorrowAssets from "./BorrowAssets"
 import Repay from "./Repay"
@@ -34,6 +28,7 @@ import AdjustAPR from "./AdjustAPR"
 import LenderWithdrawalRequests from "./LenderWithdrawalRequests"
 import PaymentHistory from "../../../components/PaymentHistory"
 import { useGetAuthorisedLenders } from "./hooks/useGetAuthorisedLenders"
+import BorrowerMarketOverview from "./BorrowerMarketOverview"
 
 const VaultDetails = () => {
   const navigate = useNavigate()
@@ -128,116 +123,7 @@ const VaultDetails = () => {
         </div>
       </Paper>
 
-      <div>
-        <div className="text-base font-bold">Market Details</div>
-        <div className="flex w-full mt-5 mb-14">
-          <div className="w-full">
-            <TableItem
-              title="Contract Address"
-              value={trimAddress(market.address)}
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Maximum Capacity"
-              value={`${market.maxTotalSupply.format(TOKEN_FORMAT_DECIMALS)} ${
-                market.underlyingToken.symbol
-              }`}
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Lender APR"
-              value={`${formatBps(
-                market.annualInterestBips,
-                MARKET_PARAMS_DECIMALS.annualInterestBips,
-              )}%`}
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Protocol Fee APR"
-              value={`${formatBps(market.protocolFeeBips)}%`}
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Penalty Rate APR"
-              value={`${formatBps(
-                market.delinquencyFeeBips,
-                MARKET_PARAMS_DECIMALS.delinquencyFeeBips,
-              )}%`}
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Minimum Reserve Ratio"
-              value={`${formatBps(
-                market.reserveRatioBips,
-                MARKET_PARAMS_DECIMALS.reserveRatioBips,
-              )}%`}
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Withdrawal Cycle Duration"
-              value={formatSecsToHours(market.pendingWithdrawalExpiry)}
-              className="pl-6 pr-24"
-            />
-            <TableItem
-              title="Maximum Grace Period"
-              value={formatSecsToHours(market.delinquencyGracePeriod)}
-              className="pl-6 pr-24"
-            />
-          </div>
-          <div className="w-full">
-            <TableItem
-              title="Available Grace Period"
-              value="23:12:38"
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Repayment To Minimum Reserves"
-              value={market.delinquentDebt.format(TOKEN_FORMAT_DECIMALS, true)}
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Available To Borrow"
-              value={market.borrowableAssets.format(
-                TOKEN_FORMAT_DECIMALS,
-                true,
-              )}
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Outstanding Debt"
-              value={`${market.totalSupply.format(TOKEN_FORMAT_DECIMALS)} ${
-                market.underlyingToken.symbol
-              }`}
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Assets In Reserves"
-              value={market.totalAssets.format(TOKEN_FORMAT_DECIMALS, true)}
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Minimum Reserves Required"
-              value={market.coverageLiquidity.format(
-                TOKEN_FORMAT_DECIMALS,
-                true,
-              )}
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Current Reserve Ratio"
-              value={`${market.collateralization.actualRatio.toFixed(
-                MARKET_PERCENTAGE_PARAM_DECIMALS,
-              )}%`}
-              className="pr-6 pl-24"
-            />
-            <TableItem
-              title="Lifetime Accrued Interest"
-              value="-"
-              className="pr-6 pl-24"
-            />
-          </div>
-        </div>
-      </div>
+      <BorrowerMarketOverview market={market} />
 
       <LenderWithdrawalRequests market={market} />
       <PaymentHistory market={market} />

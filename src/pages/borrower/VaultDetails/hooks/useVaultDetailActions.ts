@@ -118,9 +118,7 @@ export const useDeposit = (marketAccount: MarketAccount) => {
 
   return useMutation({
     mutationFn: async (amount: string) => {
-      if (!marketAccount || !signer) {
-        return
-      }
+      if (!marketAccount || !signer) throw Error()
 
       const tokenAmount = new TokenAmount(
         parseUnits(amount, marketAccount.market.underlyingToken.decimals),
@@ -161,9 +159,7 @@ export const useClaim = (
       const claimableWithdrawals = withdrawals.filter((w) =>
         w.availableWithdrawalAmount.gt(0),
       )
-      if (!market || !claimableWithdrawals.length || !address) {
-        return
-      }
+      if (!market || !claimableWithdrawals.length || !address) throw Error
 
       const claim = async () => {
         const tx =

@@ -51,5 +51,5 @@ export const formatTokenAmount = (
 export const formatSecsToHours = (seconds: number) => {
   const hours = seconds / 60 / 60
 
-  return hours.toFixed(1)
+  return hours.toFixed(2).replace(".", ":")
 }

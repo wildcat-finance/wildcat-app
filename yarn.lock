@@ -6990,7 +6990,7 @@
     react-scripts "5.0.1"
     web-vitals "^2.1.4"
 
-"@wildcatfi/wildcat-sdk@^2.0.15":
+"@wildcatfi/wildcat-sdk@2.0.15":
   version "2.0.15"
   resolved "https://registry.yarnpkg.com/@wildcatfi/wildcat-sdk/-/wildcat-sdk-2.0.15.tgz#d24514f16f574ae6f9fa3dd7171e76e6d8ffc2e2"
   integrity sha512-lOYPYrNrnwuTPjygbK8ae59p4OsAxEweoAGZxILUHe7VC5nK3/t64+ah7zTHY08wgpN1nXZI334YjC+tC80b1w==
