@@ -52,7 +52,7 @@ function VaultCard({ market, className }: VaultCardProps) {
           value={`${formatBps(market.reserveRatioBips)}%`}
         />
         <TableItem
-          title="Maximum Market Capacity"
+          title="Maximum Capacity"
           value={`${formatToken(market.maxTotalSupply.raw)}
             ${market.underlyingToken.symbol}`}
         />

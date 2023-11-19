@@ -122,7 +122,7 @@ export function NewLendersModal({ market }: NewLendersModalProps) {
             <div className="w-full border border-tint-10" />
 
             <div className="text-base font-bold text-center">
-              You have added:
+              You Are Adding:
             </div>
 
             {newLenders.map((lender) => (

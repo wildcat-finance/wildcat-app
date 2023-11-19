@@ -44,7 +44,7 @@ export const useBorrow = (marketAccount: MarketAccount) => {
       await marketAccount.borrow(tokenAmount)
     },
     onSuccess() {
-      toastifyInfo("Borrowing in progress... Check your wallet transaction")
+      toastifyInfo("Processing Borrow...")
       client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
     },
     onError(error) {
@@ -102,9 +102,9 @@ export const useApprove = (token: Token, market: Market) => {
       }
 
       await toastifyRequest(approve(), {
-        pending: `Approving ${amount} ${token.symbol} ...`,
-        success: ` ${amount} ${token.symbol} successfully approved`,
-        error: `Error approving ${token.symbol}`,
+        pending: `Approving ${amount} ${token.symbol}...`,
+        success: `Successfully Approved ${amount} ${token.symbol}!`,
+        error: `Error: ${token.symbol} Approval Failed`,
       })
     },
     onSuccess() {
@@ -140,7 +140,7 @@ export const useDeposit = (
 
       await toastifyRequest(deposit(), {
         pending: `Depositing ${amount} ${tokenSymbol}...`,
-        success: `${amount} ${tokenSymbol} successfully deposited`,
+        success: `Successfully Deposited ${amount} ${tokenSymbol}!`,
         error: `Error: ${checkCanDeposit.status}`,
       })
     },
@@ -176,9 +176,9 @@ export const useClaim = (
       }
 
       await toastifyRequest(claim(), {
-        pending: "Claiming...",
-        success: "Successfully claimed",
-        error: `Error`,
+        pending: "Executing Claim...",
+        success: "Claim Successful!",
+        error: `Error: Claim Execution Failed`,
       })
     },
     onSuccess() {
@@ -213,9 +213,9 @@ export const useClaimSeveral = (market: Market | undefined) => {
       }
 
       await toastifyRequest(claim(), {
-        pending: "Executing withdrawals...",
-        success: "Successfully executed",
-        error: `Error`,
+        pending: "Executing Claim...",
+        success: "Claim Successful!",
+        error: `Error: Claim Execution Failed`,
       })
     },
     onSuccess() {
@@ -258,7 +258,7 @@ export const useWithdraw = (marketAccount: MarketAccount) => {
       // })
     },
     onSuccess(_, amount) {
-      toastifyInfo(`${amount} successfully added to withdrawal queue`)
+      toastifyInfo(`${amount} Successfully Requested!`)
       client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
     },
     onError(error, amount) {
@@ -287,9 +287,9 @@ export const useRepay = (marketAccount: MarketAccount) => {
       const tokenAmountFormatted = amount.format(TOKEN_FORMAT_DECIMALS)
 
       await toastifyRequest(repay(), {
-        pending: `Repaying ${tokenAmountFormatted} ${symbol} in progress...`,
-        success: `Successfully repaid ${tokenAmountFormatted} ${symbol}`,
-        error: `Error repaying ${tokenAmountFormatted} ${symbol}`,
+        pending: `${tokenAmountFormatted} ${symbol} Repayment In Progress...`,
+        success: `Successfully Repaid ${tokenAmountFormatted} ${symbol}!`,
+        error: `Error: Repayment Attempt Failed`,
       })
     },
     onSuccess() {
@@ -317,13 +317,13 @@ export const useRepayOutstandingDebt = (marketAccount: MarketAccount) => {
       }
 
       await toastifyRequest(repayOutstandingDebt(), {
-        pending: "Executing outstanding debt repayment...",
-        success: "Successfully repaid outstanding debt",
-        error: `Error repaying outstanding debt`,
+        pending: "Repaying Outstanding Debt...",
+        success: "Outstanding Debt Successfully Repaid!",
+        error: `Error Repaying Outstanding Debt`,
       })
     },
     onSuccess() {
-      toastifyInfo("Repaying in progress... Check your wallet transaction")
+      toastifyInfo("Repayment In Progress...")
       client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
     },
     onError(error) {
@@ -348,8 +348,8 @@ export const useAdjustAPR = (marketAccount: MarketAccount) => {
       }
 
       await toastifyRequest(setApr(), {
-        pending: `APR adjust in progress... Check your wallet transaction`,
-        success: `APR successfully changed`,
+        pending: `Adjusting Lender APR...`,
+        success: `Lender APR Successfully Adjusted`,
       })
     },
     onSuccess() {
@@ -374,7 +374,7 @@ export const useTerminateMarket = (marketAccount: MarketAccount) => {
       await marketAccount.closeMarket()
     },
     onSuccess() {
-      toastifyInfo("Market is closing... Check your wallet transaction")
+      toastifyInfo("Market Successfully Closed")
       client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
     },
     onError(error) {
@@ -401,9 +401,9 @@ async function updateLenderAuthorizationForAll(
         }),
       ),
       {
-        pending: "Step 2. Authorizing lenders in markets...",
-        success: "Step 2. Lenders successfully authorized",
-        error: "Error authorizing lenders",
+        pending: "Step 2/2: Updating Lender Roles...",
+        success: "Step 2/2: Roles Successfully Updated!",
+        error: "Error Authorising Lenders",
       },
     )
   }
@@ -425,9 +425,9 @@ export const useAuthorizedLenders = (lenders: string[], market: string) => {
       }
 
       await toastifyRequest(authoriseLenders(), {
-        pending: "Step 1. Authorizing lenders on controller...",
-        success: "Step 1. Lenders successfully authorized",
-        error: "Error authorizing lenders",
+        pending: "Step 1/2: Authorising Lenders...",
+        success: "Step 1/2: Lenders Successfully Authorised!",
+        error: "Error Authorising Lenders",
       })
 
       await updateLenderAuthorizationForAll(controller, lenders, market)
@@ -437,7 +437,7 @@ export const useAuthorizedLenders = (lenders: string[], market: string) => {
       client.invalidateQueries({ queryKey: [GET_LENDERS_BY_MARKET_KEY] })
     },
     onError(error) {
-      toastifyError(`authorize lenders error: ${error}`)
+      toastifyError(`Error Authorising Lenders: ${error}`)
     },
   })
 }
@@ -452,7 +452,7 @@ export const useDeauthorizedLenders = (
   return useMutation({
     mutationFn: async () => {
       if (!authorizedLenders.length) {
-        toastifyError("Please add lenders address")
+        toastifyError("Error: No Addresses Provided")
         return
       }
       const tx = await controller?.deauthorizeLenders(authorizedLenders)
@@ -464,13 +464,13 @@ export const useDeauthorizedLenders = (
       )
     },
     onSuccess() {
-      toastifySuccess("Lenders successfully removed")
+      toastifySuccess("Lenders Successfully Removed")
       client.invalidateQueries({
         queryKey: [GET_AUTHORIZED_LENDERS_KEY, GET_LENDERS_BY_MARKET_KEY],
       })
     },
     onError(error) {
-      toastifyError(`Removing lenders error: ${error}`)
+      toastifyError(`Error Removing Lenders: ${error}`)
     },
   })
 }
