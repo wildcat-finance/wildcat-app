@@ -91,7 +91,7 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
           <TableItem
             title="Min. Reserve Ratio"
             value={`${formatBps(
-              minReserveRatio,
+              reserveRatioBips,
               MARKET_PARAMS_DECIMALS.reserveRatioBips,
             )}%`}
             className="pl-6 pr-24"
