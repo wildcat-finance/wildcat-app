@@ -7,7 +7,6 @@ import {
   TokenAmount,
 } from "@wildcatfi/wildcat-sdk"
 import { parseUnits } from "ethers/lib/utils"
-import { BigNumber } from "ethers"
 
 import { WildcatMarketController } from "@wildcatfi/wildcat-sdk/dist/typechain"
 import { useAccount } from "wagmi"
@@ -16,13 +15,10 @@ import {
   toastifyError,
   toastifyInfo,
   toastifyRequest,
-  toastifySuccess,
 } from "../../../../components/toasts"
 import { GET_MARKET_ACCOUNT_KEY } from "../../../../hooks/useGetMarket"
 import { useGetControllerContract } from "../../../../hooks/useGetController"
-import { GET_AUTHORIZED_LENDERS_KEY } from "../Modals/RemoveLendersModal/hooks/useGetAuthorizedLenders"
-import { GET_LENDERS_BY_MARKET_KEY } from "./useGetAuthorisedLenders"
-import { useGetWithdrawalForLender } from "../../../../hooks/useGetWithdrawalForLender"
+import { GET_AUTHORISED_LENDERS_KEY } from "../Modals/RemoveLendersModal/hooks/useGetAuthorizedLenders"
 import { useGetWithdrawals } from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
 import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
 
@@ -409,8 +405,11 @@ async function updateLenderAuthorizationForAll(
   }
 }
 
-export const useAuthorizedLenders = (lenders: string[], market: string) => {
-  const { data: controller } = useGetControllerContract()
+export const useAuthoriseLenders = (
+  lenders: string[],
+  controllerAddress: string,
+) => {
+  const { data: controller } = useGetControllerContract(controllerAddress)
   const client = useQueryClient()
 
   return useMutation({
@@ -425,16 +424,15 @@ export const useAuthorizedLenders = (lenders: string[], market: string) => {
       }
 
       await toastifyRequest(authoriseLenders(), {
-        pending: "Step 1/2: Authorising Lenders...",
-        success: "Step 1/2: Lenders Successfully Authorised!",
-        error: "Error Authorising Lenders",
+        pending: "Authorising Lenders...",
+        success: "Lenders Successfully Authorised!",
+        error: "Error authorising lenders",
       })
-
-      await updateLenderAuthorizationForAll(controller, lenders, market)
     },
     onSuccess() {
-      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
-      client.invalidateQueries({ queryKey: [GET_LENDERS_BY_MARKET_KEY] })
+      client.invalidateQueries({
+        queryKey: [GET_AUTHORISED_LENDERS_KEY],
+      })
     },
     onError(error) {
       toastifyError(`Error Authorising Lenders: ${error}`)
@@ -442,11 +440,11 @@ export const useAuthorizedLenders = (lenders: string[], market: string) => {
   })
 }
 
-export const useDeauthorizedLenders = (
+export const useDeauthorizeLenders = (
   authorizedLenders: string[],
-  market: string,
+  controllerAddress: string,
 ) => {
-  const { data: controller } = useGetControllerContract()
+  const { data: controller } = useGetControllerContract(controllerAddress)
   const client = useQueryClient()
 
   return useMutation({
@@ -455,18 +453,21 @@ export const useDeauthorizedLenders = (
         toastifyError("Error: No Addresses Provided")
         return
       }
-      const tx = await controller?.deauthorizeLenders(authorizedLenders)
-      await tx?.wait()
-      await updateLenderAuthorizationForAll(
-        controller,
-        authorizedLenders,
-        market,
-      )
+
+      const deauthorizeLenders = async () => {
+        const tx = await controller?.deauthorizeLenders(authorizedLenders)
+        await tx?.wait()
+      }
+
+      await toastifyRequest(deauthorizeLenders(), {
+        pending: "Removing Lenders...",
+        success: "Lenders successfully removed!",
+        error: "Error removing lenders",
+      })
     },
     onSuccess() {
-      toastifySuccess("Lenders Successfully Removed")
       client.invalidateQueries({
-        queryKey: [GET_AUTHORIZED_LENDERS_KEY, GET_LENDERS_BY_MARKET_KEY],
+        queryKey: [GET_AUTHORISED_LENDERS_KEY],
       })
     },
     onError(error) {

@@ -1,16 +1,7 @@
+import { useMemo } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
-import { useMemo } from "react"
-import { TokenAmount } from "@wildcatfi/wildcat-sdk"
-import { parseUnits } from "ethers/lib/utils"
-import {
-  Paper,
-  Table,
-  TableRow,
-  TableCell,
-  NumberInput,
-  Spinner,
-} from "../../../components/ui-components"
+import { Paper, NumberInput, Spinner } from "../../../components/ui-components"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 
 import { BackArrow } from "../../../components/ui-components/icons/index"
@@ -29,8 +20,8 @@ import Repay from "./Repay"
 import AdjustAPR from "./AdjustAPR"
 import LenderWithdrawalRequests from "./LenderWithdrawalRequests"
 import PaymentHistory from "../../../components/PaymentHistory"
-import { useGetAuthorisedLenders } from "./hooks/useGetAuthorisedLenders"
 import BorrowerMarketOverview from "./BorrowerMarketOverview"
+import { AuthorisedLendersList } from "./AuthorisedLendersList"
 
 const VaultDetails = () => {
   const navigate = useNavigate()
@@ -44,7 +35,6 @@ const VaultDetails = () => {
 
   const { data: marketAccount, isLoading: isMarketAccountLoading } =
     useGetMarketAccountForBorrowerLegacy(memoisedMarket)
-  const { data: authorisedLenders } = useGetAuthorisedLenders(marketAddress)
 
   const handleClickMyVaults = () => {
     navigate("/borrower/my-vaults")
@@ -133,37 +123,12 @@ const VaultDetails = () => {
       <div className="flex w-full justify-between content-center">
         <div className="text-base font-bold">Authorised Lenders</div>
         <div className="flex gap-x-2">
-          <NewLendersModal market={marketAddress!} />
-          <RemoveLendersModal market={marketAddress!} />
+          <NewLendersModal market={market} />
+          <RemoveLendersModal market={market} />
         </div>
       </div>
       <div className="mt-5 mb-14">
-        <Table
-          headers={[
-            {
-              title: "Name",
-              align: "start",
-              className: "w-44",
-            },
-            {
-              title: "Wallet Address",
-              align: "start",
-            },
-            {
-              title: "",
-              align: "start",
-              className: "w-24",
-            },
-          ]}
-        >
-          {authorisedLenders?.map((lender) => (
-            <TableRow key={lender.lender}>
-              <TableCell justify="start">{}</TableCell>
-              <TableCell justify="start">{lender.lender}</TableCell>
-              <TableCell justify="center">{}</TableCell>
-            </TableRow>
-          ))}
-        </Table>
+        <AuthorisedLendersList marketAddress={market.address} />
       </div>
 
       <ServiceAgreementCard

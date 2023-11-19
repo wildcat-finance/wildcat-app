@@ -14,7 +14,7 @@ import {
   NewLenderFormSchema,
   newLenderValisationSchema,
 } from "./validationSchema"
-import { useAuthorizedLenders } from "../../hooks/useVaultDetailActions"
+import { useAuthoriseLenders } from "../../hooks/useVaultDetailActions"
 import { NewLendersModalProps } from "./interface"
 
 const newLenderFormDefaults: NewLenderFormSchema = {
@@ -30,11 +30,12 @@ export function NewLendersModal({ market }: NewLendersModalProps) {
   const [newLenders, setNewLenders] = useState<NewLenderFormSchema[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const lendersAddresses = newLenders.map((lender) => lender.lenderWallet)
+
   const {
     mutate: authorize,
     isLoading,
     isSuccess,
-  } = useAuthorizedLenders(lendersAddresses, market)
+  } = useAuthoriseLenders(lendersAddresses, market.controller)
 
   const handleChangeInput = (evt: ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target

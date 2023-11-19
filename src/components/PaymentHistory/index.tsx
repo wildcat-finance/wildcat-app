@@ -1,40 +1,33 @@
 import React, { useState, useMemo } from "react"
-import { DateValue } from "react-aria-components"
+// import { DateValue } from "react-aria-components"
 import dayjs from "dayjs"
 
-import { BigNumber } from "ethers"
-import {
-  Chip,
-  DatePickerInput,
-  Spinner,
-  Table,
-  TableCell,
-  TableRow,
-} from "../ui-components"
+// import { BigNumber } from "ethers"
+import { Table, TableCell, TableRow } from "../ui-components"
 import { ExpandMore } from "../ui-components/icons"
 import { PaymentHistoryDetailsProps } from "./interface"
 import {
-  formatTokenAmount,
+  // formatTokenAmount,
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
 } from "../../utils/formatters"
 
-function getFromToTimestamps(dateArray: DateValue[]) {
-  const fromTimestamp = dateArray[0]
-    ? Math.floor(dateArray[0].toDate("UTC").getTime() / 1000)
-    : 0
-  const toTimestamp = dateArray[1]
-    ? Math.floor(dateArray[1].toDate("UTC").getTime() / 1000)
-    : Math.floor(Date.now() / 1000)
-
-  return { fromTimestamp, toTimestamp }
-}
+// function getFromToTimestamps(dateArray: DateValue[]) {
+//   const fromTimestamp = dateArray[0]
+//     ? Math.floor(dateArray[0].toDate("UTC").getTime() / 1000)
+//     : 0
+//   const toTimestamp = dateArray[1]
+//     ? Math.floor(dateArray[1].toDate("UTC").getTime() / 1000)
+//     : Math.floor(Date.now() / 1000)
+//
+//   return { fromTimestamp, toTimestamp }
+// }
 
 const DATE_FORMAT = "DD-MMM-YYYY"
 
 const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
   const [showHistory, setShowHistory] = useState(true)
-  const [dateArray, setDateArray] = useState<DateValue[]>([])
+  // const [dateArray, setDateArray] = useState<DateValue[]>([])
 
   // const { fromTimestamp, toTimestamp } = useMemo(
   //   () => getFromToTimestamps(dateArray),
@@ -66,7 +59,7 @@ const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
     setShowHistory(!showHistory)
   }
 
-  const { underlyingToken } = market
+  // const { underlyingToken } = market
 
   return (
     <div className="mb-14">

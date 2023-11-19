@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { useGetUpdatedController } from "../../../../../../hooks/useGetController"
 
-export const GET_AUTHORIZED_LENDERS_KEY = "controllerForBorrower"
+export const GET_AUTHORISED_LENDERS_KEY = "controllerForBorrower"
 
 export const useGetAuthorizedLenders = () => {
   const { data: controller } = useGetUpdatedController()
@@ -14,7 +14,7 @@ export const useGetAuthorizedLenders = () => {
   }
 
   return useQuery({
-    queryKey: [GET_AUTHORIZED_LENDERS_KEY],
+    queryKey: [GET_AUTHORISED_LENDERS_KEY],
     queryFn: getAuthorizedLenders,
     refetchOnMount: false,
   })

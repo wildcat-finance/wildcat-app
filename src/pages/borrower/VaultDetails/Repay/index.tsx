@@ -37,10 +37,6 @@ const Repay = ({ marketAccount }: RepayProps) => {
 
   const { outstandingDebt, underlyingToken } = market
 
-  // const repayAmountBigN = repayAmount
-  //   ? BigNumber.from(repayAmount)
-  //   : BigNumber.from("0")
-
   const repayTokenAmount = new TokenAmount(
     parseUnits(repayAmount, marketAccount.market.underlyingToken.decimals),
     marketAccount.market.underlyingToken,

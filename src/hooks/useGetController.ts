@@ -31,22 +31,22 @@ export const useGetController = () => {
   })
 }
 
-export const useGetControllerContract = () => {
-  const { address } = useAccount()
+export const useGetControllerContract = (controllerAddress: string) => {
   const signer = useEthersSigner()
   const { isWrongNetwork } = useCurrentNetwork()
+
   async function getUserController() {
     const controller = getControllerContract(
       signer as Signer,
-      address as string,
+      controllerAddress,
     )
     return controller
   }
 
   return useQuery({
-    queryKey: [GET_CONTROLLER_CONTRACT_KEY, address],
+    queryKey: [GET_CONTROLLER_CONTRACT_KEY, controllerAddress],
     queryFn: getUserController,
-    enabled: !!address && !!signer && !isWrongNetwork,
+    enabled: !!controllerAddress && !!signer && !isWrongNetwork,
     refetchOnMount: false,
   })
 }
