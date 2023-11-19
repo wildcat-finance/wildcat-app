@@ -49,7 +49,21 @@ export const formatTokenAmount = (
 
 // <---- HOURS PARAMETERS FORMATTERS ---->
 export const formatSecsToHours = (seconds: number) => {
-  const hours = seconds / 60 / 60
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.floor((seconds % 3600) / 60)
+  const remainingSeconds = seconds % 60
 
-  return hours.toFixed(2).replace(".", ":")
+  let timeString = ""
+
+  if (hours > 0) {
+    timeString += `${hours} hour${hours > 1 ? "s" : ""} `
+  }
+  if (minutes > 0) {
+    timeString += `${minutes} minute${minutes > 1 ? "s" : ""} `
+  }
+  if (remainingSeconds > 0 || timeString === "") {
+    timeString += `${remainingSeconds} sec${remainingSeconds > 1 ? "s" : ""}`
+  }
+
+  return timeString.trim()
 }
