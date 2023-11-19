@@ -62,7 +62,7 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
           min={0}
         />
         <div className="text-xxs text-right">
-          <span className="font-semibold">Deposit up to</span>{" "}
+          <span className="font-semibold">Maximum Deposit:</span>{" "}
           {marketAccount.market.maximumDeposit.format(TOKEN_FORMAT_DECIMALS)}{" "}
           {marketAccount.market.underlyingToken.symbol}
         </div>
