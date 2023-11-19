@@ -41,7 +41,7 @@ function ConnectButton() {
       return "Wrong Network"
     }
     if (isConnected && address) {
-      return `${address.slice(0, 2)}..${address.slice(-4, address.length)}`
+      return `${address.slice(0, 6)}..${address.slice(-4, address.length)}`
     }
     return "Connect"
   }, [isConnected, address, isWrongNetwork])

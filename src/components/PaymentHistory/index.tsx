@@ -124,7 +124,7 @@ const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
           <Table
             headers={[
               {
-                title: "Lender",
+                title: "Sender",
                 align: "start",
                 className: "w-40",
               },
@@ -139,12 +139,7 @@ const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
                 className: "w-52",
               },
               {
-                title: "Date Processed",
-                align: "start",
-                className: "w-28",
-              },
-              {
-                title: "Amount",
+                title: "Amount Repaid",
                 align: "end",
               },
             ]}
@@ -170,9 +165,6 @@ const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
                   >
                     {trimAddress(repayment.transactionHash, 24)}
                   </a>
-                </TableCell>
-                <TableCell justify="start">
-                  {dayjs(repayment.blockTimestamp * 1000).format(DATE_FORMAT)}
                 </TableCell>
                 <TableCell justify="start">
                   {dayjs(repayment.blockTimestamp * 1000).format(DATE_FORMAT)}

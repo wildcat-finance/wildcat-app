@@ -98,20 +98,16 @@ export function NewLendersModal({ market }: NewLendersModalProps) {
 
         <div className="flex flex-col items-center gap-y-5 px-8">
           <div className="w-72 font-light text-xxs text-center ">
-            Please provide a reference name and wallet address for each new
-            lender you want to authorise for this market.
+            Please provide a wallet address for each new lender you want to
+            authorise for this market.
           </div>
-          <FormItem
-            className="w-full"
-            label="Lender Wallet Address"
-            tooltip="test"
-          >
+          <FormItem className="w-full" label="Lender Wallet Address">
             <TextInput
               name="lenderWallet"
               value={formValues.lenderWallet}
               onChange={handleChangeInput}
               className="w-full bg-tint-11"
-              placeholder="eg: 0x987234oiwef8u234892384824309ljw0975a"
+              placeholder="e.g.: 0x863DF6BFa4469f3ead0bE8f9F2AAE51c91A907b4"
             />
           </FormItem>
           <Button

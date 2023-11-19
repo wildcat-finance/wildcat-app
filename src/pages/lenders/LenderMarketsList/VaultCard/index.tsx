@@ -49,8 +49,9 @@ function VaultCard({ market, className }: VaultCardProps) {
           value={`${formatBps(market.reserveRatioBips)}%`}
         />
         <TableItem
-          title="Total Credit Extended"
-          value={`${formatToken(market.totalSupply.raw)}`}
+          title="Max Market Capacity"
+          value={`${formatToken(market.maxTotalSupply.raw)}
+            ${market.underlyingToken.symbol}`}
         />
       </div>
 
@@ -62,7 +63,7 @@ function VaultCard({ market, className }: VaultCardProps) {
             navigate(`/lender/market-details/${market.address.toLowerCase()}`)
           }
         >
-          Go To Market
+          Go To Market Details
         </Button>
       </div>
     </div>
