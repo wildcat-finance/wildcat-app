@@ -54,7 +54,7 @@ const WithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
         <div className="inline text-black text-xs font-bold">
           Total Withdrawal Requests Outstanding
         </div>
-        <Chip className="w-20 flex justify-center">
+        <Chip className="w-30 flex justify-center">
           {totalAmount.format(TOKEN_FORMAT_DECIMALS, true)}
         </Chip>
       </div>
@@ -71,7 +71,7 @@ const WithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
           ) : (
             <ExpandMore onClick={() => toggleAccordion(1)} />
           )}
-          <Chip className="w-20 flex justify-center">
+          <Chip className="w-30 flex justify-center">
             {activeTotalAmount.format(TOKEN_FORMAT_DECIMALS, true)}
           </Chip>
         </div>
@@ -97,7 +97,7 @@ const WithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
           ) : (
             <ExpandMore onClick={() => toggleAccordion(2)} />
           )}
-          <Chip className="w-20 flex justify-center">
+          <Chip className="w-30 flex justify-center">
             {expiredTotalAmount.format(TOKEN_FORMAT_DECIMALS, true)}
           </Chip>
         </div>

@@ -58,7 +58,7 @@ const LenderWithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
         <div className="inline text-black text-xs font-bold">
           Total Withdrawal Requests Outstanding
         </div>
-        <Chip className="w-20 flex justify-center">
+        <Chip className="w-30 flex justify-center">
           {formatTokenAmount(
             totalScaledAmount,
             underlyingToken.decimals,
@@ -79,7 +79,7 @@ const LenderWithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
           ) : (
             <ExpandMore onClick={() => toggleAccordion(1)} />
           )}
-          <Chip className="w-20 flex justify-center">
+          <Chip className="w-30 flex justify-center">
             {formatTokenAmount(
               activeTotalAmount,
               underlyingToken.decimals,
@@ -110,7 +110,7 @@ const LenderWithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
           ) : (
             <ExpandMore onClick={() => toggleAccordion(2)} />
           )}
-          <Chip className="w-20 flex justify-center">
+          <Chip className="w-30 flex justify-center">
             {formatTokenAmount(
               expiredScaledTotalAmount,
               underlyingToken.decimals,
