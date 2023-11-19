@@ -416,7 +416,7 @@ export const useAuthoriseLenders = (
   return useMutation({
     mutationFn: async () => {
       if (!lenders.length) {
-        toastifyError("Add lenders")
+        toastifyError("Add At Least One Lender Address")
         return
       }
       const authoriseLenders = async () => {
