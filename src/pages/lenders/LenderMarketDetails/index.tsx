@@ -54,7 +54,7 @@ export function LenderMarketDetails() {
           <div className="text-green text-2xl font-bold">{market.name}</div>
           <div className="flex ">
             <Chip className="h-auto justify-center p-1 ml-4 mr-3 bg-tint-11">
-              {market.underlyingToken.symbol}
+              {market.marketToken.symbol}
             </Chip>
             <Button variant="blue" className="pl-1 w-16">
               Add
