@@ -97,7 +97,7 @@ const AddNewVault = () => {
           Number(marketParams.delinquencyGracePeriod) * 60 * 60,
         withdrawalBatchDuration:
           Number(marketParams.withdrawalBatchDuration) * 60 * 60,
-        maxTotalSupply: Number(marketParams.maxTotalSupply) * 100,
+        maxTotalSupply: Number(marketParams.maxTotalSupply),
         assetData: tokenAsset,
       })
     }
