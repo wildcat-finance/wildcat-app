@@ -88,7 +88,7 @@ const AddNewVault = () => {
 
     if (assetData && tokenAsset) {
       deployNewMarket({
-        namePrefix: marketParams.namePrefix,
+        namePrefix: `${marketParams.namePrefix.trimEnd()} `,
         symbolPrefix: marketParams.symbolPrefix,
         annualInterestBips: Number(marketParams.annualInterestBips) * 100,
         delinquencyFeeBips: Number(marketParams.delinquencyFeeBips) * 100,
