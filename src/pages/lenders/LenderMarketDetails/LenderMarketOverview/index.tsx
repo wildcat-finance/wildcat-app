@@ -67,11 +67,6 @@ const LenderMarketOverview = ({
       <div className="flex w-full mt-5 mb-14">
         <div className="w-full">
           <TableItem
-            title="Contract Address"
-            value={trimAddress(address)}
-            className="pl-6 pr-24"
-          />
-          <TableItem
             title="Underlying Asset"
             value={underlyingToken.symbol}
             className="pl-6 pr-24"
