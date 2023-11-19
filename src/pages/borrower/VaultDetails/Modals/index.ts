@@ -1,6 +1,6 @@
 export { RepayModal } from "./RepayModal"
 export { RepayToMinimumModal } from "./RepayToMinimumModal"
-export { CapacityModal } from "./CapacityModal"
+export { AdjustMaximumCapacityModal } from "./AdjustMaximumCapacityModal"
 export { CloseModal } from "./CloseModal"
 export { BorrowModal } from "./BorrowModal"
 export { AdjustAPRModal } from "./AdjustAPRModal"

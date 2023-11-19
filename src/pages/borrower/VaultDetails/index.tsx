@@ -1,18 +1,14 @@
-import { useMemo } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
-import { Paper, NumberInput, Spinner } from "../../../components/ui-components"
+import { Paper, Spinner } from "../../../components/ui-components"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 
 import { BackArrow } from "../../../components/ui-components/icons/index"
 
-import { RemoveLendersModal, CapacityModal, NewLendersModal } from "./Modals"
+import { RemoveLendersModal, NewLendersModal } from "./Modals"
 import { useGetMarket } from "../../../hooks/useGetMarket"
 import { useGetMarketAccountForBorrowerLegacy } from "../../../hooks/useGetMarketAccount"
-import {
-  MARKET_PARAMS_DECIMALS,
-  TOKEN_FORMAT_DECIMALS,
-} from "../../../utils/formatters"
+import { TOKEN_FORMAT_DECIMALS } from "../../../utils/formatters"
 import BorrowAssets from "./BorrowAssets"
 import Repay from "./Repay"
 import AdjustAPR from "./AdjustAPR"
@@ -20,6 +16,7 @@ import LenderWithdrawalRequests from "./LenderWithdrawalRequests"
 import PaymentHistory from "../../../components/PaymentHistory"
 import BorrowerMarketOverview from "./BorrowerMarketOverview"
 import { AuthorisedLendersList } from "./AuthorisedLendersList"
+import AdjustMaximumCapacity from "./AdjustMaximumCapacity"
 
 const VaultDetails = () => {
   const navigate = useNavigate()
@@ -89,22 +86,11 @@ const VaultDetails = () => {
           </div>
         </div>
         <div>
-          <div className="w-full flex justify-between items-center">
-            <div className="font-bold">Adjust Maximum Capacity</div>
+          <div className="w-full flex justify-between">
+            <div className="font-bold mt-3">Adjust Maximum Capacity</div>
             <div className="flex gap-x-3.5 w-full max-w-lg">
-              <NumberInput
-                decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
-                className="w-full"
-                placeholder="10.00"
-                min={0}
-              />
-              <CapacityModal />
+              <AdjustMaximumCapacity marketAccount={marketAccount} />
             </div>
-          </div>
-          <div className="text-xxs text-right mt-1.5 mr-48">
-            <span className="font-semibold">Current Capacity:</span>{" "}
-            {market.maxTotalSupply.format(TOKEN_FORMAT_DECIMALS)}{" "}
-            {market.underlyingToken.symbol}
           </div>
         </div>
       </Paper>

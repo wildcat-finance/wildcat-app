@@ -88,6 +88,7 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
           onChange={handleAprChange}
           error={!!error}
         />
+
         <div className="flex justify-between items-start text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
           <div>
             {error && (
@@ -102,6 +103,7 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
           </div>
         </div>
       </div>
+
       <div className="w-44 flex flex-col gap-y-1.5">
         <Button
           variant="green"

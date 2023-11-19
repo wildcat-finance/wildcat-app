@@ -358,6 +358,44 @@ export const useAdjustAPR = (marketAccount: MarketAccount) => {
   })
 }
 
+export const useSetMaxTotalSupply = (marketAccount: MarketAccount) => {
+  const signer = useEthersSigner()
+  const client = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (newMaxTotalSupply: string) => {
+      if (!marketAccount || !signer) {
+        return
+      }
+
+      const supplyTokenAmount = new TokenAmount(
+        parseUnits(
+          newMaxTotalSupply,
+          marketAccount.market.underlyingToken.decimals,
+        ),
+        marketAccount.market.underlyingToken,
+      )
+
+      const setMaxTotalSupply = async () => {
+        const tx = await marketAccount.setMaxTotalSupply(supplyTokenAmount)
+        await tx.wait()
+      }
+
+      await toastifyRequest(setMaxTotalSupply(), {
+        pending: `Setting Maximum Capacity...`,
+        success: `Maximum Capacity successfully Adjusted`,
+        error: "Error setting Maximum Capacity",
+      })
+    },
+    onSuccess() {
+      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
+    },
+    onError(error) {
+      console.log(error)
+    },
+  })
+}
+
 export const useTerminateMarket = (marketAccount: MarketAccount) => {
   const signer = useEthersSigner()
   const client = useQueryClient()
