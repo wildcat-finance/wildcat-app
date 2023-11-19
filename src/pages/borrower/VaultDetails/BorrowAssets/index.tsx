@@ -14,21 +14,21 @@ const BorrowAssets = ({
   const { mutate, isLoading } = useBorrow(marketAccount)
   const [borrowAmount, setBorrowAmount] = useState("0")
 
-  const maxBorrowAmount = borrowableAssets.raw
+  const maxBorrowAmount = borrowableAssets
 
   const handleBorrowAmountChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
     setBorrowAmount(value)
   }
 
-  const borrowAmounBigN = borrowAmount
-    ? BigNumber.from(borrowAmount)
-    : BigNumber.from("0")
+  const underlyingBorrowAmount = borrowAmount
+    ? marketAccount.market.underlyingToken.parseAmount(borrowAmount)
+    : marketAccount.market.underlyingToken.parseAmount(0)
 
   const disabled =
-    maxBorrowAmount.isZero() || borrowAmounBigN.gt(maxBorrowAmount)
+    maxBorrowAmount.eq(0) || underlyingBorrowAmount.gt(maxBorrowAmount)
 
-  const leftBorrowAmount = maxBorrowAmount.sub(borrowAmounBigN)
+  const leftBorrowAmount = maxBorrowAmount.sub(underlyingBorrowAmount)
 
   const handleBorrow = () => {
     mutate(borrowAmount)
@@ -47,7 +47,7 @@ const BorrowAssets = ({
       <BorrowModal
         borrow={handleBorrow}
         borrowAmount={borrowAmount}
-        leftBorrowAmount={leftBorrowAmount.toString()}
+        leftBorrowAmount={leftBorrowAmount.toFixed(TOKEN_FORMAT_DECIMALS)}
         tokenSymbol={borrowableAssets.symbol}
         disabled={disabled || isLoading}
         isLoading={isLoading}
