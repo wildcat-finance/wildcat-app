@@ -16,7 +16,7 @@ import {
   toastifyInfo,
   toastifyRequest,
 } from "../../../../components/toasts"
-import { GET_MARKET_ACCOUNT_KEY } from "../../../../hooks/useGetMarket"
+import { GET_MARKET_KEY } from "../../../../hooks/useGetMarket"
 import { useGetControllerContract } from "../../../../hooks/useGetController"
 import { GET_AUTHORISED_LENDERS_KEY } from "../Modals/RemoveLendersModal/hooks/useGetAuthorizedLenders"
 import { useGetWithdrawals } from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
@@ -41,7 +41,7 @@ export const useBorrow = (marketAccount: MarketAccount) => {
     },
     onSuccess() {
       toastifyInfo("Processing Borrow...")
-      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
     },
     onError(error) {
       console.log(error)
@@ -70,7 +70,7 @@ export const useGetAllowance = (token: Token) => {
       getAllowance()
     },
     onSuccess() {
-      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
     },
   })
 }
@@ -104,7 +104,7 @@ export const useApprove = (token: Token, market: Market) => {
       })
     },
     onSuccess() {
-      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
     },
   })
 }
@@ -142,7 +142,7 @@ export const useDeposit = (
     },
     onSuccess() {
       if (onSuccess) onSuccess()
-      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
     },
     onError(error) {
       console.log(error)
@@ -178,7 +178,7 @@ export const useClaim = (
       })
     },
     onSuccess() {
-      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
     },
     onError(error) {
       console.log(error)
@@ -215,7 +215,7 @@ export const useClaimSeveral = (market: Market | undefined) => {
       })
     },
     onSuccess() {
-      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
     },
     onError(error) {
       console.log(error)
@@ -255,7 +255,7 @@ export const useWithdraw = (marketAccount: MarketAccount) => {
     },
     onSuccess(_, amount) {
       toastifyInfo(`${amount} Successfully Requested!`)
-      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
     },
     onError(error, amount) {
       console.log(error, amount)
@@ -289,7 +289,7 @@ export const useRepay = (marketAccount: MarketAccount) => {
       })
     },
     onSuccess() {
-      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
     },
     onError(error) {
       console.log(error)
@@ -320,7 +320,7 @@ export const useRepayOutstandingDebt = (marketAccount: MarketAccount) => {
     },
     onSuccess() {
       toastifyInfo("Repayment In Progress...")
-      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
     },
     onError(error) {
       console.log(error)
@@ -350,7 +350,7 @@ export const useAdjustAPR = (marketAccount: MarketAccount) => {
       })
     },
     onSuccess() {
-      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
     },
     onError(error) {
       console.log(error)
@@ -372,7 +372,7 @@ export const useTerminateMarket = (marketAccount: MarketAccount) => {
     },
     onSuccess() {
       toastifyInfo("Market Successfully Closed")
-      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
     },
     onError(error) {
       console.log(error)

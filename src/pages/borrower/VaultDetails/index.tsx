@@ -7,10 +7,8 @@ import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import { BackArrow } from "../../../components/ui-components/icons/index"
 
 import { RemoveLendersModal, CapacityModal, NewLendersModal } from "./Modals"
-import {
-  useGetMarket,
-  useGetMarketAccountForBorrowerLegacy,
-} from "../../../hooks/useGetMarket"
+import { useGetMarket } from "../../../hooks/useGetMarket"
+import { useGetMarketAccountForBorrowerLegacy } from "../../../hooks/useGetMarketAccount"
 import {
   MARKET_PARAMS_DECIMALS,
   TOKEN_FORMAT_DECIMALS,
@@ -26,15 +24,14 @@ import { AuthorisedLendersList } from "./AuthorisedLendersList"
 const VaultDetails = () => {
   const navigate = useNavigate()
   const { marketAddress } = useParams()
-  const { data: market, isLoadingInitial: isMarketLoading } =
-    useGetMarket(marketAddress)
+  const { data: market, isInitialLoading: isMarketLoading } = useGetMarket({
+    marketAddress,
+  })
 
-  // Temp solution to keep object the same
-  // and prevent Loader blinking
-  const memoisedMarket = useMemo(() => market, [market?.address])
-
-  const { data: marketAccount, isLoading: isMarketAccountLoading } =
-    useGetMarketAccountForBorrowerLegacy(memoisedMarket)
+  // Fix loading issue
+  const memoizedMarket = useMemo(() => market, [market?.address])
+  const { data: marketAccount, isInitialLoading: isMarketAccountLoading } =
+    useGetMarketAccountForBorrowerLegacy(memoizedMarket)
 
   const handleClickMyVaults = () => {
     navigate("/borrower/my-vaults")
@@ -47,7 +44,7 @@ const VaultDetails = () => {
   }
 
   if (!market || !marketAccount) {
-    return <div>Market not found</div>
+    return <Spinner isLoading={isLoading} />
   }
 
   return (

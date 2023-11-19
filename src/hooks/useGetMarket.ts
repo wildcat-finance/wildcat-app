@@ -1,62 +1,60 @@
-import { getMarketAccount, Market, Signer } from "@wildcatfi/wildcat-sdk"
-import { useAccount } from "wagmi"
-
 import { useQuery } from "@tanstack/react-query"
+import { Market, SubgraphClient, getLensContract } from "@wildcatfi/wildcat-sdk"
+import {
+  GetMarketDocument,
+  SubgraphGetMarketQuery,
+  SubgraphGetMarketQueryVariables,
+} from "@wildcatfi/wildcat-sdk/dist/gql/graphql"
 import { useEthersSigner } from "../modules/hooks"
 import { useCurrentNetwork } from "./useCurrentNetwork"
-import { useMarket } from "./useMarket"
-import { useMarketAccount } from "./useMarketAccount"
 
-export const useGetMarket = (marketAddress: string | undefined) => {
+export const GET_MARKET_KEY = "get-market"
+
+export type UseMarketProps = {
+  marketAddress: string | undefined
+} & Partial<Omit<SubgraphGetMarketQueryVariables, "market">>
+
+export function useGetMarket({ marketAddress, ...filters }: UseMarketProps) {
   const signer = useEthersSigner()
   const { isWrongNetwork } = useCurrentNetwork()
+  const marketAddressFormatted = marketAddress?.toLowerCase()
 
-  return useMarket({
-    address: marketAddress,
-    provider: signer,
-    enabled: !!marketAddress && !!signer && !isWrongNetwork,
-  })
-}
+  async function queryMarket() {
+    if (!marketAddressFormatted || !signer) throw Error()
 
-export const GET_MARKET_ACCOUNT_KEY = "get-market-account"
+    const result = await SubgraphClient.query<
+      SubgraphGetMarketQuery,
+      SubgraphGetMarketQueryVariables
+    >({
+      query: GetMarketDocument,
+      variables: {
+        market: marketAddressFormatted,
+        ...filters,
+      },
+    })
 
-export const useGetMarketAccount = (market: Market | undefined) => {
-  const { address } = useAccount()
-  const signer = useEthersSigner()
-  const { isWrongNetwork } = useCurrentNetwork()
+    return Market.fromSubgraphMarketData(signer, result.data.market!)
+  }
 
-  return useMarketAccount({
-    market,
-    lender: address,
-    provider: signer,
-    enabled: !!market && !!address && !!signer && !isWrongNetwork,
-  })
-}
+  async function updateMarket(market: Market | undefined) {
+    if (!market || !marketAddress || !signer) throw Error()
 
-export const GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY =
-  "get-borrower-market-account-legacy"
+    const lens = getLensContract(signer)
+    const update = await lens.getMarketData(marketAddress)
+    market.updateWith(update)
 
-export const useGetMarketAccountForBorrowerLegacy = (
-  market: Market | undefined,
-) => {
-  const { address } = useAccount()
-  const signer = useEthersSigner()
-  const { isWrongNetwork } = useCurrentNetwork()
+    return market
+  }
 
-  async function getMarketAccountFn() {
-    const marketAccount = await getMarketAccount(
-      signer as Signer,
-      address as string,
-      market as Market,
-    )
-    return marketAccount
+  async function queryFn() {
+    const marketFromSubgraph = await queryMarket()
+    return updateMarket(marketFromSubgraph)
   }
 
   return useQuery({
-    queryKey: [GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY, address, market],
-    queryFn: getMarketAccountFn,
-    enabled: !!market && !!address && !!signer && !isWrongNetwork,
+    queryKey: [GET_MARKET_KEY, marketAddress],
+    queryFn,
+    enabled: !!marketAddress || !signer || isWrongNetwork,
     refetchOnMount: false,
-    refetchOnWindowFocus: false,
   })
 }

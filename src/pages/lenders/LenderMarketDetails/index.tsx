@@ -4,7 +4,8 @@ import { Button, Chip, Spinner } from "../../../components/ui-components"
 import { useWalletConnect } from "../../../hooks/useWalletConnect"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 import { LenderMarketActions } from "./LenderMarketActions"
-import { useGetMarket, useGetMarketAccount } from "../../../hooks/useGetMarket"
+import { useGetMarket } from "../../../hooks/useGetMarket"
+import { useGetMarketAccount } from "../../../hooks/useGetMarketAccount"
 import WithdrawalRequests from "./WithdrawalRequests"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import PaymentHistory from "../../../components/PaymentHistory"
@@ -17,8 +18,9 @@ export function LenderMarketDetails() {
   const { isWrongNetwork } = useCurrentNetwork()
 
   const { marketAddress } = useParams()
-  const { data: market, isLoadingInitial: isMarketLoading } =
-    useGetMarket(marketAddress)
+  const { data: market, isLoading: isMarketLoading } = useGetMarket({
+    marketAddress,
+  })
   const { data: marketAccount, isLoadingInitial: isMarketAccountLoading } =
     useGetMarketAccount(market)
 
