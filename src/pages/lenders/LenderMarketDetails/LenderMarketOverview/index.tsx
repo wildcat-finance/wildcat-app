@@ -146,8 +146,8 @@ const LenderMarketOverview = ({
             className="pr-6 pl-24"
           />
           <TableItem
-            title="Max. Available to Withdraw"
-            value={`${marketAccount.maximumWithdrawal.format(
+            title="Liquid Reserves"
+            value={`${marketAccount.market.liquidReserves.format(
               TOKEN_FORMAT_DECIMALS,
             )}
             ${market.underlyingToken.symbol}`}
