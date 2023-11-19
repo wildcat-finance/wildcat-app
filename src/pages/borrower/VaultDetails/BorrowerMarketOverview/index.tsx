@@ -62,13 +62,15 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
       <div className="flex w-full mt-5 mb-14">
         <div className="w-full">
           <TableItem
-            title="Contract Address"
+            title="Market Address"
             value={trimAddress(address)}
             className="pl-6 pr-24"
           />
           <TableItem
             title="Underlying Asset"
-            value={underlyingToken.symbol}
+            value={`${underlyingToken.symbol} (${trimAddress(
+              underlyingToken.address,
+            )})`}
             className="pl-6 pr-24"
           />
           <TableItem
