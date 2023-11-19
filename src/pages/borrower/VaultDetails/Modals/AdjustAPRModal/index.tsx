@@ -2,12 +2,17 @@ import { useState } from "react"
 import { Button, Modal } from "../../../../../components/ui-components"
 
 import { AdjustAprModalProps } from "./interface"
+import {
+  formatBps,
+  MARKET_PARAMS_DECIMALS,
+} from "../../../../../utils/formatters"
 
 export const AdjustAPRModal = ({
   currentAPR,
   newAPR,
   isLoading,
   newReserveRatio,
+  reserveRatioChanged,
   adjustAPR,
   disabled,
 }: AdjustAprModalProps) => {
@@ -47,14 +52,18 @@ export const AdjustAPRModal = ({
               {currentAPR}% to {newAPR}%
             </div>
 
-            {newReserveRatio && (
+            {newReserveRatio && reserveRatioChanged && (
               <>
                 <div className="w-72 font-light text-xxs text-center">
-                  [ONLY SHOW IF RATE IS LOWER] The minimum reserve ratio of the
-                  market will be temporarily changed to:
+                  The minimum reserve ratio of the market will be temporarily
+                  changed to:
                 </div>
                 <div className="w-72 font-bold text-xxs text-center">
-                  {newReserveRatio}%
+                  {formatBps(
+                    newReserveRatio,
+                    MARKET_PARAMS_DECIMALS.reserveRatioBips,
+                  )}
+                  %
                 </div>
               </>
             )}

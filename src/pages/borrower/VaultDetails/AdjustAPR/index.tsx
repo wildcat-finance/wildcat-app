@@ -14,30 +14,39 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
   const { mutate: terminateMarket, isLoading: terminateMarketLoading } =
     useTerminateMarket(marketAccount)
   const [apr, setApr] = useState("0")
+  const [newReserveRatio, setNewReserveRatio] = useState<number | undefined>()
+  const [error, setError] = useState<string | undefined>()
 
   const { market } = marketAccount
 
   const handleAprChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
     setApr(value)
-    // @todo display new temporary reserve ratio (and actual asset amount required)
-    // that will be in place if APR is changed to this value. if the new reserve ratio
-    // is equal to `market.reserveRatio`, then this doesn't need to be displayed
 
-    // const temporaryReserveRatioForChange = market.getReserveRatioForNewAPR(
-    //   +value,
-    // )
-    // const newReservesRequiredForChange =
-    //   market.calculateLiquidityCoverageForReserveRatio(
-    //     temporaryReserveRatioForChange,
-    //   )
+    if (value === "" || value === "0") {
+      setNewReserveRatio(undefined)
+      setError(undefined)
+      return
+    }
 
     // If status is not `Ready`, show error message
-    const setAPRStep = marketAccount.checkSetAPRStep(+value)
+    const parsedNewApr = parseFloat(value) * 100
+    const checkAPRStep = marketAccount.checkSetAPRStep(parsedNewApr)
+
+    if (checkAPRStep.status !== "Ready") {
+      setError(checkAPRStep.status)
+      setNewReserveRatio(undefined)
+      return
+    }
+
+    setError(undefined)
+    const temporaryReserveRatioForChange =
+      market.getReserveRatioForNewAPR(parsedNewApr)
+    setNewReserveRatio(temporaryReserveRatioForChange)
   }
 
   const handleAdjustAPR = () => {
-    mutate(parseFloat(apr))
+    if (!error) mutate(parseFloat(apr))
   }
 
   const handleTerminateMarket = () => {
@@ -47,7 +56,11 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
     const terminateMarketStep = marketAccount.checkCloseMarketStep()
   }
 
+  const reserveRatioChanged =
+    newReserveRatio !== null && market.reserveRatioBips !== newReserveRatio
+
   const isLoading = adjustAprLoading || terminateMarketLoading
+  const disabledApr = !apr || parseFloat(apr) <= 0 || !!error || isLoading
 
   return (
     <>
@@ -58,19 +71,30 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
           placeholder="00,000.00"
           value={apr}
           onChange={handleAprChange}
+          error={!!error}
         />
-        <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
-          <span className="font-semibold">Current Base Rate:</span>{" "}
-          {market.annualInterestBips / 100}%
+        <div className="flex justify-between items-start text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
+          <div>
+            {error && (
+              <div className="whitespace-nowrap text-red-error text-xxs">
+                {error}
+              </div>
+            )}
+          </div>
+          <div>
+            <span className="font-semibold">Current Base Rate:</span>{" "}
+            {market.annualInterestBips / 100}%
+          </div>
         </div>
       </div>
       <div className="w-44 flex flex-col gap-y-1.5">
         <AdjustAPRModal
-          disabled={parseFloat(apr) <= 0 || isLoading}
+          disabled={disabledApr}
           adjustAPR={handleAdjustAPR}
           currentAPR={market.annualInterestBips / 100}
           newAPR={parseFloat(apr)}
-          newReserveRatio={undefined}
+          newReserveRatio={newReserveRatio}
+          reserveRatioChanged={reserveRatioChanged}
           isLoading={isLoading}
         />
 

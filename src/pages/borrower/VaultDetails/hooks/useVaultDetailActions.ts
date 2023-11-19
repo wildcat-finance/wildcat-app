@@ -340,12 +340,13 @@ export const useAdjustAPR = (marketAccount: MarketAccount) => {
 
       const setApr = async () => {
         const tx = await marketAccount.setAnnualInterestBips(amount * 100)
-        tx.wait()
+        await tx.wait()
       }
 
       await toastifyRequest(setApr(), {
         pending: `Adjusting Lender APR...`,
         success: `Lender APR Successfully Adjusted`,
+        error: "Error adjusting Lender APR",
       })
     },
     onSuccess() {
