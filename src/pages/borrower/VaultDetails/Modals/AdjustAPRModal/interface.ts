@@ -1,5 +1,6 @@
 export type AdjustAprModalProps = {
-  disabled?: boolean
+  onClose?: () => void
+  isOpen?: boolean
   currentAPR: number
   newAPR: number
   newReserveRatio: number | undefined

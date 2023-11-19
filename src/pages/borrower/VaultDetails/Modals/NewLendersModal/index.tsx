@@ -66,8 +66,8 @@ export function NewLendersModal({ market }: NewLendersModalProps) {
   }
 
   const onModalClose = () => {
-    clearInputOnClose()
     setIsModalOpen(false)
+    clearInputOnClose()
   }
 
   useEffect(() => {

@@ -28,16 +28,13 @@ const VaultDetails = () => {
     marketAddress,
   })
 
-  // Fix loading issue
-  const memoizedMarket = useMemo(() => market, [market?.address])
-  const { data: marketAccount, isInitialLoading: isMarketAccountLoading } =
-    useGetMarketAccountForBorrowerLegacy(memoizedMarket)
+  const { data: marketAccount } = useGetMarketAccountForBorrowerLegacy(market)
 
   const handleClickMyVaults = () => {
     navigate("/borrower/my-vaults")
   }
 
-  const isLoading = isMarketLoading || isMarketAccountLoading
+  const isLoading = isMarketLoading
 
   if (isLoading) {
     return <Spinner isLoading={isLoading} />

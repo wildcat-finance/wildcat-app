@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react"
+import React, { ChangeEvent, useEffect, useState } from "react"
 
 import { Button, NumberInput } from "../../../../components/ui-components"
 import { AdjustAPRModal } from "../Modals"
@@ -10,7 +10,12 @@ import { AdjustAprProps } from "./interface"
 import { MARKET_PARAMS_DECIMALS } from "../../../../utils/formatters"
 
 const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
-  const { mutate, isLoading: adjustAprLoading } = useAdjustAPR(marketAccount)
+  const [isModalOpen, setModalOpen] = useState(false)
+  const {
+    mutate,
+    isLoading: adjustAprLoading,
+    isSuccess,
+  } = useAdjustAPR(marketAccount)
   const { mutate: terminateMarket, isLoading: terminateMarketLoading } =
     useTerminateMarket(marketAccount)
   const [apr, setApr] = useState("0")
@@ -56,9 +61,19 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
     const terminateMarketStep = marketAccount.checkCloseMarketStep()
   }
 
+  const onModalClose = () => {
+    setModalOpen(false)
+  }
+
+  useEffect(() => {
+    if (isSuccess) {
+      setApr("0")
+      onModalClose()
+    }
+  }, [isSuccess])
+
   const reserveRatioChanged =
     newReserveRatio !== null && market.reserveRatioBips !== newReserveRatio
-
   const isLoading = adjustAprLoading || terminateMarketLoading
   const disabledApr = !apr || parseFloat(apr) <= 0 || !!error || isLoading
 
@@ -88,15 +103,13 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
         </div>
       </div>
       <div className="w-44 flex flex-col gap-y-1.5">
-        <AdjustAPRModal
+        <Button
+          variant="green"
+          onClick={() => setModalOpen(true)}
           disabled={disabledApr}
-          adjustAPR={handleAdjustAPR}
-          currentAPR={market.annualInterestBips / 100}
-          newAPR={parseFloat(apr)}
-          newReserveRatio={newReserveRatio}
-          reserveRatioChanged={reserveRatioChanged}
-          isLoading={isLoading}
-        />
+        >
+          Adjust
+        </Button>
 
         <Button
           variant="red"
@@ -107,6 +120,17 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
           Terminate Market
         </Button>
       </div>
+
+      <AdjustAPRModal
+        isOpen={isModalOpen}
+        onClose={onModalClose}
+        adjustAPR={handleAdjustAPR}
+        currentAPR={market.annualInterestBips / 100}
+        newAPR={parseFloat(apr)}
+        newReserveRatio={newReserveRatio}
+        reserveRatioChanged={reserveRatioChanged}
+        isLoading={isLoading}
+      />
     </>
   )
 }

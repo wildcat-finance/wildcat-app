@@ -31,8 +31,8 @@ export function RemoveLendersModal({ market }: RemoveLendersModalProps) {
   }
 
   const onModalClose = () => {
-    clearInputOnClose()
     setIsModalOpen(false)
+    clearInputOnClose()
   }
 
   useEffect(() => {
