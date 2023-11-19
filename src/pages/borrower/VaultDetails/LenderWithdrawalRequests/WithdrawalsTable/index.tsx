@@ -13,7 +13,7 @@ import {
 } from "../../../../../components/ui-components"
 import { WithdrawalsTableProps } from "./interface"
 
-const DATE_FORMAT = "DD-MMM-YYYY"
+const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
 export const WithdrawalsTable = ({
   withdrawals,

@@ -23,7 +23,7 @@ import {
 //   return { fromTimestamp, toTimestamp }
 // }
 
-const DATE_FORMAT = "DD-MMM-YYYY"
+const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
 const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
   const [showHistory, setShowHistory] = useState(true)
