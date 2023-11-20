@@ -9,7 +9,7 @@ import { LenderMarketDetailsProps } from "./type"
 import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
 
 const LenderWithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
-  const { data, isLoadingInitial: isLoading } = useGetWithdrawals(market)
+  const { data } = useGetWithdrawals(market)
 
   const [thisCycle, setThisCycle] = useState(false)
   const [prevCycle, setPrevCycle] = useState(false)
@@ -21,8 +21,6 @@ const LenderWithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
       setPrevCycle(!prevCycle)
     }
   }
-
-  const { underlyingToken } = market
 
   const expiredTotalAmount = data.expiredWithdrawalsTotalOwed
   const activeTotalAmount = data.activeWithdrawalsTotalOwed
