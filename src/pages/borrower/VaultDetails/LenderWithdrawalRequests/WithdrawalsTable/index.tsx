@@ -1,8 +1,5 @@
 import dayjs from "dayjs"
-import { BigNumber } from "ethers"
-import React from "react"
 import {
-  formatTokenAmount,
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
 } from "../../../../../utils/formatters"
@@ -16,8 +13,7 @@ import { WithdrawalsTableProps } from "./interface"
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
 export const WithdrawalsTable = ({
-  withdrawals,
-  underlyingToken,
+  withdrawalBatches,
 }: WithdrawalsTableProps) => (
   <Table
     headers={[
@@ -37,46 +33,64 @@ export const WithdrawalsTable = ({
         className: "w-52",
       },
       {
-        title: "Amount",
+        title: "Requested",
+        align: "start",
+        className: "w-32",
+      },
+      {
+        title: "Paid",
+        align: "start",
+        className: "w-32",
+      },
+      {
+        title: "Owed",
         align: "end",
+        className: "w-32",
       },
     ]}
   >
-    {withdrawals &&
-      withdrawals.map((withdrawal) => (
-        <TableRow key={withdrawal.id}>
-          <TableCell justify="start">
-            <a
-              className="hover:underline"
-              href={`https://sepolia.etherscan.io/address/${withdrawal.account.address}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {trimAddress(withdrawal.account.address)}
-            </a>
-          </TableCell>
-          <TableCell justify="start">
-            <a
-              className="hover:underline"
-              href={`https://sepolia.etherscan.io/tx/${withdrawal.transactionHash}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {trimAddress(withdrawal.transactionHash, 24)}
-            </a>
-          </TableCell>
-          <TableCell justify="start">
-            {dayjs(withdrawal.blockTimestamp * 1000).format(DATE_FORMAT)}
-          </TableCell>
-          <TableCell justify="end">
-            {formatTokenAmount(
-              BigNumber.from(withdrawal.scaledAmount),
-              underlyingToken.decimals,
-              TOKEN_FORMAT_DECIMALS,
-            )}{" "}
-            {underlyingToken.symbol}
-          </TableCell>
-        </TableRow>
-      ))}
+    {withdrawalBatches &&
+      withdrawalBatches.map((batch) =>
+        batch.requests.map((withdrawal) => (
+          <TableRow key={withdrawal.id}>
+            <TableCell justify="start">
+              <a
+                className="hover:underline"
+                href={`https://sepolia.etherscan.io/address/${withdrawal.address}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {trimAddress(withdrawal.address)}
+              </a>
+            </TableCell>
+            <TableCell justify="start">
+              <a
+                className="hover:underline"
+                href={`https://sepolia.etherscan.io/tx/${withdrawal.transactionHash}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {trimAddress(withdrawal.transactionHash, 24)}
+              </a>
+            </TableCell>
+            <TableCell justify="start">
+              {dayjs(withdrawal.blockTimestamp * 1000).format(DATE_FORMAT)}
+            </TableCell>
+            <TableCell justify="start">
+              {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
+            </TableCell>
+            <TableCell justify="start">
+              {withdrawal
+                .getNormalizedAmountPaid(batch)
+                .format(TOKEN_FORMAT_DECIMALS, true)}
+            </TableCell>
+            <TableCell justify="end">
+              {withdrawal
+                .getNormalizedAmountOwed(batch)
+                .format(TOKEN_FORMAT_DECIMALS, true)}
+            </TableCell>
+          </TableRow>
+        )),
+      )}
   </Table>
 )

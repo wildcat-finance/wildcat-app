@@ -1,7 +1,5 @@
-import { Token } from "@wildcatfi/wildcat-sdk"
-import { SubgraphWithdrawalRequest } from "@wildcatfi/subgraph-hooks"
+import { Token, WithdrawalBatch } from "@wildcatfi/wildcat-sdk"
 
 export type WithdrawalsTableProps = {
-  withdrawals?: SubgraphWithdrawalRequest[]
-  underlyingToken: Token
+  withdrawalBatches?: WithdrawalBatch[]
 }

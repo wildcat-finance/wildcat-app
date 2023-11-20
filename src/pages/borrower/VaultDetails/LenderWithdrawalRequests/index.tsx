@@ -6,13 +6,10 @@ import { WithdrawalsTable } from "./WithdrawalsTable"
 import { useGetWithdrawals } from "./hooks/useGetWithdrawals"
 import { ExpandMore } from "../../../../components/ui-components/icons"
 import { LenderMarketDetailsProps } from "./type"
-import {
-  formatTokenAmount,
-  TOKEN_FORMAT_DECIMALS,
-} from "../../../../utils/formatters"
+import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
 
 const LenderWithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
-  const { data, isLoading } = useGetWithdrawals(market.address)
+  const { data, isLoadingInitial: isLoading } = useGetWithdrawals(market)
 
   const [thisCycle, setThisCycle] = useState(false)
   const [prevCycle, setPrevCycle] = useState(false)
@@ -27,13 +24,9 @@ const LenderWithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
 
   const { underlyingToken } = market
 
-  const expiredScaledTotalAmount = data
-    ? data.expiredScaledTotalAmount
-    : BigNumber.from(0)
-  const activeTotalAmount = data ? data.activeTotalAmount : BigNumber.from(0)
-  const totalScaledAmount = data
-    ? data.activeTotalAmount.add(data.expiredScaledTotalAmount)
-    : BigNumber.from(0)
+  const expiredTotalAmount = data.expiredWithdrawalsTotalOwed
+  const activeTotalAmount = data.activeWithdrawalsTotalOwed
+  const totalAmount = expiredTotalAmount.add(activeTotalAmount)
 
   return (
     <div className="mb-14">
@@ -59,11 +52,7 @@ const LenderWithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
           Total Withdrawal Requests Outstanding
         </div>
         <Chip className="w-30 flex justify-center">
-          {formatTokenAmount(
-            totalScaledAmount,
-            underlyingToken.decimals,
-            TOKEN_FORMAT_DECIMALS,
-          )}
+          {totalAmount.format(TOKEN_FORMAT_DECIMALS, true)}
         </Chip>
       </div>
       <div className="h-12 flex justify-between items-center bg-tint-10 px-6">
@@ -80,20 +69,16 @@ const LenderWithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
             <ExpandMore onClick={() => toggleAccordion(1)} />
           )}
           <Chip className="w-30 flex justify-center">
-            {formatTokenAmount(
-              activeTotalAmount,
-              underlyingToken.decimals,
-              TOKEN_FORMAT_DECIMALS,
-            )}{" "}
-            {underlyingToken.symbol}
+            {activeTotalAmount.format(TOKEN_FORMAT_DECIMALS, true)}
           </Chip>
         </div>
       </div>
 
       {thisCycle && (
         <WithdrawalsTable
-          withdrawals={data?.activeBatches}
-          underlyingToken={underlyingToken}
+          withdrawalBatches={
+            data?.activeWithdrawal ? [data.activeWithdrawal] : []
+          }
         />
       )}
 
@@ -111,20 +96,12 @@ const LenderWithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
             <ExpandMore onClick={() => toggleAccordion(2)} />
           )}
           <Chip className="w-30 flex justify-center">
-            {formatTokenAmount(
-              expiredScaledTotalAmount,
-              underlyingToken.decimals,
-              TOKEN_FORMAT_DECIMALS,
-            )}{" "}
-            {underlyingToken.symbol}
+            {expiredTotalAmount.format(TOKEN_FORMAT_DECIMALS, true)}
           </Chip>
         </div>
       </div>
       {prevCycle && (
-        <WithdrawalsTable
-          withdrawals={data?.expiredBatches}
-          underlyingToken={underlyingToken}
-        />
+        <WithdrawalsTable withdrawalBatches={data?.expiredPendingWithdrawals} />
       )}
     </div>
   )

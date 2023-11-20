@@ -1,7 +1,7 @@
 import dayjs from "dayjs"
+import { mulDiv } from "@wildcatfi/wildcat-sdk"
 import { BigNumber } from "ethers"
 import {
-  formatTokenAmount,
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
 } from "../../../../../utils/formatters"
@@ -14,10 +14,7 @@ import { WithdrawalsTableProps } from "./interface"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
-export const WithdrawalsTable = ({
-  withdrawals,
-  underlyingToken,
-}: WithdrawalsTableProps) => (
+export const WithdrawalsTable = ({ withdrawals }: WithdrawalsTableProps) => (
   <Table
     headers={[
       {
@@ -33,11 +30,22 @@ export const WithdrawalsTable = ({
       {
         title: "Date Submitted",
         align: "start",
-        className: "w-52",
+        className: "w-40",
       },
       {
-        title: "Amount",
+        title: "Requested",
+        align: "start",
+        className: "w-32",
+      },
+      {
+        title: "Paid",
+        align: "start",
+        className: "w-32",
+      },
+      {
+        title: "Owed",
         align: "end",
+        className: "w-32",
       },
     ]}
   >
@@ -48,11 +56,11 @@ export const WithdrawalsTable = ({
             <TableCell justify="start">
               <a
                 className="hover:underline"
-                href={`https://sepolia.etherscan.io/address/${withdrawal.account.address}`}
+                href={`https://sepolia.etherscan.io/address/${withdrawal.address}`}
                 target="_blank"
                 rel="noreferrer"
               >
-                {trimAddress(withdrawal.account.address)}
+                {trimAddress(withdrawal.address)}
               </a>
             </TableCell>
             <TableCell justify="start">
@@ -68,13 +76,18 @@ export const WithdrawalsTable = ({
             <TableCell justify="start">
               {dayjs(withdrawal.blockTimestamp * 1000).format(DATE_FORMAT)}
             </TableCell>
+            <TableCell justify="start">
+              {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
+            </TableCell>
+            <TableCell justify="start">
+              {withdrawal
+                .getNormalizedAmountPaid(wd.batch)
+                .format(TOKEN_FORMAT_DECIMALS, true)}
+            </TableCell>
             <TableCell justify="end">
-              {formatTokenAmount(
-                BigNumber.from(withdrawal.scaledAmount),
-                underlyingToken.decimals,
-                TOKEN_FORMAT_DECIMALS,
-              )}{" "}
-              {underlyingToken.symbol}
+              {withdrawal
+                .getNormalizedAmountOwed(wd)
+                .format(TOKEN_FORMAT_DECIMALS, true)}
             </TableCell>
           </TableRow>
         )),
