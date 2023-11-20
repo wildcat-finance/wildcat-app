@@ -12,7 +12,6 @@ import PaymentHistory from "../../../components/PaymentHistory"
 import { BackArrow } from "../../../components/ui-components/icons"
 import LenderMarketOverview from "./LenderMarketOverview"
 import { useAddToken } from "../../../hooks/useAddToken"
-import MetamaskIcon from "../../../images/MetaMask_Fox.svg"
 
 export function LenderMarketDetails() {
   const navigate = useNavigate()

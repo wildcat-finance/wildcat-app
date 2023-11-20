@@ -43,7 +43,6 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
     liquidReserves,
     delinquentDebt,
     normalizedUnclaimedWithdrawals,
-    normalizedPendingWithdrawals,
   } = market
 
   const availableGracePeriod =
@@ -56,18 +55,26 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
       <div className="text-base font-bold">Market Details</div>
       <div className="flex w-full mt-5 mb-14">
         <div className="w-full">
-          <TableItem
-            title="Market Address"
-            value={trimAddress(address)}
-            className="pl-6 pr-24"
-          />
-          <TableItem
-            title="Underlying Asset"
-            value={`${underlyingToken.symbol} (${trimAddress(
-              underlyingToken.address,
-            )})`}
-            className="pl-6 pr-24"
-          />
+          <TableItem title="Market Address" className="pl-6 pr-24">
+            <a
+              className="hover:underline text-xs"
+              href={`https://sepolia.etherscan.io/address/${address}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {trimAddress(address)}
+            </a>
+          </TableItem>
+          <TableItem title="Underlying Asset" className="pl-6 pr-24">
+            <a
+              className="hover:underline text-xs"
+              href={`https://sepolia.etherscan.io/tx/${underlyingToken.address}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {underlyingToken.symbol} ({trimAddress(underlyingToken.address)})
+            </a>
+          </TableItem>
           <TableItem
             title="Base APR"
             value={`${formatBps(

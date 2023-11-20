@@ -20,14 +20,14 @@ export function LenderMarketActions({ market }: LenderMarketActionsProps) {
   const disabled = withdrawals.totalClaimableAmount.raw.isZero()
 
   return (
-    <div className="rounded-2xl bg-tint-10 mb-14">
-      <div className="px-5 pt-8 pb-12">
+    <div className="rounded-2xl bg-tint-10 mb-14 p-8">
+      <div>
         <div className="w-full flex justify-between">
           <div className="font-bold text-sm h-8 leading-8">New Deposit</div>
           <DepositForm marketAccount={marketAccount!} />
         </div>
       </div>
-      <div className="px-5 pt-8 pb-12">
+      <div className="py-8">
         <div className="w-full flex justify-between">
           <div className="font-bold text-sm h-8 leading-8">
             Request Withdrawal
@@ -35,7 +35,7 @@ export function LenderMarketActions({ market }: LenderMarketActionsProps) {
           <WithdrawalForm marketAccount={marketAccount!} />
         </div>
       </div>
-      <div className="px-5 pt-8 pb-12">
+      <div>
         <div className="w-full flex justify-between items-center">
           <div className="font-bold text-sm">Claim Available Withdrawals</div>
           <div className="flex gap-x-3.5 w-full max-w-lg items-center">
