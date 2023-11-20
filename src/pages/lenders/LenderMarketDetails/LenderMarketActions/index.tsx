@@ -22,14 +22,16 @@ export function LenderMarketActions({ market }: LenderMarketActionsProps) {
   return (
     <div className="rounded-2xl bg-tint-10 mb-14">
       <div className="px-5 pt-8 pb-12">
-        <div className="w-full flex justify-between items-center">
-          <div className="font-bold text-sm">New Deposit</div>
+        <div className="w-full flex justify-between">
+          <div className="font-bold text-sm h-8 leading-8">New Deposit</div>
           <DepositForm marketAccount={marketAccount!} />
         </div>
       </div>
       <div className="px-5 pt-8 pb-12">
-        <div className="w-full flex justify-between items-center">
-          <div className="font-bold text-sm">Request Withdrawal</div>
+        <div className="w-full flex justify-between">
+          <div className="font-bold text-sm h-8 leading-8">
+            Request Withdrawal
+          </div>
           <WithdrawalForm marketAccount={marketAccount!} />
         </div>
       </div>

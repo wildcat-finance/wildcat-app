@@ -1,13 +1,14 @@
 import { useState } from "react"
 import { TokenAmount } from "@wildcatfi/wildcat-sdk"
 import { parseUnits } from "ethers/lib/utils"
-import { Button, NumberInput } from "../../../../components/ui-components"
+import { Button } from "../../../../components/ui-components"
 import {
   MARKET_PARAMS_DECIMALS,
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
 import { WithdrawalFormProps } from "./interface"
 import { useWithdraw } from "../../../borrower/VaultDetails/hooks/useVaultDetailActions"
+import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 
 const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
   const { mutate, isLoading } = useWithdraw(marketAccount)
@@ -32,9 +33,9 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
   }
 
   return (
-    <div className="flex gap-x-3.5 w-full max-w-lg">
+    <div className="flex gap-x-3.5 w-full max-w-xl">
       <div className="flex flex-col w-full">
-        <NumberInput
+        <DetailsInput
           decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
           value={withdrawalValue}
           className="w-full"
@@ -42,12 +43,13 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
           onChange={(e) => setWithdrawalValue(e.target.value)}
           min={0}
           max={marketAccount.market.totalSupply.format(TOKEN_FORMAT_DECIMALS)}
+          market={marketAccount.market}
+          helperText="Balance"
+          helperValue={`${marketAccount.marketBalance.format(
+            TOKEN_FORMAT_DECIMALS,
+          )}
+          ${marketAccount.market.underlyingToken.symbol}`}
         />
-        <div className="text-xxs text-right">
-          <span className="font-semibold">Balance:</span>{" "}
-          {marketAccount.marketBalance.format(TOKEN_FORMAT_DECIMALS)}{" "}
-          {marketAccount.market.underlyingToken.symbol}
-        </div>
       </div>
       <Button
         variant="green"

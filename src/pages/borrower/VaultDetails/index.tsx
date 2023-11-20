@@ -54,9 +54,9 @@ const VaultDetails = () => {
       </div>
       <Paper className="flex flex-col gap-y-5 border-0 px-6 py-5 mb-14 bg-tint-10 border-tint-8 rounded-3xl">
         <div>
-          <div className="w-full flex justify-between items-center">
-            <div className="font-bold">Borrow Assets</div>
-            <div className="flex gap-x-3.5 w-full max-w-lg">
+          <div className="w-full flex justify-between">
+            <div className="font-bold h-8 leading-8">Borrow Assets</div>
+            <div className="flex gap-x-3.5 w-full max-w-xl">
               <BorrowAssets
                 borrowableAssets={market.borrowableAssets}
                 marketAccount={marketAccount}
@@ -66,24 +66,31 @@ const VaultDetails = () => {
         </div>
         <div>
           <div className="w-full flex justify-between">
-            <div className="font-bold mt-3">Repay Debt</div>
-            <div className="flex items-center gap-x-3.5 w-full max-w-lg">
+            <div className="font-bold h-8 leading-8">Repay Debt</div>
+            <div className="flex items-center gap-x-3.5 w-full max-w-xl">
               <Repay marketAccount={marketAccount} />
             </div>
           </div>
         </div>
         <div>
           <div className="w-full flex justify-between">
-            <div className="font-bold mt-3">Adjust Lender APR</div>
-            <div className="flex items-center gap-x-3.5 w-full max-w-lg">
+            <div
+              className="font-bold
+             h-8 leading-8"
+            >
+              Adjust Lender APR
+            </div>
+            <div className="flex items-center gap-x-3.5 w-full max-w-xl">
               <AdjustAPR marketAccount={marketAccount} />
             </div>
           </div>
         </div>
         <div>
           <div className="w-full flex justify-between">
-            <div className="font-bold mt-3">Adjust Maximum Capacity</div>
-            <div className="flex gap-x-3.5 w-full max-w-lg">
+            <div className="font-bold h-8 leading-8">
+              Adjust Maximum Capacity
+            </div>
+            <div className="flex gap-x-3.5 w-full max-w-xl">
               <AdjustMaximumCapacity marketAccount={marketAccount} />
             </div>
           </div>

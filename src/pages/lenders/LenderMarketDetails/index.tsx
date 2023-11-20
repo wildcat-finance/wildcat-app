@@ -1,11 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
 
-import {
-  Button,
-  Chip,
-  Spinner,
-  Tooltip,
-} from "../../../components/ui-components"
+import { Button, Chip, Spinner } from "../../../components/ui-components"
 import { useWalletConnect } from "../../../hooks/useWalletConnect"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 import { LenderMarketActions } from "./LenderMarketActions"
