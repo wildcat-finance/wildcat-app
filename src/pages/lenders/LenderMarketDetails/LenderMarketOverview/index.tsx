@@ -64,9 +64,9 @@ const LenderMarketOverview = ({
           />
           <TableItem
             title="Max. Borrowing Capacity"
-            value={`${maxTotalSupply.format(TOKEN_FORMAT_DECIMALS)} ${
-              underlyingToken.symbol
-            }`}
+            value={`${Number(
+              maxTotalSupply.format(TOKEN_FORMAT_DECIMALS),
+            ).toLocaleString("en-US")} ${underlyingToken.symbol}`}
             className="pl-6 pr-24"
           />
           <TableItem
