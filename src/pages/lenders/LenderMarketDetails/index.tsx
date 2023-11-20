@@ -1,6 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom"
 
-import { Button, Chip, Spinner } from "../../../components/ui-components"
+import {
+  Button,
+  Chip,
+  Spinner,
+  Tooltip,
+} from "../../../components/ui-components"
 import { useWalletConnect } from "../../../hooks/useWalletConnect"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 import { LenderMarketActions } from "./LenderMarketActions"
@@ -11,6 +16,8 @@ import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import PaymentHistory from "../../../components/PaymentHistory"
 import { BackArrow } from "../../../components/ui-components/icons"
 import LenderMarketOverview from "./LenderMarketOverview"
+import { useAddToken } from "../../../hooks/useAddToken"
+import MetamaskIcon from "../../../images/MetaMask_Fox.svg"
 
 export function LenderMarketDetails() {
   const navigate = useNavigate()
@@ -23,6 +30,10 @@ export function LenderMarketDetails() {
   })
   const { data: marketAccount, isLoadingInitial: isMarketAccountLoading } =
     useGetMarketAccount(market)
+
+  const { canAddToken, handleAddToken, isAddingToken } = useAddToken(
+    market?.marketToken,
+  )
 
   const isLoading = isMarketLoading || isMarketAccountLoading
 
@@ -58,9 +69,15 @@ export function LenderMarketDetails() {
             <Chip className="h-auto justify-center p-1 ml-4 mr-3 bg-tint-11">
               {market.marketToken.symbol}
             </Chip>
-            <Button variant="blue" className="pl-1 w-16">
-              Add
-            </Button>
+            {canAddToken && (
+              <Button
+                variant="blue"
+                disabled={isAddingToken}
+                onClick={handleAddToken}
+              >
+                Add Token
+              </Button>
+            )}
           </div>
         </div>
       </div>
