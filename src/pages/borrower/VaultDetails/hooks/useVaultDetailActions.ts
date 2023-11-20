@@ -21,6 +21,10 @@ import { useGetControllerContract } from "../../../../hooks/useGetController"
 import { GET_AUTHORISED_LENDERS_KEY } from "../Modals/RemoveLendersModal/hooks/useGetAuthorizedLenders"
 import { useGetWithdrawals } from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
 import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
+import {
+  GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY,
+  GET_MARKET_ACCOUNT_KEY,
+} from "../../../../hooks/useGetMarketAccount"
 
 export const useBorrow = (marketAccount: MarketAccount) => {
   const signer = useEthersSigner()
@@ -41,7 +45,9 @@ export const useBorrow = (marketAccount: MarketAccount) => {
     },
     onSuccess() {
       toastifyInfo("Processing Borrow...")
-      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
+      client.invalidateQueries({
+        queryKey: [GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY],
+      })
     },
     onError(error) {
       console.log(error)
@@ -79,15 +85,10 @@ export const useApprove = (token: Token, market: Market) => {
   const client = useQueryClient()
 
   return useMutation({
-    mutationFn: async (amount: string) => {
+    mutationFn: async (tokenAmount: TokenAmount) => {
       if (!market) {
         return
       }
-
-      const tokenAmount = new TokenAmount(
-        parseUnits(amount, token.decimals),
-        token,
-      )
 
       const approve = async () => {
         const tx = await token.contract.approve(
@@ -98,13 +99,22 @@ export const useApprove = (token: Token, market: Market) => {
       }
 
       await toastifyRequest(approve(), {
-        pending: `Approving ${amount} ${token.symbol}...`,
-        success: `Successfully Approved ${amount} ${token.symbol}!`,
+        pending: `Approving ${tokenAmount.format(
+          tokenAmount.token.decimals,
+          true,
+        )}...`,
+        success: `Successfully Approved ${tokenAmount.format(
+          tokenAmount.token.decimals,
+          true,
+        )} ${token.symbol}!`,
         error: `Error: ${token.symbol} Approval Failed`,
       })
     },
     onSuccess() {
-      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
+      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+      client.invalidateQueries({
+        queryKey: [GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY],
+      })
     },
   })
 }
@@ -143,6 +153,7 @@ export const useDeposit = (
     onSuccess() {
       if (onSuccess) onSuccess()
       client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
+      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
     },
     onError(error) {
       console.log(error)
@@ -289,7 +300,9 @@ export const useRepay = (marketAccount: MarketAccount) => {
       })
     },
     onSuccess() {
-      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
+      client.invalidateQueries({
+        queryKey: [GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY],
+      })
     },
     onError(error) {
       console.log(error)
@@ -320,7 +333,9 @@ export const useRepayOutstandingDebt = (marketAccount: MarketAccount) => {
     },
     onSuccess() {
       toastifyInfo("Repayment In Progress...")
-      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
+      client.invalidateQueries({
+        queryKey: [GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY],
+      })
     },
     onError(error) {
       console.log(error)
@@ -350,7 +365,9 @@ export const useAdjustAPR = (marketAccount: MarketAccount) => {
       })
     },
     onSuccess() {
-      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
+      client.invalidateQueries({
+        queryKey: [GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY],
+      })
     },
     onError(error) {
       console.log(error)
@@ -388,7 +405,9 @@ export const useSetMaxTotalSupply = (marketAccount: MarketAccount) => {
       })
     },
     onSuccess() {
-      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
+      client.invalidateQueries({
+        queryKey: [GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY],
+      })
     },
     onError(error) {
       console.log(error)
@@ -418,7 +437,9 @@ export const useTerminateMarket = (marketAccount: MarketAccount) => {
       })
     },
     onSuccess() {
-      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
+      client.invalidateQueries({
+        queryKey: [GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY],
+      })
     },
     onError(error) {
       console.log(error)
