@@ -8,7 +8,6 @@ import { BackArrow } from "../../../components/ui-components/icons/index"
 import { RemoveLendersModal, NewLendersModal } from "./Modals"
 import { useGetMarket } from "../../../hooks/useGetMarket"
 import { useGetMarketAccountForBorrowerLegacy } from "../../../hooks/useGetMarketAccount"
-import { TOKEN_FORMAT_DECIMALS } from "../../../utils/formatters"
 import BorrowAssets from "./BorrowAssets"
 import Repay from "./Repay"
 import AdjustAPR from "./AdjustAPR"
@@ -63,10 +62,6 @@ const VaultDetails = () => {
                 marketAccount={marketAccount}
               />
             </div>
-          </div>
-          <div className="text-xxs text-right mt-1.5 mr-48">
-            <span className="font-semibold">Available To Borrow:</span>{" "}
-            {market.borrowableAssets.format(TOKEN_FORMAT_DECIMALS, true)}
           </div>
         </div>
         <div>

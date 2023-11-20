@@ -1,11 +1,11 @@
 import { ChangeEvent, useState } from "react"
 import { BigNumber } from "ethers"
 
-import { NumberInput } from "../../../../components/ui-components"
 import { BorrowModal } from "../Modals"
 import { useBorrow } from "../hooks/useVaultDetailActions"
 import { BorrowAssetProps } from "./interface"
 import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
+import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 
 const BorrowAssets = ({
   borrowableAssets,
@@ -36,12 +36,18 @@ const BorrowAssets = ({
 
   return (
     <>
-      <NumberInput
+      <DetailsInput
+        market={marketAccount.market}
         decimalScale={TOKEN_FORMAT_DECIMALS}
         className="w-full"
         placeholder="00,000.00"
         value={borrowAmount}
         onChange={handleBorrowAmountChange}
+        helperText="Available To Borrow"
+        helperValue={`${marketAccount.market.borrowableAssets.format(
+          TOKEN_FORMAT_DECIMALS,
+          true,
+        )}`}
       />
 
       <BorrowModal

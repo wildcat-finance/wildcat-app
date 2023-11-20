@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react"
 
 import { CloseMarketStatus } from "@wildcatfi/wildcat-sdk"
-import { Button, NumberInput } from "../../../../components/ui-components"
+import { Button } from "../../../../components/ui-components"
 import { AdjustAPRModal } from "../Modals"
 import {
   useApprove,
@@ -16,6 +16,7 @@ import {
 } from "../../../../utils/formatters"
 import { toastifyError, toastifyInfo } from "../../../../components/toasts"
 import { ButtonProps } from "../../../../components/ui-components/Button/interface"
+import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 
 const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
   const [isModalOpen, setModalOpen] = useState(false)
@@ -99,7 +100,7 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
             )
           }
         })
-        .catch((err) => {})
+        .catch(() => {})
     } else if (terminateMarketStep.status === "UnpaidWithdrawalBatches") {
       const { length } = market.unpaidWithdrawalBatchExpiries
       processUnpaidWithdrawalBatch()
@@ -112,7 +113,7 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
             )
           }
         })
-        .catch((err) => {})
+        .catch(() => {})
     } else if (terminateMarketStep.status !== "Ready") {
       toastifyError(terminateMarketStep.status)
     } else {
@@ -157,30 +158,18 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
 
   return (
     <>
-      <div className="w-full">
-        <NumberInput
-          decimalScale={MARKET_PARAMS_DECIMALS.annualInterestBips}
-          className="w-full"
-          placeholder="00,000.00"
-          value={apr}
-          onChange={handleAprChange}
-          error={!!error}
-        />
-
-        <div className="flex justify-between items-start text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
-          <div>
-            {error && (
-              <div className="whitespace-nowrap text-red-error text-xxs">
-                {error}
-              </div>
-            )}
-          </div>
-          <div>
-            <span className="font-semibold">Current Base Rate:</span>{" "}
-            {market.annualInterestBips / 100}%
-          </div>
-        </div>
-      </div>
+      <DetailsInput
+        decimalScale={MARKET_PARAMS_DECIMALS.annualInterestBips}
+        className="w-full"
+        placeholder="00,000.00"
+        value={apr}
+        onChange={handleAprChange}
+        error={!!error}
+        market={market}
+        helperText="Current Base Rate"
+        helperValue={`${market.annualInterestBips / 100}%`}
+        errorText={error}
+      />
 
       <div className="w-44 flex flex-col gap-y-1.5">
         <Button

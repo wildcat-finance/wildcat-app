@@ -1,8 +1,6 @@
 import React, { ChangeEvent, useMemo, useState } from "react"
 
-import { RepayStatus, TokenAmount } from "@wildcatfi/wildcat-sdk"
-import { parseUnits } from "ethers/lib/utils"
-import { Button, NumberInput } from "../../../../components/ui-components"
+import { Button } from "../../../../components/ui-components"
 import { RepayModal } from "../Modals"
 import {
   useApprove,
@@ -14,6 +12,7 @@ import {
   MARKET_PARAMS_DECIMALS,
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
+import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 
 const Repay = ({ marketAccount }: RepayProps) => {
   const { market } = marketAccount
@@ -67,18 +66,15 @@ const Repay = ({ marketAccount }: RepayProps) => {
 
   return (
     <>
-      <div className="w-full">
-        <NumberInput
-          decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
-          className="w-full"
-          placeholder="00,000.00"
-          onChange={handleRepayAmountChange}
-        />
-        <div className="text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
-          <span className="font-semibold">Outstanding Debt:</span>{" "}
-          {outstandingDebt.format(TOKEN_FORMAT_DECIMALS, true)}
-        </div>
-      </div>
+      <DetailsInput
+        market={market}
+        decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
+        className="w-full"
+        placeholder="00,000.00"
+        onChange={handleRepayAmountChange}
+        helperText="Outstanding Debt"
+        helperValue={`${outstandingDebt.format(TOKEN_FORMAT_DECIMALS, true)}`}
+      />
       <div className="w-44 flex flex-col gap-y-1.5">
         {repayStep.status === "InsufficientAllowance" ? (
           <Button

@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from "react"
 
 import { TokenAmount } from "@wildcatfi/wildcat-sdk"
 import { parseUnits } from "ethers/lib/utils"
-import { Button, NumberInput } from "../../../../components/ui-components"
+import { Button } from "../../../../components/ui-components"
 import { AdjustMaximumCapacityModal } from "../Modals"
 import { useSetMaxTotalSupply } from "../hooks/useVaultDetailActions"
 import { AdjustMaximumCapacityProps } from "./interface"
@@ -10,6 +10,7 @@ import {
   MARKET_PARAMS_DECIMALS,
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
+import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 
 const AdjustMaximumCapacity = ({
   marketAccount,
@@ -66,29 +67,20 @@ const AdjustMaximumCapacity = ({
 
   return (
     <>
-      <div className="w-full">
-        <NumberInput
-          decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
-          className="w-full"
-          placeholder="10.00"
-          min={0}
-          onChange={handleMaxTotalSupplyChange}
-          value={newMaxTotalSupply}
-        />
-
-        <div className="flex justify-between items-start text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
-          <div className="w-36">
-            {error && (
-              <div className="text-red-error text-xxs text-left">{error}</div>
-            )}
-          </div>
-          <div>
-            <span className="font-semibold">Current Capacity:</span>{" "}
-            {market.maxTotalSupply.format(TOKEN_FORMAT_DECIMALS)}{" "}
-            {market.underlyingToken.symbol}
-          </div>
-        </div>
-      </div>
+      <DetailsInput
+        decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
+        className="w-full"
+        placeholder="10.00"
+        min={0}
+        onChange={handleMaxTotalSupplyChange}
+        value={newMaxTotalSupply}
+        market={market}
+        helperText="Current Capacity"
+        helperValue={`${market.maxTotalSupply.format(TOKEN_FORMAT_DECIMALS)} ${
+          market.underlyingToken.symbol
+        }`}
+        errorText={error}
+      />
 
       <div className="w-44 flex flex-col gap-y-1.5">
         <Button
