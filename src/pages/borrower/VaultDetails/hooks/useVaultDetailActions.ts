@@ -19,7 +19,10 @@ import {
 import { GET_MARKET_KEY } from "../../../../hooks/useGetMarket"
 import { useGetControllerContract } from "../../../../hooks/useGetController"
 import { GET_AUTHORISED_LENDERS_KEY } from "../Modals/RemoveLendersModal/hooks/useGetAuthorizedLenders"
-import { useGetWithdrawals } from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
+import {
+  GET_WITHDRAWALS_KEY,
+  useGetWithdrawals,
+} from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
 import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
 import {
   GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY,
@@ -41,10 +44,24 @@ export const useBorrow = (marketAccount: MarketAccount) => {
         marketAccount.market.underlyingToken,
       )
 
-      await marketAccount.borrow(tokenAmount)
+      const borrow = async () => {
+        const tx = await marketAccount.borrow(tokenAmount)
+        await tx.wait()
+      }
+
+      await toastifyRequest(borrow(), {
+        pending: `Borrowing ${tokenAmount.format(
+          tokenAmount.token.decimals,
+          true,
+        )}...`,
+        success: `Borrowed ${tokenAmount.format(
+          tokenAmount.token.decimals,
+          true,
+        )}!`,
+        error: `Error: Borrow Failed`,
+      })
     },
     onSuccess() {
-      toastifyInfo("Processing Borrow...")
       client.invalidateQueries({
         queryKey: [GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY],
       })
@@ -106,7 +123,7 @@ export const useApprove = (token: Token, market: Market) => {
         success: `Successfully Approved ${tokenAmount.format(
           tokenAmount.token.decimals,
           true,
-        )} ${token.symbol}!`,
+        )}!`,
         error: `Error: ${token.symbol} Approval Failed`,
       })
     },
@@ -114,6 +131,38 @@ export const useApprove = (token: Token, market: Market) => {
       client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
       client.invalidateQueries({
         queryKey: [GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY],
+      })
+    },
+  })
+}
+
+export const useProcessUnpaidWithdrawalBatch = (market: Market) => {
+  const client = useQueryClient()
+
+  return useMutation({
+    mutationFn: async () => {
+      if (!market) {
+        return
+      }
+
+      const processWithdrawalBatch = async () => {
+        const tx = await market.processUnpaidWithdrawalBatch()
+        await tx.wait()
+      }
+
+      await toastifyRequest(processWithdrawalBatch(), {
+        pending: `Closing unpaid withdrawal batch...`,
+        success: `Successfully closed batch!`,
+        error: `Error: Closing withdrawal batch for ${market.name} failed`,
+      })
+    },
+    onSuccess() {
+      client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
+      client.invalidateQueries({
+        queryKey: [GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY],
+      })
+      client.invalidateQueries({
+        queryKey: [GET_WITHDRAWALS_KEY],
       })
     },
   })
