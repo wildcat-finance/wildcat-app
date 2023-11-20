@@ -12,7 +12,7 @@ const HomePage = () => (
     <div className="max-w-m text-m" style={{ padding: "1rem" }}>
       If you’re helping us to test while we’re prepping for mainnet launch (or
       just want a look around), you can be added as a borrower on our mock
-      archcontroller by either{" "}
+      archcontroller by{" "}
       <a
         target="_blank"
         href="mailto:laurence@wildcat.finance"
@@ -21,17 +21,7 @@ const HomePage = () => (
       >
         sending us{" "}
       </a>
-      an address, or if you’re comfortable interacting with Etherscan, you can
-      add yourself via the <i>registerBorrower</i> function{" "}
-      <a
-        target="_blank"
-        href="https://sepolia.etherscan.io/address/0xe0b536e3b389b77b9dc8d7e8e623cbef69b4ed84#writeContract"
-        rel="noreferrer"
-        className="underline"
-      >
-        here
-      </a>
-      .
+      an address you want to be added.
     </div>
 
     <div className="max-w-m text-m" style={{ padding: "1rem" }}>
