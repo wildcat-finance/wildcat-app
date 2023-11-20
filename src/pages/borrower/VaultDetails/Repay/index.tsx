@@ -1,6 +1,6 @@
-import React, { ChangeEvent, useState } from "react"
+import React, { ChangeEvent, useMemo, useState } from "react"
 
-import { TokenAmount } from "@wildcatfi/wildcat-sdk"
+import { RepayStatus, TokenAmount } from "@wildcatfi/wildcat-sdk"
 import { parseUnits } from "ethers/lib/utils"
 import { Button, NumberInput } from "../../../../components/ui-components"
 import { RepayModal } from "../Modals"
@@ -36,32 +36,29 @@ const Repay = ({ marketAccount }: RepayProps) => {
 
   const { outstandingDebt, underlyingToken } = market
 
-  const repayTokenAmount = new TokenAmount(
-    parseUnits(repayAmount, marketAccount.market.underlyingToken.decimals),
-    marketAccount.market.underlyingToken,
+  const repayTokenAmount = useMemo(
+    () => marketAccount.market.underlyingToken.parseAmount(repayAmount),
+    [repayAmount],
   )
+  const repayStep = marketAccount.checkRepayStep(repayTokenAmount)
 
   const isLoading =
     isRepayAmountLoading || isRepayOutstandingDebtLoading || isApproving
 
   const repayDisabled =
-    repayTokenAmount.raw.isZero() ||
-    outstandingDebt.raw.isZero() ||
-    marketAccount.checkRepayStep(repayTokenAmount).status !== "Ready" ||
-    isLoading
+    repayTokenAmount.raw.isZero() || repayStep.status !== "Ready" || isLoading
 
   const repayOutstandingDisabled =
     outstandingDebt.raw.isZero() ||
     !marketAccount.canRepayOutstanding ||
     isLoading
 
-  const isEnoughTokenApproval = marketAccount.isApprovedFor(repayTokenAmount)
-  const allowanceRemainder =
-    marketAccount.getAllowanceRemainder(repayTokenAmount)
-
   const handleApprove = () => {
-    approve(allowanceRemainder.toFixed())
+    if (repayStep?.status === "InsufficientAllowance") {
+      approve(repayTokenAmount)
+    }
   }
+
   const handleRepay = () => {
     repay(repayTokenAmount)
   }
@@ -83,16 +80,7 @@ const Repay = ({ marketAccount }: RepayProps) => {
         </div>
       </div>
       <div className="w-44 flex flex-col gap-y-1.5">
-        {isEnoughTokenApproval ? (
-          <RepayModal
-            disabled={repayDisabled}
-            newMarketReserve={newMarketReserve.format(TOKEN_FORMAT_DECIMALS)}
-            repayAmount={repayAmount}
-            isLoading={isLoading}
-            tokenSymbol={underlyingToken.symbol}
-            repay={handleRepay}
-          />
-        ) : (
+        {repayStep.status === "InsufficientAllowance" ? (
           <Button
             variant="green"
             className="w-full"
@@ -101,6 +89,15 @@ const Repay = ({ marketAccount }: RepayProps) => {
           >
             Approve
           </Button>
+        ) : (
+          <RepayModal
+            disabled={repayDisabled}
+            newMarketReserve={newMarketReserve.format(TOKEN_FORMAT_DECIMALS)}
+            repayAmount={repayAmount}
+            isLoading={isLoading}
+            tokenSymbol={underlyingToken.symbol}
+            repay={handleRepay}
+          />
         )}
         <Button
           disabled={repayOutstandingDisabled}

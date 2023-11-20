@@ -68,7 +68,7 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
 
   const handleApprove = async () => {
     if (allowanceRemainder) {
-      await approve(allowanceRemainder.toFixed()).then(() => {
+      await approve(allowanceRemainder).then(() => {
         setAllowanceRemainder(null)
       })
     }

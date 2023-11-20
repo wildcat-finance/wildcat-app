@@ -1,6 +1,4 @@
-import { useState } from "react"
-import { TokenAmount } from "@wildcatfi/wildcat-sdk"
-import { parseUnits } from "ethers/lib/utils"
+import { useMemo, useState } from "react"
 import { Button, NumberInput } from "../../../../components/ui-components"
 import {
   MARKET_PARAMS_DECIMALS,
@@ -11,44 +9,44 @@ import {
   useDeposit,
 } from "../../../borrower/VaultDetails/hooks/useVaultDetailActions"
 import { DepositFormProps } from "./interface"
-import { getDepositButtonAction, getDepositButtonText } from "./utils/utils"
+import { getDepositButtonText } from "./utils/utils"
 
 const DepositForm = ({ marketAccount }: DepositFormProps) => {
-  const { mutate: approve } = useApprove(
+  const { mutate: approve, isLoading: isApproving } = useApprove(
     marketAccount.market.underlyingToken,
     marketAccount.market,
   )
   const [depositValue, setDepositValue] = useState("0")
-  const { mutate: deposit, isLoading } = useDeposit(marketAccount, () => {
-    setDepositValue("0")
-  })
-
-  const depositValueBigNum = new TokenAmount(
-    parseUnits(
-      depositValue || "0",
-      marketAccount.market.underlyingToken.decimals,
-    ),
-    marketAccount.market.underlyingToken,
+  const { mutate: deposit, isLoading: isDepositing } = useDeposit(
+    marketAccount,
+    () => {
+      setDepositValue("0")
+    },
   )
+
+  const depositTokenAmount = useMemo(() => {
+    const tokenAmount =
+      marketAccount.market.underlyingToken.parseAmount(depositValue)
+    return tokenAmount
+  }, [depositValue])
+
+  const depositStep = marketAccount.checkDepositStep(depositTokenAmount)
 
   const disabled =
-    depositValueBigNum.raw.isZero() ||
-    depositValueBigNum.raw.gt(marketAccount.market.maximumDeposit.raw) ||
-    isLoading ||
-    !marketAccount?.canDeposit
+    depositTokenAmount.raw.isZero() ||
+    isApproving ||
+    isDepositing ||
+    !["Ready", "InsufficientAllowance"].includes(depositStep?.status || "")
 
   const handleSubmit = () => {
-    const buttonAction = getDepositButtonAction(
-      marketAccount.checkDepositStep(depositValueBigNum),
-      deposit,
-      approve,
-    )
-    buttonAction(depositValue)
+    if (depositStep?.status === "Ready") {
+      deposit(depositValue)
+    } else if (depositStep?.status === "InsufficientAllowance") {
+      approve(depositTokenAmount)
+    }
   }
 
-  const buttonText = getDepositButtonText(
-    marketAccount.checkDepositStep(depositValueBigNum),
-  )
+  const buttonText = getDepositButtonText(depositStep)
 
   return (
     <div className="flex gap-x-3.5 w-full max-w-lg">
