@@ -1,4 +1,3 @@
-import { TokenAmount } from "@wildcatfi/wildcat-sdk"
 import { TableItem } from "../../../../components/ui-components"
 import {
   formatBps,
@@ -10,21 +9,6 @@ import {
 
 import type { BorrowerMarketOverviewProps } from "./interface"
 import { useGetWithdrawals } from "../WithdrawalRequests/hooks/useGetWithdrawals"
-
-function getMinReserveRatio(
-  reserveRatioBips: number,
-  coverageLiquidity: TokenAmount,
-  totalSupply: TokenAmount,
-) {
-  if (totalSupply.raw.isZero() || coverageLiquidity.raw.isZero()) {
-    return reserveRatioBips
-  }
-
-  return Math.min(
-    reserveRatioBips,
-    coverageLiquidity.raw.div(totalSupply.raw).toNumber(),
-  )
-}
 
 const LenderMarketOverview = ({
   marketAccount,
@@ -47,8 +31,6 @@ const LenderMarketOverview = ({
     liquidReserves,
     delinquentDebt,
   } = market
-
-  const { data: withdrawals } = useGetWithdrawals(market)
 
   const availableGracePeriod =
     timeDelinquent > delinquencyGracePeriod
