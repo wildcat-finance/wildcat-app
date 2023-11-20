@@ -38,7 +38,7 @@ export const WithdrawalsTable = ({ withdrawals }: WithdrawalsTableProps) => (
         className: "w-32",
       },
       {
-        title: "Paid",
+        title: "Claimed",
         align: "start",
         className: "w-32",
       },
@@ -80,8 +80,13 @@ export const WithdrawalsTable = ({ withdrawals }: WithdrawalsTableProps) => (
               {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
             </TableCell>
             <TableCell justify="start">
-              {withdrawal
-                .getNormalizedAmountPaid(wd.batch)
+              {wd.market.underlyingToken
+                .getAmount(
+                  wd.normalizedAmountWithdrawn.mulDiv(
+                    withdrawal.scaledAmount,
+                    wd.scaledAmount,
+                  ),
+                )
                 .format(TOKEN_FORMAT_DECIMALS, true)}
             </TableCell>
             <TableCell justify="end">
