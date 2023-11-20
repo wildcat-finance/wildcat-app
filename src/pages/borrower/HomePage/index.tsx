@@ -12,7 +12,7 @@ const HomePage = () => (
     <div className="max-w-m text-m" style={{ padding: "1rem" }}>
       If you’re helping us to test while we’re prepping for mainnet launch (or
       just want a look around), you can be added as a borrower on our mock
-      archcontroller by either{" "}
+      archcontroller by{" "}
       <a
         target="_blank"
         href="mailto:laurence@wildcat.finance"
