@@ -28,6 +28,7 @@ import {
   GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY,
   GET_MARKET_ACCOUNT_KEY,
 } from "../../../../hooks/useGetMarketAccount"
+import { useGetMarketsForController } from "./useGetMarketsForController"
 
 export const useBorrow = (marketAccount: MarketAccount) => {
   const signer = useEthersSigner()
@@ -527,6 +528,7 @@ export const useAuthoriseLenders = (
   controllerAddress: string,
 ) => {
   const { data: controller } = useGetControllerContract(controllerAddress)
+  const { data: markets } = useGetMarketsForController(controllerAddress)
   const client = useQueryClient()
 
   return useMutation({
@@ -539,11 +541,28 @@ export const useAuthoriseLenders = (
         const tx = await controller?.authorizeLenders(lenders)
         await tx?.wait()
       }
+      const updateAuthorizations = async () => {
+        const tx = await controller?.updateLenderAuthorization(
+          lenders[0].toLowerCase(),
+          markets as string[],
+        )
+        await tx?.wait()
+      }
 
       await toastifyRequest(authoriseLenders(), {
         pending: "Authorising Lenders...",
         success: "Lenders Successfully Authorised!",
         error: "Error authorising lenders",
+      }).then(() => {
+        if (markets?.length && lenders.length === 1) {
+          const market = `market${markets.length > 1 ? "s" : ""}`
+          return toastifyRequest(updateAuthorizations(), {
+            pending: `Updating lender authorization for ${markets.length} ${market}...`,
+            success: `Updated lender authorization for ${markets.length} ${market}!`,
+            error: "Error updating lender authorization",
+          })
+        }
+        return undefined
       })
     },
     onSuccess() {
