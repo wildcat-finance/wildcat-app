@@ -25,7 +25,7 @@ const HomePage = () => (
       add yourself via the <i>registerBorrower</i> function{" "}
       <a
         target="_blank"
-        href="https://sepolia.etherscan.io/address/0xe0b536e3b389b77b9dc8d7e8e623cbef69b4ed84#writeContract"
+        href="https://sepolia.etherscan.io/address/0x74275efE86068b8E25eeF58E66FB1FbbF814B78e#writeContract"
         rel="noreferrer"
         className="underline"
       >
