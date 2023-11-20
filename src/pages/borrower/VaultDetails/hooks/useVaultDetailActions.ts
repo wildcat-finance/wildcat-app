@@ -481,9 +481,9 @@ export const useTerminateMarket = (marketAccount: MarketAccount) => {
       }
 
       await toastifyRequest(closeMarket(), {
-        pending: `Closing Market...`,
-        success: `Market successfully closed`,
-        error: "Error closing Market",
+        pending: `Terminating Market...`,
+        success: `Successfully Terminated Market!`,
+        error: "Error Terminating Market",
       })
     },
     onSuccess() {
