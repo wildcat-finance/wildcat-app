@@ -97,7 +97,7 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
       {allowanceRemainder ? (
         <Button
           variant="green"
-          className="w-44 px-2 whitespace-nowrap"
+          className="w-64 px-2 whitespace-nowrap"
           onClick={handleApprove}
           disabled={isApproving}
         >
