@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useState } from "react"
-import { BigNumber } from "ethers"
 
 import { TokenAmount } from "@wildcatfi/wildcat-sdk"
 import { parseUnits } from "ethers/lib/utils"

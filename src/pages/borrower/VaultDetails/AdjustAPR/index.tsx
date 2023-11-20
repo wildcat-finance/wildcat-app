@@ -1,13 +1,19 @@
 import React, { ChangeEvent, useEffect, useState } from "react"
 
+import { TokenAmount } from "@wildcatfi/wildcat-sdk"
 import { Button, NumberInput } from "../../../../components/ui-components"
 import { AdjustAPRModal } from "../Modals"
 import {
+  useApprove,
   useAdjustAPR,
   useTerminateMarket,
 } from "../hooks/useVaultDetailActions"
 import { AdjustAprProps } from "./interface"
-import { MARKET_PARAMS_DECIMALS } from "../../../../utils/formatters"
+import {
+  MARKET_PARAMS_DECIMALS,
+  TOKEN_FORMAT_DECIMALS,
+} from "../../../../utils/formatters"
+import { toastifyError, toastifyInfo } from "../../../../components/toasts"
 
 const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
   const [isModalOpen, setModalOpen] = useState(false)
@@ -18,8 +24,14 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
   } = useAdjustAPR(marketAccount)
   const { mutate: terminateMarket, isLoading: terminateMarketLoading } =
     useTerminateMarket(marketAccount)
+  const { mutateAsync: approve, isLoading: isApproving } = useApprove(
+    marketAccount.market.underlyingToken,
+    marketAccount.market,
+  )
   const [apr, setApr] = useState("0")
   const [newReserveRatio, setNewReserveRatio] = useState<number | undefined>()
+  const [allowanceRemainder, setAllowanceRemainder] =
+    useState<TokenAmount | null>(null)
   const [error, setError] = useState<string | undefined>()
 
   const { market } = marketAccount
@@ -54,11 +66,30 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
     if (!error) mutate(parseFloat(apr))
   }
 
+  const handleApprove = async () => {
+    if (allowanceRemainder) {
+      await approve(allowanceRemainder.toFixed()).then(() => {
+        setAllowanceRemainder(null)
+      })
+    }
+  }
+
   const handleTerminateMarket = () => {
-    terminateMarket()
-    // @todo handle approval when status is InsufficientApproval
-    // otherwise, if status not `Ready`, show error message
     const terminateMarketStep = marketAccount.checkCloseMarketStep()
+
+    if (terminateMarketStep.status === "InsufficientAllowance") {
+      toastifyInfo(
+        `Need to approve ${terminateMarketStep.remainder.format(
+          TOKEN_FORMAT_DECIMALS,
+          true,
+        )} `,
+      )
+      setAllowanceRemainder(terminateMarketStep.remainder)
+    } else if (terminateMarketStep.status !== "Ready") {
+      toastifyError(terminateMarketStep.status)
+    } else {
+      terminateMarket()
+    }
   }
 
   const onModalClose = () => {
@@ -113,14 +144,25 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
           Adjust
         </Button>
 
-        <Button
-          variant="red"
-          className="w-44 px-2 whitespace-nowrap"
-          disabled={isLoading}
-          onClick={handleTerminateMarket}
-        >
-          Terminate Market
-        </Button>
+        {allowanceRemainder ? (
+          <Button
+            variant="green"
+            className="w-44 px-2 whitespace-nowrap"
+            onClick={handleApprove}
+            disabled={isApproving}
+          >
+            Approve
+          </Button>
+        ) : (
+          <Button
+            variant="red"
+            className="w-44 px-2 whitespace-nowrap"
+            disabled={isLoading}
+            onClick={handleTerminateMarket}
+          >
+            Terminate Market
+          </Button>
+        )}
       </div>
 
       <AdjustAPRModal

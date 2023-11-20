@@ -406,10 +406,18 @@ export const useTerminateMarket = (marketAccount: MarketAccount) => {
         return
       }
 
-      await marketAccount.closeMarket()
+      const closeMarket = async () => {
+        const tx = await marketAccount.closeMarket()
+        await tx.wait()
+      }
+
+      await toastifyRequest(closeMarket(), {
+        pending: `Closing Market...`,
+        success: `Market successfully closed`,
+        error: "Error closing Market",
+      })
     },
     onSuccess() {
-      toastifyInfo("Market Successfully Closed")
       client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
     },
     onError(error) {
