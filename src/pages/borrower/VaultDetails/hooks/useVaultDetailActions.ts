@@ -186,42 +186,42 @@ export const useClaim = (
   })
 }
 
-export const useClaimSeveral = (market: Market | undefined) => {
-  const client = useQueryClient()
-  const { address } = useAccount()
-  const { data } = useGetWithdrawals(market!.address)
-  console.log(data?.expiredBatches)
+// export const useClaimSeveral = (market: Market | undefined) => {
+//   const client = useQueryClient()
+//   const { address } = useAccount()
+//   const { data } = useGetWithdrawals(market!.address)
+//   console.log(data?.expiredBatches)
 
-  return useMutation({
-    mutationFn: async () => {
-      if (!market || !address || !data?.expiredBatches.length) {
-        return
-      }
+//   return useMutation({
+//     mutationFn: async () => {
+//       if (!market || !address || !data?.expiredBatches.length) {
+//         return
+//       }
 
-      const withdrawals = data?.expiredBatches.map((expiredBatch) => ({
-        expiry: expiredBatch.blockTimestamp,
-        lender: address.toLowerCase(),
-      }))
+//       const withdrawals = data?.expiredBatches.map((expiredBatch) => ({
+//         expiry: expiredBatch.blockTimestamp,
+//         lender: address.toLowerCase(),
+//       }))
 
-      const claim = async () => {
-        const tx = await market.executeWithdrawals(withdrawals)
-        await tx?.wait()
-      }
+//       const claim = async () => {
+//         const tx = await market.executeWithdrawals(withdrawals)
+//         await tx?.wait()
+//       }
 
-      await toastifyRequest(claim(), {
-        pending: "Executing Claim...",
-        success: "Claim Successful!",
-        error: `Error: Claim Execution Failed`,
-      })
-    },
-    onSuccess() {
-      client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
-    },
-    onError(error) {
-      console.log(error)
-    },
-  })
-}
+//       await toastifyRequest(claim(), {
+//         pending: "Executing Claim...",
+//         success: "Claim Successful!",
+//         error: `Error: Claim Execution Failed`,
+//       })
+//     },
+//     onSuccess() {
+//       client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
+//     },
+//     onError(error) {
+//       console.log(error)
+//     },
+//   })
+// }
 
 export const useWithdraw = (marketAccount: MarketAccount) => {
   const { address } = useAccount()
