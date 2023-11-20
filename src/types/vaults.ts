@@ -1,5 +1,5 @@
 export enum VaultStatus {
-  ACTIVE = "Active",
+  HEALTHY = "Healthy",
   PENDING = "Pending",
   DELINQUENT = "Delinquent",
   PENALTY = "Penalty",

@@ -7,7 +7,7 @@ export const mockedVaults: Vault[] = [
     maximumCapacity: "1000",
     reserveRatio: "20",
     annualInterestRate: "5",
-    status: VaultStatus.ACTIVE,
+    status: VaultStatus.HEALTHY,
     availableCapacity: "100",
   },
   {
@@ -16,7 +16,7 @@ export const mockedVaults: Vault[] = [
     maximumCapacity: "1500",
     reserveRatio: "30",
     annualInterestRate: "4",
-    status: VaultStatus.ACTIVE,
+    status: VaultStatus.HEALTHY,
     availableCapacity: "300",
   },
   {
@@ -34,7 +34,7 @@ export const mockedVaults: Vault[] = [
     maximumCapacity: "1200",
     reserveRatio: "18",
     annualInterestRate: "4.5",
-    status: VaultStatus.ACTIVE,
+    status: VaultStatus.HEALTHY,
     availableCapacity: "1005",
   },
   {
@@ -68,7 +68,7 @@ export const mockedUnderlyingAssets = mockedVaults.map(
   (vault) => vault.tokenSymbol,
 )
 export const mockedStatuses = [
-  VaultStatus.ACTIVE,
+  VaultStatus.HEALTHY,
   VaultStatus.PENALTY,
   VaultStatus.DELINQUENT,
   VaultStatus.TERMINATED,
