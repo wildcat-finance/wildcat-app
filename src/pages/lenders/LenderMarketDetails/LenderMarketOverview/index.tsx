@@ -44,22 +44,16 @@ const LenderMarketOverview = ({
     withdrawalBatchDuration,
     delinquencyFeeBips,
     totalAssets,
+    liquidReserves,
+    delinquentDebt,
   } = market
 
   const { data: withdrawals } = useGetWithdrawals(market)
-
-  const minReserveRatio = getMinReserveRatio(
-    reserveRatioBips,
-    coverageLiquidity,
-    totalSupply,
-  )
 
   const availableGracePeriod =
     timeDelinquent > delinquencyGracePeriod
       ? 0
       : delinquencyGracePeriod - timeDelinquent
-
-  const reservedOwed = coverageLiquidity.sub(totalAssets)
 
   return (
     <div>
@@ -146,16 +140,13 @@ const LenderMarketOverview = ({
             className="pr-6 pl-24"
           />
           <TableItem
-            title="Liquid Reserves"
-            value={`${marketAccount.market.liquidReserves.format(
-              TOKEN_FORMAT_DECIMALS,
-            )}
-            ${market.underlyingToken.symbol}`}
+            title="Total Reserves"
+            value={totalAssets.format(TOKEN_FORMAT_DECIMALS, true)}
             className="pr-6 pl-24"
           />
           <TableItem
-            title="Assets in Reserve"
-            value={totalAssets.format(TOKEN_FORMAT_DECIMALS, true)}
+            title="Liquid Reserves"
+            value={liquidReserves.format(TOKEN_FORMAT_DECIMALS, true)}
             className="pr-6 pl-24"
           />
           <TableItem
@@ -164,8 +155,8 @@ const LenderMarketOverview = ({
             className="pr-6 pl-24"
           />
           <TableItem
-            title="Reserves Owed"
-            value={reservedOwed.format(TOKEN_FORMAT_DECIMALS, true)}
+            title="Delinquent Debt"
+            value={delinquentDebt.format(TOKEN_FORMAT_DECIMALS, true)}
             className="pr-6 pl-24"
           />
         </div>
