@@ -10,6 +10,7 @@ import { parseUnits } from "ethers/lib/utils"
 
 import { WildcatMarketController } from "@wildcatfi/wildcat-sdk/dist/typechain"
 import { useAccount } from "wagmi"
+import { ContractTransaction } from "ethers"
 import { useEthersSigner } from "../../../../modules/hooks"
 import {
   toastifyError,
@@ -18,17 +19,14 @@ import {
 } from "../../../../components/toasts"
 import { GET_MARKET_KEY } from "../../../../hooks/useGetMarket"
 import { useGetControllerContract } from "../../../../hooks/useGetController"
-import { GET_AUTHORISED_LENDERS_KEY } from "../Modals/RemoveLendersModal/hooks/useGetAuthorizedLenders"
-import {
-  GET_WITHDRAWALS_KEY,
-  useGetWithdrawals,
-} from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
+import { GET_WITHDRAWALS_KEY } from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
 import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
 import {
   GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY,
   GET_MARKET_ACCOUNT_KEY,
 } from "../../../../hooks/useGetMarketAccount"
 import { useGetMarketsForController } from "./useGetMarketsForController"
+import { GET_LENDERS_BY_MARKET_KEY } from "./useGetAuthorisedLenders"
 
 export const useBorrow = (marketAccount: MarketAccount) => {
   const signer = useEthersSigner()
@@ -141,13 +139,22 @@ export const useProcessUnpaidWithdrawalBatch = (market: Market) => {
   const client = useQueryClient()
 
   return useMutation({
-    mutationFn: async () => {
+    mutationFn: async ({
+      tokenAmount,
+      maxBatches,
+    }: {
+      tokenAmount: TokenAmount
+      maxBatches: number
+    }) => {
       if (!market) {
         return
       }
 
       const processWithdrawalBatch = async () => {
-        const tx = await market.processUnpaidWithdrawalBatch()
+        const tx = await market.repayAndProcessUnpaidWithdrawalBatches(
+          tokenAmount,
+          maxBatches,
+        )
         await tx.wait()
       }
 
@@ -537,15 +544,20 @@ export const useAuthoriseLenders = (
         toastifyError("Add At Least One Lender Address")
         return
       }
-      const authoriseLenders = async () => {
-        const tx = await controller?.authorizeLenders(lenders)
-        await tx?.wait()
+      if (!controller) {
+        toastifyError("Controller Not Found")
+        return
       }
-      const updateAuthorizations = async () => {
-        const tx = await controller?.updateLenderAuthorization(
-          lenders[0].toLowerCase(),
-          markets as string[],
-        )
+      const authoriseLenders = async () => {
+        let tx: ContractTransaction
+        if (markets?.length) {
+          tx = await controller.authorizeLendersAndUpdateMarkets(
+            lenders,
+            markets,
+          )
+        } else {
+          tx = await controller.authorizeLenders(lenders)
+        }
         await tx?.wait()
       }
 
@@ -553,22 +565,10 @@ export const useAuthoriseLenders = (
         pending: "Authorising Lenders...",
         success: "Lenders Successfully Authorised!",
         error: "Error authorising lenders",
-      }).then(() => {
-        if (markets?.length && lenders.length === 1) {
-          const market = `market${markets.length > 1 ? "s" : ""}`
-          return toastifyRequest(updateAuthorizations(), {
-            pending: `Updating lender authorization for ${markets.length} ${market}...`,
-            success: `Updated lender authorization for ${markets.length} ${market}!`,
-            error: "Error updating lender authorization",
-          })
-        }
-        return undefined
       })
     },
     onSuccess() {
-      client.invalidateQueries({
-        queryKey: [GET_AUTHORISED_LENDERS_KEY],
-      })
+      client.invalidateQueries({ queryKey: [GET_LENDERS_BY_MARKET_KEY] })
     },
     onError(error) {
       toastifyError(`Error Authorising Lenders: ${error}`)
@@ -581,6 +581,7 @@ export const useDeauthorizeLenders = (
   controllerAddress: string,
 ) => {
   const { data: controller } = useGetControllerContract(controllerAddress)
+  const { data: markets } = useGetMarketsForController(controllerAddress)
   const client = useQueryClient()
 
   return useMutation({
@@ -589,9 +590,20 @@ export const useDeauthorizeLenders = (
         toastifyError("Error: No Addresses Provided")
         return
       }
-
+      if (!controller) {
+        toastifyError("Controller Not Found")
+        return
+      }
       const deauthorizeLenders = async () => {
-        const tx = await controller?.deauthorizeLenders(authorizedLenders)
+        let tx: ContractTransaction
+        if (markets?.length) {
+          tx = await controller.deauthorizeLendersAndUpdateMarkets(
+            authorizedLenders,
+            markets,
+          )
+        } else {
+          tx = await controller.deauthorizeLenders(authorizedLenders)
+        }
         await tx?.wait()
       }
 
@@ -602,9 +614,7 @@ export const useDeauthorizeLenders = (
       })
     },
     onSuccess() {
-      client.invalidateQueries({
-        queryKey: [GET_AUTHORISED_LENDERS_KEY],
-      })
+      client.invalidateQueries({ queryKey: [GET_LENDERS_BY_MARKET_KEY] })
     },
     onError(error) {
       toastifyError(`Error Removing Lenders: ${error}`)
