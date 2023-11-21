@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react"
 
-import { CloseMarketStatus } from "@wildcatfi/wildcat-sdk"
+import { CloseMarketStatus, minTokenAmount } from "@wildcatfi/wildcat-sdk"
 import { Button } from "../../../../components/ui-components"
 import { AdjustAPRModal } from "../Modals"
 import {
@@ -27,8 +27,10 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
   } = useAdjustAPR(marketAccount)
   const { mutate: terminateMarket, isLoading: terminateMarketLoading } =
     useTerminateMarket(marketAccount)
-  const { mutateAsync: processUnpaidWithdrawalBatch, isLoading: isProcessing } =
-    useProcessUnpaidWithdrawalBatch(marketAccount.market)
+  const {
+    mutateAsync: repayAndProcessUnpaidWithdrawalBatch,
+    isLoading: isProcessing,
+  } = useProcessUnpaidWithdrawalBatch(marketAccount.market)
   const { mutateAsync: approve, isLoading: isApproving } = useApprove(
     marketAccount.market.underlyingToken,
     marketAccount.market,
@@ -103,17 +105,14 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
         .catch(() => {})
     } else if (terminateMarketStep.status === "UnpaidWithdrawalBatches") {
       const { length } = market.unpaidWithdrawalBatchExpiries
-      processUnpaidWithdrawalBatch()
-        .then(() => {
-          if (length > 1) {
-            toastifyInfo(
-              `Need to process ${
-                length - 1
-              } unpaid withdrawal batches before closing market`,
-            )
-          }
-        })
-        .catch(() => {})
+      const repayAmount = minTokenAmount(
+        market.outstandingDebt,
+        market.underlyingToken.getAmount(marketAccount.underlyingApproval),
+      )
+      repayAndProcessUnpaidWithdrawalBatch({
+        tokenAmount: repayAmount,
+        maxBatches: length,
+      })
     } else if (terminateMarketStep.status !== "Ready") {
       toastifyError(terminateMarketStep.status)
     } else {
