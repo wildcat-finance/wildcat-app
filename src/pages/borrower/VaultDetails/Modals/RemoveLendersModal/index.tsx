@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react"
 import { Button, Modal } from "../../../../../components/ui-components"
 
-import { useGetAuthorizedLenders } from "./hooks/useGetAuthorizedLenders"
 import { useDeauthorizeLenders } from "../../hooks/useVaultDetailActions"
 import { RemoveLendersModalProps } from "./interface"
+import { useGetAuthorisedLendersByMarket } from "../../hooks/useGetAuthorisedLenders"
 
 export function RemoveLendersModal({ market }: RemoveLendersModalProps) {
   const [selectedLenders, setSelectedLenders] = useState<string[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const { data: lenders } = useGetAuthorizedLenders()
+  const { data: lenders } = useGetAuthorisedLendersByMarket(market.address)
   const { mutate: deauthorize, isSuccess } = useDeauthorizeLenders(
     selectedLenders,
     market.controller,
