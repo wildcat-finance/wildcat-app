@@ -88,7 +88,7 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
           market={marketAccount.market}
           errorText={error}
           helperText="Maximum Deposit"
-          helperValue={`${marketAccount.market.maximumDeposit.format(
+          helperValue={`${marketAccount.maximumDeposit.format(
             TOKEN_FORMAT_DECIMALS,
           )}
           ${marketAccount.market.underlyingToken.symbol}`}
