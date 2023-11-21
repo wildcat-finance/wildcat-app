@@ -53,9 +53,6 @@ export const BorrowModal = ({
             <div className="w-72 font-bold text-xxs text-center">
               {leftBorrowAmount} {tokenSymbol}
             </div>
-            <div className="w-72 font-light text-xxs text-center">
-              NOTE: this text needs to change if trying to borrow too much.
-            </div>
           </div>
         </div>
       </Modal>
