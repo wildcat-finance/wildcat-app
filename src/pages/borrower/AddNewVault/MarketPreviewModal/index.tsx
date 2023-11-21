@@ -65,14 +65,14 @@ export const MarketPreviewModal = ({
             <FormItem label="Market Token Name">
               <input
                 className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={getValues("namePrefix")}
+                value={getValues("namePrefix").concat(token?.name ?? "")}
                 disabled
               />
             </FormItem>
             <FormItem label="Market Token Symbol">
               <input
                 className="w-44 h-8 px-3 py-3 text-xxs bg-tint-7.5 border border-tint-8.5 text-black"
-                value={getValues("symbolPrefix")}
+                value={getValues("symbolPrefix").concat(token?.symbol ?? "")}
                 disabled
               />
             </FormItem>
