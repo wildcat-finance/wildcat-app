@@ -28,7 +28,9 @@ export const useGetAuthorisedLendersByMarket = (
       `Got authorised lenders : ${res.data.market?.controller.authorizedLenders}`,
     )
 
-    return res.data?.market?.controller.authorizedLenders
+    return res.data?.market?.controller.authorizedLenders.map(
+      (lender) => lender.lender,
+    )
   }
 
   return useQuery({
