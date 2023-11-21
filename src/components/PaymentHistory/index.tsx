@@ -64,7 +64,7 @@ const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
   return (
     <div className="mb-14">
       <div className="flex w-full justify-between content-center">
-        <div className="text-base font-bold">Borrower Payment History</div>
+        <div className="text-base font-bold">Borrower Repayment History</div>
         <button
           className="flex items-center gap-x-2"
           onClick={() => toggleAccordion()}
