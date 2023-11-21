@@ -14,9 +14,9 @@ export const DetailsInput = (props: DetailsInputType) => (
     />
 
     <div className="flex justify-between items-start text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
-      <div className="w-36">
+      <div className="w-52 relative">
         {props.errorText && (
-          <div className="text-red-error text-xxs text-left">
+          <div className="absolute top-0 left-0 text-red-error text-xxs text-left">
             {props.errorText}
           </div>
         )}

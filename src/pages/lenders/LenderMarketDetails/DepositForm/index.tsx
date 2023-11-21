@@ -12,6 +12,7 @@ import {
 } from "../../../borrower/BorrowerMarketDetails/hooks/useVaultDetailActions"
 import { DepositFormProps } from "./interface"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
+import { SDK_ERRORS_MAPPING } from "../../../../utils/forms/errors"
 
 const DepositForm = ({ marketAccount }: DepositFormProps) => {
   const [allowanceRemainder, setAllowanceRemainder] = useState<
@@ -45,7 +46,7 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
     const checkDepositStep = marketAccount.checkDepositStep(depositValueAmount)
 
     if (checkDepositStep.status !== "Ready") {
-      setError(checkDepositStep.status)
+      setError(SDK_ERRORS_MAPPING.deposit[checkDepositStep.status])
 
       if (checkDepositStep.status === "InsufficientAllowance") {
         setAllowanceRemainder(checkDepositStep.remainder)

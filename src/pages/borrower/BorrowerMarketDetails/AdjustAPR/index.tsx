@@ -17,6 +17,7 @@ import {
 import { toastifyError, toastifyInfo } from "../../../../components/toasts"
 import { ButtonProps } from "../../../../components/ui-components/Button/interface"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
+import { SDK_ERRORS_MAPPING } from "../../../../utils/forms/errors"
 
 const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
   const [isModalOpen, setModalOpen] = useState(false)
@@ -58,7 +59,7 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
     const checkAPRStep = marketAccount.checkSetAPRStep(parsedNewApr)
 
     if (checkAPRStep.status !== "Ready") {
-      setError(checkAPRStep.status)
+      setError(SDK_ERRORS_MAPPING.setApr[checkAPRStep.status])
       setNewReserveRatio(undefined)
       return
     }

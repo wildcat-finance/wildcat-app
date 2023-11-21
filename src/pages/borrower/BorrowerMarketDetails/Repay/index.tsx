@@ -13,6 +13,7 @@ import {
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
+import { SDK_ERRORS_MAPPING } from "../../../../utils/forms/errors"
 
 const Repay = ({ marketAccount }: RepayProps) => {
   const { market } = marketAccount
@@ -28,9 +29,28 @@ const Repay = ({ marketAccount }: RepayProps) => {
     marketAccount.market,
   )
 
+  const [error, setError] = useState<string | undefined>()
+
   const handleRepayAmountChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
     setRepayAmount(value || "0")
+
+    if (value === "" || value === "0") {
+      setError(undefined)
+      return
+    }
+
+    const repayTokenAmount =
+      marketAccount.market.underlyingToken.parseAmount(value)
+
+    const repayStep = marketAccount.checkRepayStep(repayTokenAmount)
+
+    if (repayStep.status !== "Ready") {
+      setError(SDK_ERRORS_MAPPING.repay[repayStep.status])
+      return
+    }
+
+    setError(undefined)
   }
 
   const { outstandingDebt, underlyingToken } = market
@@ -44,8 +64,7 @@ const Repay = ({ marketAccount }: RepayProps) => {
   const isLoading =
     isRepayAmountLoading || isRepayOutstandingDebtLoading || isApproving
 
-  const repayDisabled =
-    repayTokenAmount.raw.isZero() || repayStep.status !== "Ready" || isLoading
+  const repayDisabled = repayTokenAmount.raw.isZero() || !!error || isLoading
 
   const repayOutstandingDisabled =
     outstandingDebt.raw.isZero() ||
@@ -73,6 +92,8 @@ const Repay = ({ marketAccount }: RepayProps) => {
         placeholder="00,000.00"
         onChange={handleRepayAmountChange}
         helperText="Outstanding Debt"
+        error={!!error}
+        errorText={error}
         helperValue={`${outstandingDebt.format(TOKEN_FORMAT_DECIMALS, true)}`}
       />
       <div className="w-44 flex flex-col gap-y-1.5">
