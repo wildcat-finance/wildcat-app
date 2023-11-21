@@ -151,6 +151,7 @@ const AddNewVault = () => {
         <form className="flex flex-col items-start">
           <FormItem
             label="Market Type"
+            className="mb-5 pb-4"
             error={Boolean(errors.vaultType)}
             errorText={errors.vaultType?.message}
             tooltip="Dictates market logic and enforces minimum and maximum
