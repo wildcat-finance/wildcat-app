@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import {
   MarketParameters,
   deployToken,
@@ -7,7 +7,10 @@ import {
 import { parseUnits } from "ethers/lib/utils"
 
 import { useNavigate } from "react-router-dom"
-import { useGetController } from "../../../../hooks/useGetController"
+import {
+  GET_CONTROLLER_KEY,
+  useGetController,
+} from "../../../../hooks/useGetController"
 import { useEthersSigner } from "../../../../modules/hooks"
 import { DeployNewMarketParams } from "./interface"
 import { toastifyError, toastifyRequest } from "../../../../components/toasts"
@@ -18,6 +21,7 @@ export const useDeployMarket = () => {
   const { data: controller } = useGetController()
   const signer = useEthersSigner()
   const navigate = useNavigate()
+  const client = useQueryClient()
 
   const { mutate: deployNewMarket, isLoading: isDeploying } = useMutation({
     mutationFn: async (marketParams: DeployNewMarketParams) => {
@@ -80,6 +84,7 @@ export const useDeployMarket = () => {
       setTimeout(() => {
         navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.MyVaults}`)
       }, 3000)
+      client.invalidateQueries({ queryKey: [GET_CONTROLLER_KEY] })
     },
     onError(error) {
       console.log(error)
