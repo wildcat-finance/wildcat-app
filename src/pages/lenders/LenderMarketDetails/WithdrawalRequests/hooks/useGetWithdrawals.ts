@@ -1,21 +1,3 @@
-// import { useAccount } from "wagmi"
-// import { Market } from "@wildcatfi/wildcat-sdk"
-// import {
-//   useGetLenderWithdrawals,
-//   GET_LENDER_WITHDRAWALS_KEY,
-// } from "../../../../../hooks/useGetLenderWithdrawals"
-
-// export { GET_LENDER_WITHDRAWALS_KEY }
-
-// export const useGetWithdrawals = (market: Market) => {
-//   const { address } = useAccount()
-//   return useGetLenderWithdrawals({
-//     lender: address,
-//     market,
-//     enabled: true,
-//   })
-// }
-
 /* eslint-disable no-plusplus */
 /* eslint-disable no-restricted-syntax */
 import { useQuery } from "@tanstack/react-query"
