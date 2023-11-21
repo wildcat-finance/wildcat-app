@@ -4,7 +4,7 @@ import HomePage from "../HomePage"
 import AddNewVault from "../AddNewVault"
 import ServiceAgreement from "../ServiceAgreement"
 import MyVaults from "../MyVaults"
-import VaultDetails from "../VaultDetails"
+import BorrowerMarketDetails from "../BorrowerMarketDetails"
 
 import { BORROWER_PATHS } from "./constants"
 
@@ -28,6 +28,6 @@ export const BORROWER_ROUTES: RouteObject[] = [
   },
   {
     path: BORROWER_PATHS.VaultDetails,
-    element: <VaultDetails />,
+    element: <BorrowerMarketDetails />,
   },
 ]

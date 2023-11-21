@@ -7,7 +7,7 @@ import {
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
 import { WithdrawalFormProps } from "./interface"
-import { useWithdraw } from "../../../borrower/VaultDetails/hooks/useVaultDetailActions"
+import { useWithdraw } from "../../../borrower/BorrowerMarketDetails/hooks/useVaultDetailActions"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 
 const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {

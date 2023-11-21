@@ -9,7 +9,7 @@ import {
 import {
   useApprove,
   useDeposit,
-} from "../../../borrower/VaultDetails/hooks/useVaultDetailActions"
+} from "../../../borrower/BorrowerMarketDetails/hooks/useVaultDetailActions"
 import { DepositFormProps } from "./interface"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 

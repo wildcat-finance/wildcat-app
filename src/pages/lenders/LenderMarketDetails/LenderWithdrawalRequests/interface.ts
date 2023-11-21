@@ -1,5 +1,5 @@
 import { Market } from "@wildcatfi/wildcat-sdk"
 
-export type LenderMarketDetailsProps = {
+export type LenderWithdrawalRequestsProps = {
   market: Market
 }

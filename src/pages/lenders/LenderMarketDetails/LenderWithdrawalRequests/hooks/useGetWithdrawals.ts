@@ -19,6 +19,7 @@ import {
 import { logger } from "@wildcatfi/wildcat-sdk/dist/utils/logger"
 import { useMemo } from "react"
 import { useAccount } from "wagmi"
+import { POLLING_INTERVAL } from "../../../../../config/polling"
 
 export type LenderWithdrawalsForMarketResult = {
   completeWithdrawals: LenderWithdrawalStatus[]
@@ -121,6 +122,7 @@ export function useGetWithdrawals(
   } = useQuery({
     queryKey: [GET_LENDER_WITHDRAWALS_KEY, "initial", lender, market],
     queryFn: queryLenderWithdrawals,
+    refetchInterval: POLLING_INTERVAL,
     enabled: !!lender && !!market,
     refetchOnMount: false,
   })
@@ -214,6 +216,7 @@ export function useGetWithdrawals(
     failureReason: errorUpdate,
   } = useQuery({
     queryKey: [GET_LENDER_WITHDRAWALS_KEY, "update", updateQueryKeys],
+    keepPreviousData: true,
     queryFn: updateWithdrawals,
     enabled: !!data,
     refetchOnMount: false,

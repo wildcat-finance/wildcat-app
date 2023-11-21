@@ -7,6 +7,7 @@ import {
 } from "@wildcatfi/wildcat-sdk/dist/gql/graphql"
 import { useEthersSigner } from "../modules/hooks"
 import { useCurrentNetwork } from "./useCurrentNetwork"
+import { POLLING_INTERVAL } from "../config/polling"
 
 export const GET_MARKET_KEY = "get-market"
 
@@ -54,6 +55,7 @@ export function useGetMarket({ marketAddress, ...filters }: UseMarketProps) {
   return useQuery({
     queryKey: [GET_MARKET_KEY, marketAddress],
     queryFn,
+    refetchInterval: POLLING_INTERVAL,
     enabled: !!marketAddress || !signer || isWrongNetwork,
     refetchOnMount: false,
   })

@@ -1,6 +1,7 @@
 import { BigNumber } from "ethers"
 import { formatUnits } from "ethers/lib/utils"
 import { MarketParameters, stripTrailingZeroes } from "@wildcatfi/wildcat-sdk"
+import dayjs from "dayjs"
 
 // <---- MARKET PARAMETERS FORMATTERS ---->
 export const TOKEN_FORMAT_DECIMALS = 4
@@ -67,3 +68,8 @@ export const formatSecsToHours = (seconds: number) => {
 
   return timeString.trim()
 }
+
+// <---- TIMESTAMP TO DATE FORMATTERS ---->
+export const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
+export const timestampToDateFormatted = (timestamp: number) =>
+  dayjs(timestamp * 1000).format(DATE_FORMAT)

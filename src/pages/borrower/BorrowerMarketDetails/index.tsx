@@ -11,13 +11,13 @@ import { useGetMarketAccountForBorrowerLegacy } from "../../../hooks/useGetMarke
 import BorrowAssets from "./BorrowAssets"
 import Repay from "./Repay"
 import AdjustAPR from "./AdjustAPR"
-import LenderWithdrawalRequests from "./LenderWithdrawalRequests"
-import PaymentHistory from "../../../components/PaymentHistory"
+import LenderWithdrawalRequests from "./BorrowerWithdrawalRequests"
+import PaymentHistory from "../../../components/MarketDetailsCommon/PaymentHistory"
 import BorrowerMarketOverview from "./BorrowerMarketOverview"
 import { AuthorisedLendersList } from "./AuthorisedLendersList"
 import AdjustMaximumCapacity from "./AdjustMaximumCapacity"
 
-const VaultDetails = () => {
+const BorrowerMarketDetails = () => {
   const navigate = useNavigate()
   const { marketAddress } = useParams()
   const { data: market, isInitialLoading: isMarketLoading } = useGetMarket({
@@ -122,4 +122,4 @@ const VaultDetails = () => {
   )
 }
 
-export default VaultDetails
+export default BorrowerMarketDetails

@@ -3,14 +3,14 @@ import React, { useState, useMemo } from "react"
 import dayjs from "dayjs"
 
 // import { BigNumber } from "ethers"
-import { Table, TableCell, TableRow } from "../ui-components"
-import { ExpandMore } from "../ui-components/icons"
+import { Table, TableCell, TableRow } from "../../ui-components"
+import { ExpandMore } from "../../ui-components/icons"
 import { PaymentHistoryDetailsProps } from "./interface"
 import {
   // formatTokenAmount,
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
-} from "../../utils/formatters"
+} from "../../../utils/formatters"
 
 // function getFromToTimestamps(dateArray: DateValue[]) {
 //   const fromTimestamp = dateArray[0]

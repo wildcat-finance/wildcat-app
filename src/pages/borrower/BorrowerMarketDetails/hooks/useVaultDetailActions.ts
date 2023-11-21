@@ -19,7 +19,7 @@ import {
 } from "../../../../components/toasts"
 import { GET_MARKET_KEY } from "../../../../hooks/useGetMarket"
 import { useGetControllerContract } from "../../../../hooks/useGetController"
-import { GET_WITHDRAWALS_KEY } from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
+import { GET_WITHDRAWALS_KEY } from "../BorrowerWithdrawalRequests/hooks/useGetWithdrawals"
 import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
 import {
   GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY,

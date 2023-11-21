@@ -8,7 +8,7 @@ import {
 } from "../../../../utils/formatters"
 
 import type { BorrowerMarketOverviewProps } from "./interface"
-import { useGetWithdrawals } from "../WithdrawalRequests/hooks/useGetWithdrawals"
+import { useGetWithdrawals } from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
 
 const LenderMarketOverview = ({
   marketAccount,

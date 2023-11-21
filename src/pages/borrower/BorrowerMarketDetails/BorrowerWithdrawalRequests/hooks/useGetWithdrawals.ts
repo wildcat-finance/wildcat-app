@@ -163,6 +163,7 @@ export function useGetWithdrawals(
     failureReason: errorUpdate,
   } = useQuery({
     queryKey: [GET_WITHDRAWALS_KEY, "update", updateQueryKeys],
+    keepPreviousData: true,
     queryFn: getUpdatedBatches,
     enabled: !!data,
     refetchOnMount: false,

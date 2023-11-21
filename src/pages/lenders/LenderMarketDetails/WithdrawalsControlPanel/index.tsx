@@ -6,7 +6,7 @@ import {
   TableRow,
 } from "../../../../components/ui-components"
 import { ExpandMore } from "../../../../components/ui-components/icons"
-import { WithdrawalsControlPanelProps } from "./type"
+import type { WithdrawalsControlPanelProps } from "./type"
 
 export const WithdrawalsControlPanel = ({
   tableData,

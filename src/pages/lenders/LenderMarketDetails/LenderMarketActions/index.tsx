@@ -3,8 +3,8 @@ import DepositForm from "../DepositForm"
 import { useGetMarketAccount } from "../../../../hooks/useGetMarketAccount"
 import WithdrawalForm from "../WithdrawalForm"
 import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
-import { useClaim } from "../../../borrower/VaultDetails/hooks/useVaultDetailActions"
-import { useGetWithdrawals } from "../WithdrawalRequests/hooks/useGetWithdrawals"
+import { useClaim } from "../../../borrower/BorrowerMarketDetails/hooks/useVaultDetailActions"
+import { useGetWithdrawals } from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
 
 import type { LenderMarketActionsProps } from "./interface"
 

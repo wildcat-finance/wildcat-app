@@ -1,18 +1,19 @@
 import React, { useState } from "react"
-import { BigNumber } from "ethers"
 
 import { Chip } from "../../../../components/ui-components"
 import { WithdrawalsTable } from "./WithdrawalsTable"
 import { useGetWithdrawals } from "./hooks/useGetWithdrawals"
 import { ExpandMore } from "../../../../components/ui-components/icons"
-import { LenderMarketDetailsProps } from "./type"
+import { BorrowerWithdrawalRequestsProps } from "./interface"
 import {
-  formatTokenAmount,
+  timestampToDateFormatted,
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
 
-const WithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
-  const { data, isLoadingInitial: isLoading } = useGetWithdrawals(market)
+const BorrowerWithdrawalRequests = ({
+  market,
+}: BorrowerWithdrawalRequestsProps) => {
+  const { data } = useGetWithdrawals(market)
 
   const [thisCycle, setThisCycle] = useState(false)
   const [prevCycle, setPrevCycle] = useState(false)
@@ -25,11 +26,13 @@ const WithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
     }
   }
 
-  const { underlyingToken } = market
-
-  const expiredTotalAmount = data.expiredTotalPendingAmount
-  const activeTotalAmount = data.activeTotalPendingAmount
+  const expiredTotalAmount = data.expiredWithdrawalsTotalOwed
+  const activeTotalAmount = data.activeWithdrawalsTotalOwed
   const totalAmount = expiredTotalAmount.add(activeTotalAmount)
+
+  const cycleStart = data.activeWithdrawal?.requests[0]?.blockTimestamp
+  const cycleEnd =
+    cycleStart !== undefined ? cycleStart + market.withdrawalBatchDuration : 0
 
   return (
     <div className="mb-14">
@@ -39,14 +42,22 @@ const WithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
           <Chip color="green" className="w-fit !h-6 text-white">
             Ongoing Cycle
           </Chip>
-          <div className="flex gap-x-2">
-            <div className="inline text-black text-xs font-bold">Start</div>
-            <div className="text-black text-xs"> </div>
-          </div>
-          <div className="flex gap-x-2">
-            <div className="inline text-black text-xs font-bold">End</div>
-            <div className="text-black text-xs"> </div>
-          </div>
+          {cycleStart && (
+            <div className="flex gap-x-2">
+              <div className="inline text-black text-xs font-bold">Start</div>
+              <div className="text-black text-xs">
+                {timestampToDateFormatted(cycleStart)}
+              </div>
+            </div>
+          )}
+          {cycleStart && (
+            <div className="flex gap-x-2">
+              <div className="inline text-black text-xs font-bold">End</div>
+              <div className="text-black text-xs">
+                {timestampToDateFormatted(cycleEnd)}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -79,8 +90,9 @@ const WithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
 
       {thisCycle && (
         <WithdrawalsTable
-          withdrawals={data?.activeWithdrawal ? [data.activeWithdrawal] : []}
-          underlyingToken={underlyingToken}
+          withdrawalBatches={
+            data?.activeWithdrawal ? [data.activeWithdrawal] : []
+          }
         />
       )}
 
@@ -103,13 +115,10 @@ const WithdrawalRequests = ({ market }: LenderMarketDetailsProps) => {
         </div>
       </div>
       {prevCycle && (
-        <WithdrawalsTable
-          withdrawals={data?.expiredPendingWithdrawals}
-          underlyingToken={underlyingToken}
-        />
+        <WithdrawalsTable withdrawalBatches={data?.expiredPendingWithdrawals} />
       )}
     </div>
   )
 }
 
-export default WithdrawalRequests
+export default BorrowerWithdrawalRequests
