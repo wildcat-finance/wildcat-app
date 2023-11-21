@@ -36,9 +36,9 @@ export const AuthorisedLendersList = ({
       >
         {authorisedLenders &&
           authorisedLenders.map((lender) => (
-            <TableRow key={lender.lender}>
+            <TableRow key={lender}>
               <TableCell justify="start">{}</TableCell>
-              <TableCell justify="start">{lender.lender}</TableCell>
+              <TableCell justify="start">{lender}</TableCell>
               <TableCell justify="center">{}</TableCell>
             </TableRow>
           ))}
