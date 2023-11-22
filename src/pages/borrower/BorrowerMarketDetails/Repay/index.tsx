@@ -91,7 +91,7 @@ const Repay = ({ marketAccount }: RepayProps) => {
         className="w-full"
         placeholder="00,000.00"
         onChange={handleRepayAmountChange}
-        helperText="Outstanding Debt"
+        helperText="Borrowed"
         error={!!error}
         errorText={error}
         helperValue={`${outstandingDebt.format(TOKEN_FORMAT_DECIMALS, true)}`}
