@@ -185,9 +185,7 @@ const AddNewVault = () => {
           <FormItem
             label="Market Token Name Prefix"
             className="mb-5 pb-4"
-            endDecorator={
-              <Chip className="w-32 ml-3">{tokenAsset?.symbol}</Chip>
-            }
+            endDecorator={<Chip className="w-32 ml-3">{tokenAsset?.name}</Chip>}
             error={Boolean(errors.namePrefix)}
             errorText={errors.namePrefix?.message}
             tooltip="The identifier that attaches to the front of the name of the underlying
