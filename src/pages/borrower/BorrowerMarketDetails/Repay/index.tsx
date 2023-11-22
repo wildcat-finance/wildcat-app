@@ -1,9 +1,11 @@
 import React, { ChangeEvent, useMemo, useState } from "react"
+import { minTokenAmount } from "@wildcatfi/wildcat-sdk"
 
 import { Button } from "../../../../components/ui-components"
 import { RepayModal } from "../Modals"
 import {
   useApprove,
+  useProcessUnpaidWithdrawalBatch,
   useRepay,
   useRepayOutstandingDebt,
 } from "../hooks/useVaultDetailActions"
@@ -18,12 +20,20 @@ import { SDK_ERRORS_MAPPING } from "../../../../utils/forms/errors"
 const Repay = ({ marketAccount }: RepayProps) => {
   const { market } = marketAccount
   const [repayAmount, setRepayAmount] = useState("0")
+
   const { mutate: repay, isLoading: isRepayAmountLoading } =
     useRepay(marketAccount)
+
+  const {
+    mutate: repayAndProcessUnpaidWithdrawalBatch,
+    isLoading: isLoadingUnpaidWithdrawalBatch,
+  } = useProcessUnpaidWithdrawalBatch(marketAccount.market)
+
   const {
     mutate: repayOutstandingDebt,
     isLoading: isRepayOutstandingDebtLoading,
   } = useRepayOutstandingDebt(marketAccount)
+
   const { mutate: approve, isLoading: isApproving } = useApprove(
     marketAccount.market.underlyingToken,
     marketAccount.market,
@@ -62,7 +72,10 @@ const Repay = ({ marketAccount }: RepayProps) => {
   const repayStep = marketAccount.checkRepayStep(repayTokenAmount)
 
   const isLoading =
-    isRepayAmountLoading || isRepayOutstandingDebtLoading || isApproving
+    isRepayAmountLoading ||
+    isRepayOutstandingDebtLoading ||
+    isApproving ||
+    isLoadingUnpaidWithdrawalBatch
 
   const repayDisabled = repayTokenAmount.raw.isZero() || !!error || isLoading
 
@@ -78,7 +91,20 @@ const Repay = ({ marketAccount }: RepayProps) => {
   }
 
   const handleRepay = () => {
-    repay(repayTokenAmount)
+    if (!market.unpaidWithdrawalBatchExpiries.length) {
+      repay(repayTokenAmount)
+    } else {
+      const { length } = market.unpaidWithdrawalBatchExpiries
+      const repayAmountValue = minTokenAmount(
+        market.outstandingDebt,
+        market.underlyingToken.getAmount(marketAccount.underlyingApproval),
+      )
+
+      repayAndProcessUnpaidWithdrawalBatch({
+        tokenAmount: repayAmountValue,
+        maxBatches: length,
+      })
+    }
   }
 
   const newMarketReserve = market.totalAssets.add(repayTokenAmount)
