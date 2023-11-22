@@ -1,9 +1,11 @@
 import React, { ChangeEvent, useMemo, useState } from "react"
+import { minTokenAmount } from "@wildcatfi/wildcat-sdk"
 
 import { Button } from "../../../../components/ui-components"
 import { RepayModal } from "../Modals"
 import {
   useApprove,
+  useProcessUnpaidWithdrawalBatch,
   useRepay,
   useRepayOutstandingDebt,
 } from "../hooks/useVaultDetailActions"
@@ -14,16 +16,26 @@ import {
 } from "../../../../utils/formatters"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { SDK_ERRORS_MAPPING } from "../../../../utils/forms/errors"
+import { useGetWithdrawals } from "../BorrowerWithdrawalRequests/hooks/useGetWithdrawals"
 
 const Repay = ({ marketAccount }: RepayProps) => {
   const { market } = marketAccount
   const [repayAmount, setRepayAmount] = useState("0")
+  const { data: withdrawals } = useGetWithdrawals(market)
+
   const { mutate: repay, isLoading: isRepayAmountLoading } =
     useRepay(marketAccount)
+
+  const {
+    mutateAsync: repayAndProcessUnpaidWithdrawalBatch,
+    isLoading: isProcessing,
+  } = useProcessUnpaidWithdrawalBatch(marketAccount.market)
+
   const {
     mutate: repayOutstandingDebt,
     isLoading: isRepayOutstandingDebtLoading,
   } = useRepayOutstandingDebt(marketAccount)
+
   const { mutate: approve, isLoading: isApproving } = useApprove(
     marketAccount.market.underlyingToken,
     marketAccount.market,
@@ -78,7 +90,22 @@ const Repay = ({ marketAccount }: RepayProps) => {
   }
 
   const handleRepay = () => {
-    repay(repayTokenAmount)
+    if (
+      withdrawals?.activeWithdrawalsTotalOwed.raw.isZero() &&
+      withdrawals?.expiredWithdrawalsTotalOwed.raw.isZero()
+    ) {
+      repay(repayTokenAmount)
+    } else {
+      const { length } = market.unpaidWithdrawalBatchExpiries
+      const repayAmountValue = minTokenAmount(
+        market.outstandingDebt,
+        market.underlyingToken.getAmount(marketAccount.underlyingApproval),
+      )
+      repayAndProcessUnpaidWithdrawalBatch({
+        tokenAmount: repayAmountValue,
+        maxBatches: length,
+      })
+    }
   }
 
   const newMarketReserve = market.totalAssets.add(repayTokenAmount)
