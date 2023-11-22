@@ -23533,7 +23533,7 @@
       "decimals": 18
     },
     {
-      "address": "0x746d7b1dfcD1Cc2f4b7d09F3F1B9A21764FBeB33",
+      "address": "0xE119251d4343F821B4ED17D781fA65f69bAc7230",
       "name": "USDC",
       "symbol": "USDC",
       "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
@@ -23549,7 +23549,7 @@
       "decimals": 18
     },
     {
-      "address": "0xAdd8Ad605fE57064903a3DeFC3b4ed676992bba6",
+      "address": "0x02a6adfc5242C19F23f22762f2D7Ff55b0a922Af",
       "name": "Tether USD",
       "symbol": "USDT",
       "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png",
