@@ -16,19 +16,17 @@ import {
 } from "../../../../utils/formatters"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { SDK_ERRORS_MAPPING } from "../../../../utils/forms/errors"
-import { useGetWithdrawals } from "../BorrowerWithdrawalRequests/hooks/useGetWithdrawals"
 
 const Repay = ({ marketAccount }: RepayProps) => {
   const { market } = marketAccount
   const [repayAmount, setRepayAmount] = useState("0")
-  const { data: withdrawals } = useGetWithdrawals(market)
 
   const { mutate: repay, isLoading: isRepayAmountLoading } =
     useRepay(marketAccount)
 
   const {
-    mutateAsync: repayAndProcessUnpaidWithdrawalBatch,
-    isLoading: isProcessing,
+    mutate: repayAndProcessUnpaidWithdrawalBatch,
+    isLoading: isLoadingUnpaidWithdrawalBatch,
   } = useProcessUnpaidWithdrawalBatch(marketAccount.market)
 
   const {
@@ -74,7 +72,10 @@ const Repay = ({ marketAccount }: RepayProps) => {
   const repayStep = marketAccount.checkRepayStep(repayTokenAmount)
 
   const isLoading =
-    isRepayAmountLoading || isRepayOutstandingDebtLoading || isApproving
+    isRepayAmountLoading ||
+    isRepayOutstandingDebtLoading ||
+    isApproving ||
+    isLoadingUnpaidWithdrawalBatch
 
   const repayDisabled = repayTokenAmount.raw.isZero() || !!error || isLoading
 
@@ -90,10 +91,7 @@ const Repay = ({ marketAccount }: RepayProps) => {
   }
 
   const handleRepay = () => {
-    if (
-      withdrawals?.activeWithdrawalsTotalOwed.raw.isZero() &&
-      withdrawals?.expiredWithdrawalsTotalOwed.raw.isZero()
-    ) {
+    if (!market.unpaidWithdrawalBatchExpiries.length) {
       repay(repayTokenAmount)
     } else {
       const { length } = market.unpaidWithdrawalBatchExpiries
@@ -101,6 +99,7 @@ const Repay = ({ marketAccount }: RepayProps) => {
         market.outstandingDebt,
         market.underlyingToken.getAmount(marketAccount.underlyingApproval),
       )
+
       repayAndProcessUnpaidWithdrawalBatch({
         tokenAmount: repayAmountValue,
         maxBatches: length,
