@@ -8,8 +8,7 @@ import {
 export const validationSchema = z.object({
   vaultType: z.string().min(1),
   asset: z.string().refine((value) => utils.isAddress(value), {
-    message:
-      "Provided address is invalid. Please insure you have typed correctly.",
+    message: "Invalid address: please ensure you have the correct token.",
   }),
   namePrefix: z
     .string()
