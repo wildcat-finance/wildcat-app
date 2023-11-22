@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useState, useMemo } from "react"
-import { TokenAmount } from "@wildcatfi/wildcat-sdk"
 
 import { Button } from "../../../../components/ui-components"
 import {
@@ -15,9 +14,6 @@ import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { SDK_ERRORS_MAPPING } from "../../../../utils/forms/errors"
 
 const DepositForm = ({ marketAccount }: DepositFormProps) => {
-  const [allowanceRemainder, setAllowanceRemainder] = useState<
-    TokenAmount | undefined
-  >(undefined)
   const { mutateAsync: approve, isLoading: isApproving } = useApprove(
     marketAccount.market.underlyingToken,
     marketAccount.market,
@@ -29,17 +25,14 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
   })
 
   const [error, setError] = useState<string | undefined>()
+  const [insufficientAllowance, setInsufficientAllowance] = useState(false)
 
-  const handleChangeDeposit = (evt: ChangeEvent<HTMLInputElement>) => {
-    const { value } = evt.target
-    setDepositValue(value)
+  const clearErrors = () => {
+    setInsufficientAllowance(false)
+    setError(undefined)
+  }
 
-    if (value === "" || value === "0") {
-      setAllowanceRemainder(undefined)
-      setError(undefined)
-      return
-    }
-
+  const validate = (value: string) => {
     const depositValueAmount =
       marketAccount.market.underlyingToken.parseAmount(value)
 
@@ -49,11 +42,23 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
       setError(SDK_ERRORS_MAPPING.deposit[checkDepositStep.status])
 
       if (checkDepositStep.status === "InsufficientAllowance") {
-        setAllowanceRemainder(checkDepositStep.remainder)
+        setInsufficientAllowance(true)
       }
     } else {
-      setError(undefined)
+      clearErrors()
     }
+  }
+
+  const handleChangeDeposit = (evt: ChangeEvent<HTMLInputElement>) => {
+    const { value } = evt.target
+    setDepositValue(value)
+
+    if (value === "" || value === "0") {
+      clearErrors()
+      return
+    }
+
+    validate(value)
   }
 
   const depositTokenAmount = useMemo(
@@ -65,10 +70,13 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
     deposit(depositValue)
   }
 
-  const handleApprove = async () => {
-    if (allowanceRemainder) {
-      await approve(allowanceRemainder).then(() => {
-        setAllowanceRemainder(undefined)
+  const handleApprove = () => {
+    if (!depositTokenAmount.raw.isZero()) {
+      approve(depositTokenAmount).then(() => {
+        // There is a delay between the approval tx and the allowance update
+        setTimeout(() => {
+          validate(depositValue)
+        }, 500)
       })
     }
   }
@@ -95,7 +103,7 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
           ${marketAccount.market.underlyingToken.symbol}`}
         />
       </div>
-      {allowanceRemainder ? (
+      {insufficientAllowance ? (
         <Button
           variant="green"
           className="w-64 px-2 whitespace-nowrap"

@@ -41,8 +41,11 @@ const LenderWithdrawalRequests = ({
       <div className="flex justify-between items-center mb-8">
         <div className="text-base font-bold">Lender Withdrawal Requests</div>
         <div className="flex gap-x-7 items-center">
-          <Chip color="green" className="w-fit !h-6 text-white">
-            Ongoing Cycle
+          <Chip
+            color={cycleStart ? "green" : "red"}
+            className="w-fit !h-6 text-white"
+          >
+            {cycleStart ? "Ongoing Cycle" : "No Cycle"}
           </Chip>
           {cycleStart && (
             <div className="flex gap-x-2">

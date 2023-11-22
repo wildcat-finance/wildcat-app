@@ -11,7 +11,7 @@ import { useWithdraw } from "../../../borrower/BorrowerMarketDetails/hooks/useVa
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 
 const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
-  const { mutate, isLoading } = useWithdraw(marketAccount)
+  const { mutateAsync, isLoading } = useWithdraw(marketAccount)
   const [withdrawalValue, setWithdrawalValue] = useState("0")
 
   const withdrawalValueBigNum = new TokenAmount(
@@ -29,7 +29,13 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
     !marketAccount?.canWithdraw
 
   const handleWithdraw = () => {
-    mutate(withdrawalValue)
+    mutateAsync(withdrawalValue)
+      .catch((e) => {
+        console.log(e)
+      })
+      .finally(() => {
+        setWithdrawalValue("0")
+      })
   }
 
   return (
