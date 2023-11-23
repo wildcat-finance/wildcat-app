@@ -8,16 +8,16 @@ import type {
 type ExcludeReady<T> = T extends "Ready" ? never : T
 
 type DepositErrorStatuses = {
-  [key in ExcludeReady<DepositStatus["status"]>]: string
+  [key in ExcludeReady<DepositStatus["status"]>]: string | undefined
 }
 type RepayErrorStatuses = {
-  [key in ExcludeReady<RepayStatus["status"]>]: string
+  [key in ExcludeReady<RepayStatus["status"]>]: string | undefined
 }
 type CloseMarketErrorStatuses = {
-  [key in ExcludeReady<CloseMarketStatus["status"]>]: string
+  [key in ExcludeReady<CloseMarketStatus["status"]>]: string | undefined
 }
 type SetAPRErrorStatuses = {
-  [key in ExcludeReady<SetAprStatus["status"]>]: string
+  [key in ExcludeReady<SetAprStatus["status"]>]: string | undefined
 }
 
 type SDKErrorsMapping = {
@@ -35,15 +35,13 @@ export const SDK_ERRORS_MAPPING: SDKErrorsMapping = {
       "You're attempting to deposit more than the maximum capacity",
     InsufficientBalance:
       "You don't have enough of the underlying token in your wallet",
-    InsufficientAllowance:
-      "You haven't granted a sufficient allowance for this deposit",
+    InsufficientAllowance: undefined,
   },
 
   repay: {
     InsufficientBalance:
       "You don't have enough of the underlying token in your wallet",
-    InsufficientAllowance:
-      "You haven't granted a sufficient allowance for this repayment",
+    InsufficientAllowance: undefined,
     ExceedsOutstandingDebt: "You're attempting to repay more than you owe",
   },
 
@@ -52,7 +50,7 @@ export const SDK_ERRORS_MAPPING: SDKErrorsMapping = {
     UnpaidWithdrawalBatches: "There are unpaid withdrawal batches",
     InsufficientBalance:
       "Your wallet's balance of the underlying token is insufficient",
-    InsufficientAllowance: "You haven't granted a sufficient allowance",
+    InsufficientAllowance: undefined,
   },
 
   setApr: {
