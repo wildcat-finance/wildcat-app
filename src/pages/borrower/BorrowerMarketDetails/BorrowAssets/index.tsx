@@ -1,17 +1,18 @@
 import { ChangeEvent, useState } from "react"
-import { BigNumber } from "ethers"
 
 import { BorrowModal } from "../Modals"
 import { useBorrow } from "../hooks/useVaultDetailActions"
 import { BorrowAssetProps } from "./interface"
 import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
+import { Button } from "../../../../components/ui-components"
 
 const BorrowAssets = ({
   borrowableAssets,
   marketAccount,
 }: BorrowAssetProps) => {
-  const { mutate, isLoading } = useBorrow(marketAccount)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const { mutateAsync, isLoading } = useBorrow(marketAccount)
   const [borrowAmount, setBorrowAmount] = useState("0")
 
   const maxBorrowAmount = borrowableAssets
@@ -31,7 +32,10 @@ const BorrowAssets = ({
   const leftBorrowAmount = maxBorrowAmount.sub(underlyingBorrowAmount)
 
   const handleBorrow = () => {
-    mutate(borrowAmount)
+    mutateAsync(borrowAmount).then(() => {
+      setBorrowAmount("")
+      setIsModalOpen(false)
+    })
   }
 
   return (
@@ -50,12 +54,22 @@ const BorrowAssets = ({
         )}`}
       />
 
+      <Button
+        variant="green"
+        className="w-64"
+        onClick={() => setIsModalOpen(true)}
+        disabled={disabled}
+      >
+        Borrow
+      </Button>
+
       <BorrowModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
         borrow={handleBorrow}
         borrowAmount={borrowAmount}
         leftBorrowAmount={leftBorrowAmount.toFixed(TOKEN_FORMAT_DECIMALS)}
         tokenSymbol={borrowableAssets.symbol}
-        disabled={disabled || isLoading}
         isLoading={isLoading}
       />
     </>

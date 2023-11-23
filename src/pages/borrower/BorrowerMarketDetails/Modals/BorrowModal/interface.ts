@@ -1,5 +1,6 @@
 export type BorrowModalProps = {
-  disabled?: boolean
+  onClose?: () => void
+  isOpen?: boolean
   borrowAmount: string
   leftBorrowAmount: string
   tokenSymbol: string
