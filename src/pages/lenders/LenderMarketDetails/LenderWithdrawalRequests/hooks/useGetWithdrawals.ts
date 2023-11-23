@@ -123,6 +123,7 @@ export function useGetWithdrawals(
     queryKey: [GET_LENDER_WITHDRAWALS_KEY, "initial", lender, market],
     queryFn: queryLenderWithdrawals,
     refetchInterval: POLLING_INTERVAL,
+    keepPreviousData: true,
     enabled: !!lender && !!market,
     refetchOnMount: false,
   })
