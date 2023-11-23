@@ -295,7 +295,6 @@ export const useClaim = (
 export const useWithdraw = (marketAccount: MarketAccount) => {
   const { address } = useAccount()
   const client = useQueryClient()
-  // TODO: add call canWithdraw
 
   return useMutation({
     mutationFn: async (amount: string) => {
@@ -312,18 +311,15 @@ export const useWithdraw = (marketAccount: MarketAccount) => {
         await marketAccount.queueWithdrawal(tokenAmount)
       }
 
-      // const { symbol } = marketAccount.market.underlyingToken
+      const { symbol } = marketAccount.market.underlyingToken
 
-      await withdraw()
-
-      // await toastifyRequest(withdraw(), {
-      //   pending: `Add ${amount} ${symbol} to withdrawal queue`,
-      //   success: `${amount} ${symbol} successfully added to withdrawal queue`,
-      //   error: "Error adding to withdrawal queue",
-      // })
+      await toastifyRequest(withdraw(), {
+        pending: `Adding ${amount} ${symbol} to withdrawal queue`,
+        success: `${amount} ${symbol} successfully added to withdrawal queue`,
+        error: "Error adding to withdrawal queue",
+      })
     },
-    onSuccess(_, amount) {
-      toastifyInfo(`${amount} Successfully Requested!`)
+    onSuccess() {
       client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
     },
     onError(error, amount) {

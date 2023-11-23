@@ -59,7 +59,7 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
         console.log(e)
       })
       .finally(() => {
-        setWithdrawalValue("0")
+        setWithdrawalValue("")
       })
   }
 
