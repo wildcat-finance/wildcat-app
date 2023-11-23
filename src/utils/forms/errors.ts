@@ -3,6 +3,7 @@ import type {
   RepayStatus,
   CloseMarketStatus,
   SetAprStatus,
+  QueueWithdrawalStatus,
 } from "@wildcatfi/wildcat-sdk"
 
 type ExcludeReady<T> = T extends "Ready" ? never : T
@@ -19,9 +20,13 @@ type CloseMarketErrorStatuses = {
 type SetAPRErrorStatuses = {
   [key in ExcludeReady<SetAprStatus["status"]>]: string | undefined
 }
+type QueueWithdrawalStatuses = {
+  [key in ExcludeReady<QueueWithdrawalStatus["status"]>]: string | undefined
+}
 
 type SDKErrorsMapping = {
   deposit: DepositErrorStatuses
+  queueWithdrawal: QueueWithdrawalStatuses
   repay: RepayErrorStatuses
   closeMarket: CloseMarketErrorStatuses
   setApr: SetAPRErrorStatuses
@@ -36,6 +41,12 @@ export const SDK_ERRORS_MAPPING: SDKErrorsMapping = {
     InsufficientBalance:
       "You don't have enough of the underlying token in your wallet",
     InsufficientAllowance: undefined,
+  },
+
+  queueWithdrawal: {
+    InsufficientRole: "You can not withdraw funds from this market",
+    InsufficientBalance:
+      "You don't have enough of the market token in your wallet",
   },
 
   repay: {
