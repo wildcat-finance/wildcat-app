@@ -9,7 +9,6 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       className,
       onChange,
       error,
-      warning,
       min = 0,
       max,
       onMaxClick,
@@ -20,7 +19,6 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       "h-8 px-3 text-xxs border bg-white outline-none w-full",
       { "opacity-50": props.disabled },
       { "border-red-border": error },
-      { "border-yellow-500": warning },
       { "border-tint-9": !error },
     )
 

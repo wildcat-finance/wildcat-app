@@ -11,7 +11,6 @@ export const DetailsInput = (props: DetailsInputType) => (
       onChange={props.onChange}
       value={props.value}
       error={!!props.errorText}
-      warning={!!props.wariningText}
     />
 
     <div className="flex justify-between items-start text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">
@@ -19,11 +18,6 @@ export const DetailsInput = (props: DetailsInputType) => (
         {props.errorText && (
           <div className="absolute top-0 left-0 text-red-error text-xxs text-left">
             {props.errorText}
-          </div>
-        )}
-        {props.wariningText && (
-          <div className="absolute top-0 left-0 text-yellow-500 text-xxs text-left">
-            {props.wariningText}
           </div>
         )}
       </div>

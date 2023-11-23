@@ -25,13 +25,11 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
   })
 
   const [error, setError] = useState<string | undefined>()
-  const [warning, setWarning] = useState<string | undefined>()
   const [insufficientAllowance, setInsufficientAllowance] = useState(false)
 
   const clearErrors = () => {
     setInsufficientAllowance(false)
     setError(undefined)
-    setWarning(undefined)
   }
 
   const validate = (value: string) => {
@@ -42,15 +40,9 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
 
     if (checkDepositStep.status !== "Ready") {
       setError(SDK_ERRORS_MAPPING.deposit[checkDepositStep.status])
-      setWarning(undefined)
-
-      if (checkDepositStep.status === "InsufficientAllowance") {
-        setInsufficientAllowance(
-          checkDepositStep.status === "InsufficientAllowance",
-        )
-        setError(undefined)
-        setWarning(SDK_ERRORS_MAPPING.deposit.InsufficientAllowance)
-      }
+      setInsufficientAllowance(
+        checkDepositStep.status === "InsufficientAllowance",
+      )
     } else {
       clearErrors()
     }
@@ -103,7 +95,6 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
           min={0}
           market={marketAccount.market}
           errorText={error}
-          wariningText={warning}
           helperText="Maximum Deposit"
           helperValue={`${marketAccount.maximumDeposit.format(
             TOKEN_FORMAT_DECIMALS,
