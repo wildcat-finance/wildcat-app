@@ -40,10 +40,9 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
 
     if (checkDepositStep.status !== "Ready") {
       setError(SDK_ERRORS_MAPPING.deposit[checkDepositStep.status])
-
-      if (checkDepositStep.status === "InsufficientAllowance") {
-        setInsufficientAllowance(true)
-      }
+      setInsufficientAllowance(
+        checkDepositStep.status === "InsufficientAllowance",
+      )
     } else {
       clearErrors()
     }
