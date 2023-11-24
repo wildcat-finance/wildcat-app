@@ -37,7 +37,7 @@ export const MarketPreviewModal = ({
       {isModalOpen && (
         <Modal
           firstBtnText="Confirm"
-          sign={handleSubmit}
+          onClick={handleSubmit}
           isOpen={isModalOpen}
           onClose={onClose}
           isLoading={isDeploying}

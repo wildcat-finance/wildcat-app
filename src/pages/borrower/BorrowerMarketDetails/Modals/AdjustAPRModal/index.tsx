@@ -20,7 +20,8 @@ export const AdjustAPRModal = ({
     isOpen={isOpen}
     onClose={onClose}
     isLoading={isLoading}
-    sign={adjustAPR}
+    onClick={adjustAPR}
+    firstBtnText="Confirm"
   >
     <div>
       <div className="text-base font-bold px-8 w-100 text-center">

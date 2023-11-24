@@ -10,7 +10,13 @@ export const BorrowModal = ({
   isLoading,
   borrow,
 }: BorrowModalProps) => (
-  <Modal isOpen={isOpen} onClose={onClose} isLoading={isLoading} sign={borrow}>
+  <Modal
+    isOpen={isOpen}
+    onClose={onClose}
+    isLoading={isLoading}
+    onClick={borrow}
+    firstBtnText="Submit"
+  >
     <div>
       <div className="text-base font-bold px-8 w-100 text-center">
         You are borrowing from your market.

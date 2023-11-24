@@ -90,8 +90,10 @@ export function NewLendersModal({ market }: NewLendersModalProps) {
       <Modal
         isOpen={isModalOpen}
         onClose={onModalClose}
-        sign={authorize}
+        onClick={authorize}
         isLoading={isLoading}
+        firstBtnText="Sign"
+        hasSignIcon
       >
         <div className="text-base font-bold px-8">Onboard New Lender/s</div>
 

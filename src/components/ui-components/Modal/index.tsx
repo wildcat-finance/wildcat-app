@@ -10,10 +10,9 @@ import { SignIcon } from "../icons"
 
 export function Modal({
   children,
-  sign,
+  onClick,
   onClose,
   isOpen = false,
-  showFooter = true,
   isLoading,
   loadingText,
   firstBtnText,
@@ -61,42 +60,26 @@ export function Modal({
                   </Button>
                   <Paper className="bg-white border-none py-5">
                     {children}
-                    {showFooter && (
-                      <div className="flex gap-x-3 justify-center mt-5">
-                        {!sign && (
-                          <Button
-                            variant="blue"
-                            className="w-28"
-                            onClick={sign}
-                          >
-                            Submit
-                          </Button>
-                        )}
+                    <div className="flex gap-x-3 justify-center mt-5">
+                      <Button
+                        className="w-28"
+                        variant="blue"
+                        icon={hasSignIcon ? <SignIcon /> : undefined}
+                        onClick={onClick}
+                        disabled={isLoading}
+                      >
+                        {isLoading && loadingText ? loadingText : firstBtnText}
+                      </Button>
 
-                        {sign && (
-                          <Button
-                            className="w-28"
-                            variant="blue"
-                            icon={hasSignIcon ? <SignIcon /> : undefined}
-                            onClick={sign}
-                            disabled={isLoading}
-                          >
-                            {isLoading && loadingText
-                              ? loadingText
-                              : firstBtnText || "Sign"}
-                          </Button>
-                        )}
-
-                        <Button
-                          variant="grey"
-                          className="!text-black font-semibold w-28"
-                          onClick={onClose}
-                          disabled={isLoading}
-                        >
-                          Cancel
-                        </Button>
-                      </div>
-                    )}
+                      <Button
+                        variant="grey"
+                        className="!text-black font-semibold w-28"
+                        onClick={onClose}
+                        disabled={isLoading}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
                   </Paper>
                 </div>
               </Dialog.Panel>

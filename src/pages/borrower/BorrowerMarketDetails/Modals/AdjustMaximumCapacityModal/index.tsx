@@ -14,7 +14,7 @@ export const AdjustMaximumCapacityModal = ({
   <Modal
     isOpen={isOpen}
     onClose={onClose}
-    sign={adjustMaxTotalSupply}
+    onClick={adjustMaxTotalSupply}
     isLoading={isLoading}
     firstBtnText="Confirm"
   >

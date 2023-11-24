@@ -1,6 +1,6 @@
 export type ModalProps = {
   children: React.ReactNode
-  sign?: () => void
+  onClick?: () => void
   onClose?: () => void
   isOpen?: boolean
   showFooter?: boolean
