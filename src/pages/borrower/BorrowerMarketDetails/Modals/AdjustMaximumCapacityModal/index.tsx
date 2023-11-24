@@ -3,6 +3,7 @@ import { AdjustMaximumCapacityModalProps } from "./interface"
 import { TOKEN_FORMAT_DECIMALS } from "../../../../../utils/formatters"
 
 export const AdjustMaximumCapacityModal = ({
+  marketSymbol,
   onClose,
   isOpen = false,
   currentMaxTotalSupply,
@@ -15,6 +16,7 @@ export const AdjustMaximumCapacityModal = ({
     onClose={onClose}
     sign={adjustMaxTotalSupply}
     isLoading={isLoading}
+    firstBtnText="Confirm"
   >
     <div>
       <div className="text-base font-bold px-8 w-80 text-center">
@@ -29,8 +31,8 @@ export const AdjustMaximumCapacityModal = ({
           deposits you are comfortable paying interest on from:
         </div>
         <div className="w-72 font-bold text-xxs text-center">
-          {currentMaxTotalSupply.format(TOKEN_FORMAT_DECIMALS)} to{" "}
-          {newtMaxTotalSupply.format(TOKEN_FORMAT_DECIMALS)}
+          {currentMaxTotalSupply.format(TOKEN_FORMAT_DECIMALS)} {marketSymbol}{" "}
+          to {newtMaxTotalSupply.format(TOKEN_FORMAT_DECIMALS)} {marketSymbol}
         </div>
       </div>
     </div>

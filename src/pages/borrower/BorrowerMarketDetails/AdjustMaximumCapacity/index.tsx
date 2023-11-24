@@ -94,6 +94,7 @@ const AdjustMaximumCapacity = ({
       </div>
 
       <AdjustMaximumCapacityModal
+        marketSymbol={market.underlyingToken.symbol}
         isOpen={isModalOpen}
         onClose={onModalClose}
         isLoading={isLoading}

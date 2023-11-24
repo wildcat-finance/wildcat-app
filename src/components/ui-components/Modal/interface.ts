@@ -7,4 +7,5 @@ export type ModalProps = {
   isLoading?: boolean
   loadingText?: string
   firstBtnText?: string
+  hasSignIcon?: boolean
 }

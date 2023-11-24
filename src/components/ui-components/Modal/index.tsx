@@ -17,6 +17,7 @@ export function Modal({
   isLoading,
   loadingText,
   firstBtnText,
+  hasSignIcon,
 }: ModalProps) {
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -74,8 +75,9 @@ export function Modal({
 
                         {sign && (
                           <Button
+                            className="w-28"
                             variant="blue"
-                            icon={<SignIcon />}
+                            icon={hasSignIcon ? <SignIcon /> : undefined}
                             onClick={sign}
                             disabled={isLoading}
                           >
