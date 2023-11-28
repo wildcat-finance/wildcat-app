@@ -14,6 +14,7 @@ import {
 } from "@wildcatfi/wildcat-sdk/dist/gql/graphql"
 import { logger } from "@wildcatfi/wildcat-sdk/dist/utils/logger"
 import { useMemo } from "react"
+import { POLLING_INTERVAL } from "../../../../../config/polling"
 
 export type BorrowerWithdrawalsForMarketResult = {
   activeWithdrawal: WithdrawalBatch | undefined
@@ -73,6 +74,8 @@ export function useGetWithdrawals(
   } = useQuery({
     queryKey: [GET_WITHDRAWALS_KEY, "initial", address],
     queryFn: getAllPendingWithdrawalBatches,
+    refetchInterval: POLLING_INTERVAL,
+    keepPreviousData: true,
     enabled: !!market,
     refetchOnMount: false,
   })
@@ -163,8 +166,8 @@ export function useGetWithdrawals(
     failureReason: errorUpdate,
   } = useQuery({
     queryKey: [GET_WITHDRAWALS_KEY, "update", updateQueryKeys],
-    keepPreviousData: true,
     queryFn: getUpdatedBatches,
+    keepPreviousData: true,
     enabled: !!data,
     refetchOnMount: false,
   })

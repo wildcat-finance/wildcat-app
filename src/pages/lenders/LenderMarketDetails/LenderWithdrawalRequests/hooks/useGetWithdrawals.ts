@@ -217,8 +217,8 @@ export function useGetWithdrawals(
     failureReason: errorUpdate,
   } = useQuery({
     queryKey: [GET_LENDER_WITHDRAWALS_KEY, "update", updateQueryKeys],
-    keepPreviousData: true,
     queryFn: updateWithdrawals,
+    keepPreviousData: true,
     enabled: !!data,
     refetchOnMount: false,
   })
