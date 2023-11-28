@@ -8,7 +8,6 @@ import {
 } from "../../../../utils/formatters"
 
 import type { BorrowerMarketOverviewProps } from "./interface"
-import { useGetWithdrawals } from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
 
 const LenderMarketOverview = ({
   marketAccount,
@@ -85,11 +84,16 @@ const LenderMarketOverview = ({
             )}%`}
             className="pl-6 pr-24"
           />
-          <TableItem
-            title="Market Token Name"
-            value={marketToken.name}
-            className="pl-6 pr-24"
-          />
+          <TableItem title="Market Token Name" className="pl-6 pr-24">
+            <a
+              className="hover:underline text-xs"
+              href={`https://sepolia.etherscan.io/address/${marketToken.address}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {marketToken.name}
+            </a>
+          </TableItem>
           <TableItem
             title="Withdrawal Cycle Duration"
             value={formatSecsToHours(withdrawalBatchDuration)}
