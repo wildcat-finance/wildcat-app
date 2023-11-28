@@ -13,13 +13,13 @@ function ServiceAgreement() {
   return (
     <>
       <div className="text-green text-2xl font-bold mb-8 w-2/3">
-        Wildcat Service Agreement
+        Wildcat Services Agreement
       </div>
 
       <BluePaper className="mb-8">
         <AiOutlineExclamationCircle height={24} />
         <span className="text-xs text-center">
-          Please review and sign the Wildcat Service Agreement in order to
+          Please review and sign the Wildcat Services Agreement in order to
           access the app.
         </span>
       </BluePaper>
