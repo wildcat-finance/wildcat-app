@@ -36,7 +36,7 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
     marketAccount.market.underlyingToken,
     marketAccount.market,
   )
-  const [apr, setApr] = useState("0")
+  const [apr, setApr] = useState("")
   const [newReserveRatio, setNewReserveRatio] = useState<number | undefined>()
   const [isTerminating, setIsTerminating] = useState(false)
 
@@ -145,7 +145,7 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
 
   useEffect(() => {
     if (isSuccess) {
-      setApr("0")
+      setApr("")
       onModalClose()
     }
   }, [isSuccess])

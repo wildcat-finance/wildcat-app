@@ -3,7 +3,6 @@ import { useMemo, useState } from "react"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import { Select, TextInput } from "../../../components/ui-components"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
-import { useTokensList } from "../../../hooks/useTokensList"
 import { mockedStatuses } from "../../../mocks/vaults"
 import { getMarketStatus } from "../../../utils/marketStatus"
 import { useLendersMarkets } from "./hooks/useLendersMarkets"
@@ -22,16 +21,7 @@ function LenderMarketsList() {
     setFilterByName(value.toLowerCase())
   }
 
-  const { tokensByChainId } = useTokensList()
   const { data: lendersMarkets } = useLendersMarkets()
-
-  const mockedUnderlyingAssetsOptions: SelectOptionItem[] = tokensByChainId.map(
-    (token) => ({
-      id: token.address,
-      label: token.symbol,
-      value: token.symbol,
-    }),
-  )
 
   const mockedVaultStatusOptions: SelectOptionItem[] = mockedStatuses
     .sort()

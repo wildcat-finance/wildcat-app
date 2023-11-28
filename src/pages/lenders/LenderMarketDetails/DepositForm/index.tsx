@@ -19,9 +19,9 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
     marketAccount.market,
   )
 
-  const [depositValue, setDepositValue] = useState("0")
+  const [depositValue, setDepositValue] = useState("")
   const { mutate: deposit, isLoading } = useDeposit(marketAccount, () => {
-    setDepositValue("0")
+    setDepositValue("")
   })
 
   const [error, setError] = useState<string | undefined>()

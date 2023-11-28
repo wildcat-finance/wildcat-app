@@ -13,7 +13,7 @@ const BorrowAssets = ({
 }: BorrowAssetProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { mutateAsync, isLoading } = useBorrow(marketAccount)
-  const [borrowAmount, setBorrowAmount] = useState("0")
+  const [borrowAmount, setBorrowAmount] = useState("")
 
   const maxBorrowAmount = borrowableAssets
 

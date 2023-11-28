@@ -17,7 +17,7 @@ const AdjustMaximumCapacity = ({
 }: AdjustMaximumCapacityProps) => {
   const [isModalOpen, setModalOpen] = useState(false)
   const { mutate, isLoading, isSuccess } = useSetMaxTotalSupply(marketAccount)
-  const [newMaxTotalSupply, setNewMaxTotalSupply] = useState("0")
+  const [newMaxTotalSupply, setNewMaxTotalSupply] = useState("")
   const [error, setError] = useState<string | undefined>()
 
   const { market } = marketAccount
@@ -53,7 +53,7 @@ const AdjustMaximumCapacity = ({
 
   useEffect(() => {
     if (isSuccess) {
-      setNewMaxTotalSupply("0")
+      setNewMaxTotalSupply("")
       onModalClose()
     }
   }, [isSuccess])
@@ -70,7 +70,7 @@ const AdjustMaximumCapacity = ({
       <DetailsInput
         decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
         className="w-full"
-        placeholder="10.00"
+        placeholder="00,000.00"
         min={0}
         onChange={handleMaxTotalSupplyChange}
         value={newMaxTotalSupply}

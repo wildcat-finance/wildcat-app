@@ -13,7 +13,7 @@ import { SDK_ERRORS_MAPPING } from "../../../../utils/forms/errors"
 
 const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
   const { mutateAsync, isLoading } = useWithdraw(marketAccount)
-  const [withdrawalValue, setWithdrawalValue] = useState("0")
+  const [withdrawalValue, setWithdrawalValue] = useState("")
   const [error, setError] = useState<string | undefined>()
 
   const withdrawalValueBigNum = new TokenAmount(
