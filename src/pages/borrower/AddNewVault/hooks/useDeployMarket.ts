@@ -82,7 +82,7 @@ export const useDeployMarket = () => {
     },
     onSuccess: () => {
       setTimeout(() => {
-        navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.MyVaults}`)
+        navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.MarketsList}`)
       }, 3000)
       client.invalidateQueries({ queryKey: [GET_CONTROLLER_KEY] })
     },

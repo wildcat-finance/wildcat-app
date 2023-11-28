@@ -2,6 +2,6 @@ export const BORROWER_PATHS = {
   HomePage: "/",
   AddNewVault: "add-new-vault",
   Agreement: "agreement",
-  MyVaults: "my-vaults",
+  MarketsList: "markets-list",
   VaultDetails: "market-details/:marketAddress",
 }
