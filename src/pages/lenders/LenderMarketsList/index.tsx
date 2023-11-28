@@ -74,6 +74,20 @@ function LenderMarketsList() {
     selectedUnderlyingAsset,
   ])
 
+  const filterUnderlyingOptions = useMemo(() => {
+    if (!lendersMarkets) return []
+
+    const options = lendersMarkets
+      .map((lendersMarket) => lendersMarket.market.underlyingToken.symbol)
+      .filter((value, index, self) => self.indexOf(value) === index)
+
+    return options.map((option) => ({
+      id: option,
+      label: option,
+      value: option,
+    }))
+  }, [lendersMarkets])
+
   return (
     <>
       <div className="text-xs flex-col">
@@ -92,7 +106,7 @@ function LenderMarketsList() {
           </div>
           <div className="w-1/3 px-2.5 py-2.5">
             <Select
-              options={mockedUnderlyingAssetsOptions}
+              options={filterUnderlyingOptions}
               onChange={setSelectedUnderlyingAsset}
               selected={selectedUnderlyingAsset}
               placeholder="Underlying Asset"
