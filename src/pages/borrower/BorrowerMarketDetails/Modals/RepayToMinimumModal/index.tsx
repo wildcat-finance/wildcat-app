@@ -17,12 +17,7 @@ export const RepayToMinimumModal = () => {
         Repay To Minimum Reserves
       </Button>
 
-      <Modal
-        isOpen={isModalOpen}
-        onClose={onClose}
-        firstBtnText="Sign"
-        hasSignIcon
-      >
+      <Modal isOpen={isModalOpen} onClose={onClose} firstBtnText="Confirm">
         <div>
           <div className="text-base font-bold px-8 w-100 text-center">
             You are repaying to the market.

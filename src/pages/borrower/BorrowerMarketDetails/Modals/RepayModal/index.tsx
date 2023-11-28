@@ -31,8 +31,7 @@ export const RepayModal = ({
         onClose={onClose}
         isLoading={isLoading}
         onClick={repay}
-        firstBtnText="Sign"
-        hasSignIcon
+        firstBtnText="Confirm"
       >
         <div>
           <div className="text-base font-bold px-8 w-100 text-center">

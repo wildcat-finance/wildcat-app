@@ -51,8 +51,7 @@ export function RemoveLendersModal({ market }: RemoveLendersModalProps) {
         isOpen={isModalOpen}
         onClose={onModalClose}
         onClick={deauthorize}
-        firstBtnText="Sign"
-        hasSignIcon
+        firstBtnText="Confirm"
       >
         <>
           <div className="text-base font-bold px-8">Remove Lenders</div>

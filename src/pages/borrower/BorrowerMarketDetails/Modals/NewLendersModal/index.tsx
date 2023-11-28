@@ -92,8 +92,7 @@ export function NewLendersModal({ market }: NewLendersModalProps) {
         onClose={onModalClose}
         onClick={authorize}
         isLoading={isLoading}
-        firstBtnText="Sign"
-        hasSignIcon
+        firstBtnText="Confirm"
       >
         <div className="text-base font-bold px-8">Onboard New Lender/s</div>
 

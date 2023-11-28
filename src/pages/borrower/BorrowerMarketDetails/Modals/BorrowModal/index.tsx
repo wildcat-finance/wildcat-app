@@ -15,7 +15,7 @@ export const BorrowModal = ({
     onClose={onClose}
     isLoading={isLoading}
     onClick={borrow}
-    firstBtnText="Submit"
+    firstBtnText="Confirm"
   >
     <div>
       <div className="text-base font-bold px-8 w-100 text-center">
