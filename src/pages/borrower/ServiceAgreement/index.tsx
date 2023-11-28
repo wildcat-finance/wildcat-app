@@ -286,29 +286,562 @@ function ServiceAgreement() {
 
             <p className="m-4">(b) The Service Provider shall not:</p>
 
-            <p className="mb-4">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
-              nec fringilla dolor. Vestibulum blandit luctus nisi a aliquet.
+            <p className="m-8">
+              (i) assist with the onboarding of any Lender, including any
+              anti-money laundering or ’know your client’ screening;
             </p>
-            <p className="mb-4">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
-              nec fringilla dolor. Vestibulum blandit luctus nisi a aliquet.
+
+            <p className="m-8">
+              (ii) be involved in any transactions entered into between any
+              Borrower and any Lender;
             </p>
-            <p className="mb-4">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
-              nec fringilla dolor. Vestibulum blandit luctus nisi a aliquet.
+
+            <p className="m-8">(iii) receive or hold any Assets;</p>
+
+            <p className="m-8">
+              (iv) except for the security monitoring responsibilities as
+              provided in the Schedule hereto, have any obligation to provide
+              ongoing security for the Borrowers, the Lenders and the Protocol;
+              and
             </p>
-            <p className="mb-4">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
-              nec fringilla dolor. Vestibulum blandit luctus nisi a aliquet.
+
+            <p className="m-8">
+              (v) except as provided in the Schedule hereto, have any
+              obligations in the event of a market delinquency.
             </p>
-            <p className="mb-4">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
-              nec fringilla dolor. Vestibulum blandit luctus nisi a aliquet.
+
+            <p className="mb-4">4. FEES</p>
+
+            <p className="m-4">
+              (a) For providing the Services the Service Provider shall be
+              entitled to receive a fee pursuant to the protocol fee
+              configuration under which the relevant market is deployed (the
+              ’Fee’).
             </p>
+            <p className="m-4">
+              (b) The Service Provider may, in its sole discretion, revise a Fee
+              in the event (i) in the case of a Fee that is a fixed origination
+              fee, the origination fee asset becomes unreasonable to continue
+              utilising (i.e. depeg, underlying contract migration); or (ii) in
+              the case of a Fee that is represented as a proportion of base
+              annual percentage return, the designated fee recipient address
+              becomes inaccessible; provided however, that notwithstanding the
+              foregoing, no Fee shall be retroactively revised once a market has
+              been deployed under a protocol fee configuration.
+            </p>
+
+            <p className="m-4">
+              (c) Each Borrower hereby acknowledges and agrees that the Service
+              Provider has the right to revise any Fee pursuant to Clause 4(b).
+            </p>
+
+            <p className="mb-4">5. BORROWER AND LENDER REPRESENTATIONS</p>
+
             <p className="mb-4">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
-              nec fringilla dolor. Vestibulum blandit luctus nisi a aliquet.
+              5.1. Making And Repetition Of Representations
+            </p>
+
+            <p className="m-4">
+              Each Borrower and each Lender (each a ’Representing Party’) makes
+              the representations contained in this Clause 5 to the Service
+              Provider.
+            </p>
+
+            <p className="mb-4">5.2. No Reliance Or Advice</p>
+
+            <p className="m-4">
+              (a) This Agreement is suitable for the Representing Party, based
+              upon its own judgement.
+            </p>
+            <p className="m-4">
+              (b) The Representing Party has made its own independent decision
+              to enter into this Agreement.
+            </p>
+
+            <p className="m-4">
+              (c) The Representing Party has obtained such independent advice
+              regarding this Agreement as it considers necessary, or has freely
+              chosen not to obtain such independent advice.
+            </p>
+
+            <p className="m-4">
+              (d) The Service Provider is not an adviser to the Representing
+              Party, and has not advised the Representing Party in connection
+              with this Agreement.
+            </p>
+
+            <p className="m-4">
+              (e) The Representing Party is not relying on any communication of
+              any kind from the Service Provider or made by the Service Provider
+              as advice, recommendation or guarantee of result in connection
+              with this Agreement.
+            </p>
+
+            <p className="mb-4">5.3. Evaluation And Understanding</p>
+
+            <p className="m-4">
+              (a) The Representing Party is capable of assessing and
+              understanding (on its own behalf or through independent
+              professional advice), and understands and accepts, the terms,
+              conditions and risks of this Agreement.
+            </p>
+
+            <p className="m-4">
+              (b) The Representing Party is capable of assuming, and assumes,
+              all risks associated with this Agreement.
+            </p>
+
+            <p className="mb-4">5.4. Risk Disclosure Statement</p>
+
+            <p className="m-4">
+              The Representing Party has received, read and understood the Risk
+              Disclosure Statement.
+            </p>
+
+            <p className="mb-4">5.5. Accuracy Of Specified Information</p>
+
+            <p className="m-4">
+              All applicable information that is furnished by the Representing
+              Party to the Service Provider or the Protocol is, as of the date
+              of the information, true, accurate and complete in every material
+              respect.
+            </p>
+
+            <p className="mb-4">5.6. Power To Act</p>
+
+            <p className="m-4">
+              Each Borrower and each Lender represents and warrants that (a) it
+              has the power to execute and deliver this Agreement and to perform
+              its obligations hereunder, (b) it has taken all necessary action
+              to authorize such execution, delivery and performance, and (iii)
+              this Agreement constitutes a legal, valid, and binding obligation
+              enforceable against it in accordance with the terms hereunder.
+            </p>
+
+            <p className="mb-4">6. CONFIDENTIALITY</p>
+
+            <p className="m-4">
+              (a) The Service Provider acknowledges that in the course of
+              providing the Services it may have access to Confidential
+              Information.
+            </p>
+
+            <p className="m-4">
+              (b) The Service Provider shall not (except in the proper course of
+              its duties) use or disclose to any third party (and shall use its
+              best endeavours to prevent the publication or disclosure of) any
+              Confidential Information. This restriction does not apply to:
+            </p>
+
+            <p className="m-8">
+              (i) any use or disclosure authorised by a Borrower or a Lender or
+              as required by law; or
+            </p>
+
+            <p className="m-8">
+              (ii) any information which is already in, or comes into, the
+              public domain otherwise than through the Service Provider’s
+              unauthorised disclosure.
+            </p>
+
+            <p className="mb-4">7. LIMITATION OF LIABILITY</p>
+
+            <p className="mb-4">7.1. Liability For Loss</p>
+
+            <p className="m-4">
+              (a) The Service Provider is not liable for any Loss arising out of
+              or relating to this Agreement or the Protocol, whether for breach
+              of contract, tort, negligence, or other form of action or theory
+              of liability, and irrespective of whether the Service Provider or
+              the Borrowers or the Lenders have been advised of the possibility
+              of any such Loss, unless such Loss arises directly from the
+              Service Provider’s or its Affiliates’ wilful default or actual
+              fraud.
+            </p>
+
+            <p className="m-4">
+              (b) The Service Provider will not be responsible or liable for the
+              acts or omissions of its Affiliates or any third party.
+            </p>
+
+            <p className="mb-4">7.2. Specific Liabilities</p>
+
+            <p className="m-4">
+              (a) This Clause 7.2 is without prejudice to the generality of
+              Clause 7.1.
+            </p>
+
+            <p className="m-4">
+              (b) The Service Provider will not be liable to any Borrower or any
+              Lender for any Loss arising from any failure, interruption or
+              delay in performance of any obligation arising under this
+              Agreement resulting from acts or events not reasonably within the
+              Service Provider’s control including without limitation, acts of
+              war and terrorism, insurrection, civil disorder, acts of God,
+              industrial action, any acts or regulations of any Government
+              Agency, or any other operational or technical failures.
+            </p>
+
+            <p className="m-4">
+              (c) The Service Provider will not be liable for any Loss,
+              liability, cost or expense whatsoever arising from unauthorised
+              use of the Protocol. Each Borrower and each Lender will, on
+              demand, indemnify, protect and hold the Service Provider harmless
+              from and against all Losses, liabilities, judgments, suits,
+              actions, proceedings, claims, damages and costs resulting from or
+              arising out of any act or omission by any person using the
+              Protocol or accessing the Service Provider’s services through use
+              of a Borrower&#39;s or a Lender’s designated passwords, systems
+              and devices, whether or not such Borrower or such Lender has
+              authorised such use.
+            </p>
+
+            <p className="m-4">
+              (d) The Service Provider will not be liable for any Loss arising
+              from any attack on the Protocol, including any such potential
+              attacks as may be detailed in the Risk Disclosure Statement.
+            </p>
+
+            <p className="mb-4">7.3. Disclaimer Of Warranties</p>
+
+            <p className="m-4">
+              (a) Each Borrower and each Lender acknowledges and accepts that
+              the Service Provider makes no representations or warranties,
+              express or implied, with respect to the Protocol or any Assets.
+            </p>
+
+            <p className="m-4">
+              (b) To the extent possible, all warranties, express or implied,
+              including without limitation any implied warranties of
+              merchantability and fitness for a particular purpose, are
+              disclaimed by the Service Provider.
+            </p>
+
+            <p className="mb-4">8. INDEMNITY TO THE SERVICE PROVIDER</p>
+
+            <p className="mb-4">
+              Each Borrower and each Lender agrees to indemnify the Service
+              Provider and keep it indemnified at all times against all or any
+              costs, claims, damages or expenses incurred by the Service
+              Provider arising during the course of the Service Provider
+              providing the Services save for costs, claims, damages or expenses
+              arising due to the Service Provider’s actual fraud or wilful
+              default.
+            </p>
+
+            <p className="mb-4">9. TERMINATION</p>
+
+            <p className="m-4">
+              (a) This Agreement shall be terminated with immediate effect in
+              respect of a Borrower or Lender as the case may be if at any time
+              a Borrower or Lender (each of the following a ’Termination
+              Event’):
+            </p>
+
+            <p className="m-8">
+              (i) commits any gross misconduct affecting the Protocol as
+              determined by the Service Provider at its sole discretion;
+            </p>
+
+            <p className="m-8">
+              (ii) commits any serious or repeated breach or non-observance of
+              any of the provisions of this Agreement;
+            </p>
+
+            <p className="m-8">
+              (iii) is declared bankrupt or makes any arrangement with or for
+              the benefit of its creditors;
+            </p>
+
+            <p className="m-8">
+              (iv) commits any fraud or dishonesty or acts in any manner which
+              in the opinion of the Borrowers and the Lenders brings or is
+              likely to bring the Service Provider or the Borrowers or the
+              Lenders into disrepute or is materially adverse to the interests
+              of the Borrowers or the Lenders;
+            </p>
+
+            <p className="m-8">
+              (v) commits any offence under any applicable anti-corruption,
+              anti-bribery, anti-money laundering or countering of terrorist
+              financing (or similar) legislation and regulations; or
+            </p>
+
+            <p className="m-8">
+              (vi) is added to any list of persons sanctioned by the USA or the
+              United Kingdom as confirmed by the Chainalysis oracle from time to
+              time.
+            </p>
+
+            <p className="m-4">
+              (b) To the extent possible, all warranties, express or implied,
+              including without limitation any implied warranties of
+              merchantability and fitness for a particular purpose, are
+              disclaimed by the Service Provider.
+            </p>
+
+            <p className="m-4">
+              (b) The rights of the Service Provider under this Clause are
+              without prejudice to any other rights that they may have at law to
+              terminate the Agreement or to accept any breach of this Agreement
+              on the part of a Borrower or Lender as having brought the
+              Agreement to an end. Any delay by the Service Provider in
+              exercising its rights to terminate shall not constitute a waiver
+              of these rights.
+            </p>
+
+            <p className="mb-4">10. NO RELATIONSHIP</p>
+
+            <p className="mb-4">
+              This Agreement does not create any kind of partnership, joint
+              venture, fiduciary, agency or trustee relationship or any similar
+              relationship or legal arrangement between the parties or between
+              either party and any other person.
+            </p>
+
+            <p className="mb-4">11. COMPLIANCE</p>
+
+            <p className="mb-4">11.1. Breach Of Financial Crime Regulations</p>
+
+            <p className="m-4">
+              Notwithstanding any other provision of this Agreement to the
+              contrary, the Service Provider is not obliged to do or omit to do
+              anything if it would, or might in its reasonable opinion,
+              constitute a breach of any Financial Crime Regulation.
+            </p>
+
+            <p className="mb-4">
+              11.3. Compliance With Financial Crime Regulations
+            </p>
+
+            <p className="m-4">
+              Each Borrower and each Lender agrees to exercise its rights and
+              perform its obligations under this Agreement in accordance with
+              all Financial Crime Regulations.
+            </p>
+
+            <p className="mb-4">11.4. Disclosure</p>
+
+            <p className="m-4">
+              (a) The Participant agrees that Service Provider may disclose any
+              information concerning any Borrower or any Lender to any
+              Government Agency or court (in any jurisdiction), where required
+              by applicable law.
+            </p>
+
+            <p className="m-4">
+              (b) Without prejudice to any other provision of this Agreement
+              relating to data or its disclosure, each Borrower and each Lender
+              consents to the disclosure by the Service Provider or their
+              Affiliates of any information or data in connection with or
+              relating to such Borrower or such Lender and/or this Agreement, to
+              the extent that the Service Provider determines it is required,
+              permitted or desirable to:
+            </p>
+
+            <p className="m-8">(i) comply with any applicable law; or</p>
+            <p className="m-8">(ii) operate the Protocol.</p>
+
+            <p className="m-4">
+              (c) If the relevant information relates to a third party, such
+              Borrower or such Lender will obtain the third party’s consent to
+              that disclosure.
+            </p>
+
+            <p className="mb-4">11.5. Anti-Money Laundering And Sanctions</p>
+
+            <p className="m-4">
+              (a) Notwithstanding any other provision of this Agreement to the
+              contrary, the Service Provider is not obliged to do or omit to do
+              anything if it would, or might in its reasonable opinion,
+              constitute a breach of any Financial Crime Regulation or any
+              anti-money laundering, counter-terrorism financing or economic or
+              trade sanctions laws (“AML/CTF Provisions”) applicable to the
+              Service Provider.
+            </p>
+
+            <p className="m-4">
+              (b) Each Borrower and each Lender must provide to the Service
+              Provider upon request all information and documents that are
+              within its possession, custody or control reasonably required by
+              the Service Provider from time to time, and as necessary in order
+              for the Service Provider to comply with any AML/CTF Provisions or
+              ongoing customer due diligence requirements or regulations
+              applicable to the Service Provider.
+            </p>
+
+            <p className="m-4">
+              (c) Each Borrower and each Lender agrees that the Service Provider
+              may disclose any information concerning such Borrower or such
+              Lender to any Government Agency or court (in any jurisdiction)
+              where required by applicable law.
+            </p>
+
+            <p className="m-4">
+              (d) Each Borrower and each Lender agrees to exercise its rights
+              and perform its obligations under this Agreement in accordance
+              with all applicable AML/CTF Provisions and ongoing customer due
+              diligence requirements and regulations.
+            </p>
+
+            <p className="mb-4">12. FURTHER ASSURANCE</p>
+
+            <p className="mb-4">
+              Each Borrower and each Lender shall perform, execute and deliver
+              such further acts and documents as may be required by law or
+              reasonably requested by the Service Provider to implement the
+              purposes of and to perfect this Agreement.
+            </p>
+
+            <p className="mb-4">13. PARTIAL INVALIDITY</p>
+
+            <p className="mb-4">
+              If any provision of this Agreement is or becomes or is found by a
+              court or other competent authority to be illegal, invalid or
+              unenforceable in any respect, in whole or in part, under any law
+              of any jurisdiction, neither the legality, validity and
+              enforceability in that jurisdiction of any other provision or part
+              of this Agreement, nor the legality, validity or enforceability in
+              any other jurisdiction of that provision or part or of any other
+              provision of this Agreement, shall be affected or impaired.
+            </p>
+
+            <p className="mb-4">
+              14. VARIATION, ASSIGNMENT, SUCCESSORS AND ASSIGNS
+            </p>
+
+            <p className="m-4">
+              (a) No variation of this Agreement shall be valid unless it is in
+              writing and signed by or on behalf of each of the parties.
+            </p>
+
+            <p className="m-4">
+              (b) This Agreement is binding on and inures to the benefit of the
+              parties and their respective successors, heirs, personal
+              representatives, and permitted assigns.
+            </p>
+
+            <p className="m-4">
+              (c) No Borrower or Lender may assign or delegate its rights or
+              obligations hereunder without the Service Provider’s prior written
+              consent, which may be withheld in the Service Provider’s sole
+              discretion.
+            </p>
+
+            <p className="m-4">
+              (d) The Service Provider may assign, novate or otherwise deal with
+              its rights or obligations under this Agreement without the consent
+              of, or notification to, any Borrower or any Lender.
+            </p>
+
+            <p className="mb-4">15. INTENTION TO BE BOUND</p>
+
+            <p className="mb-4">
+              By clicking on the “Sign” (or similar) button, or by otherwise
+              accessing or using the Protocol, each Borrower and each Lender
+              intends to be legally bound by the terms and conditions of this
+              Agreement.
+            </p>
+
+            <p className="mb-4">16. ELECTRONIC EXECUTION</p>
+
+            <p className="m-4">
+              (a) The parties acknowledge and agree that this Agreement may be
+              executed by electronic signature, and may be delivered
+              electronically. Without limitation to the generality of this
+              Clause 16, the parties agree that either DocuSign (and similar
+              services) or various cryptographic message signing techniques
+              (such as the ECDSA signing algorithm) may be used to execute and
+              deliver this Agreement.
+            </p>
+
+            <p className="m-4">
+              (b) Communications that are digitally signed and supported by a
+              digital certificate have the same validity, admissibility and
+              enforceability as if signed in writing.
+            </p>
+
+            <p className="m-4">
+              (c) Any notice or communication that is digitally signed must
+              comply with any applicable law.
+            </p>
+
+            <p className="mb-4">17. ARBITRATION</p>
+
+            <p className="mb-4">17.1. Submission To Arbitration</p>
+
+            <p className="m-4">
+              (a) Any dispute, controversy, difference or claim arising out of
+              or relating to this Agreement, including the existence, validity,
+              interpretation, performance, breach or termination thereof or any
+              dispute regarding non-contractual obligations arising out of or
+              relating to this Agreement shall be settled by arbitration
+              pursuant to the BVI IAC Arbitration Rules.
+            </p>
+
+            <p className="m-4">
+              (b) Each Borrower and each Lender agrees that:
+            </p>
+
+            <p className="m-8">
+              (i) the law of this Clause 17 is British Virgin Islands law;
+            </p>
+            <p className="m-8">
+              (ii) the seat of arbitration will be the Road Town, Tortola,
+              British Virgin Islands;
+            </p>
+            <p className="m-8">
+              (iii) unless the parties to the arbitration agree otherwise, the
+              number of arbitrators will be one and such arbitrator must have
+              relevant legal and technological expertise;
+            </p>
+            <p className="m-8">
+              (iv) the arbitration proceedings will be conducted in English.
+            </p>
+
+            <p className="mb-4">17.2. Injunctive Remedies</p>
+
+            <p className="m-4">
+              Notwithstanding any other provision of this Agreement, including
+              for the avoidance of doubt Clause 17.1, each Borrower and each
+              Lender agrees that the Service Provider has the right to apply for
+              injunctive remedies (or an equivalent type of urgent legal relief)
+              in any jurisdiction.
+            </p>
+
+            <p className="mb-4">18. GOVERNING LAW</p>
+
+            <p className="m-4">
+              This Agreement (including any non-contractual obligations or
+              liabilities arising out of it or in connection with it) is
+              governed by and is to be construed in accordance with the laws of
+              the British Virgin Islands.
+            </p>
+
+            <p className="mb-4">SCHEDULE: SERVICES</p>
+
+            <p className="mb-4">
+              ● Market delinquency monitoring, including monitoring reserve
+              ratios for each market to ensure such markets do not go below the
+              reserve ratio and become delinquent.
+            </p>
+
+            <p className="mb-4">
+              ● Security monitoring of the Protocol, including:
+            </p>
+
+            <p className="m-4">
+              ○ reviewing transactions rejected by any integrated security
+              solutions provider and provisioning such relevant maintenance or
+              updating of code that the Service Provider (in its sole
+              discretion) deems necessary for ongoing security; and
+            </p>
+
+            <p className="m-4">
+              ○ overseeing any bug bounty programs existing at any such time,
+              diagnosing and adjusting identified bugs and paying rewards under
+              any bug bounty program to a whitehat that accurately identifies a
+              bug.
             </p>
           </div>
         </div>
