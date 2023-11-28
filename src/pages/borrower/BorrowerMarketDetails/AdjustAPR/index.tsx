@@ -161,7 +161,7 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
       <DetailsInput
         decimalScale={MARKET_PARAMS_DECIMALS.annualInterestBips}
         className="w-full"
-        placeholder="00,000.00"
+        placeholder="00.00"
         value={apr}
         onChange={handleAprChange}
         error={!!error}
