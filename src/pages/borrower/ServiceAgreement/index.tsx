@@ -260,7 +260,7 @@ function ServiceAgreement() {
               (b) The Service Provider shall provide the Services until:
             </p>
 
-            <p className="m-8">
+            <p className="pl-8 pt-0 pb-2">
               (i) the occurrence of any event which (a) results in the continued
               operation of the Protocol ceasing to be feasible or (b) would
               cause the Service Provider to operate in an improper or illegal
@@ -268,7 +268,7 @@ function ServiceAgreement() {
               sole discretion; or
             </p>
 
-            <p className="m-8">
+            <p className="pl-8 pt-0 pb-4">
               (ii) solely with respect to the provision of Services to the
               relevant Borrower or Lender, the occurrence of a Termination Event
               with respect to such Borrower or such Lender.
@@ -278,34 +278,34 @@ function ServiceAgreement() {
 
             <p className="m-4">(a) The Service Provider shall:</p>
 
-            <p className="m-8">(i) provide the Services, and;</p>
+            <p className="pl-8 pt-0 pb-2">(i) provide the Services, and;</p>
 
-            <p className="m-8">
+            <p className="pl-8 pt-0 pb-0">
               (ii) comply with all applicable laws and regulations.
             </p>
 
             <p className="m-4">(b) The Service Provider shall not:</p>
 
-            <p className="m-8">
+            <p className="pl-8 pt-0 pb-2">
               (i) assist with the onboarding of any Lender, including any
               anti-money laundering or ’know your client’ screening;
             </p>
 
-            <p className="m-8">
+            <p className="pl-8 pt-0 pb-2">
               (ii) be involved in any transactions entered into between any
               Borrower and any Lender;
             </p>
 
-            <p className="m-8">(iii) receive or hold any Assets;</p>
+            <p className="pl-8 pt-0 pb-2">(iii) receive or hold any Assets;</p>
 
-            <p className="m-8">
+            <p className="pl-8 pt-0 pb-2">
               (iv) except for the security monitoring responsibilities as
               provided in the Schedule hereto, have any obligation to provide
               ongoing security for the Borrowers, the Lenders and the Protocol;
               and
             </p>
 
-            <p className="m-8">
+            <p className="pl-8 pt-0 pb-4">
               (v) except as provided in the Schedule hereto, have any
               obligations in the event of a market delinquency.
             </p>
@@ -433,12 +433,12 @@ function ServiceAgreement() {
               Confidential Information. This restriction does not apply to:
             </p>
 
-            <p className="m-8">
+            <p className="pl-8 pt-0 pb-2">
               (i) any use or disclosure authorised by a Borrower or a Lender or
               as required by law; or
             </p>
 
-            <p className="m-8">
+            <p className="pl-8 pt-0 pb-4">
               (ii) any information which is already in, or comes into, the
               public domain otherwise than through the Service Provider’s
               unauthorised disclosure.
@@ -538,22 +538,22 @@ function ServiceAgreement() {
               Event’):
             </p>
 
-            <p className="m-8">
+            <p className="pl-8 pt-0 pb-2">
               (i) commits any gross misconduct affecting the Protocol as
               determined by the Service Provider at its sole discretion;
             </p>
 
-            <p className="m-8">
+            <p className="pl-8 pt-2 pb-2">
               (ii) commits any serious or repeated breach or non-observance of
               any of the provisions of this Agreement;
             </p>
 
-            <p className="m-8">
+            <p className="pl-8 pt-2 pb-2">
               (iii) is declared bankrupt or makes any arrangement with or for
               the benefit of its creditors;
             </p>
 
-            <p className="m-8">
+            <p className="pl-8 pt-2 pb-2">
               (iv) commits any fraud or dishonesty or acts in any manner which
               in the opinion of the Borrowers and the Lenders brings or is
               likely to bring the Service Provider or the Borrowers or the
@@ -561,19 +561,19 @@ function ServiceAgreement() {
               of the Borrowers or the Lenders;
             </p>
 
-            <p className="m-8">
+            <p className="pl-8 pt-2 pb-2">
               (v) commits any offence under any applicable anti-corruption,
               anti-bribery, anti-money laundering or countering of terrorist
               financing (or similar) legislation and regulations; or
             </p>
 
-            <p className="m-8">
+            <p className="pl-8 pt-2 pb-2">
               (vi) is added to any list of persons sanctioned by the USA or the
               United Kingdom as confirmed by the Chainalysis oracle from time to
               time.
             </p>
 
-            <p className="m-4">
+            <p className="pl-8 pt-2 pb-0">
               (b) To the extent possible, all warranties, express or implied,
               including without limitation any implied warranties of
               merchantability and fitness for a particular purpose, are
@@ -639,8 +639,10 @@ function ServiceAgreement() {
               permitted or desirable to:
             </p>
 
-            <p className="m-8">(i) comply with any applicable law; or</p>
-            <p className="m-8">(ii) operate the Protocol.</p>
+            <p className="pl-8 pt-0 pb-2">
+              (i) comply with any applicable law; or
+            </p>
+            <p className="pl-8 pt-2 pb-0">(ii) operate the Protocol.</p>
 
             <p className="m-4">
               (c) If the relevant information relates to a third party, such
@@ -783,19 +785,19 @@ function ServiceAgreement() {
               (b) Each Borrower and each Lender agrees that:
             </p>
 
-            <p className="m-8">
+            <p className="pl-8 pt-0 pb-2">
               (i) the law of this Clause 17 is British Virgin Islands law;
             </p>
-            <p className="m-8">
+            <p className="pl-8 pt-2 pb-2">
               (ii) the seat of arbitration will be the Road Town, Tortola,
               British Virgin Islands;
             </p>
-            <p className="m-8">
+            <p className="pl-8 pt-2 pb-2">
               (iii) unless the parties to the arbitration agree otherwise, the
               number of arbitrators will be one and such arbitrator must have
               relevant legal and technological expertise;
             </p>
-            <p className="m-8">
+            <p className="pl-8 pt-2 pb-2">
               (iv) the arbitration proceedings will be conducted in English.
             </p>
 
