@@ -26,7 +26,7 @@ import {
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
 const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
-  const [showHistory, setShowHistory] = useState(true)
+  const [showHistory, setShowHistory] = useState(false)
   // const [dateArray, setDateArray] = useState<DateValue[]>([])
 
   // const { fromTimestamp, toTimestamp } = useMemo(
