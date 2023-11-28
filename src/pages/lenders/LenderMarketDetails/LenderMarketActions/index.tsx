@@ -1,15 +1,15 @@
-import { Button } from "../../../../components/ui-components"
+import { Button, Spinner } from "../../../../components/ui-components"
 import DepositForm from "../DepositForm"
-import { useGetMarketAccount } from "../../../../hooks/useGetMarketAccount"
 import WithdrawalForm from "../WithdrawalForm"
 import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
 import { useClaim } from "../../../borrower/BorrowerMarketDetails/hooks/useVaultDetailActions"
 import { useGetWithdrawals } from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
 
 import type { LenderMarketActionsProps } from "./interface"
+import { useLenderMarketAccount } from "../../hooks/useLenderMarketAccount"
 
 export function LenderMarketActions({ market }: LenderMarketActionsProps) {
-  const { data: marketAccount } = useGetMarketAccount(market)
+  const { data: marketAccount } = useLenderMarketAccount(market)
   const { data: withdrawals } = useGetWithdrawals(market)
 
   const { mutate: claim } = useClaim(
@@ -18,6 +18,10 @@ export function LenderMarketActions({ market }: LenderMarketActionsProps) {
   )
 
   const disabled = withdrawals.totalClaimableAmount.raw.isZero()
+
+  if (!marketAccount) {
+    return <Spinner isLoading />
+  }
 
   return (
     <div className="rounded-2xl bg-tint-10 mb-14 p-8">
