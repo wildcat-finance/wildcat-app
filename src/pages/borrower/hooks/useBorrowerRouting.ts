@@ -29,7 +29,7 @@ export const useBorrowerRouting = () => {
     }
 
     if (isSuccess && isRegisteredBorrower && (isIndexPage || isAgreementPage)) {
-      navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.MyVaults}`)
+      navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.MarketsList}`)
     }
   }, [isSuccess, data?.isRegisteredBorrower, pathname, hasSignedAgreement])
 

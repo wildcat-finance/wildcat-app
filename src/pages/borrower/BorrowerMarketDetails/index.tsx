@@ -16,6 +16,8 @@ import PaymentHistory from "../../../components/MarketDetailsCommon/PaymentHisto
 import BorrowerMarketOverview from "./BorrowerMarketOverview"
 import { AuthorisedLendersList } from "./AuthorisedLendersList"
 import AdjustMaximumCapacity from "./AdjustMaximumCapacity"
+import { BORROWER_PATHS } from "../routes/constants"
+import { BASE_PATHS } from "../../../routes/constants"
 
 const BorrowerMarketDetails = () => {
   const navigate = useNavigate()
@@ -27,7 +29,7 @@ const BorrowerMarketDetails = () => {
   const { data: marketAccount } = useGetMarketAccountForBorrowerLegacy(market)
 
   const handleClickMyVaults = () => {
-    navigate("/borrower/my-vaults")
+    navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.MarketsList}`)
   }
 
   const isLoading = isMarketLoading

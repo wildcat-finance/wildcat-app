@@ -6,13 +6,17 @@ import {
 } from "@wildcatfi/wildcat-sdk/dist/gql/graphql"
 import {
   Market,
-  TwoStepQueryHookResult,
   SubgraphClient,
   getLensContract,
   SignerOrProvider,
 } from "@wildcatfi/wildcat-sdk"
-import { useMemo } from "react"
 import { logger } from "@wildcatfi/wildcat-sdk/dist/utils/logger"
+import { useAccount } from "wagmi"
+import { useEthersSigner } from "../../../modules/hooks"
+import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
+import { POLLING_INTERVAL } from "../../../config/polling"
+
+export const GET_BORROWER_MARKETS_LIST_KEY = "get-borrower-markets-list"
 
 export type MarketsForBorrowerProps = {
   borrower: string | undefined
@@ -20,12 +24,12 @@ export type MarketsForBorrowerProps = {
   enabled: boolean
 } & Omit<SubgraphGetMarketsForBorrowerQueryVariables, "borrower">
 
-export function useMarketsForBorrower({
+export function useMarketsForBorrowerQuery({
   borrower: _borrower,
   provider,
   enabled,
   ...filters
-}: MarketsForBorrowerProps): TwoStepQueryHookResult<Market[]> {
+}: MarketsForBorrowerProps) {
   const borrower = _borrower?.toLowerCase()
 
   async function queryMarketsForBorrower() {
@@ -35,6 +39,7 @@ export function useMarketsForBorrower({
     >({
       query: GetMarketsForBorrowerDocument,
       variables: { borrower: borrower as string, ...filters },
+      fetchPolicy: "network-only",
     })
     return (
       result.data.controllers[0].markets.map((market) =>
@@ -43,21 +48,7 @@ export function useMarketsForBorrower({
     )
   }
 
-  const {
-    data,
-    isLoading: isLoadingInitial,
-    refetch: refetchInitial,
-    isError: isErrorInitial,
-    failureReason: errorInitial,
-  } = useQuery({
-    queryKey: ["marketsForBorrower/initial", borrower],
-    queryFn: queryMarketsForBorrower,
-    enabled: !!borrower && !!provider && enabled,
-    refetchOnMount: false,
-  })
-
-  const markets = data ?? []
-  async function updateMarkets() {
+  async function updateMarkets(markets: Market[]) {
     const lens = getLensContract(provider as SignerOrProvider)
     const updatedMarkets = await lens.getMarketsData(
       markets.map((x) => x.address),
@@ -72,35 +63,28 @@ export function useMarketsForBorrower({
     return markets
   }
 
-  const updateQueryKeys = useMemo(
-    () => markets.map((b) => [b.address]),
-    [markets],
-  )
+  async function getMarketsForBorrower() {
+    const subgrpahMarkets = await queryMarketsForBorrower()
+    return updateMarkets(subgrpahMarkets)
+  }
 
-  const {
-    data: updatedMarkets,
-    isLoading: isLoadingUpdate,
-    refetch: refetchUpdate,
-    isPaused: isPendingUpdate,
-    isError: isErrorUpdate,
-    failureReason: errorUpdate,
-  } = useQuery({
-    queryKey: ["marketsForBorrower/update", updateQueryKeys],
-    queryFn: updateMarkets,
-    enabled: !!data,
+  return useQuery({
+    queryKey: [GET_BORROWER_MARKETS_LIST_KEY],
+    queryFn: getMarketsForBorrower,
+    refetchInterval: POLLING_INTERVAL,
+    enabled,
     refetchOnMount: false,
   })
+}
 
-  return {
-    data: updatedMarkets ?? markets,
-    isLoadingInitial,
-    isErrorInitial,
-    errorInitial: errorInitial as Error | null,
-    refetchInitial,
-    isLoadingUpdate,
-    isPendingUpdate,
-    isErrorUpdate,
-    errorUpdate: errorUpdate as Error | null,
-    refetchUpdate,
-  }
+export const useMarketsForBorrower = () => {
+  const { address } = useAccount()
+  const signer = useEthersSigner()
+  const { isWrongNetwork } = useCurrentNetwork()
+
+  return useMarketsForBorrowerQuery({
+    borrower: address,
+    provider: signer,
+    enabled: !!address && !!signer && !isWrongNetwork,
+  })
 }

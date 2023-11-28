@@ -1,16 +1,19 @@
 import { useState, useMemo } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { Select, TextInput, Button } from "../../../components/ui-components"
+import {
+  Select,
+  TextInput,
+  Button,
+  Spinner,
+} from "../../../components/ui-components"
 import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import VaultCard from "./VaultCard"
 
 import { mockedStatuses } from "../../../mocks/vaults"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
-import { useMyMarkets } from "./hooks/useMyMarkets"
+import { useMarketsForBorrower } from "../hooks/useMarketsForBorrower"
 import { getMarketStatus } from "../../../utils/marketStatus"
-
-// import { useAllMarkets } from "./hooks/useAllMarkets"
 
 const mockedVaultStatusOptions: SelectOptionItem[] = mockedStatuses
   .sort()
@@ -20,14 +23,14 @@ const mockedVaultStatusOptions: SelectOptionItem[] = mockedStatuses
     value: status,
   }))
 
-function MyVaults() {
+function BorrowerMarketsList() {
   const navigate = useNavigate()
   const [filterByName, setFilterByName] = useState<string>("")
   const [selectedUnderlyingAsset, setSelectedUnderlyingAsset] =
     useState<SelectOptionItem | null>(null)
   const [selectedVaultStatus, setSelectedVaultStatus] =
     useState<SelectOptionItem | null>(null)
-  const { data: markets } = useMyMarkets()
+  const { data: markets, isLoading } = useMarketsForBorrower()
 
   const handleFilterByName = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
@@ -47,6 +50,10 @@ function MyVaults() {
       value: option,
     }))
   }, [markets])
+
+  if (isLoading) {
+    return <Spinner isLoading />
+  }
 
   const filteredMarkets = markets
     ? markets
@@ -132,4 +139,4 @@ function MyVaults() {
   )
 }
 
-export default MyVaults
+export default BorrowerMarketsList

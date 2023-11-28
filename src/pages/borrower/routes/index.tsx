@@ -3,7 +3,7 @@ import { RouteObject } from "react-router-dom"
 import HomePage from "../HomePage"
 import AddNewVault from "../AddNewVault"
 import ServiceAgreement from "../ServiceAgreement"
-import MyVaults from "../MyVaults"
+import BorrowerMarketsList from "../BorrowerMarketsList"
 import BorrowerMarketDetails from "../BorrowerMarketDetails"
 
 import { BORROWER_PATHS } from "./constants"
@@ -23,8 +23,8 @@ export const BORROWER_ROUTES: RouteObject[] = [
     element: <ServiceAgreement />,
   },
   {
-    path: BORROWER_PATHS.MyVaults,
-    element: <MyVaults />,
+    path: BORROWER_PATHS.MarketsList,
+    element: <BorrowerMarketsList />,
   },
   {
     path: BORROWER_PATHS.VaultDetails,
