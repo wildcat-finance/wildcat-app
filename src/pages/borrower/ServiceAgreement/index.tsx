@@ -16,6 +16,11 @@ function ServiceAgreement() {
         Wildcat Services Agreement
       </div>
 
+      <div className="text-green text-xs font-bold mb-8 w-2/3">
+        Agreement SHA-256 Hash:
+        62ca43f85e18dced3553f6702373c71b5be79bc05d4cac9aea7f85d902f15579
+      </div>
+
       <BluePaper className="mb-8">
         <AiOutlineExclamationCircle height={24} />
         <span className="text-xs text-center">
