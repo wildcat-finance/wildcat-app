@@ -6,10 +6,11 @@ import { useClaim } from "../../../borrower/BorrowerMarketDetails/hooks/useVault
 import { useGetWithdrawals } from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
 
 import type { LenderMarketActionsProps } from "./interface"
-import { useLenderMarketAccount } from "../../hooks/useLenderMarketAccount"
 
-export function LenderMarketActions({ market }: LenderMarketActionsProps) {
-  const { data: marketAccount } = useLenderMarketAccount(market)
+export function LenderMarketActions({
+  market,
+  marketAccount,
+}: LenderMarketActionsProps) {
   const { data: withdrawals } = useGetWithdrawals(market)
 
   const { mutate: claim } = useClaim(
