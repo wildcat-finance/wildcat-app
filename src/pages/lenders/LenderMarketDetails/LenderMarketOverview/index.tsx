@@ -54,7 +54,7 @@ const LenderMarketOverview = ({
           <TableItem title="Underlying Asset" className="pl-6 pr-24">
             <a
               className="hover:underline text-xs"
-              href={`https://sepolia.etherscan.io/tx/${underlyingToken.address}`}
+              href={`https://sepolia.etherscan.io/address/${underlyingToken.address}`}
               target="_blank"
               rel="noreferrer"
             >
