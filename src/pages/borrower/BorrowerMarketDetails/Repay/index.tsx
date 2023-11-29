@@ -95,13 +95,9 @@ const Repay = ({ marketAccount }: RepayProps) => {
       repay(repayTokenAmount)
     } else {
       const { length } = market.unpaidWithdrawalBatchExpiries
-      const repayAmountValue = minTokenAmount(
-        market.outstandingDebt,
-        market.underlyingToken.getAmount(marketAccount.underlyingApproval),
-      )
 
       repayAndProcessUnpaidWithdrawalBatch({
-        tokenAmount: repayAmountValue,
+        tokenAmount: repayTokenAmount,
         maxBatches: length,
       })
     }
