@@ -19,7 +19,7 @@ function LendersServiceAgreement() {
 
       <div className="text-green text-xs font-bold mb-8 w-2/3">
         Agreement SHA-256 Hash:
-        62ca43f85e18dced3553f6702373c71b5be79bc05d4cac9aea7f85d902f15579
+        293aa4a019d4a77693d8bcec55872e122330a73f51b3620d7987e5b090cf7934
       </div>
 
       <BluePaper className="mb-8">
@@ -617,7 +617,7 @@ function LendersServiceAgreement() {
             </p>
 
             <p className="mb-4">
-              11.3. Compliance With Financial Crime Regulations
+              11.2. Compliance With Financial Crime Regulations
             </p>
 
             <p className="m-4">
@@ -626,7 +626,7 @@ function LendersServiceAgreement() {
               all Financial Crime Regulations.
             </p>
 
-            <p className="mb-4">11.4. Disclosure</p>
+            <p className="mb-4">11.3. Disclosure</p>
 
             <p className="m-4">
               (a) The Participant agrees that Service Provider may disclose any
@@ -656,7 +656,7 @@ function LendersServiceAgreement() {
               that disclosure.
             </p>
 
-            <p className="mb-4">11.5. Anti-Money Laundering And Sanctions</p>
+            <p className="mb-4">11.4. Anti-Money Laundering And Sanctions</p>
 
             <p className="m-4">
               (a) Notwithstanding any other provision of this Agreement to the
