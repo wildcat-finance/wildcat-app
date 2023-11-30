@@ -26,8 +26,14 @@ export const DepositModal = ({
 
       <div className="flex flex-col items-center gap-y-5 px-8">
         <div className="w-72 font-light text-xxs text-center">
-          You are depositing {depositAmount} {tokenSymbol}. Spare market
-          capacity after this transaction will be {marketCapacity} {tokenSymbol}
+          You are depositing
+          <div className="w-72 font-bold text-xxs text-center my-5">
+            {depositAmount} {tokenSymbol}
+          </div>
+          Spare market capacity after this transaction will be
+          <div className="w-72 font-bold text-xxs text-center my-5">
+            {marketCapacity} {tokenSymbol}
+          </div>
         </div>
       </div>
     </div>

@@ -102,10 +102,8 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
         isOpen={isModalOpen}
         onClose={toggleModal}
         withdraw={handleWithdraw}
-        withdrawableAmount={withdrawalValue}
-        outstandingLoan={marketAccount.marketBalance.format(
-          TOKEN_FORMAT_DECIMALS,
-        )}
+        withdrawAmount={withdrawalValue}
+        outstandingLoan=""
         tokenSymbol={marketAccount.market.underlyingToken.symbol}
       />
     </div>

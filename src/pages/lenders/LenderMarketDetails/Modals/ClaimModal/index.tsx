@@ -25,8 +25,11 @@ export const ClaimModal = ({
 
       <div className="flex flex-col items-center gap-y-5 px-8">
         <div className="w-72 font-light text-xxs text-center">
-          You are claiming {claimableAmount} {tokenSymbol} and transferring it
-          into your wallet.
+          You are claiming
+          <div className="w-72 font-bold text-xxs text-center my-5">
+            {claimableAmount} {tokenSymbol}
+          </div>
+          and transferring it into your wallet.
         </div>
       </div>
     </div>
