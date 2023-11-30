@@ -1,32 +1,33 @@
 import { Modal } from "../../../../../components/ui-components"
-import { ClaimModalProps } from "./type"
+import type { DepositModalProps } from "./type"
 
-export const ClaimModal = ({
+export const DepositModal = ({
   onClose,
-  claim,
+  deposit,
   isLoading,
-  isOpen = false,
-  claimableAmount,
+  isOpen,
+  depositAmount,
+  marketCapacity,
   tokenSymbol,
-}: ClaimModalProps) => (
+}: DepositModalProps) => (
   <Modal
     isOpen={isOpen}
     onClose={onClose}
     isLoading={isLoading}
-    onClick={claim}
-    firstBtnText="Claim"
+    onClick={deposit}
+    firstBtnText="Deposit"
   >
     <div>
       <div className="text-base font-bold px-8 w-100 text-center">
-        You are claiming your rewards.
+        New Deposit
       </div>
 
       <div className="w-full border border-tint-10 my-3" />
 
       <div className="flex flex-col items-center gap-y-5 px-8">
         <div className="w-72 font-light text-xxs text-center">
-          You are claiming {claimableAmount} {tokenSymbol} and transferring it
-          into your wallet.
+          You are depositing {depositAmount} {tokenSymbol}. Spare market
+          capacity after this transaction will be {marketCapacity} {tokenSymbol}
         </div>
       </div>
     </div>

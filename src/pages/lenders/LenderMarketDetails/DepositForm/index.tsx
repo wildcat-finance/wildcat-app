@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useMemo, useState } from "react"
 import { Controller } from "react-hook-form"
 
 import { Button } from "../../../../components/ui-components"
@@ -11,6 +11,7 @@ import { DepositFormProps } from "./interface"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { useDepositForm } from "./hooks/useValidateDeposit"
 import { useAllowanceCheck } from "./hooks/useAllowanceCheck"
+import { DepositModal } from "../Modals/DepositModal"
 
 const DepositForm = ({ marketAccount }: DepositFormProps) => {
   const {
@@ -20,6 +21,10 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
     watch,
     reset,
   } = useDepositForm(marketAccount)
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const toggleModal = () => setIsModalOpen(!isModalOpen)
 
   const { mutateAsync: deposit, isLoading: isDepositing } =
     useDeposit(marketAccount)
@@ -34,6 +39,7 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
     useAllowanceCheck(marketAccount, depositTokenAmount)
 
   const onSubmit = handleSubmit(async () => {
+    toggleModal()
     await deposit(depositValue)
     reset()
   })
@@ -80,12 +86,22 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
         <Button
           variant="green"
           className="w-64"
-          onClick={onSubmit}
+          onClick={toggleModal}
           disabled={disabled}
         >
           Deposit
         </Button>
       )}
+      {/* TODO: fix marketCapacity value */}
+      <DepositModal
+        onClose={toggleModal}
+        deposit={onSubmit}
+        isLoading={isLoading}
+        isOpen={isModalOpen}
+        depositAmount={depositValue}
+        marketCapacity=""
+        tokenSymbol={marketAccount.market.underlyingToken.symbol}
+      />
     </div>
   )
 }
