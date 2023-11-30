@@ -1,6 +1,5 @@
 import dayjs from "dayjs"
-import { mulDiv } from "@wildcatfi/wildcat-sdk"
-import { BigNumber } from "ethers"
+
 import {
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
@@ -11,6 +10,7 @@ import {
   TableRow,
 } from "../../../../../components/ui-components"
 import { WithdrawalsTableProps } from "./interface"
+import { getEtherscanLink } from "../../../../../utils/links"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
@@ -56,7 +56,7 @@ export const WithdrawalsTable = ({ withdrawals }: WithdrawalsTableProps) => (
             <TableCell justify="start">
               <a
                 className="hover:underline"
-                href={`https://sepolia.etherscan.io/address/${withdrawal.address}`}
+                href={getEtherscanLink(withdrawal.address, "address")}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -66,7 +66,7 @@ export const WithdrawalsTable = ({ withdrawals }: WithdrawalsTableProps) => (
             <TableCell justify="start">
               <a
                 className="hover:underline"
-                href={`https://sepolia.etherscan.io/tx/${withdrawal.transactionHash}`}
+                href={getEtherscanLink(withdrawal.transactionHash, "tx")}
                 target="_blank"
                 rel="noreferrer"
               >

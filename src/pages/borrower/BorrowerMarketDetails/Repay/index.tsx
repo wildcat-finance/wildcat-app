@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useMemo, useState } from "react"
-import { minTokenAmount } from "@wildcatfi/wildcat-sdk"
 
 import { Button } from "../../../../components/ui-components"
 import { RepayModal } from "../Modals"

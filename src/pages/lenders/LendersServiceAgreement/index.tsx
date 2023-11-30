@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom"
-
 import { AiOutlineExclamationCircle } from "react-icons/ai"
 import { Paper } from "../../../components/ui-components/Paper"
 import { BluePaper } from "../../../components/ui-components/BluePaper"
@@ -8,7 +6,6 @@ import { useAgreementStore } from "../../../store/useAgreementStore"
 import { DownloadIcon, SignIcon } from "../../../components/ui-components/icons"
 
 function LendersServiceAgreement() {
-  const navigate = useNavigate()
   const { setSignedAgreement } = useAgreementStore()
 
   return (

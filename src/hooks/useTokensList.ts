@@ -20,7 +20,9 @@ function sortingFunctionByName(a: TokenMeta, b: TokenMeta) {
 export const useTokensList = () => {
   const [initialTokensList] = useState<TokenMeta[]>(TOKENS_LIST.tokens)
   const [filteredTokens, setFilteredTokens] = useState<TokenMeta[]>([])
-  const { chainId } = useCurrentNetwork()
+  const { currentNetwork } = useCurrentNetwork()
+
+  const { chainId } = currentNetwork
 
   const tokensByChainId = useMemo(
     () => initialTokensList.filter((token) => token.chainId === chainId),

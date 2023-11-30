@@ -8,6 +8,7 @@ import {
 } from "../../../../utils/formatters"
 
 import type { BorrowerMarketOverviewProps } from "./interface"
+import { getEtherscanLink } from "../../../../utils/links"
 
 const LenderMarketOverview = ({
   marketAccount,
@@ -44,7 +45,7 @@ const LenderMarketOverview = ({
           <TableItem title="Market Address" className="pl-6 pr-24">
             <a
               className="hover:underline text-xs"
-              href={`https://sepolia.etherscan.io/address/${address}`}
+              href={getEtherscanLink(address, "address")}
               target="_blank"
               rel="noreferrer"
             >
@@ -54,7 +55,7 @@ const LenderMarketOverview = ({
           <TableItem title="Underlying Asset" className="pl-6 pr-24">
             <a
               className="hover:underline text-xs"
-              href={`https://sepolia.etherscan.io/address/${underlyingToken.address}`}
+              href={getEtherscanLink(underlyingToken.address, "address")}
               target="_blank"
               rel="noreferrer"
             >
@@ -87,7 +88,7 @@ const LenderMarketOverview = ({
           <TableItem title="Market Token Name" className="pl-6 pr-24">
             <a
               className="hover:underline text-xs"
-              href={`https://sepolia.etherscan.io/address/${marketToken.address}`}
+              href={getEtherscanLink(marketToken.address, "address")}
               target="_blank"
               rel="noreferrer"
             >

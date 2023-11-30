@@ -1,4 +1,3 @@
-import { TokenAmount } from "@wildcatfi/wildcat-sdk"
 import { TableItem } from "../../../../components/ui-components"
 import {
   formatBps,
@@ -9,21 +8,7 @@ import {
 } from "../../../../utils/formatters"
 
 import type { BorrowerMarketOverviewProps } from "./interface"
-
-function getMinReserveRatio(
-  reserveRatioBips: number,
-  coverageLiquidity: TokenAmount,
-  totalSupply: TokenAmount,
-) {
-  if (totalSupply.raw.isZero() || coverageLiquidity.raw.isZero()) {
-    return reserveRatioBips
-  }
-
-  return Math.min(
-    reserveRatioBips,
-    coverageLiquidity.raw.div(totalSupply.raw).toNumber(),
-  )
-}
+import { getEtherscanLink } from "../../../../utils/links"
 
 const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
   const {
@@ -58,7 +43,7 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
           <TableItem title="Market Address" className="pl-6 pr-24">
             <a
               className="hover:underline text-xs"
-              href={`https://sepolia.etherscan.io/address/${address}`}
+              href={getEtherscanLink(address, "address")}
               target="_blank"
               rel="noreferrer"
             >
@@ -68,7 +53,7 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
           <TableItem title="Underlying Asset" className="pl-6 pr-24">
             <a
               className="hover:underline text-xs"
-              href={`https://sepolia.etherscan.io/address/${underlyingToken.address}`}
+              href={getEtherscanLink(underlyingToken.address, "address")}
               target="_blank"
               rel="noreferrer"
             >
@@ -101,7 +86,7 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
           <TableItem title="Market Token Name" className="pl-6 pr-24">
             <a
               className="hover:underline text-xs"
-              href={`https://sepolia.etherscan.io/address/${marketToken.address}`}
+              href={getEtherscanLink(marketToken.address, "address")}
               target="_blank"
               rel="noreferrer"
             >

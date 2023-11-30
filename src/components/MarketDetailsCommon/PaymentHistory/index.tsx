@@ -1,8 +1,6 @@
-import React, { useState, useMemo } from "react"
-// import { DateValue } from "react-aria-components"
+import React, { useState } from "react"
 import dayjs from "dayjs"
 
-// import { BigNumber } from "ethers"
 import { Table, TableCell, TableRow } from "../../ui-components"
 import { ExpandMore } from "../../ui-components/icons"
 import { PaymentHistoryDetailsProps } from "./interface"
@@ -11,55 +9,16 @@ import {
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
 } from "../../../utils/formatters"
-
-// function getFromToTimestamps(dateArray: DateValue[]) {
-//   const fromTimestamp = dateArray[0]
-//     ? Math.floor(dateArray[0].toDate("UTC").getTime() / 1000)
-//     : 0
-//   const toTimestamp = dateArray[1]
-//     ? Math.floor(dateArray[1].toDate("UTC").getTime() / 1000)
-//     : Math.floor(Date.now() / 1000)
-//
-//   return { fromTimestamp, toTimestamp }
-// }
+import { getEtherscanLink } from "../../../utils/links"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
 const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
   const [showHistory, setShowHistory] = useState(false)
-  // const [dateArray, setDateArray] = useState<DateValue[]>([])
 
-  // const { fromTimestamp, toTimestamp } = useMemo(
-  //   () => getFromToTimestamps(dateArray),
-  //   [dateArray],
-  // )
-  //
-  // const isDatePicked = dateArray.length >= 1
-
-  // const [isActivePage, setIsActivePage] = useState(1)
-  //
-  // function numberToArray(number: number) {
-  //   const array = []
-  //   for (let i = 1; i <= number; i += 1) {
-  //     array.push(i)
-  //   }
-  //   return array
-  // }
-
-  // const handleDateReset = () => {
-  //   setDateArray([])
-  // }
-  // const handleSecondDateChange = (date: DateValue) => {
-  //   setDateArray([dateArray[0], date])
-  // }
-  // const handleFirstDateChange = (date: DateValue) => {
-  //   setDateArray([date, dateArray[1]])
-  // }
   const toggleAccordion = () => {
     setShowHistory(!showHistory)
   }
-
-  // const { underlyingToken } = market
 
   return (
     <div className="mb-14">
@@ -142,7 +101,7 @@ const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
                 <TableCell justify="start">
                   <a
                     className="hover:underline"
-                    href={`https://sepolia.etherscan.io/address/${repayment.from}`}
+                    href={getEtherscanLink(repayment.from, "address")}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -152,7 +111,7 @@ const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
                 <TableCell justify="start">
                   <a
                     className="hover:underline"
-                    href={`https://sepolia.etherscan.io/tx/${repayment.transactionHash}`}
+                    href={getEtherscanLink(repayment.transactionHash, "tx")}
                     target="_blank"
                     rel="noreferrer"
                   >
