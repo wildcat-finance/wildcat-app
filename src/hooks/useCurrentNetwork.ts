@@ -1,5 +1,5 @@
 import { useNetwork } from "wagmi"
-import { NETWORKS } from "../config/networks"
+import { NETWORKS, TargetChainId } from "../config/networks"
 
 export const useCurrentNetwork = () => {
   const { chain } = useNetwork()
@@ -8,6 +8,7 @@ export const useCurrentNetwork = () => {
 
   return {
     chainId: chain?.id,
-    isWrongNetwork: !isTestnet,
+    isWrongNetwork: chain?.id !== TargetChainId,
+    isTestnet,
   }
 }

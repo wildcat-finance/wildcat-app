@@ -8,6 +8,7 @@ import { useTokensList } from "../../../../../hooks/useTokensList"
 
 import { TokenMeta } from "../../../../../types/tokens"
 import { ComboboxItem } from "../../../../../components/ui-components/Combobox/interface"
+import { TargetChainId } from "../../../../../config/networks"
 
 function tokensToOptions(tokens: TokenMeta[]) {
   return tokens.map((token) => ({
@@ -36,7 +37,7 @@ export const useTokenSelector = (
       return
     }
     if (utils.isAddress(input)) {
-      Token.getTokenData(input, signer as Signer)
+      Token.getTokenData(TargetChainId, input, signer as Signer)
         .then((tokenData) => {
           const newToken = {
             id: tokenData.symbol,

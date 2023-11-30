@@ -16,12 +16,15 @@ import { DeployNewMarketParams } from "./interface"
 import { toastifyError, toastifyRequest } from "../../../../components/toasts"
 import { BORROWER_PATHS } from "../../routes/constants"
 import { BASE_PATHS } from "../../../../routes/constants"
+import { TargetChainId } from "../../../../config/networks"
+import { useCurrentNetwork } from "../../../../hooks/useCurrentNetwork"
 
 export const useDeployMarket = () => {
   const { data: controller } = useGetController()
   const signer = useEthersSigner()
   const navigate = useNavigate()
   const client = useQueryClient()
+  const { isTestnet } = useCurrentNetwork()
 
   const { mutate: deployNewMarket, isLoading: isDeploying } = useMutation({
     mutationFn: async (marketParams: DeployNewMarketParams) => {
@@ -31,14 +34,21 @@ export const useDeployMarket = () => {
 
       const { assetData } = marketParams
 
-      const asset = await toastifyRequest(
-        deployToken(signer, assetData.name, assetData.symbol),
-        {
-          pending: "Step 1/2: Deploying Mock Token...",
-          success: "Step 1/2: Mock Token Deployed Successfully!",
-          error: "Step 1/2: Mock Token Deployment Failed.",
-        },
-      )
+      const asset = isTestnet
+        ? await toastifyRequest(
+            deployToken(
+              TargetChainId,
+              signer,
+              assetData.name,
+              assetData.symbol,
+            ),
+            {
+              pending: "Step 1/2: Deploying Mock Token...",
+              success: "Step 1/2: Mock Token Deployed Successfully!",
+              error: "Step 1/2: Mock Token Deployment Failed.",
+            },
+          )
+        : assetData
 
       const maxTotalSupply = new TokenAmount(
         parseUnits(marketParams.maxTotalSupply.toString(), asset.decimals),
@@ -60,11 +70,16 @@ export const useDeployMarket = () => {
       // 1. Ensure borrower is registered on the arch-controller.
       // For the testnet deployment, anyone can register a borrower
       if (!controller.isRegisteredBorrower) {
-        await toastifyRequest(controller.registerBorrower(), {
-          pending: "Adjusting: Registering Borrower...",
-          success: "Adjusting: Borrower Registered Successfully",
-          error: "Adjusting: Borrower Registration Failed",
-        })
+        if (isTestnet) {
+          await toastifyRequest(controller.registerBorrower(), {
+            pending: "Adjusting: Registering Borrower...",
+            success: "Adjusting: Borrower Registered Successfully",
+            error: "Adjusting: Borrower Registration Failed",
+          })
+        } else {
+          toastifyError("Must Be Registered Borrower")
+          throw Error("Not Registered Borrower")
+        }
       }
 
       // 2. Ensure the `asset, namePrefix, symbolPrefix` are unique.
@@ -73,11 +88,12 @@ export const useDeployMarket = () => {
         throw Error("Market Not Unique")
       }
 
+      const stepPrefix = isTestnet ? "Step 2/2: " : ""
       // 3. Deploy market
       await toastifyRequest(controller.deployMarket(marketParameters), {
-        pending: "Step 2/2: Deploying Market...",
-        success: "Step 2/2: Market Deployed - Redirecting To Market List...",
-        error: "Step 2/2: Market Deployment Failed",
+        pending: `${stepPrefix}Deploying Market...`,
+        success: `${stepPrefix}Market Deployed - Redirecting To Market List...`,
+        error: `${stepPrefix}Market Deployment Failed`,
       })
     },
     onSuccess: () => {

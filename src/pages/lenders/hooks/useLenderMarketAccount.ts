@@ -4,7 +4,6 @@ import {
   MarketAccount,
   SignerOrProvider,
   TwoStepQueryHookResult,
-  SubgraphClient,
   getLensContract,
   LenderRole,
 } from "@wildcatfi/wildcat-sdk"
@@ -19,6 +18,8 @@ import { useAccount } from "wagmi"
 import { useEthersSigner } from "../../../modules/hooks"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 import { POLLING_INTERVAL } from "../../../config/polling"
+import { SubgraphClient } from "../../../config/subgraph"
+import { TargetChainId } from "../../../config/networks"
 
 export const GET_LENDER_MARKET_ACCOUNT_KEY = "get-lender-market-account"
 
@@ -89,7 +90,7 @@ export function useLenderMarketAccountQuery({
   })
   async function updateMarketAccount() {
     if (!data || !provider) throw Error()
-    const lens = getLensContract(provider)
+    const lens = getLensContract(TargetChainId, provider)
     const update = await lens.getMarketDataWithLenderStatus(
       lenderAddress as string,
       marketAddress as string,

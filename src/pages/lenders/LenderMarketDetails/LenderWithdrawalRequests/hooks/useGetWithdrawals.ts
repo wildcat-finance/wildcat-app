@@ -8,7 +8,6 @@ import {
 } from "@wildcatfi/wildcat-sdk/dist/gql/graphql"
 import {
   Market,
-  SubgraphClient,
   getLensContract,
   WithdrawalBatch,
   LenderWithdrawalStatus,
@@ -20,6 +19,8 @@ import { logger } from "@wildcatfi/wildcat-sdk/dist/utils/logger"
 import { useMemo } from "react"
 import { useAccount } from "wagmi"
 import { POLLING_INTERVAL } from "../../../../../config/polling"
+import { SubgraphClient } from "../../../../../config/subgraph"
+import { TargetChainId } from "../../../../../config/networks"
 
 export type LenderWithdrawalsForMarketResult = {
   completeWithdrawals: LenderWithdrawalStatus[]
@@ -139,7 +140,7 @@ export function useGetWithdrawals(
 
   async function updateWithdrawals() {
     if (!lender || !market || !marketAddress) throw Error()
-    const lens = getLensContract(market.provider)
+    const lens = getLensContract(TargetChainId, market.provider)
     const incompleteWithdrawals = [
       ...(withdrawals.activeWithdrawal ? [withdrawals.activeWithdrawal] : []),
       ...(withdrawals.expiredPendingWithdrawals ?? []),

@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useEthersSigner } from "../modules/hooks"
 import { useCurrentNetwork } from "./useCurrentNetwork"
 import { useMarketAccount } from "./useMarketAccount"
+import { TargetChainId } from "../config/networks"
 
 export const GET_MARKET_ACCOUNT_KEY = "get-market-account"
 
@@ -33,6 +34,7 @@ export const useGetMarketAccountForBorrowerLegacy = (
 
   async function getMarketAccountFn() {
     const marketAccount = await getMarketAccount(
+      TargetChainId,
       signer as Signer,
       address as string,
       market as Market,

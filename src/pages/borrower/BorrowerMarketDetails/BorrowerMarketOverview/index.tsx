@@ -9,6 +9,7 @@ import {
 } from "../../../../utils/formatters"
 
 import type { BorrowerMarketOverviewProps } from "./interface"
+import { EtherscanBaseUrl } from "../../../../config/networks"
 
 function getMinReserveRatio(
   reserveRatioBips: number,
@@ -58,7 +59,7 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
           <TableItem title="Market Address" className="pl-6 pr-24">
             <a
               className="hover:underline text-xs"
-              href={`https://sepolia.etherscan.io/address/${address}`}
+              href={`${EtherscanBaseUrl}/address/${address}`}
               target="_blank"
               rel="noreferrer"
             >
@@ -68,7 +69,7 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
           <TableItem title="Underlying Asset" className="pl-6 pr-24">
             <a
               className="hover:underline text-xs"
-              href={`https://sepolia.etherscan.io/address/${underlyingToken.address}`}
+              href={`${EtherscanBaseUrl}/address/${underlyingToken.address}`}
               target="_blank"
               rel="noreferrer"
             >
@@ -101,7 +102,7 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
           <TableItem title="Market Token Name" className="pl-6 pr-24">
             <a
               className="hover:underline text-xs"
-              href={`https://sepolia.etherscan.io/address/${marketToken.address}`}
+              href={`${EtherscanBaseUrl}/address/${marketToken.address}`}
               target="_blank"
               rel="noreferrer"
             >

@@ -8,6 +8,7 @@ import {
 
 import { useEthersSigner } from "../modules/hooks"
 import { useCurrentNetwork } from "./useCurrentNetwork"
+import { TargetChainId } from "../config/networks"
 
 export const GET_CONTROLLER_KEY = "controller"
 export const GET_CONTROLLER_CONTRACT_KEY = "controllerContract"
@@ -19,7 +20,11 @@ export const useGetController = () => {
   const { isWrongNetwork } = useCurrentNetwork()
 
   async function getUserController() {
-    const controller = await getController(signer as Signer, address as string)
+    const controller = await getController(
+      TargetChainId,
+      signer as Signer,
+      address as string,
+    )
     return controller
   }
 
@@ -57,7 +62,11 @@ export const useGetUpdatedController = () => {
   const { isWrongNetwork } = useCurrentNetwork()
 
   async function getUserController() {
-    const controller = await getController(signer as Signer, address as string)
+    const controller = await getController(
+      TargetChainId,
+      signer as Signer,
+      address as string,
+    )
     await controller.update()
 
     return controller

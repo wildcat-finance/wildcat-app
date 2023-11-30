@@ -1,4 +1,5 @@
 import { Typography } from "../../../components/ui-components"
+import { EtherscanBaseUrl } from "../../../config/networks"
 
 const HomePage = () => (
   <div>
@@ -39,7 +40,7 @@ const HomePage = () => (
       add yourself via the <i>registerBorrower</i> function{" "}
       <a
         target="_blank"
-        href="https://sepolia.etherscan.io/address/0xa476920af80B587f696734430227869795E2Ea78#writeContract"
+        href={`${EtherscanBaseUrl}/address/0xa476920af80B587f696734430227869795E2Ea78#writeContract`}
         rel="noreferrer"
         className="underline"
       >

@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import {
   Market,
-  SubgraphClient,
   getLensContract,
   WithdrawalBatch,
   TwoStepQueryHookResult,
@@ -15,6 +14,8 @@ import {
 import { logger } from "@wildcatfi/wildcat-sdk/dist/utils/logger"
 import { useMemo } from "react"
 import { POLLING_INTERVAL } from "../../../../../config/polling"
+import { SubgraphClient } from "../../../../../config/subgraph"
+import { TargetChainId } from "../../../../../config/networks"
 
 export type BorrowerWithdrawalsForMarketResult = {
   activeWithdrawal: WithdrawalBatch | undefined
@@ -89,7 +90,7 @@ export function useGetWithdrawals(
   async function getUpdatedBatches() {
     if (!address || !market) throw Error()
     logger.debug(`Getting batch updates...`)
-    const lens = getLensContract(market.provider)
+    const lens = getLensContract(TargetChainId, market.provider)
     const pendingWithdrawals = [
       ...(withdrawals.activeWithdrawal ? [withdrawals.activeWithdrawal] : []),
       ...(withdrawals.expiredPendingWithdrawals ?? []),

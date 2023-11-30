@@ -16,13 +16,14 @@ import {
   SignerOrProvider,
   Market,
   MarketAccount,
-  SubgraphClient,
   getLensContract,
   TwoStepQueryHookResult,
 } from "@wildcatfi/wildcat-sdk"
 import { logger } from "@wildcatfi/wildcat-sdk/dist/utils/logger"
 import { useCurrentNetwork } from "../../../../hooks/useCurrentNetwork"
 import { useEthersSigner } from "../../../../modules/hooks"
+import { SubgraphClient } from "../../../../config/subgraph"
+import { TargetChainId } from "../../../../config/networks"
 
 export type LenderMarketsQueryProps = {
   numDeposits?: number
@@ -70,6 +71,7 @@ export function useLendersMarkets({
 
     const lenderAccounts = result.data.lenderAccounts.map((account) => {
       const market = Market.fromSubgraphMarketData(
+        TargetChainId,
         provider as SignerOrProvider,
         account.market,
       )
@@ -86,6 +88,7 @@ export function useLendersMarkets({
       logger.debug(`Got markets without account: ${markets.length}!`)
       markets.forEach((marketData) => {
         const market = Market.fromSubgraphMarketData(
+          TargetChainId,
           provider as SignerOrProvider,
           marketData,
         )
@@ -118,7 +121,7 @@ export function useLendersMarkets({
 
   async function getLenderUpdates() {
     logger.debug(`Getting lender updates...`)
-    const lens = getLensContract(provider as SignerOrProvider)
+    const lens = getLensContract(TargetChainId, provider as SignerOrProvider)
     const accountUpdates = await lens.getMarketsDataWithLenderStatus(
       lender as string,
       accounts.map((x) => x.market.address),

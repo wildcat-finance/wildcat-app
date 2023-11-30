@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { Market, SubgraphClient, getLensContract } from "@wildcatfi/wildcat-sdk"
+import { Market, getLensContract } from "@wildcatfi/wildcat-sdk"
 import {
   GetMarketDocument,
   SubgraphGetMarketQuery,
@@ -8,6 +8,8 @@ import {
 import { useEthersSigner } from "../modules/hooks"
 import { useCurrentNetwork } from "./useCurrentNetwork"
 import { POLLING_INTERVAL } from "../config/polling"
+import { SubgraphClient } from "../config/subgraph"
+import { TargetChainId } from "../config/networks"
 
 export const GET_MARKET_KEY = "get-market"
 
@@ -34,13 +36,17 @@ export function useGetMarket({ marketAddress, ...filters }: UseMarketProps) {
       },
     })
 
-    return Market.fromSubgraphMarketData(signer, result.data.market!)
+    return Market.fromSubgraphMarketData(
+      TargetChainId,
+      signer,
+      result.data.market!,
+    )
   }
 
   async function updateMarket(market: Market | undefined) {
     if (!market || !marketAddress || !signer) throw Error()
 
-    const lens = getLensContract(signer)
+    const lens = getLensContract(TargetChainId, signer)
     const update = await lens.getMarketData(marketAddress)
     market.updateWith(update)
 
