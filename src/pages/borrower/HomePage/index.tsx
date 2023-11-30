@@ -6,13 +6,27 @@ const HomePage = () => (
 
     <div className="max-w-m text-m" style={{ padding: "1rem" }}>
       We don’t recognise the address that you’ve connected as belonging to a
-      registered borrower on the <b>Sepolia testnet</b>.{"\n\n"}
+      registered borrower on the network that you’re currently connected to via
+      your wallet.
     </div>
 
     <div className="max-w-m text-m" style={{ padding: "1rem" }}>
-      If you’re helping us to test while we’re prepping for mainnet launch (or
-      just want a look around), you can be added as a borrower on our mock
-      archcontroller by{" "}
+      If you’re a borrower interested in using Wildcat on Ethereum mainnet, then
+      get in touch with us via our{" "}
+      <a
+        target="_blank"
+        href="https://rvficirw76q.typeform.com/to/FKBzhnmo"
+        rel="noreferrer"
+        className="underline"
+      >
+        Typeform
+      </a>
+      .
+    </div>
+
+    <div className="max-w-m text-m" style={{ padding: "1rem" }}>
+      If you’re interested in looking around on the Sepolia testnet instead,
+      then you can be added as a borrower on our mock archcontroller either by{" "}
       <a
         target="_blank"
         href="mailto:laurence@wildcat.finance"
@@ -25,7 +39,7 @@ const HomePage = () => (
       add yourself via the <i>registerBorrower</i> function{" "}
       <a
         target="_blank"
-        href="https://sepolia.etherscan.io/address/0x43f1db4e70ccb43ccd5d4a7bc033245254cc3909#writeContract"
+        href="https://sepolia.etherscan.io/address/0xa476920af80B587f696734430227869795E2Ea78#writeContract"
         rel="noreferrer"
         className="underline"
       >
@@ -35,12 +49,11 @@ const HomePage = () => (
     </div>
 
     <div className="max-w-m text-m" style={{ padding: "1rem" }}>
-      Once you’re authorised, you’ll be able to deploy markets, add your own
-      lenders, and generally tinker around.
+      Once you’re authorised on either network, the world is your oyster.
     </div>
 
     <div className="max-w-m text-m" style={{ padding: "1rem" }}>
-      Welcome, and thanks for checking out Wildcat!
+      Welcome to the Wildcat Protocol.
     </div>
   </div>
 )
