@@ -10,11 +10,15 @@ import { WithdrawalFormProps } from "./interface"
 import { useWithdraw } from "../../../borrower/BorrowerMarketDetails/hooks/useVaultDetailActions"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { SDK_ERRORS_MAPPING } from "../../../../utils/forms/errors"
+import { WithdrawalModal } from "../Modals/WithdrawalModal"
 
 const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
   const { mutateAsync, isLoading } = useWithdraw(marketAccount)
   const [withdrawalValue, setWithdrawalValue] = useState("")
   const [error, setError] = useState<string | undefined>()
+  const [isModalOpen, setModalOpen] = useState(false)
+
+  const toggleModal = () => setModalOpen(!isModalOpen)
 
   const withdrawalValueBigNum = new TokenAmount(
     parseUnits(
@@ -54,6 +58,7 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
   }
 
   const handleWithdraw = () => {
+    toggleModal()
     mutateAsync(withdrawalValue)
       .catch((e) => {
         console.log(e)
@@ -86,11 +91,23 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
       <Button
         variant="green"
         className="w-64"
-        onClick={handleWithdraw}
+        onClick={toggleModal}
         disabled={disabled}
       >
         Request
       </Button>
+
+      {/* TODO: fix outstandingLoan value */}
+      <WithdrawalModal
+        isOpen={isModalOpen}
+        onClose={toggleModal}
+        withdraw={handleWithdraw}
+        withdrawableAmount={withdrawalValue}
+        outstandingLoan={marketAccount.marketBalance.format(
+          TOKEN_FORMAT_DECIMALS,
+        )}
+        tokenSymbol={marketAccount.market.underlyingToken.symbol}
+      />
     </div>
   )
 }
