@@ -7,7 +7,7 @@ import {
   Button,
   Spinner,
 } from "../../../components/ui-components"
-import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
+// import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import VaultCard from "./VaultCard"
 
 import { mockedStatuses } from "../../../mocks/vaults"
@@ -129,12 +129,6 @@ function BorrowerMarketsList() {
           </div>
         ))}
       </div>
-
-      <ServiceAgreementCard
-        className="mt-10"
-        title="Wildcat Service Agreement"
-        description="You agreed to the Wildcat Service Agreement on 12-Sept-2023"
-      />
     </div>
   )
 }

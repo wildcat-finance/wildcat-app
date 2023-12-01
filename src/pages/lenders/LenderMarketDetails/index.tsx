@@ -6,7 +6,7 @@ import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 import { LenderMarketActions } from "./LenderMarketActions"
 import { useGetMarket } from "../../../hooks/useGetMarket"
 import WithdrawalRequests from "./LenderWithdrawalRequests"
-import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
+// import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import PaymentHistory from "../../../components/MarketDetailsCommon/PaymentHistory"
 import { BackArrow } from "../../../components/ui-components/icons"
 import LenderMarketOverview from "./LenderMarketOverview"
@@ -83,12 +83,6 @@ export function LenderMarketDetails() {
 
       <WithdrawalRequests market={market} />
       <PaymentHistory market={market} />
-
-      <ServiceAgreementCard
-        className="mt-10"
-        title="Wildcat Service Agreement"
-        description="You agreed to the Wildcat Service Agreement on 12-Sept-2023"
-      />
     </div>
   )
 }
