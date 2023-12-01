@@ -42,15 +42,21 @@ export function useMarketsForBorrowerQuery({
       variables: { borrower: borrower as string, ...filters },
       fetchPolicy: "network-only",
     })
-    return (
-      result.data.controllers[0].markets.map((market) =>
-        Market.fromSubgraphMarketData(
-          TargetChainId,
-          provider as SignerOrProvider,
-          market,
-        ),
-      ) ?? []
-    )
+
+    const controller = result.data.controllers[0]
+    if (controller) {
+      return (
+        controller.markets.map((market) =>
+          Market.fromSubgraphMarketData(
+            TargetChainId,
+            provider as SignerOrProvider,
+            market,
+          ),
+        ) ?? []
+      )
+    }
+
+    return []
   }
 
   async function updateMarkets(markets: Market[]) {
