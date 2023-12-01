@@ -8,12 +8,12 @@ const HomePage = () => {
       <div>
         <Typography variant="h1">Hello, Stranger!</Typography>
 
-        <div className="max-w-m text-m" style={{ padding: "1rem" }}>
+        <div className="max-w-m text-m mb-4">
           We don't recognise the address that you've connected as belonging to a
           registered borrower on Ethereum mainnet.
         </div>
 
-        <div className="max-w-m text-m" style={{ padding: "1rem" }}>
+        <div className="max-w-m text-m mb-4">
           If you're a borrower interested in using Wildcat, then get in touch
           with us via our{" "}
           <a
@@ -27,7 +27,7 @@ const HomePage = () => {
           .
         </div>
 
-        <div className="max-w-m text-m" style={{ padding: "1rem" }}>
+        <div className="max-w-m text-m mb-4">
           If you're interested in looking around on the Sepolia testnet instead,
           then you should head over{" "}
           <a
@@ -42,11 +42,11 @@ const HomePage = () => {
           there.
         </div>
 
-        <div className="max-w-m text-m" style={{ padding: "1rem" }}>
+        <div className="max-w-m text-m mb-4">
           Once you're authorised, the world is your oyster.
         </div>
 
-        <div className="max-w-m text-m" style={{ padding: "1rem" }}>
+        <div className="max-w-m text-m mb-4">
           Welcome to the Wildcat Protocol.
         </div>
       </div>
@@ -56,12 +56,12 @@ const HomePage = () => {
     <div>
       <Typography variant="h1">Hello, Stranger!</Typography>
 
-      <div className="max-w-m text-m" style={{ padding: "1rem" }}>
+      <div className="max-w-m text-m mb-4">
         We don't recognise the address that you've connected as belonging to a
         registered borrower on the Sepolia testnet.
       </div>
 
-      <div className="max-w-m text-m" style={{ padding: "1rem" }}>
+      <div className="max-w-m text-m mb-4">
         If you're interested in looking around here instead, then you can be
         added as a borrower on our mock archcontroller by either{" "}
         <a
@@ -85,11 +85,11 @@ const HomePage = () => {
         .
       </div>
 
-      <div className="max-w-m text-m" style={{ padding: "1rem" }}>
+      <div className="max-w-m text-m mb-4">
         Once you're authorised, the world is your oyster.
       </div>
 
-      <div className="max-w-m text-m" style={{ padding: "1rem" }}>
+      <div className="max-w-m text-m mb-4">
         Welcome to the Wildcat Protocol.
       </div>
     </div>
@@ -100,13 +100,13 @@ const HomePage = () => {
 //   <div>
 //     <Typography variant="h1">Hello, Stranger!</Typography>
 
-//     <div className="max-w-m text-m" style={{ padding: "1rem" }}>
+//     <div className="max-w-m text-m mb-4">
 //       We don’t recognise the address that you’ve connected as belonging to a
 //       registered borrower on the network that you’re currently connected to via
 //       your wallet.
 //     </div>
 
-//     <div className="max-w-m text-m" style={{ padding: "1rem" }}>
+//     <div className="max-w-m text-m mb-4">
 //       If you’re a borrower interested in using Wildcat on Ethereum mainnet, then
 //       get in touch with us via our{" "}
 //       <a
@@ -120,7 +120,7 @@ const HomePage = () => {
 //       .
 //     </div>
 
-//     <div className="max-w-m text-m" style={{ padding: "1rem" }}>
+//     <div className="max-w-m text-m mb-4">
 //       If you’re interested in looking around on the Sepolia testnet instead,
 //       then you can be added as a borrower on our mock archcontroller either by{" "}
 //       <a
@@ -144,11 +144,11 @@ const HomePage = () => {
 //       .
 //     </div>
 
-//     <div className="max-w-m text-m" style={{ padding: "1rem" }}>
+//     <div className="max-w-m text-m mb-4">
 //       Once you’re authorised on either network, the world is your oyster.
 //     </div>
 
-//     <div className="max-w-m text-m" style={{ padding: "1rem" }}>
+//     <div className="max-w-m text-m mb-4">
 //       Welcome to the Wildcat Protocol.
 //     </div>
 //   </div>

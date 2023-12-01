@@ -83,12 +83,14 @@ function BorrowerMarketsList() {
         <div className="text-xs font-normal underline">My Markets</div>
         <div className="text-green text-2xl font-bold justify-between items-center flex mt-8">
           All Markets For Borrower
-          <Button
-            onClick={() => navigate("/borrower/add-new-vault")}
-            variant="blue"
-          >
-            New Market
-          </Button>
+          <div className="px-5">
+            <Button
+              onClick={() => navigate("/borrower/add-new-vault")}
+              variant="blue"
+            >
+              New Market
+            </Button>
+          </div>
         </div>
 
         <div className="flex w-full flex-wrap -mx-2.5 mt-8">
