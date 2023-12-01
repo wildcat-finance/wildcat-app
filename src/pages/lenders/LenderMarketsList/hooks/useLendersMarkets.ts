@@ -24,6 +24,7 @@ import { useCurrentNetwork } from "../../../../hooks/useCurrentNetwork"
 import { useEthersSigner } from "../../../../modules/hooks"
 import { SubgraphClient } from "../../../../config/subgraph"
 import { TargetChainId } from "../../../../config/networks"
+import { POLLING_INTERVAL } from "../../../../config/polling"
 
 export type LenderMarketsQueryProps = {
   numDeposits?: number
@@ -64,6 +65,7 @@ export function useLendersMarkets({
         ...filters,
         numWithdrawals: 1,
       },
+      fetchPolicy: "network-only",
     })
     logger.debug(
       `Got ${result.data.lenderAccounts.length} existing lender accounts...`,
@@ -113,6 +115,7 @@ export function useLendersMarkets({
   } = useQuery({
     queryKey: [GET_LENDERS_ACCOUNTS_KEY, "initial", lender],
     queryFn: queryLenders,
+    refetchInterval: POLLING_INTERVAL,
     enabled: !!provider && !isWrongNetwork && !!lender,
     refetchOnMount: false,
   })
