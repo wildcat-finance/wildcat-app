@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react"
 
-import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
+// import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import { Select, TextInput } from "../../../components/ui-components"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
 import { mockedStatuses } from "../../../mocks/vaults"
@@ -127,12 +127,6 @@ function LenderMarketsList() {
           </div>
         ))}
       </div>
-
-      <ServiceAgreementCard
-        className="mt-12"
-        title="Wildcat Service Agreement"
-        description="You agreed to the Wildcat Service Agreement on 12-Sept-2023"
-      />
     </>
   )
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Token } from "@wildcatfi/wildcat-sdk"
 
-import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
+// import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import {
   Paper,
   Chip,
@@ -367,12 +367,6 @@ const AddNewVault = () => {
           validateForm={handleValidateForm}
         />
       </Paper>
-
-      <ServiceAgreementCard
-        className="mt-10"
-        title="Wildcat Service Agreement"
-        description="You agreed to the Wildcat Service Agreement on 12-Sept-2023"
-      />
     </div>
   )
 }
