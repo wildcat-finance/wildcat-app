@@ -3,13 +3,20 @@ import cn from "classnames"
 import { useNavigate } from "react-router-dom"
 import { Button, Chip, TableItem } from "../../../../components/ui-components"
 import { VaultCardProps } from "./interface"
-import { formatBps, formatToken } from "../../../../utils/formatters"
+import {
+  TOKEN_FORMAT_DECIMALS,
+  formatBps,
+  formatToken,
+} from "../../../../utils/formatters"
 import {
   getMarketStatus,
   getVaultStatusColor,
 } from "../../../../utils/marketStatus"
+import { useLenderMarketAccount } from "../../hooks/useLenderMarketAccount"
 
 function VaultCard({ market, className }: VaultCardProps) {
+  const { data: marketAccount } = useLenderMarketAccount(market)
+
   const status = getMarketStatus(
     market.isClosed,
     market.isDelinquent,
@@ -49,9 +56,15 @@ function VaultCard({ market, className }: VaultCardProps) {
           value={`${formatBps(market.reserveRatioBips)}%`}
         />
         <TableItem
-          title="Max Market Capacity"
+          title="Maximum Capacity"
           value={`${formatToken(market.maxTotalSupply.raw)}
             ${market.underlyingToken.symbol}`}
+        />
+        <TableItem
+          title="Loaned Amount"
+          value={`${marketAccount?.marketBalance.format(
+            TOKEN_FORMAT_DECIMALS,
+          )} ${market.underlyingToken.symbol}`}
         />
       </div>
 
