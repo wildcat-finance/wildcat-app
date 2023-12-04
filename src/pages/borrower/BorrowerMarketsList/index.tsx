@@ -7,7 +7,6 @@ import {
   Button,
   Spinner,
 } from "../../../components/ui-components"
-// import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import VaultCard from "./VaultCard"
 
 import { mockedStatuses } from "../../../mocks/vaults"
@@ -31,6 +30,7 @@ function BorrowerMarketsList() {
   const [selectedVaultStatus, setSelectedVaultStatus] =
     useState<SelectOptionItem | null>(null)
   const { data: markets, isLoading } = useMarketsForBorrower()
+  const noMarkets = markets?.length === 0
 
   const handleFilterByName = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
@@ -125,6 +125,7 @@ function BorrowerMarketsList() {
       </div>
 
       <div className="flex w-full flex-wrap -mx-2.5 mt-5">
+        {noMarkets && <div className="m-auto">No markets yet</div>}
         {filteredMarkets.map((market) => (
           <div key={market.address} className="w-1/3 px-2.5 py-2.5">
             <VaultCard market={market} className="w-full" />
