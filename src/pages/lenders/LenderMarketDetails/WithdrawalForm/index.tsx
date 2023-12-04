@@ -25,8 +25,12 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
   const withdrawalValue = watch("withdrawalAmount")
 
   const onSubmit = handleSubmit(async () => {
-    await mutateAsync(withdrawalValue)
-    reset()
+    try {
+      await mutateAsync(withdrawalValue)
+      reset()
+    } catch (error) {
+      console.log(error)
+    }
   })
 
   const withdrawalValueBigNum = new TokenAmount(

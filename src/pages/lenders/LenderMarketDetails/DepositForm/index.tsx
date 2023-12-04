@@ -34,8 +34,12 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
     useAllowanceCheck(marketAccount, depositTokenAmount)
 
   const onSubmit = handleSubmit(async () => {
-    await deposit(depositValue)
-    reset()
+    try {
+      await deposit(depositValue)
+      reset()
+    } catch (error) {
+      console.log(error)
+    }
   })
 
   const isLoading = isDepositing || isApproving
