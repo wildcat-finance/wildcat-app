@@ -1,6 +1,6 @@
-import { ChangeEvent, useState } from "react"
 import { TokenAmount } from "@wildcatfi/wildcat-sdk"
 import { parseUnits } from "ethers/lib/utils"
+import { Controller } from "react-hook-form"
 import { Button } from "../../../../components/ui-components"
 import {
   MARKET_PARAMS_DECIMALS,
@@ -9,12 +9,25 @@ import {
 import { WithdrawalFormProps } from "./interface"
 import { useWithdraw } from "../../../borrower/BorrowerMarketDetails/hooks/useVaultDetailActions"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
-import { SDK_ERRORS_MAPPING } from "../../../../utils/forms/errors"
+import { useWithdrawalForm } from "./hooks/useValidateWithdrawal"
 
 const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    watch,
+    reset,
+  } = useWithdrawalForm(marketAccount)
+
   const { mutateAsync, isLoading } = useWithdraw(marketAccount)
-  const [withdrawalValue, setWithdrawalValue] = useState("")
-  const [error, setError] = useState<string | undefined>()
+
+  const withdrawalValue = watch("withdrawalAmount")
+
+  const onSubmit = handleSubmit(async () => {
+    await mutateAsync(withdrawalValue)
+    reset()
+  })
 
   const withdrawalValueBigNum = new TokenAmount(
     parseUnits(
@@ -24,69 +37,40 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
     marketAccount.market.underlyingToken,
   )
 
-  const disabled = withdrawalValueBigNum.raw.isZero() || !!error || isLoading
-
-  const clearErrors = () => setError(undefined)
-
-  const validate = (value: string) => {
-    const withdrawalAmount =
-      marketAccount.market.underlyingToken.parseAmount(value)
-
-    const { status } = marketAccount.checkQueueWithdrawalStep(withdrawalAmount)
-
-    if (status !== "Ready") {
-      setError(SDK_ERRORS_MAPPING.queueWithdrawal[status])
-    } else {
-      clearErrors()
-    }
-  }
-
-  const handleChangeWithdrawalAmount = (evt: ChangeEvent<HTMLInputElement>) => {
-    const { value } = evt.target
-    setWithdrawalValue(value)
-
-    if (value === "" || value === "0") {
-      clearErrors()
-      return
-    }
-
-    validate(value)
-  }
-
-  const handleWithdraw = () => {
-    mutateAsync(withdrawalValue)
-      .catch((e) => {
-        console.log(e)
-      })
-      .finally(() => {
-        setWithdrawalValue("")
-      })
-  }
+  const disabled =
+    withdrawalValueBigNum.raw.isZero() || !!errors.withdrawalAmount || isLoading
 
   return (
     <div className="flex gap-x-3.5 w-full max-w-xl">
       <div className="flex flex-col w-full">
-        <DetailsInput
-          decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
-          value={withdrawalValue}
-          className="w-full"
-          placeholder="00,000.00"
-          onChange={handleChangeWithdrawalAmount}
-          min={0}
-          max={marketAccount.market.totalSupply.format(TOKEN_FORMAT_DECIMALS)}
-          market={marketAccount.market}
-          errorText={error}
-          helperText="Balance"
-          helperValue={`${marketAccount.marketBalance.format(
-            TOKEN_FORMAT_DECIMALS,
+        <Controller
+          name="withdrawalAmount"
+          control={control}
+          render={({ field }) => (
+            <DetailsInput
+              decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
+              className="w-full"
+              placeholder="00,000.00"
+              min={0}
+              max={marketAccount.market.totalSupply.format(
+                TOKEN_FORMAT_DECIMALS,
+              )}
+              market={marketAccount.market}
+              errorText={errors.withdrawalAmount?.message}
+              helperText="Balance"
+              helperValue={`${marketAccount.marketBalance.format(
+                TOKEN_FORMAT_DECIMALS,
+              )}
+            ${marketAccount.market.underlyingToken.symbol}`}
+              {...field}
+            />
           )}
-          ${marketAccount.market.underlyingToken.symbol}`}
         />
       </div>
       <Button
         variant="green"
         className="w-64"
-        onClick={handleWithdraw}
+        onClick={onSubmit}
         disabled={disabled}
       >
         Request
