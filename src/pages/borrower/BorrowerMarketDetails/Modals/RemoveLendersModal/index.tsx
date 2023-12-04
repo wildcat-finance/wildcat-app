@@ -41,9 +41,15 @@ export function RemoveLendersModal({ market }: RemoveLendersModalProps) {
     }
   }, [isSuccess])
 
+  const marketDisabled = market.isClosed
+
   return (
     <>
-      <Button variant="red" onClick={() => setIsModalOpen(true)}>
+      <Button
+        variant="red"
+        disabled={marketDisabled}
+        onClick={() => setIsModalOpen(true)}
+      >
         Deauthorise Lenders
       </Button>
 

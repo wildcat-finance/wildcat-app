@@ -76,12 +76,15 @@ export function NewLendersModal({ market }: NewLendersModalProps) {
     }
   }, [isSuccess])
 
+  const marketDisabled = market.isClosed
+  const disabled = marketDisabled || isLoading
+
   return (
     <>
       <Button
         variant="blue"
         className="w-35 whitespace-nowrap"
-        disabled={isLoading}
+        disabled={disabled}
         onClick={() => setIsModalOpen(true)}
       >
         Authorise Lenders
