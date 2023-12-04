@@ -86,6 +86,20 @@ const HomePage = () => {
       </div>
 
       <div className="max-w-m text-m mb-4">
+        If you need to get a hold of some Sepolia ETH, you can generate some
+        quickly using this faucet:{" "}
+        <a
+          target="_blank"
+          href="https://sepolia-faucet.pk910.de"
+          rel="noreferrer"
+          className="underline"
+        >
+          https://sepolia-faucet.pk910.de
+        </a>
+        .
+      </div>
+
+      <div className="max-w-m text-m mb-4">
         Once you're authorised, the world is your oyster.
       </div>
 
