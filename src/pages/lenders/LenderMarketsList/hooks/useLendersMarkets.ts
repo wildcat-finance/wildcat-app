@@ -103,6 +103,11 @@ export function useLendersMarkets({
       })
     })
     logger.debug(`Got ${lenderAccounts.length} lender accounts...`)
+    lenderAccounts.sort(
+      (a, b) =>
+        (a.market.deployedEvent?.blockNumber ?? 0) -
+        (b.market.deployedEvent?.blockNumber ?? 0),
+    )
     return lenderAccounts
   }
 
