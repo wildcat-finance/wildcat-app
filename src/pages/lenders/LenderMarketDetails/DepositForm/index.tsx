@@ -38,9 +38,13 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
     reset()
   })
 
+  const marketDisabled = marketAccount.market.isClosed
   const isLoading = isDepositing || isApproving
   const disabled =
-    depositTokenAmount.raw.isZero() || isLoading || !!errors.depositAmount
+    marketDisabled ||
+    depositTokenAmount.raw.isZero() ||
+    isLoading ||
+    !!errors.depositAmount
 
   return (
     <div className="flex gap-x-3.5 w-full max-w-xl">
