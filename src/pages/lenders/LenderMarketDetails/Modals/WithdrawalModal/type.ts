@@ -5,6 +5,5 @@ export type WithdrawalModalProps = {
   isOpen?: boolean
   disabled?: boolean
   withdrawAmount: string
-  outstandingLoan: string
   tokenSymbol: string
 }

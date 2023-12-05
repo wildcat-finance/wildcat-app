@@ -60,11 +60,11 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
   const handleWithdraw = () => {
     toggleModal()
     mutateAsync(withdrawalValue)
+      .then(() => {
+        setWithdrawalValue("")
+      })
       .catch((e) => {
         console.log(e)
-      })
-      .finally(() => {
-        setWithdrawalValue("")
       })
   }
 
@@ -97,13 +97,11 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
         Request
       </Button>
 
-      {/* TODO: fix outstandingLoan value */}
       <WithdrawalModal
         isOpen={isModalOpen}
         onClose={toggleModal}
         withdraw={handleWithdraw}
         withdrawAmount={withdrawalValue}
-        outstandingLoan=""
         tokenSymbol={marketAccount.market.underlyingToken.symbol}
       />
     </div>

@@ -5,6 +5,5 @@ export type DepositModalProps = {
   isOpen?: boolean
   disabled?: boolean
   depositAmount: string
-  marketCapacity: string
   tokenSymbol: string
 }

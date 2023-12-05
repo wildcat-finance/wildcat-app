@@ -92,14 +92,13 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
           Deposit
         </Button>
       )}
-      {/* TODO: fix marketCapacity value */}
+
       <DepositModal
         onClose={toggleModal}
         deposit={onSubmit}
         isLoading={isLoading}
         isOpen={isModalOpen}
         depositAmount={depositValue}
-        marketCapacity=""
         tokenSymbol={marketAccount.market.underlyingToken.symbol}
       />
     </div>

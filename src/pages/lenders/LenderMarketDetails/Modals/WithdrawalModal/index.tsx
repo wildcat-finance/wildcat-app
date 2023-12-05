@@ -7,7 +7,6 @@ export const WithdrawalModal = ({
   withdraw,
   isLoading,
   withdrawAmount,
-  outstandingLoan,
   tokenSymbol,
 }: WithdrawalModalProps) => (
   <Modal
@@ -27,12 +26,8 @@ export const WithdrawalModal = ({
       <div className="flex flex-col items-center gap-y-5 px-8">
         <div className="w-72 font-light text-xxs text-center">
           You are requesting a withdrawal of
-          <div className="w-72 font-bold text-xxs text-center my-5">
+          <div className="w-72 font-bold text-xxs text-center mt-5">
             {withdrawAmount} {tokenSymbol}
-          </div>
-          Your outstanding loan after this withdrawal will be
-          <div className="w-72 font-bold text-xxs text-center my-5">
-            {outstandingLoan} {tokenSymbol}
           </div>
         </div>
       </div>
