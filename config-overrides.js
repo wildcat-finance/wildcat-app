@@ -1,4 +1,7 @@
 module.exports = {
+  webpack: function (config) {
+    return config;
+  },
   // The function to use to create a webpack dev server configuration when running the development
   // server with 'npm run start' or 'yarn start'.
   // Example: set the dev server to use a specific certificate in https.
@@ -20,5 +23,8 @@ module.exports = {
       // Return your customized Webpack Development Server config.
       return config
     }
+  },
+  paths: function (paths) {
+    return paths;
   },
 }
