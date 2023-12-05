@@ -10,7 +10,6 @@ import { alchemyProvider } from "wagmi/providers/alchemy"
 import { InjectedConnector } from "wagmi/connectors/injected"
 import { LedgerConnector } from "wagmi/connectors/ledger"
 import type { ReactNode } from "react"
-import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet"
 import { SafeConnector } from "wagmi/connectors/safe"
 import { TargetChainId } from "../../../config/networks"
 
