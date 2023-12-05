@@ -10,6 +10,8 @@ import { alchemyProvider } from "wagmi/providers/alchemy"
 import { InjectedConnector } from "wagmi/connectors/injected"
 import { LedgerConnector } from "wagmi/connectors/ledger"
 import type { ReactNode } from "react"
+import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet"
+import { SafeConnector } from "wagmi/connectors/safe"
 import { TargetChainId } from "../../../config/networks"
 
 const networks = [sepolia, mainnet].filter((n) => n.id === TargetChainId)
@@ -29,6 +31,13 @@ const config = createConfig({
   connectors: [
     new InjectedConnector({ chains }),
     new LedgerConnector({ chains }),
+    new SafeConnector({
+      chains,
+      options: {
+        allowedDomains: [/gnosis-safe.io$/, /app.safe.global$/],
+        debug: false,
+      },
+    }),
   ],
   webSocketPublicClient,
 })
