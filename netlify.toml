@@ -2,3 +2,15 @@
   from = "/*"
   to = "/"
   status = 200
+[[headers]]
+  for = "/manifest.json"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET"
+    Access-Control-Allow-Headers = 'X-Requested-With, content-type, Authorization'
+[[headers]]
+  for = "/wildcat-logo.svg"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET"
+    Access-Control-Allow-Headers = 'X-Requested-With, content-type, Authorization'
