@@ -11,6 +11,7 @@ import { DepositFormProps } from "./interface"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { useDepositForm } from "./hooks/useValidateDeposit"
 import { useAllowanceCheck } from "./hooks/useAllowanceCheck"
+import { useGnosisSafeSDK } from "../../../../hooks/useGnosisSafeSDK"
 
 const DepositForm = ({ marketAccount }: DepositFormProps) => {
   const {
@@ -20,6 +21,8 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
     watch,
     reset,
   } = useDepositForm(marketAccount)
+
+  const { isConnectedToSafe } = useGnosisSafeSDK()
 
   const { mutateAsync: deposit, isLoading: isDepositing } =
     useDeposit(marketAccount)
@@ -67,7 +70,7 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
         />
       </div>
 
-      {hasInsufficientAllowance ? (
+      {hasInsufficientAllowance && !isConnectedToSafe ? (
         <Button
           variant="green"
           className="w-64 px-2 whitespace-nowrap"
