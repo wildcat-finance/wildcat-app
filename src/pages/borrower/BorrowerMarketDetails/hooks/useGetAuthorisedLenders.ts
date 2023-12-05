@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
-import { SubgraphClient } from "@wildcatfi/wildcat-sdk"
 import {
   GetAuthorizedLendersByMarketDocument,
   SubgraphGetAuthorizedLendersByMarketQuery,
   SubgraphGetAuthorizedLendersByMarketQueryVariables,
 } from "@wildcatfi/wildcat-sdk/dist/gql/graphql"
 import { logger } from "@wildcatfi/wildcat-sdk/dist/utils/logger"
+import { SubgraphClient } from "../../../../config/subgraph"
 
 export const GET_LENDERS_BY_MARKET_KEY = "get-authorised-lenders-by-market"
 export const useGetAuthorisedLendersByMarket = (

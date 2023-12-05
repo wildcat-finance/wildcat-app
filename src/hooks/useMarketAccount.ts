@@ -4,7 +4,6 @@ import {
   MarketAccount,
   SignerOrProvider,
   TwoStepQueryHookResult,
-  SubgraphClient,
   getLensContract,
   LenderRole,
 } from "@wildcatfi/wildcat-sdk"
@@ -15,6 +14,8 @@ import {
   SubgraphGetMarketQueryVariables,
 } from "@wildcatfi/wildcat-sdk/dist/gql/graphql"
 import { BigNumber } from "ethers"
+import { TargetChainId } from "../config/networks"
+import { SubgraphClient } from "../config/subgraph"
 
 export const GET_MARKET_ACCOUNT_KEY = "get-market-account"
 
@@ -47,16 +48,21 @@ export function useMarketAccount({
       },
     })
     if (!result.data.market!.lenders.length) {
-      return new MarketAccount(
+      return MarketAccount.fromMarketDataOnly(
+        market!,
         lenderAddress as string,
         false,
-        LenderRole.Null,
-        BigNumber.from(0),
-        market!.marketToken.getAmount(0),
-        market!.underlyingToken.getAmount(0),
-        BigNumber.from(0),
-        market!,
       )
+      // return new MarketAccount(
+      //   lenderAddress as string,
+      //   false,
+      //   LenderRole.Null,
+      //   BigNumber.from(0),
+      //   market!.marketToken.getAmount(0),
+      //   market!.underlyingToken.getAmount(0),
+      //   BigNumber.from(0),
+      //   market!,
+      // )
     }
     return MarketAccount.fromSubgraphAccountData(
       market as Market,
@@ -78,7 +84,7 @@ export function useMarketAccount({
   })
   async function updateMarketAccount() {
     if (!data || !provider) throw Error()
-    const lens = getLensContract(provider)
+    const lens = getLensContract(TargetChainId, provider)
     const update = await lens.getMarketDataWithLenderStatus(
       lenderAddress as string,
       marketAddress as string,

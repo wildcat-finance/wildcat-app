@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react"
 
-import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import { Select, TextInput } from "../../../components/ui-components"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
 import { mockedStatuses } from "../../../mocks/vaults"
@@ -22,6 +21,7 @@ function LenderMarketsList() {
   }
 
   const { data: lendersMarkets } = useLendersMarkets()
+  const noAvailableMarkets = lendersMarkets.length === 0
 
   const mockedVaultStatusOptions: SelectOptionItem[] = mockedStatuses
     .sort()
@@ -118,6 +118,9 @@ function LenderMarketsList() {
       </div>
 
       <div className="flex w-full flex-wrap -mx-2.5 mt-5">
+        {noAvailableMarkets && (
+          <div className="m-auto">No markets available yet</div>
+        )}
         {filteredMarkets.map((lendersMarket) => (
           <div
             key={lendersMarket.market.address}
@@ -127,12 +130,6 @@ function LenderMarketsList() {
           </div>
         ))}
       </div>
-
-      <ServiceAgreementCard
-        className="mt-12"
-        title="Wildcat Service Agreement"
-        description="You agreed to the Wildcat Service Agreement on 12-Sept-2023"
-      />
     </>
   )
 }

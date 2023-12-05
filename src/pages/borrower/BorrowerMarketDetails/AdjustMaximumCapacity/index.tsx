@@ -63,7 +63,12 @@ const AdjustMaximumCapacity = ({
     market.underlyingToken,
   )
 
-  const disabled = !!error || isLoading || newMaxTotalSupplyAmount.raw.isZero()
+  const marketDisabled = marketAccount.market.isClosed
+  const disabled =
+    marketDisabled ||
+    !!error ||
+    isLoading ||
+    newMaxTotalSupplyAmount.raw.isZero()
 
   return (
     <>

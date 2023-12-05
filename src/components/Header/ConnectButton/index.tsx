@@ -5,7 +5,7 @@ import { Dialog, Modal } from "react-aria-components"
 
 import { Button } from "../../ui-components"
 import { useWalletConnectModalStore } from "../../../store/useWalletConnectModalStore"
-import { NETWORKS } from "../../../config/networks"
+import { TargetChainId, TargetNetwork } from "../../../config/networks"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 import { trimAddress } from "../../../utils/formatters"
 
@@ -75,9 +75,9 @@ function ConnectButton() {
               <Button
                 variant="black"
                 className="w-full"
-                onClick={() => switchNetwork?.(NETWORKS.Sepolia.chainId)}
+                onClick={() => switchNetwork?.(TargetChainId)}
               >
-                Switch to Sepolia
+                Switch to {TargetNetwork.name}
               </Button>
             )}
             {isConnected ? (

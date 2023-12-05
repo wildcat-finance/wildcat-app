@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "../../../../../components/ui-components"
 import { WithdrawalsTableProps } from "./interface"
+import { EtherscanBaseUrl } from "../../../../../config/networks"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
@@ -56,7 +57,7 @@ export const WithdrawalsTable = ({
             <TableCell justify="start">
               <a
                 className="hover:underline"
-                href={`https://sepolia.etherscan.io/address/${withdrawal.address}`}
+                href={`${EtherscanBaseUrl}/address/${withdrawal.address}`}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -66,7 +67,7 @@ export const WithdrawalsTable = ({
             <TableCell justify="start">
               <a
                 className="hover:underline"
-                href={`https://sepolia.etherscan.io/tx/${withdrawal.transactionHash}`}
+                href={`${EtherscanBaseUrl}/tx/${withdrawal.transactionHash}`}
                 target="_blank"
                 rel="noreferrer"
               >

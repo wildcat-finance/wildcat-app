@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import {
   Market,
-  SubgraphClient,
   getLensContract,
   WithdrawalBatch,
   TwoStepQueryHookResult,
@@ -13,6 +12,8 @@ import {
 } from "@wildcatfi/wildcat-sdk/dist/gql/graphql"
 import { logger } from "@wildcatfi/wildcat-sdk/dist/utils/logger"
 import { useMemo } from "react"
+import { SubgraphClient } from "../config/subgraph"
+import { TargetChainId } from "../config/networks"
 
 export function useGetMarketWithdrawals({
   market,
@@ -58,7 +59,7 @@ export function useGetMarketWithdrawals({
   async function getUpdatedBatches() {
     if (!address || !market) throw Error()
     logger.debug(`Getting batch updates...`)
-    const lens = getLensContract(market.provider)
+    const lens = getLensContract(TargetChainId, market.provider)
     const batchUpdates = await lens.getWithdrawalBatchesData(
       address,
       batches.map((x) => x.expiry),

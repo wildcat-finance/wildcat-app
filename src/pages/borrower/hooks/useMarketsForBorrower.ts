@@ -6,7 +6,6 @@ import {
 } from "@wildcatfi/wildcat-sdk/dist/gql/graphql"
 import {
   Market,
-  SubgraphClient,
   getLensContract,
   SignerOrProvider,
 } from "@wildcatfi/wildcat-sdk"
@@ -15,6 +14,8 @@ import { useAccount } from "wagmi"
 import { useEthersSigner } from "../../../modules/hooks"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 import { POLLING_INTERVAL } from "../../../config/polling"
+import { TargetChainId } from "../../../config/networks"
+import { SubgraphClient } from "../../../config/subgraph"
 
 export const GET_BORROWER_MARKETS_LIST_KEY = "get-borrower-markets-list"
 
@@ -41,15 +42,25 @@ export function useMarketsForBorrowerQuery({
       variables: { borrower: borrower as string, ...filters },
       fetchPolicy: "network-only",
     })
-    return (
-      result.data.controllers[0].markets.map((market) =>
-        Market.fromSubgraphMarketData(provider as SignerOrProvider, market),
-      ) ?? []
-    )
+
+    const controller = result.data.controllers[0]
+    if (controller) {
+      return (
+        controller.markets.map((market) =>
+          Market.fromSubgraphMarketData(
+            TargetChainId,
+            provider as SignerOrProvider,
+            market,
+          ),
+        ) ?? []
+      )
+    }
+
+    return []
   }
 
   async function updateMarkets(markets: Market[]) {
-    const lens = getLensContract(provider as SignerOrProvider)
+    const lens = getLensContract(TargetChainId, provider as SignerOrProvider)
     const updatedMarkets = await lens.getMarketsData(
       markets.map((x) => x.address),
     )

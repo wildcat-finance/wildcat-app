@@ -5,13 +5,13 @@ import { useWalletConnect } from "../../../hooks/useWalletConnect"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 import { LenderMarketActions } from "./LenderMarketActions"
 import { useGetMarket } from "../../../hooks/useGetMarket"
-import { useGetMarketAccount } from "../../../hooks/useGetMarketAccount"
 import WithdrawalRequests from "./LenderWithdrawalRequests"
-import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
+// import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import PaymentHistory from "../../../components/MarketDetailsCommon/PaymentHistory"
 import { BackArrow } from "../../../components/ui-components/icons"
 import LenderMarketOverview from "./LenderMarketOverview"
 import { useAddToken } from "../../../hooks/useAddToken"
+import { useLenderMarketAccount } from "../hooks/useLenderMarketAccount"
 
 export function LenderMarketDetails() {
   const navigate = useNavigate()
@@ -22,8 +22,9 @@ export function LenderMarketDetails() {
   const { data: market, isLoading: isMarketLoading } = useGetMarket({
     marketAddress,
   })
+
   const { data: marketAccount, isLoadingInitial: isMarketAccountLoading } =
-    useGetMarketAccount(market)
+    useLenderMarketAccount(market)
 
   const { canAddToken, handleAddToken, isAddingToken } = useAddToken(
     market?.marketToken,
@@ -76,18 +77,12 @@ export function LenderMarketDetails() {
         </div>
       </div>
 
-      <LenderMarketActions market={market} />
+      <LenderMarketActions market={market} marketAccount={marketAccount} />
 
       <LenderMarketOverview marketAccount={marketAccount} />
 
       <WithdrawalRequests market={market} />
       <PaymentHistory market={market} />
-
-      <ServiceAgreementCard
-        className="mt-10"
-        title="Wildcat Service Agreement"
-        description="You agreed to the Wildcat Service Agreement on 12-Sept-2023"
-      />
     </div>
   )
 }

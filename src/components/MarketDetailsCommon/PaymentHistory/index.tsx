@@ -11,6 +11,7 @@ import {
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
 } from "../../../utils/formatters"
+import { EtherscanBaseUrl } from "../../../config/networks"
 
 // function getFromToTimestamps(dateArray: DateValue[]) {
 //   const fromTimestamp = dateArray[0]
@@ -142,7 +143,7 @@ const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
                 <TableCell justify="start">
                   <a
                     className="hover:underline"
-                    href={`https://sepolia.etherscan.io/address/${repayment.from}`}
+                    href={`${EtherscanBaseUrl}/address/${repayment.from}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -152,7 +153,7 @@ const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
                 <TableCell justify="start">
                   <a
                     className="hover:underline"
-                    href={`https://sepolia.etherscan.io/tx/${repayment.transactionHash}`}
+                    href={`${EtherscanBaseUrl}/tx/${repayment.transactionHash}`}
                     target="_blank"
                     rel="noreferrer"
                   >

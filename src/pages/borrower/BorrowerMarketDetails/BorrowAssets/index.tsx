@@ -26,8 +26,11 @@ const BorrowAssets = ({
     ? marketAccount.market.underlyingToken.parseAmount(borrowAmount)
     : marketAccount.market.underlyingToken.parseAmount(0)
 
+  const marketDisabled = marketAccount.market.isClosed
   const disabled =
-    maxBorrowAmount.eq(0) || underlyingBorrowAmount.gt(maxBorrowAmount)
+    marketDisabled ||
+    maxBorrowAmount.eq(0) ||
+    underlyingBorrowAmount.gt(maxBorrowAmount)
 
   const leftBorrowAmount = maxBorrowAmount.sub(underlyingBorrowAmount)
 

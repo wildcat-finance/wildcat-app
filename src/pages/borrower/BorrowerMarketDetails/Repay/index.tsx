@@ -77,9 +77,12 @@ const Repay = ({ marketAccount }: RepayProps) => {
     isApproving ||
     isLoadingUnpaidWithdrawalBatch
 
-  const repayDisabled = repayTokenAmount.raw.isZero() || !!error || isLoading
+  const marketDisabled = marketAccount.market.isClosed
+  const repayDisabled =
+    marketDisabled || repayTokenAmount.raw.isZero() || !!error || isLoading
 
   const repayOutstandingDisabled =
+    marketDisabled ||
     outstandingDebt.raw.isZero() ||
     !marketAccount.canRepayOutstanding ||
     isLoading

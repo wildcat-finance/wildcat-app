@@ -150,11 +150,13 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
     }
   }, [isSuccess])
 
+  const marketDisabled = marketAccount.market.isClosed
   const reserveRatioChanged =
     newReserveRatio !== null && market.reserveRatioBips !== newReserveRatio
   const isLoading =
     adjustAprLoading || terminateMarketLoading || isProcessing || isApproving
-  const disabledApr = !apr || parseFloat(apr) <= 0 || !!error || isLoading
+  const disabledApr =
+    marketDisabled || !apr || parseFloat(apr) <= 0 || !!error || isLoading
 
   return (
     <>
@@ -183,8 +185,8 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
         <Button
           variant={terminateButtonColor}
           className="w-44 px-2 whitespace-nowrap"
-          disabled={isLoading}
           onClick={handleTerminateMarket}
+          disabled={marketDisabled || isLoading}
         >
           {terminateButtonText}
         </Button>

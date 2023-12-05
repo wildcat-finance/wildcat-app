@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Token } from "@wildcatfi/wildcat-sdk"
 
-import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
+// import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import {
   Paper,
   Chip,
@@ -137,14 +137,13 @@ const AddNewVault = () => {
 
   return (
     <div>
-      <Button
-        variant="outline"
+      <button
         className="flex items-center gap-x-2 mb-8"
         onClick={handleClickMyVaults}
       >
         <img src={arrowBack} alt="Back" />
         <p className="text-xs font-normal underline">My Markets</p>
-      </Button>
+      </button>
       <div className="text-green text-2xl font-bold mb-8 w-2/3">New Market</div>
 
       <Paper className="p-8 bg-tint-10 border-tint-8">
@@ -367,12 +366,6 @@ const AddNewVault = () => {
           validateForm={handleValidateForm}
         />
       </Paper>
-
-      <ServiceAgreementCard
-        className="mt-10"
-        title="Wildcat Service Agreement"
-        description="You agreed to the Wildcat Service Agreement on 12-Sept-2023"
-      />
     </div>
   )
 }

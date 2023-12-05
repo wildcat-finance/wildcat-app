@@ -58,7 +58,7 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
             <DetailsInput
               decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
               className="w-full"
-              placeholder="10.00"
+              placeholder="00,000.00"
               min={0}
               market={marketAccount.market}
               errorText={errors.depositAmount?.message}

@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom"
 
 import { Paper, Spinner } from "../../../components/ui-components"
-import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
+// import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 
 import { BackArrow } from "../../../components/ui-components/icons/index"
 
@@ -114,12 +114,6 @@ const BorrowerMarketDetails = () => {
       <div className="mt-5 mb-14">
         <AuthorisedLendersList marketAddress={market.address} />
       </div>
-
-      <ServiceAgreementCard
-        className="mt-10"
-        title="Wildcat Service Agreement"
-        description="You agreed to the Wildcat Service Agreement on 12-Sept-2023"
-      />
     </div>
   )
 }

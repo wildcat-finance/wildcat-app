@@ -75,7 +75,7 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
           decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
           value={withdrawalValue}
           className="w-full"
-          placeholder="10.00"
+          placeholder="00,000.00"
           onChange={handleChangeWithdrawalAmount}
           min={0}
           max={marketAccount.market.totalSupply.format(TOKEN_FORMAT_DECIMALS)}

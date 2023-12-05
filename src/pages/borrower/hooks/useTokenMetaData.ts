@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { Token, Signer } from "@wildcatfi/wildcat-sdk"
 import { useEthersSigner } from "../../../modules/hooks"
+import { TargetChainId } from "../../../config/networks"
 
 const TOKEN_METADATA_KEY = "tokenMetadata"
 
@@ -13,7 +14,11 @@ export function useTokenMetadata({ address }: { address: string | undefined }) {
       signer !== undefined &&
       address.length === 42
     ) {
-      const token = await Token.getTokenData(address, signer as Signer)
+      const token = await Token.getTokenData(
+        TargetChainId,
+        address,
+        signer as Signer,
+      )
       return token
     }
     return undefined
