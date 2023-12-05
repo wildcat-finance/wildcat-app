@@ -16,6 +16,7 @@ export const DetailsInput = forwardRef<HTMLInputElement, DetailsInputType>(
         onBlur={props.onBlur}
         onChange={props.onChange}
         ref={ref}
+        disabled={props.disabled}
       />
 
       <div className="flex justify-between items-start text-xxs text-right mt-1.5 mr-auto pr-1.5 w-full">

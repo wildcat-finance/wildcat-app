@@ -6,17 +6,18 @@ import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 import { LenderMarketActions } from "./LenderMarketActions"
 import { useGetMarket } from "../../../hooks/useGetMarket"
 import WithdrawalRequests from "./LenderWithdrawalRequests"
-// import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import PaymentHistory from "../../../components/MarketDetailsCommon/PaymentHistory"
 import { BackArrow } from "../../../components/ui-components/icons"
 import LenderMarketOverview from "./LenderMarketOverview"
 import { useAddToken } from "../../../hooks/useAddToken"
 import { useLenderMarketAccount } from "../hooks/useLenderMarketAccount"
+import { useTransactionWait } from "../../../store/useTransactionWait"
 
 export function LenderMarketDetails() {
   const navigate = useNavigate()
   const { isConnected } = useWalletConnect()
   const { isWrongNetwork } = useCurrentNetwork()
+  const { isTxInProgress } = useTransactionWait()
 
   const { marketAddress } = useParams()
   const { data: market, isLoading: isMarketLoading } = useGetMarket({
@@ -51,8 +52,9 @@ export function LenderMarketDetails() {
   return (
     <div className="flex flex-col">
       <button
-        className="flex items-center gap-x-2 px-0 mb-8"
+        className="flex items-center gap-x-2 px-0 mb-8 disabled:opacity-50"
         onClick={handleClickMyMarkets}
+        disabled={isTxInProgress}
       >
         <BackArrow />
         <p className="text-xs font-normal underline">My Markets</p>

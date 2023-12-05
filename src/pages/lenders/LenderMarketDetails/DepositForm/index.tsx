@@ -11,6 +11,7 @@ import { DepositFormProps } from "./interface"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { useDepositForm } from "./hooks/useValidateDeposit"
 import { useAllowanceCheck } from "./hooks/useAllowanceCheck"
+import { useTransactionWait } from "../../../../store/useTransactionWait"
 
 const DepositForm = ({ marketAccount }: DepositFormProps) => {
   const {
@@ -20,6 +21,8 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
     watch,
     reset,
   } = useDepositForm(marketAccount)
+
+  const { isTxInProgress, setisTxInProgress } = useTransactionWait()
 
   const { mutateAsync: deposit, isLoading: isDepositing } =
     useDeposit(marketAccount)
@@ -33,9 +36,18 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
   const { hasInsufficientAllowance, handleApprove, isApproving } =
     useAllowanceCheck(marketAccount, depositTokenAmount)
 
-  const onSubmit = handleSubmit(async () => {
-    await deposit(depositValue)
-    reset()
+  const onSubmit = handleSubmit(() => {
+    setisTxInProgress(true)
+    deposit(depositValue)
+      .then(() => {
+        reset()
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+      .finally(() => {
+        setisTxInProgress(false)
+      })
   })
 
   const marketDisabled = marketAccount.market.isClosed
@@ -65,6 +77,7 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
                 TOKEN_FORMAT_DECIMALS,
                 true,
               )}
+              disabled={isTxInProgress}
               {...field}
             />
           )}

@@ -11,12 +11,18 @@ import {
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
+import { useTransactionWait } from "../../../../store/useTransactionWait"
 
 const AdjustMaximumCapacity = ({
   marketAccount,
 }: AdjustMaximumCapacityProps) => {
+  const { isTxInProgress, setisTxInProgress } = useTransactionWait()
   const [isModalOpen, setModalOpen] = useState(false)
-  const { mutate, isLoading, isSuccess } = useSetMaxTotalSupply(marketAccount)
+  const {
+    mutateAsync: mutate,
+    isLoading,
+    isSuccess,
+  } = useSetMaxTotalSupply(marketAccount)
   const [newMaxTotalSupply, setNewMaxTotalSupply] = useState("")
   const [error, setError] = useState<string | undefined>()
 
@@ -44,7 +50,14 @@ const AdjustMaximumCapacity = ({
   }
 
   const handleAdjustMaxTotalSupply = () => {
-    if (!error) mutate(newMaxTotalSupply)
+    setModalOpen(false)
+    setisTxInProgress(true)
+    if (!error)
+      mutate(newMaxTotalSupply)
+        .finally(() => setisTxInProgress(false))
+        .catch((e) => {
+          console.log(e)
+        })
   }
 
   const onModalClose = () => {
@@ -68,7 +81,8 @@ const AdjustMaximumCapacity = ({
     marketDisabled ||
     !!error ||
     isLoading ||
-    newMaxTotalSupplyAmount.raw.isZero()
+    newMaxTotalSupplyAmount.raw.isZero() ||
+    isTxInProgress
 
   return (
     <>
@@ -85,6 +99,7 @@ const AdjustMaximumCapacity = ({
           market.underlyingToken.symbol
         }`}
         errorText={error}
+        disabled={isTxInProgress}
       />
 
       <div className="w-44 flex flex-col gap-y-1.5">

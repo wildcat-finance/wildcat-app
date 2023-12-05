@@ -10,8 +10,10 @@ import { WithdrawalFormProps } from "./interface"
 import { useWithdraw } from "../../../borrower/BorrowerMarketDetails/hooks/useVaultDetailActions"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { SDK_ERRORS_MAPPING } from "../../../../utils/forms/errors"
+import { useTransactionWait } from "../../../../store/useTransactionWait"
 
 const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
+  const { isTxInProgress, setisTxInProgress } = useTransactionWait()
   const { mutateAsync, isLoading } = useWithdraw(marketAccount)
   const [withdrawalValue, setWithdrawalValue] = useState("")
   const [error, setError] = useState<string | undefined>()
@@ -57,12 +59,16 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
   }
 
   const handleWithdraw = () => {
+    setisTxInProgress(true)
     mutateAsync(withdrawalValue)
+      .then(() => {
+        setWithdrawalValue("")
+      })
       .catch((e) => {
         console.log(e)
       })
       .finally(() => {
-        setWithdrawalValue("")
+        setisTxInProgress(false)
       })
   }
 
@@ -84,6 +90,7 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
             TOKEN_FORMAT_DECIMALS,
           )}
           ${marketAccount.market.underlyingToken.symbol}`}
+          disabled={isTxInProgress}
         />
       </div>
       <Button

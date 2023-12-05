@@ -6,11 +6,14 @@ import { BorrowAssetProps } from "./interface"
 import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { Button } from "../../../../components/ui-components"
+import { useTransactionWait } from "../../../../store/useTransactionWait"
 
 const BorrowAssets = ({
   borrowableAssets,
   marketAccount,
 }: BorrowAssetProps) => {
+  const { isTxInProgress, setisTxInProgress } = useTransactionWait()
+
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { mutateAsync, isLoading } = useBorrow(marketAccount)
   const [borrowAmount, setBorrowAmount] = useState("")
@@ -30,15 +33,24 @@ const BorrowAssets = ({
   const disabled =
     marketDisabled ||
     maxBorrowAmount.eq(0) ||
-    underlyingBorrowAmount.gt(maxBorrowAmount)
+    underlyingBorrowAmount.gt(maxBorrowAmount) ||
+    isTxInProgress
 
   const leftBorrowAmount = maxBorrowAmount.sub(underlyingBorrowAmount)
 
   const handleBorrow = () => {
-    mutateAsync(borrowAmount).then(() => {
-      setBorrowAmount("")
-      setIsModalOpen(false)
-    })
+    setisTxInProgress(true)
+    setIsModalOpen(false)
+    mutateAsync(borrowAmount)
+      .then(() => {
+        setBorrowAmount("")
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+      .finally(() => {
+        setisTxInProgress(false)
+      })
   }
 
   return (
@@ -55,6 +67,7 @@ const BorrowAssets = ({
           TOKEN_FORMAT_DECIMALS,
           true,
         )}`}
+        disabled={isTxInProgress}
       />
 
       <Button

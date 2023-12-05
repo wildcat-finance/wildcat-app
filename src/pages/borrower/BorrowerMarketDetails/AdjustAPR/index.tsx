@@ -18,11 +18,12 @@ import { toastifyError, toastifyInfo } from "../../../../components/toasts"
 import { ButtonProps } from "../../../../components/ui-components/Button/interface"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { SDK_ERRORS_MAPPING } from "../../../../utils/forms/errors"
+import { useTransactionWait } from "../../../../store/useTransactionWait"
 
 const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
   const [isModalOpen, setModalOpen] = useState(false)
   const {
-    mutate,
+    mutateAsync: mutate,
     isLoading: adjustAprLoading,
     isSuccess,
   } = useAdjustAPR(marketAccount)
@@ -39,6 +40,7 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
   const [apr, setApr] = useState("")
   const [newReserveRatio, setNewReserveRatio] = useState<number | undefined>()
   const [isTerminating, setIsTerminating] = useState(false)
+  const { isTxInProgress, setisTxInProgress } = useTransactionWait()
 
   const [error, setError] = useState<string | undefined>()
 
@@ -71,7 +73,14 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
   }
 
   const handleAdjustAPR = () => {
-    if (!error) mutate(parseFloat(apr))
+    setModalOpen(false)
+    setisTxInProgress(true)
+    if (!error)
+      mutate(parseFloat(apr))
+        .finally(() => setisTxInProgress(false))
+        .catch((e) => {
+          console.log(e)
+        })
   }
 
   const terminateMarketStep = marketAccount.checkCloseMarketStep()
@@ -156,7 +165,12 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
   const isLoading =
     adjustAprLoading || terminateMarketLoading || isProcessing || isApproving
   const disabledApr =
-    marketDisabled || !apr || parseFloat(apr) <= 0 || !!error || isLoading
+    marketDisabled ||
+    !apr ||
+    parseFloat(apr) <= 0 ||
+    !!error ||
+    isLoading ||
+    isTxInProgress
 
   return (
     <>
@@ -171,6 +185,7 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
         helperText="Current Base Rate"
         helperValue={`${market.annualInterestBips / 100}%`}
         errorText={error}
+        disabled={isTxInProgress}
       />
 
       <div className="w-44 flex flex-col gap-y-1.5">
@@ -186,7 +201,7 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
           variant={terminateButtonColor}
           className="w-44 px-2 whitespace-nowrap"
           onClick={handleTerminateMarket}
-          disabled={marketDisabled || isLoading}
+          disabled={marketDisabled || isLoading || isTxInProgress}
         >
           {terminateButtonText}
         </Button>

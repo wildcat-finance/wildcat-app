@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useMemo, useState } from "react"
-import { minTokenAmount } from "@wildcatfi/wildcat-sdk"
 
 import { Button } from "../../../../components/ui-components"
 import { RepayModal } from "../Modals"
@@ -16,12 +15,19 @@ import {
 } from "../../../../utils/formatters"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { SDK_ERRORS_MAPPING } from "../../../../utils/forms/errors"
+import { useTransactionWait } from "../../../../store/useTransactionWait"
 
 const Repay = ({ marketAccount }: RepayProps) => {
-  const { market } = marketAccount
-  const [repayAmount, setRepayAmount] = useState("0")
+  const { isTxInProgress, setisTxInProgress } = useTransactionWait()
 
-  const { mutate: repay, isLoading: isRepayAmountLoading } =
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const toggleModal = () => setIsModalOpen(!isModalOpen)
+
+  const { market } = marketAccount
+  const [repayAmount, setRepayAmount] = useState("")
+
+  const { mutateAsync: repay, isLoading: isRepayAmountLoading } =
     useRepay(marketAccount)
 
   const {
@@ -50,8 +56,9 @@ const Repay = ({ marketAccount }: RepayProps) => {
       return
     }
 
-    const repayTokenAmount =
-      marketAccount.market.underlyingToken.parseAmount(value)
+    const repayTokenAmount = marketAccount.market.underlyingToken.parseAmount(
+      value || "0",
+    )
 
     const repayStep = marketAccount.checkRepayStep(repayTokenAmount)
 
@@ -66,7 +73,7 @@ const Repay = ({ marketAccount }: RepayProps) => {
   const { outstandingDebt, underlyingToken } = market
 
   const repayTokenAmount = useMemo(
-    () => marketAccount.market.underlyingToken.parseAmount(repayAmount),
+    () => marketAccount.market.underlyingToken.parseAmount(repayAmount || "0"),
     [repayAmount],
   )
   const repayStep = marketAccount.checkRepayStep(repayTokenAmount)
@@ -79,7 +86,11 @@ const Repay = ({ marketAccount }: RepayProps) => {
 
   const marketDisabled = marketAccount.market.isClosed
   const repayDisabled =
-    marketDisabled || repayTokenAmount.raw.isZero() || !!error || isLoading
+    marketDisabled ||
+    repayTokenAmount.raw.isZero() ||
+    !!error ||
+    isLoading ||
+    isTxInProgress
 
   const repayOutstandingDisabled =
     marketDisabled ||
@@ -94,8 +105,16 @@ const Repay = ({ marketAccount }: RepayProps) => {
   }
 
   const handleRepay = () => {
+    toggleModal()
+    setisTxInProgress(true)
     if (!market.unpaidWithdrawalBatchExpiries.length) {
       repay(repayTokenAmount)
+        .catch((e) => {
+          console.log(e)
+        })
+        .finally(() => {
+          setisTxInProgress(false)
+        })
     } else {
       const { length } = market.unpaidWithdrawalBatchExpiries
 
@@ -111,6 +130,7 @@ const Repay = ({ marketAccount }: RepayProps) => {
   return (
     <>
       <DetailsInput
+        disabled={isTxInProgress}
         market={market}
         decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
         className="w-full"
@@ -139,6 +159,8 @@ const Repay = ({ marketAccount }: RepayProps) => {
             isLoading={isLoading}
             tokenSymbol={underlyingToken.symbol}
             repay={handleRepay}
+            isOpen={isModalOpen}
+            onClose={toggleModal}
           />
         )}
         <Button

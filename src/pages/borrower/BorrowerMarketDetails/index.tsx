@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
 
 import { Paper, Spinner } from "../../../components/ui-components"
-// import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 
 import { BackArrow } from "../../../components/ui-components/icons/index"
 
@@ -18,8 +17,11 @@ import { AuthorisedLendersList } from "./AuthorisedLendersList"
 import AdjustMaximumCapacity from "./AdjustMaximumCapacity"
 import { BORROWER_PATHS } from "../routes/constants"
 import { BASE_PATHS } from "../../../routes/constants"
+import { useTransactionWait } from "../../../store/useTransactionWait"
 
 const BorrowerMarketDetails = () => {
+  const { isTxInProgress } = useTransactionWait()
+
   const navigate = useNavigate()
   const { marketAddress } = useParams()
   const { data: market, isInitialLoading: isMarketLoading } = useGetMarket({
@@ -45,8 +47,9 @@ const BorrowerMarketDetails = () => {
   return (
     <div>
       <button
-        className="flex items-center gap-x-2 mb-8 px-0"
+        className="flex items-center gap-x-2 mb-8 px-0 disabled:opacity-50"
         onClick={handleClickMyVaults}
+        disabled={isTxInProgress}
       >
         <BackArrow />
         <p className="text-xs font-normal underline">My Markets</p>
