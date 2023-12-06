@@ -24,6 +24,7 @@ const mockedVaultStatusOptions: SelectOptionItem[] = mockedStatuses
 
 function BorrowerMarketsList() {
   const navigate = useNavigate()
+  const [showTerminated, setShowTerminated] = useState<boolean>(false)
   const [filterByName, setFilterByName] = useState<string>("")
   const [selectedUnderlyingAsset, setSelectedUnderlyingAsset] =
     useState<SelectOptionItem | null>(null)
@@ -31,6 +32,16 @@ function BorrowerMarketsList() {
     useState<SelectOptionItem | null>(null)
   const { data: markets, isLoading } = useMarketsForBorrower()
   const noMarkets = markets?.length === 0
+
+  const handleVaultStatusChange = (selectedOption: SelectOptionItem | null) => {
+    setSelectedVaultStatus(selectedOption)
+
+    if (selectedOption?.value === "Terminated") {
+      setShowTerminated(true)
+    } else {
+      setShowTerminated(false)
+    }
+  }
 
   const handleFilterByName = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
@@ -57,6 +68,10 @@ function BorrowerMarketsList() {
 
   const filteredMarkets = markets
     ? markets
+        .filter((market) => {
+          if (showTerminated) return true
+          return !market.isClosed
+        })
         .filter((market) => {
           if (!selectedVaultStatus) return true
           return (
@@ -92,8 +107,17 @@ function BorrowerMarketsList() {
             </Button>
           </div>
         </div>
+        <div className="flex flex-row gap-x-2 align-middle mt-3">
+          <input
+            type="checkbox"
+            id="showTerminated"
+            checked={showTerminated}
+            onChange={() => setShowTerminated(!showTerminated)}
+          />
+          <label htmlFor="showTerminated">Show terminated Markets</label>
+        </div>
 
-        <div className="flex w-full flex-wrap -mx-2.5 mt-8">
+        <div className="flex w-full flex-wrap -mx-2.5 mt-3">
           <div className="w-1/3 px-2.5 py-2.5">
             <TextInput
               onChange={handleFilterByName}
@@ -114,7 +138,7 @@ function BorrowerMarketsList() {
           <div className="w-1/3 px-2.5 py-2.5">
             <Select
               options={mockedVaultStatusOptions}
-              onChange={setSelectedVaultStatus}
+              onChange={handleVaultStatusChange}
               selected={selectedVaultStatus}
               placeholder="Market Status"
               className="w-full"

@@ -10,10 +10,21 @@ import VaultCard from "./VaultCard"
 
 function LenderMarketsList() {
   const [filterByName, setFilterByName] = useState<string>("")
+  const [showTerminated, setShowTerminated] = useState<boolean>(false)
   const [selectedUnderlyingAsset, setSelectedUnderlyingAsset] =
     useState<SelectOptionItem | null>(null)
   const [selectedVaultStatus, setSelectedVaultStatus] =
     useState<SelectOptionItem | null>(null)
+
+  const handleVaultStatusChange = (selectedOption: SelectOptionItem | null) => {
+    setSelectedVaultStatus(selectedOption)
+
+    if (selectedOption?.value === "Terminated") {
+      setShowTerminated(true)
+    } else {
+      setShowTerminated(false)
+    }
+  }
 
   const handleFilterByName = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
@@ -37,6 +48,10 @@ function LenderMarketsList() {
     }
 
     return lendersMarkets
+      .filter((market) => {
+        if (showTerminated) return true
+        return !market.market.isClosed
+      })
       .filter((lendersMarket) => {
         if (!selectedVaultStatus) return true
         return (
@@ -62,6 +77,7 @@ function LenderMarketsList() {
     selectedVaultStatus,
     filterByName,
     selectedUnderlyingAsset,
+    showTerminated,
   ])
 
   const filterUnderlyingOptions = useMemo(() => {
@@ -85,8 +101,17 @@ function LenderMarketsList() {
         <div className="text-green text-2xl font-bold mt-8">
           All Markets For Lender
         </div>
+        <div className="flex flex-row gap-x-2 align-middle mt-3">
+          <input
+            type="checkbox"
+            id="showTerminated"
+            checked={showTerminated}
+            onChange={() => setShowTerminated(!showTerminated)}
+          />
+          <label htmlFor="showTerminated">Show terminated Markets</label>
+        </div>
 
-        <div className="flex w-full flex-wrap -mx-2.5 mt-8">
+        <div className="flex w-full flex-wrap -mx-2.5 mt-3">
           <div className="w-1/3 px-2.5 py-2.5">
             <TextInput
               onChange={handleFilterByName}
@@ -107,7 +132,7 @@ function LenderMarketsList() {
           <div className="w-1/3 px-2.5 py-2.5">
             <Select
               options={mockedVaultStatusOptions}
-              onChange={setSelectedVaultStatus}
+              onChange={handleVaultStatusChange}
               selected={selectedVaultStatus}
               placeholder="Market Status"
               className="w-full"
