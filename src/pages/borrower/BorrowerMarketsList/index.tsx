@@ -90,6 +90,18 @@ function BorrowerMarketsList() {
           if (!selectedUnderlyingAsset) return true
           return market.underlyingToken.symbol === selectedUnderlyingAsset.value
         })
+        .sort((a, b) => {
+          const isClosedA = a.isClosed
+          const isClosedB = b.isClosed
+
+          if (isClosedA && !isClosedB) {
+            return 1
+          }
+          if (!isClosedA && isClosedB) {
+            return -1
+          }
+          return 0
+        })
     : []
 
   return (
