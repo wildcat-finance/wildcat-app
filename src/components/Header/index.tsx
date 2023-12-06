@@ -13,8 +13,16 @@ export function Header() {
       <WildcartLogo className="h-full" />
       {isDesktop && (
         <div className="flex flex-1 items-center justify-center gap-10">
-          <NavItem name="Borrowers" link="/borrower" linkName="borrower" />
-          <NavItem name="Lenders" link="/lender/agreement" linkName="lender" />
+          <NavItem
+            name="Borrowers"
+            link="/borrower/markets-list"
+            linkName="borrower"
+          />
+          <NavItem
+            name="Lenders"
+            link="lender/active-vaults"
+            linkName="lender"
+          />
         </div>
       )}
 

@@ -11,6 +11,11 @@ import { BORROWER_PATHS } from "./constants"
 export const BORROWER_ROUTES: RouteObject[] = [
   {
     path: BORROWER_PATHS.HomePage,
+    element: <div />,
+    index: true,
+  },
+  {
+    path: BORROWER_PATHS.SignAgreement,
     element: <HomePage />,
     index: true,
   },

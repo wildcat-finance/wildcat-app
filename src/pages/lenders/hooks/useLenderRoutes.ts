@@ -17,13 +17,8 @@ export const useLenderRouting = () => {
     const isAgreementPage =
       pathname === `${BASE_PATHS.Lender}/${LENDERS_PATH.Agreement}`
 
-    if (isSuccess && isIndexPage) {
+    if (isSuccess && isIndexPage && !hasSignedAgreement) {
       navigate(BASE_PATHS.Lender)
-      return
-    }
-
-    if (!hasSignedAgreement) {
-      navigate(`${BASE_PATHS.Lender}/${LENDERS_PATH.Agreement}`)
       return
     }
 
