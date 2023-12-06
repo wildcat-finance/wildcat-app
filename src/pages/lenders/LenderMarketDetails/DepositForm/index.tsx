@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useMemo, useState } from "react"
 import { Controller } from "react-hook-form"
 
 import { Button } from "../../../../components/ui-components"
@@ -11,6 +11,8 @@ import { DepositFormProps } from "./interface"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { useDepositForm } from "./hooks/useValidateDeposit"
 import { useAllowanceCheck } from "./hooks/useAllowanceCheck"
+import { DepositModal } from "../Modals/DepositModal"
+import { useGnosisSafeSDK } from "../../../../hooks/useGnosisSafeSDK"
 import { useTransactionWait } from "../../../../store/useTransactionWait"
 
 const DepositForm = ({ marketAccount }: DepositFormProps) => {
@@ -23,6 +25,12 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
   } = useDepositForm(marketAccount)
 
   const { isTxInProgress, setisTxInProgress } = useTransactionWait()
+
+  const { isConnectedToSafe } = useGnosisSafeSDK()
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const toggleModal = () => setIsModalOpen(!isModalOpen)
 
   const { mutateAsync: deposit, isLoading: isDepositing } =
     useDeposit(marketAccount)
@@ -37,6 +45,7 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
     useAllowanceCheck(marketAccount, depositTokenAmount)
 
   const onSubmit = handleSubmit(() => {
+    toggleModal()
     setisTxInProgress(true)
     deposit(depositValue)
       .then(() => {
@@ -56,7 +65,8 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
     marketDisabled ||
     depositTokenAmount.raw.isZero() ||
     isLoading ||
-    !!errors.depositAmount
+    !!errors.depositAmount ||
+    isTxInProgress
 
   return (
     <div className="flex gap-x-3.5 w-full max-w-xl">
@@ -84,7 +94,7 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
         />
       </div>
 
-      {hasInsufficientAllowance ? (
+      {hasInsufficientAllowance && !isConnectedToSafe ? (
         <Button
           variant="green"
           className="w-64 px-2 whitespace-nowrap"
@@ -97,12 +107,21 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
         <Button
           variant="green"
           className="w-64"
-          onClick={onSubmit}
+          onClick={toggleModal}
           disabled={disabled}
         >
           Deposit
         </Button>
       )}
+
+      <DepositModal
+        onClose={toggleModal}
+        deposit={onSubmit}
+        isLoading={isLoading}
+        isOpen={isModalOpen}
+        depositAmount={depositValue}
+        tokenSymbol={marketAccount.market.underlyingToken.symbol}
+      />
     </div>
   )
 }
