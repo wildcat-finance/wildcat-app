@@ -1,6 +1,4 @@
 import dayjs from "dayjs"
-import { mulDiv } from "@wildcatfi/wildcat-sdk"
-import { BigNumber } from "ethers"
 import {
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
@@ -35,11 +33,6 @@ export const WithdrawalsTable = ({ withdrawals }: WithdrawalsTableProps) => (
       },
       {
         title: "Requested",
-        align: "start",
-        className: "w-32",
-      },
-      {
-        title: "Claimed",
         align: "start",
         className: "w-32",
       },
@@ -79,16 +72,6 @@ export const WithdrawalsTable = ({ withdrawals }: WithdrawalsTableProps) => (
             </TableCell>
             <TableCell justify="start">
               {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
-            </TableCell>
-            <TableCell justify="start">
-              {wd.market.underlyingToken
-                .getAmount(
-                  wd.normalizedAmountWithdrawn.mulDiv(
-                    withdrawal.scaledAmount,
-                    wd.scaledAmount,
-                  ),
-                )
-                .format(TOKEN_FORMAT_DECIMALS, true)}
             </TableCell>
             <TableCell justify="end">
               {withdrawal

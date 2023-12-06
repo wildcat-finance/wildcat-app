@@ -102,7 +102,7 @@ const LenderWithdrawalRequests = ({
 
       <div className="h-12 flex justify-between items-center bg-tint-10 px-6 mt-6">
         <div className="inline text-black text-xs font-bold">
-          Requests Made In Previous Cycles
+          Outstanding From Previous Cycles
         </div>
         <div className="flex gap-x-4 items-center">
           {prevCycle ? (
