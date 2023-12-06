@@ -94,21 +94,23 @@ function ConnectButton() {
               </>
             ) : (
               <>
-                {connectors.map((connector) => (
-                  <Button
-                    disabled={!connector.ready}
-                    key={connector.id}
-                    onClick={() => connect({ connector })}
-                    variant="black"
-                    className="w-full"
-                  >
-                    {connector.name}
-                    {!connector.ready && " (unsupported)"}
-                    {isLoading &&
-                      connector.id === pendingConnector?.id &&
-                      " (connecting)"}
-                  </Button>
-                ))}
+                {connectors
+                  .filter((c) => !(c.name === "Safe" && !c.ready))
+                  .map((connector) => (
+                    <Button
+                      disabled={!connector.ready}
+                      key={connector.id}
+                      onClick={() => connect({ connector })}
+                      variant="black"
+                      className="w-full"
+                    >
+                      {connector.name}
+                      {!connector.ready && " (unsupported)"}
+                      {isLoading &&
+                        connector.id === pendingConnector?.id &&
+                        " (connecting)"}
+                    </Button>
+                  ))}
               </>
             )}
           </div>
