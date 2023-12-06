@@ -9,6 +9,7 @@ import {
 import { parseUnits } from "ethers/lib/utils"
 
 import { WildcatMarketController } from "@wildcatfi/wildcat-sdk/dist/typechain"
+import { BaseTransaction } from "@safe-global/safe-apps-sdk"
 import { useAccount } from "wagmi"
 import { ContractTransaction } from "ethers"
 import { useEthersSigner } from "../../../../modules/hooks"
@@ -27,6 +28,7 @@ import {
 } from "../../../../hooks/useGetMarketAccount"
 import { useGetMarketsForController } from "./useGetMarketsForController"
 import { GET_LENDERS_BY_MARKET_KEY } from "./useGetAuthorisedLenders"
+import { useGnosisSafeSDK } from "../../../../hooks/useGnosisSafeSDK"
 
 export const useBorrow = (marketAccount: MarketAccount) => {
   const signer = useEthersSigner()
@@ -135,8 +137,12 @@ export const useApprove = (token: Token, market: Market) => {
   })
 }
 
-export const useProcessUnpaidWithdrawalBatch = (market: Market) => {
+export const useProcessUnpaidWithdrawalBatch = (
+  marketAccount: MarketAccount,
+) => {
   const client = useQueryClient()
+  const { isConnectedToSafe, sendTransactions: sendGnosisTransactions } =
+    useGnosisSafeSDK()
 
   return useMutation({
     mutationFn: async ({
@@ -146,22 +152,36 @@ export const useProcessUnpaidWithdrawalBatch = (market: Market) => {
       tokenAmount: TokenAmount
       maxBatches: number
     }) => {
-      if (!market) {
+      if (!marketAccount) {
         return
       }
 
       const processWithdrawalBatch = async () => {
-        const tx = await market.repayAndProcessUnpaidWithdrawalBatches(
-          tokenAmount,
-          maxBatches,
-        )
-        await tx.wait()
+        const { status } = marketAccount.checkRepayStep(tokenAmount)
+        if (isConnectedToSafe && status === "InsufficientAllowance") {
+          const gnosisTransactions = [
+            await marketAccount.populateApproveMarket(tokenAmount),
+            await marketAccount.market.populateRepayAndProcessUnpaidWithdrawalBatches(
+              tokenAmount,
+              maxBatches,
+            ),
+          ]
+          const tx = await sendGnosisTransactions(gnosisTransactions)
+          await tx.wait()
+        } else {
+          const tx =
+            await marketAccount.market.repayAndProcessUnpaidWithdrawalBatches(
+              tokenAmount,
+              maxBatches,
+            )
+          await tx.wait()
+        }
       }
 
       await toastifyRequest(processWithdrawalBatch(), {
         pending: `Closing unpaid withdrawal batch...`,
         success: `Successfully closed batch!`,
-        error: `Error: Closing withdrawal batch for ${market.name} failed`,
+        error: `Error: Closing withdrawal batch for ${marketAccount.market.name} failed`,
       })
     },
     onSuccess() {
@@ -182,6 +202,8 @@ export const useDeposit = (
 ) => {
   const signer = useEthersSigner()
   const client = useQueryClient()
+  const { isConnectedToSafe, sendTransactions: sendGnosisTransactions } =
+    useGnosisSafeSDK()
 
   return useMutation({
     mutationFn: async (amount: string) => {
@@ -197,8 +219,20 @@ export const useDeposit = (
       const checkCanDeposit = marketAccount.checkDepositStep(tokenAmount)
 
       const deposit = async () => {
-        const tx = await marketAccount.deposit(tokenAmount)
-        await tx.wait()
+        if (
+          isConnectedToSafe &&
+          checkCanDeposit.status === "InsufficientAllowance"
+        ) {
+          const gnosisTransactions = [
+            await marketAccount.populateApproveMarket(tokenAmount),
+            await marketAccount.populateDeposit(tokenAmount),
+          ]
+          const tx = await sendGnosisTransactions(gnosisTransactions)
+          await tx.wait()
+        } else {
+          const tx = await marketAccount.deposit(tokenAmount)
+          await tx.wait()
+        }
       }
 
       await toastifyRequest(deposit(), {
@@ -331,6 +365,8 @@ export const useWithdraw = (marketAccount: MarketAccount) => {
 export const useRepay = (marketAccount: MarketAccount) => {
   const signer = useEthersSigner()
   const client = useQueryClient()
+  const { isConnectedToSafe, sendTransactions: sendGnosisTransactions } =
+    useGnosisSafeSDK()
 
   return useMutation({
     mutationFn: async (amount: TokenAmount) => {
@@ -338,7 +374,31 @@ export const useRepay = (marketAccount: MarketAccount) => {
         return
       }
 
+      const step = marketAccount.checkRepayStep(amount)
+      const gnosisTransactions: BaseTransaction[] = []
+      if (step.status !== "Ready") {
+        if (isConnectedToSafe && step.status === "InsufficientAllowance") {
+          gnosisTransactions.push(
+            await marketAccount.populateApproveMarket(amount),
+          )
+        } else {
+          throw Error(
+            `Should not be able to reach useRepay when status not ready and not connected to safe`,
+          )
+        }
+      }
+
       const repay = async () => {
+        if (gnosisTransactions.length) {
+          gnosisTransactions.push(await marketAccount.populateRepay(amount.raw))
+          console.log(`Sending gnosis transactions...`)
+          console.log(gnosisTransactions)
+          const tx = await sendGnosisTransactions(gnosisTransactions)
+          console.log(
+            `Got gnosis transaction:\n\tsafeTxHash: ${tx.safeTxHash}\n\ttxHash: ${tx.txHash}`,
+          )
+          await tx.wait()
+        }
         const tx = await marketAccount.repay(amount.raw)
         await tx?.wait()
       }

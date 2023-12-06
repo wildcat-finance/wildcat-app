@@ -16,6 +16,7 @@ import {
 } from "../../../../utils/formatters"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { SDK_ERRORS_MAPPING } from "../../../../utils/forms/errors"
+import { useGnosisSafeSDK } from "../../../../hooks/useGnosisSafeSDK"
 
 const Repay = ({ marketAccount }: RepayProps) => {
   const { market } = marketAccount
@@ -24,10 +25,12 @@ const Repay = ({ marketAccount }: RepayProps) => {
   const { mutate: repay, isLoading: isRepayAmountLoading } =
     useRepay(marketAccount)
 
+  const { isConnectedToSafe } = useGnosisSafeSDK()
+
   const {
     mutate: repayAndProcessUnpaidWithdrawalBatch,
     isLoading: isLoadingUnpaidWithdrawalBatch,
-  } = useProcessUnpaidWithdrawalBatch(marketAccount.market)
+  } = useProcessUnpaidWithdrawalBatch(marketAccount)
 
   const {
     mutate: repayOutstandingDebt,
@@ -56,8 +59,12 @@ const Repay = ({ marketAccount }: RepayProps) => {
     const repayStep = marketAccount.checkRepayStep(repayTokenAmount)
 
     if (repayStep.status !== "Ready") {
-      setError(SDK_ERRORS_MAPPING.repay[repayStep.status])
-      return
+      if (
+        !(repayStep.status === "InsufficientAllowance" && isConnectedToSafe)
+      ) {
+        setError(SDK_ERRORS_MAPPING.repay[repayStep.status])
+        return
+      }
     }
 
     setError(undefined)
@@ -122,7 +129,7 @@ const Repay = ({ marketAccount }: RepayProps) => {
         helperValue={`${outstandingDebt.format(TOKEN_FORMAT_DECIMALS, true)}`}
       />
       <div className="w-44 flex flex-col gap-y-1.5">
-        {repayStep.status === "InsufficientAllowance" ? (
+        {repayStep.status === "InsufficientAllowance" && !isConnectedToSafe ? (
           <Button
             variant="green"
             className="w-full"

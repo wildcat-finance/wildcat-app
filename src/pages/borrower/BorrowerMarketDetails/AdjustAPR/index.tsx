@@ -31,7 +31,7 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
   const {
     mutateAsync: repayAndProcessUnpaidWithdrawalBatch,
     isLoading: isProcessing,
-  } = useProcessUnpaidWithdrawalBatch(marketAccount.market)
+  } = useProcessUnpaidWithdrawalBatch(marketAccount)
   const { mutateAsync: approve, isLoading: isApproving } = useApprove(
     marketAccount.market.underlyingToken,
     marketAccount.market,
