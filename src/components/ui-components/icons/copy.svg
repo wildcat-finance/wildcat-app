@@ -1,15 +1,8 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg fill="#000000" height="800px" width="800px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-	 viewBox="0 0 488.3 488.3" xml:space="preserve">
-<g>
-	<g>
-		<path d="M314.25,85.4h-227c-21.3,0-38.6,17.3-38.6,38.6v325.7c0,21.3,17.3,38.6,38.6,38.6h227c21.3,0,38.6-17.3,38.6-38.6V124
-			C352.75,102.7,335.45,85.4,314.25,85.4z M325.75,449.6c0,6.4-5.2,11.6-11.6,11.6h-227c-6.4,0-11.6-5.2-11.6-11.6V124
-			c0-6.4,5.2-11.6,11.6-11.6h227c6.4,0,11.6,5.2,11.6,11.6V449.6z"/>
-		<path d="M401.05,0h-227c-21.3,0-38.6,17.3-38.6,38.6c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5c0-6.4,5.2-11.6,11.6-11.6h227
-			c6.4,0,11.6,5.2,11.6,11.6v325.7c0,6.4-5.2,11.6-11.6,11.6c-7.5,0-13.5,6-13.5,13.5s6,13.5,13.5,13.5c21.3,0,38.6-17.3,38.6-38.6
-			V38.6C439.65,17.3,422.35,0,401.05,0z"/>
-	</g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 12.7 15.875" xmlns="http://www.w3.org/2000/svg">
+<g style="">
+<path d="m4.6395 0.52968c-0.56774 0-1.0643 0.33146-1.3069 0.80925-0.15189 0.25608-0.06259 0.58665 0.1974 0.73174 0.25472 0.1421 0.57647 0.05171 0.71934-0.20257 0.04912-0.16846 0.19966-0.28164 0.39016-0.28164h6.0663c0.23423 0 0.40618 0.17195 0.40618 0.40618v6.0684c0 0.1835-0.10574 0.32756-0.26407 0.38189-0.25429 0.14286-0.34467 0.46514-0.20257 0.71985 0.14509 0.26 0.47566 0.3493 0.73174 0.1974 0.46961-0.24493 0.79375-0.73789 0.79375-1.2991v-6.0684c0-0.80224-0.66279-1.463-1.465-1.463zm-2.6453 2.6469c-0.80224 0-1.465 0.6602-1.465 1.4624v6.0684c0 0.80224 0.66279 1.463 1.465 1.463h6.0663c0.80224 0 1.465-0.66072 1.465-1.463v-6.0684c0-0.80224-0.66279-1.4624-1.465-1.4624zm0 1.0563h6.0663c0.23423 0 0.40618 0.17195 0.40618 0.40618v6.0684c0 0.23423-0.17195 0.40669-0.40618 0.40669h-6.0663c-0.23423 0-0.40618-0.17246-0.40618-0.40669v-6.0684c0-0.23423 0.17195-0.40618 0.40618-0.40618z" color="#000000" color-rendering="auto" dominant-baseline="auto" image-rendering="auto" shape-rendering="auto" solid-color="#000000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;paint-order:normal;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
 </g>
+<text y="27.7" fill="#000000" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif" font-size="5px" font-weight="bold">Created by Ranah Pixel Studio</text>
+<text y="32.7" fill="#000000" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif" font-size="5px" font-weight="bold">from the Noun Project</text>
 </svg>

@@ -3,13 +3,17 @@ import { useCallback, useEffect, useMemo } from "react"
 import { useAccount, useConnect, useDisconnect, useSwitchNetwork } from "wagmi"
 import { Dialog, Modal } from "react-aria-components"
 
+import { useCopyToClipboard } from "react-use"
 import { Button } from "../../ui-components"
 import { useWalletConnectModalStore } from "../../../store/useWalletConnectModalStore"
 import { TargetChainId, TargetNetwork } from "../../../config/networks"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 import { trimAddress } from "../../../utils/formatters"
+import { CopyIcon } from "../../ui-components/icons"
+import { toastifyInfo } from "../../toasts"
 
 function ConnectButton() {
+  const [state, copyToClipboard] = useCopyToClipboard()
   const { isOpen, setIsWalletModalOpen } = useWalletConnectModalStore()
 
   const { connectors, connect, isLoading, pendingConnector } = useConnect()
@@ -51,6 +55,15 @@ function ConnectButton() {
     [address],
   )
 
+  const handleCopyAddress = (text: string) => {
+    copyToClipboard(text)
+    if (state.error) {
+      toastifyInfo("Failed to copy to clipboard")
+    } else {
+      toastifyInfo("Copied to clipboard")
+    }
+  }
+
   return (
     <>
       <Button className="rounded-sm" onClick={openModal} variant="silver">
@@ -61,7 +74,7 @@ function ConnectButton() {
       </Button>
       <Modal isDismissable isOpen={isOpen} onOpenChange={setIsWalletModalOpen}>
         <Dialog className="bg-sand w-80 p-6 rounded-sm flex flex-col">
-          <div className="flex items-center justify-center mb-6 relative">
+          <div className="flex items-center justify-center mb-4 relative">
             <p className="text-2xl font-medium select-none">
               {isConnected ? "Account" : " Select Wallet"}
             </p>
@@ -82,7 +95,12 @@ function ConnectButton() {
             )}
             {isConnected ? (
               <>
-                <p>{shortenedAddress}</p>
+                <button onClick={() => handleCopyAddress(String(address))}>
+                  <div className="flex flex-row items-center gap-x-2 mb-1">
+                    <p className="hover:underline">{shortenedAddress}</p>
+                    <CopyIcon className="w-4 h-4" />
+                  </div>
+                </button>
 
                 <Button
                   variant="black"
@@ -116,7 +134,7 @@ function ConnectButton() {
           </div>
 
           {!isWrongNetwork && (
-            <div className="mt-6">
+            <div className="mt-1">
               <Button variant="black" className="w-full" onClick={closeModal}>
                 Close
               </Button>
