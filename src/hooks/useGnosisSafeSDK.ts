@@ -1,7 +1,9 @@
 import SafeAppsSDK, {
   BaseTransaction,
+  TransactionStatus,
   Web3TransactionReceiptObject,
 } from "@safe-global/safe-apps-sdk"
+import { useQuery } from "@tanstack/react-query"
 import { useEffect, useMemo, useState } from "react"
 import { useAccount } from "wagmi"
 
@@ -15,6 +17,37 @@ export type GnosisSafeHook = {
     txHash: string
     wait: () => Promise<Web3TransactionReceiptObject>
   }>
+}
+
+export const WAIT_FOR_SAFE_TX_KEY = "wait-for-safe-tx"
+
+export function useSafeTxDetails({
+  sdk,
+  safeTxHash,
+}: {
+  safeTxHash: string | undefined
+  sdk: SafeAppsSDK | undefined
+}) {
+  const [isFinished, setIsFinished] = useState(false)
+  return useQuery({
+    enabled: !!safeTxHash && !!sdk && !isFinished,
+    queryKey: [WAIT_FOR_SAFE_TX_KEY, safeTxHash],
+    queryFn: async () => {
+      if (!sdk) throw Error("No sdk found")
+      const tx = await sdk.txs.getBySafeTxHash(safeTxHash!)
+      console.log(`useSafeTxDetails :: tx:`)
+      console.log(tx)
+      if (
+        tx.txStatus === TransactionStatus.CANCELLED ||
+        tx.txStatus === TransactionStatus.FAILED ||
+        tx.txStatus === TransactionStatus.SUCCESS
+      ) {
+        setIsFinished(true)
+      }
+      return tx
+    },
+    refetchInterval: 2000,
+  })
 }
 
 export function useGnosisSafeSDK(): GnosisSafeHook {
