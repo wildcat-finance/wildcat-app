@@ -47,7 +47,7 @@ function LenderMarketsList() {
       return []
     }
 
-    return lendersMarkets
+    const sortedMarkets = lendersMarkets
       .filter((market) => {
         if (showTerminated) return true
         return !market.market.isClosed
@@ -72,6 +72,20 @@ function LenderMarketsList() {
           market.market.underlyingToken.symbol === selectedUnderlyingAsset.value
         )
       })
+      .sort((a, b) => {
+        const isClosedA = a.market.isClosed
+        const isClosedB = b.market.isClosed
+
+        if (isClosedA && !isClosedB) {
+          return 1
+        }
+        if (!isClosedA && isClosedB) {
+          return -1
+        }
+        return 0
+      })
+
+    return sortedMarkets
   }, [
     lendersMarkets,
     selectedVaultStatus,
