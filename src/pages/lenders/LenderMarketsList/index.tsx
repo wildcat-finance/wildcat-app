@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react"
 
-import { Select, TextInput } from "../../../components/ui-components"
+import { Select, Spinner, TextInput } from "../../../components/ui-components"
 import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
 import { mockedStatuses } from "../../../mocks/vaults"
 import { getMarketStatus } from "../../../utils/marketStatus"
@@ -31,8 +31,13 @@ function LenderMarketsList() {
     setFilterByName(value.toLowerCase())
   }
 
-  const { data: lendersMarkets } = useLendersMarkets()
+  const {
+    data: lendersMarkets,
+    isLoadingInitial,
+    isLoadingUpdate,
+  } = useLendersMarkets()
   const noAvailableMarkets = lendersMarkets.length === 0
+  const isLoading = isLoadingInitial || isLoadingUpdate
 
   const mockedVaultStatusOptions: SelectOptionItem[] = mockedStatuses
     .sort()
@@ -107,6 +112,10 @@ function LenderMarketsList() {
       value: option,
     }))
   }, [lendersMarkets])
+
+  if (isLoading) {
+    return <Spinner isLoading />
+  }
 
   return (
     <>

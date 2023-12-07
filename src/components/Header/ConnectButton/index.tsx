@@ -60,7 +60,7 @@ function ConnectButton() {
     if (state.error) {
       toastifyInfo("Failed to copy to clipboard")
     } else {
-      toastifyInfo("Copied to clipboard")
+      toastifyInfo("Address copied to clipboard")
     }
   }
 
@@ -98,7 +98,7 @@ function ConnectButton() {
                 <button onClick={() => handleCopyAddress(String(address))}>
                   <div className="flex flex-row items-center gap-x-2 mb-1">
                     <p className="hover:underline">{shortenedAddress}</p>
-                    <CopyIcon className="w-4 h-4" />
+                    <CopyIcon className="w-4 h-4 opacity-50 hover:opacity-100" />
                   </div>
                 </button>
 
