@@ -1,4 +1,4 @@
-import { RouteObject } from "react-router-dom"
+import { Navigate, RouteObject } from "react-router-dom"
 
 import * as React from "react"
 import { LENDERS_PATH } from "./constants"
@@ -9,7 +9,7 @@ import { LenderMarketDetails } from "../LenderMarketDetails"
 export const LENDERS_ROUTES: RouteObject[] = [
   {
     path: LENDERS_PATH.IndexPage,
-    element: <LendersServiceAgreement />,
+    element: <Navigate to={LENDERS_PATH.Agreement} replace />,
     index: true,
   },
   {

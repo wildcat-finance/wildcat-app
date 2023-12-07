@@ -1,25 +1,72 @@
-import { useNavigate } from "react-router-dom"
-
 import { AiOutlineExclamationCircle } from "react-icons/ai"
+import { useEffect, useState } from "react"
+import { useAccount } from "wagmi"
+import dayjs from "dayjs"
 import { Paper } from "../../../components/ui-components/Paper"
 import { BluePaper } from "../../../components/ui-components/BluePaper"
 import { Button } from "../../../components/ui-components/Button"
-import { useAgreementStore } from "../../../store/useAgreementStore"
 import { DownloadIcon, SignIcon } from "../../../components/ui-components/icons"
+import { OrangePaper } from "../../../components/ui-components/OrangePaper"
+import { useGnosisSafeSDK } from "../../../hooks/useGnosisSafeSDK"
+import { useSubmitSignature } from "./hooks/useSubmitSignature"
+import { useSignAgreement } from "./hooks/useSignAgreement"
+import { WaitForSignatureModal } from "../../borrower/ServiceAgreement/WaitForSignatureModal"
+
+const DATE_FORMAT = "MMMM DD, YYYY"
 
 function LendersServiceAgreement() {
-  const navigate = useNavigate()
-  const { setSignedAgreement } = useAgreementStore()
+  const { isConnectedToSafe, sdk } = useGnosisSafeSDK()
+  const [dateSigned, setDateSigned] = useState<string>("")
+  const { address } = useAccount()
+  const { mutateAsync: signAgreement, isLoading: isSigning } =
+    useSignAgreement()
+  const [safeTxHash, setSafeTxHash] = useState<string | undefined>(undefined)
+
+  const { mutateAsync: submitSignature, isLoading: isSubmitting } =
+    useSubmitSignature()
+
+  useEffect(() => {
+    setDateSigned(dayjs(Date.now()).format(DATE_FORMAT))
+  })
+
+  const handleSubmitForSafeTx = async () => {
+    await submitSignature({
+      signature: "0x",
+      dateSigned,
+      address: address as string,
+    }).then(() => {
+      setSafeTxHash(undefined)
+    })
+  }
+
+  const handleSign = async () => {
+    const result = await signAgreement({
+      dateSigned,
+      address,
+    })
+    console.log(result)
+    if (result.signature) {
+      await submitSignature({
+        signature: result.signature,
+        dateSigned,
+        address: address as string,
+      })
+      // navigate("/borrower")
+    } else if (result.safeTxHash) {
+      console.log(await sdk?.txs.getBySafeTxHash(result.safeTxHash))
+      // setSafeTxHash(result.safeTxHash)
+      setSafeTxHash(result.safeTxHash)
+    }
+  }
+
+  const onReject = () => {
+    setSafeTxHash(undefined)
+  }
 
   return (
     <>
       <div className="text-green text-2xl font-bold mb-8 w-2/3">
         Wildcat Services Agreement
-      </div>
-
-      <div className="text-green text-xs font-bold mb-8 w-2/3">
-        Agreement SHA-256 Hash:
-        293aa4a019d4a77693d8bcec55872e122330a73f51b3620d7987e5b090cf7934
       </div>
 
       <BluePaper className="mb-8">
@@ -579,7 +626,7 @@ function LendersServiceAgreement() {
               time.
             </p>
 
-            <p className="pl-8 pt-2 pb-0">
+            <p className="m-4">
               (b) To the extent possible, all warranties, express or implied,
               including without limitation any implied warranties of
               merchantability and fitness for a particular purpose, are
@@ -587,7 +634,7 @@ function LendersServiceAgreement() {
             </p>
 
             <p className="m-4">
-              (b) The rights of the Service Provider under this Clause are
+              (c) The rights of the Service Provider under this Clause are
               without prejudice to any other rights that they may have at law to
               terminate the Agreement or to accept any breach of this Agreement
               on the part of a Borrower or Lender as having brought the
@@ -851,6 +898,10 @@ function LendersServiceAgreement() {
               any bug bounty program to a whitehat that accurately identifies a
               bug.
             </p>
+
+            {!isConnectedToSafe && (
+              <p className="mb-4 mt-4">Date: {dateSigned}</p>
+            )}
           </div>
         </div>
 
@@ -858,7 +909,8 @@ function LendersServiceAgreement() {
           <Button
             variant="blue"
             icon={<SignIcon />}
-            onClick={() => setSignedAgreement(true)}
+            disabled={isSigning || isSubmitting}
+            onClick={handleSign}
           >
             Sign
           </Button>
@@ -867,6 +919,14 @@ function LendersServiceAgreement() {
             Download
           </Button>
         </div>
+
+        {safeTxHash && (
+          <WaitForSignatureModal
+            safeTxHash={safeTxHash}
+            onClose={handleSubmitForSafeTx}
+            onReject={onReject}
+          />
+        )}
       </Paper>
     </>
   )

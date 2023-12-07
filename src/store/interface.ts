@@ -1,6 +1,8 @@
 export type AgreementStore = {
-  hasSignedAgreement: boolean
-  setSignedAgreement: (isSigned: boolean) => void
+  setSlaSignature: (address: string, signature: string) => void
+  setBorrowerSignature: (address: string, signature: string) => void
+  [key: `sla-signature-${string}`]: string
+  [key: `borrower-signature-${string}`]: string
 }
 
 export type WalletConnectModalStore = {
