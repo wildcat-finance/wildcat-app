@@ -6,12 +6,17 @@ import { AgreementStore } from "./interface"
 export const useAgreementStore = create<AgreementStore>()(
   persist(
     (set) => ({
-      hasSignedAgreement: false,
-      setSignedAgreement: (hasSignedAgreement: boolean) =>
-        set({ hasSignedAgreement }),
+      setSlaSignature: (address: string, signature: string) =>
+        set({
+          [`sla-signature-${address.toLowerCase()}`]: signature,
+        }),
+      setBorrowerSignature: (address: string, signature: string) =>
+        set({
+          [`borrower-signature-${address.toLowerCase()}`]: signature,
+        }),
     }),
     {
-      name: "signed-agreement",
+      name: "sla-signatures",
     },
   ),
 )
