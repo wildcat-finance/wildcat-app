@@ -31,7 +31,7 @@ const BorrowerMarketDetails = () => {
   const { data: marketAccount } = useGetMarketAccountForBorrowerLegacy(market)
 
   const handleClickMyVaults = () => {
-    navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.MarketsList}`)
+    navigate(`${BASE_PATHS.Borrower}`)
   }
 
   const isLoading = isMarketLoading

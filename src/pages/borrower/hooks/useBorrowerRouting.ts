@@ -13,23 +13,22 @@ export const useBorrowerRouting = () => {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    const isIndexPage = pathname === BASE_PATHS.Borrower
+    const isWhitelistPage =
+      pathname === `${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`
     const isAgreementPage =
-      pathname === `${BASE_PATHS.Borrower}/${BORROWER_PATHS.Agreement}`
+      pathname === `${BASE_PATHS.Borrower}/${BORROWER_PATHS.ServiceAgreement}`
     const isRegisteredBorrower = data?.isRegisteredBorrower
 
-    if (isSuccess && !isRegisteredBorrower && !isIndexPage) {
+    if (isSuccess && (isWhitelistPage || isAgreementPage)) {
       navigate(BASE_PATHS.Borrower)
-      return
+    }
+
+    if (!isRegisteredBorrower) {
+      navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`)
     }
 
     if (isRegisteredBorrower && !hasSignedAgreement) {
-      navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.Agreement}`)
-      return
-    }
-
-    if (isSuccess && isRegisteredBorrower && (isIndexPage || isAgreementPage)) {
-      navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.MarketsList}`)
+      navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.ServiceAgreement}`)
     }
   }, [isSuccess, data?.isRegisteredBorrower, pathname, hasSignedAgreement])
 

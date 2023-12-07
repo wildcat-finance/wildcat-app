@@ -8,7 +8,6 @@ import { useAgreementStore } from "../../../store/useAgreementStore"
 import { DownloadIcon, SignIcon } from "../../../components/ui-components/icons"
 
 function LendersServiceAgreement() {
-  const navigate = useNavigate()
   const { setSignedAgreement } = useAgreementStore()
 
   return (

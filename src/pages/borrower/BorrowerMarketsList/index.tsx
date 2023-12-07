@@ -112,7 +112,7 @@ function BorrowerMarketsList() {
           All Markets For Borrower
           <div className="px-5">
             <Button
-              onClick={() => navigate("/borrower/add-new-vault")}
+              onClick={() => navigate("/borrower/add-new-market")}
               variant="blue"
             >
               New Market

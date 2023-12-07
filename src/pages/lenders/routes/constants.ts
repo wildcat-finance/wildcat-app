@@ -1,7 +1,5 @@
 export const LENDERS_PATH = {
   IndexPage: "*",
-  SignAgreement: "/agreement",
-  Agreement: "agreement",
-  ActiveVaults: "active-vaults",
+  ServiceAgreement: "agreement",
   MarketDetails: "market-details/:marketAddress",
 }

@@ -1,8 +1,7 @@
 export const BORROWER_PATHS = {
-  HomePage: "/",
-  SignAgreement: "/agreement",
-  AddNewVault: "add-new-vault",
-  Agreement: "agreement",
-  MarketsList: "markets-list",
-  VaultDetails: "market-details/:marketAddress",
+  IndexPage: "*",
+  Whitelisting: "whitelisting",
+  ServiceAgreement: "agreement",
+  AddNewMarket: "add-new-market",
+  MarketDetails: "market-details/:marketAddress",
 }

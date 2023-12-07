@@ -58,7 +58,7 @@ const AddNewVault = () => {
   )
 
   const handleClickMyVaults = () => {
-    navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.MarketsList}`)
+    navigate(`${BASE_PATHS.Borrower}`)
   }
 
   const handleMarketTypeSelect = (value: SelectOptionItem | null) => {

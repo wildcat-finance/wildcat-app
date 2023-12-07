@@ -7,7 +7,6 @@ import { DownloadIcon, SignIcon } from "../../../components/ui-components/icons"
 import { useAgreementStore } from "../../../store/useAgreementStore"
 
 function ServiceAgreement() {
-  const navigate = useNavigate()
   const { setSignedAgreement } = useAgreementStore()
 
   return (

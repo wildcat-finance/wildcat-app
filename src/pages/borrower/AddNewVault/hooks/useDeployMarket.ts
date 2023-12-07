@@ -158,7 +158,7 @@ export const useDeployMarket = () => {
     },
     onSuccess: () => {
       setTimeout(() => {
-        navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.MarketsList}`)
+        navigate(`${BASE_PATHS.Borrower}`)
       }, 3000)
       client.invalidateQueries({ queryKey: [GET_CONTROLLER_KEY] })
     },

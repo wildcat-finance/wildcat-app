@@ -13,17 +13,15 @@ export const useLenderRouting = () => {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    const isIndexPage = pathname === BASE_PATHS.Lender
     const isAgreementPage =
-      pathname === `${BASE_PATHS.Lender}/${LENDERS_PATH.Agreement}`
+      pathname === `${BASE_PATHS.Lender}/${LENDERS_PATH.ServiceAgreement}`
 
-    if (isSuccess && isIndexPage && !hasSignedAgreement) {
-      navigate(BASE_PATHS.Lender)
-      return
+    if (!hasSignedAgreement) {
+      navigate(`${BASE_PATHS.Lender}/${LENDERS_PATH.ServiceAgreement}`)
     }
 
-    if (isSuccess && (isIndexPage || isAgreementPage)) {
-      navigate(`${BASE_PATHS.Lender}/${LENDERS_PATH.ActiveVaults}`)
+    if (isSuccess && hasSignedAgreement && isAgreementPage) {
+      navigate(`${BASE_PATHS.Lender}`)
     }
   }, [isSuccess, pathname, hasSignedAgreement])
 

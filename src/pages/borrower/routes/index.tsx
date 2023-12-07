@@ -1,6 +1,6 @@
 import { RouteObject } from "react-router-dom"
 
-import HomePage from "../HomePage"
+import BorrowerWhitelisting from "../HomePage"
 import AddNewVault from "../AddNewVault"
 import ServiceAgreement from "../ServiceAgreement"
 import BorrowerMarketsList from "../BorrowerMarketsList"
@@ -10,29 +10,24 @@ import { BORROWER_PATHS } from "./constants"
 
 export const BORROWER_ROUTES: RouteObject[] = [
   {
-    path: BORROWER_PATHS.HomePage,
-    element: <div />,
+    path: BORROWER_PATHS.IndexPage,
+    element: <BorrowerMarketsList />,
     index: true,
   },
   {
-    path: BORROWER_PATHS.SignAgreement,
-    element: <HomePage />,
-    index: true,
+    path: BORROWER_PATHS.Whitelisting,
+    element: <BorrowerWhitelisting />,
   },
   {
-    path: BORROWER_PATHS.AddNewVault,
-    element: <AddNewVault />,
-  },
-  {
-    path: BORROWER_PATHS.Agreement,
+    path: BORROWER_PATHS.ServiceAgreement,
     element: <ServiceAgreement />,
   },
   {
-    path: BORROWER_PATHS.MarketsList,
-    element: <BorrowerMarketsList />,
+    path: BORROWER_PATHS.AddNewMarket,
+    element: <AddNewVault />,
   },
   {
-    path: BORROWER_PATHS.VaultDetails,
+    path: BORROWER_PATHS.MarketDetails,
     element: <BorrowerMarketDetails />,
   },
 ]

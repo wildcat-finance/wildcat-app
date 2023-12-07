@@ -9,16 +9,12 @@ import { LenderMarketDetails } from "../LenderMarketDetails"
 export const LENDERS_ROUTES: RouteObject[] = [
   {
     path: LENDERS_PATH.IndexPage,
-    element: <LendersServiceAgreement />,
+    element: <ActiveVaults />,
     index: true,
   },
   {
-    path: LENDERS_PATH.Agreement,
+    path: LENDERS_PATH.ServiceAgreement,
     element: <LendersServiceAgreement />,
-  },
-  {
-    path: LENDERS_PATH.ActiveVaults,
-    element: <ActiveVaults />,
   },
   {
     path: LENDERS_PATH.MarketDetails,

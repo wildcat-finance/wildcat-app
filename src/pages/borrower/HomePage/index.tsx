@@ -2,7 +2,7 @@
 import { Typography } from "../../../components/ui-components"
 import { TargetChainId } from "../../../config/networks"
 
-const HomePage = () => {
+const BorrowerWhitelisting = () => {
   if (TargetChainId === 1) {
     return (
       <div>
@@ -168,4 +168,4 @@ const HomePage = () => {
 //   </div>
 // )
 
-export default HomePage
+export default BorrowerWhitelisting

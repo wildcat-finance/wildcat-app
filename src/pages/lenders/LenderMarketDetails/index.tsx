@@ -34,7 +34,7 @@ export function LenderMarketDetails() {
   const isLoading = isMarketLoading || isMarketAccountLoading
 
   const handleClickMyMarkets = () => {
-    navigate("/lender/active-vaults")
+    navigate("/lender")
   }
 
   if (!isConnected || isWrongNetwork) {
