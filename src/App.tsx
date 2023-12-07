@@ -18,6 +18,7 @@ import BorrowerSection from "./pages/borrower"
 import { BASE_PATHS } from "./routes/constants"
 import LendersSection from "./pages/lenders"
 import { client } from "./client/client"
+import { AdminHomePage } from "./pages/admin/AdminHomePage"
 
 const queryClient = new QueryClient()
 
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: `${BASE_PATHS.Lender}/*`,
         element: <LendersSection />,
+      },
+      {
+        path: "admin",
+        element: <AdminHomePage />,
       },
       {
         path: "",
