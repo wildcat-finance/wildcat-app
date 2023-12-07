@@ -10,7 +10,7 @@ import { TargetChainId, TargetNetwork } from "../../../config/networks"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 import { trimAddress } from "../../../utils/formatters"
 import { CopyIcon } from "../../ui-components/icons"
-import { toastifyInfo } from "../../toasts"
+import { toastifyError, toastifyInfo } from "../../toasts"
 
 function ConnectButton() {
   const [state, copyToClipboard] = useCopyToClipboard()
@@ -58,7 +58,7 @@ function ConnectButton() {
   const handleCopyAddress = (text: string) => {
     copyToClipboard(text)
     if (state.error) {
-      toastifyInfo("Failed to copy to clipboard")
+      toastifyError("Failed to copy to clipboard")
     } else {
       toastifyInfo("Address copied to clipboard")
     }
