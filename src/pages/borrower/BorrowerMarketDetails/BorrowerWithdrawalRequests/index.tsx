@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 
 import { Chip } from "../../../../components/ui-components"
-import { WithdrawalsTable } from "./WithdrawalsTable"
+import { ThisCycleTable } from "./WithdrawalsTable/ThisCycleTable"
+import { PrevCycleTable } from "./WithdrawalsTable/PrevCycleTable"
 import { useGetWithdrawals } from "./hooks/useGetWithdrawals"
 import { ExpandMore } from "../../../../components/ui-components/icons"
 import { BorrowerWithdrawalRequestsProps } from "./interface"
@@ -9,6 +10,7 @@ import {
   timestampToDateFormatted,
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
+import { ClaimTable } from "./ClaimableTable"
 
 const BorrowerWithdrawalRequests = ({
   market,
@@ -17,12 +19,15 @@ const BorrowerWithdrawalRequests = ({
 
   const [thisCycle, setThisCycle] = useState(false)
   const [prevCycle, setPrevCycle] = useState(false)
+  const [openClaimTable, setOpenClaimTable] = useState(false)
 
   const toggleAccordion = (index: number) => {
     if (index === 1) {
       setThisCycle(!thisCycle)
     } else if (index === 2) {
       setPrevCycle(!prevCycle)
+    } else if (index === 3) {
+      setOpenClaimTable(!openClaimTable)
     }
   }
 
@@ -66,7 +71,7 @@ const BorrowerWithdrawalRequests = ({
 
       <div className="flex justify-between items-center mb-4 pr-6">
         <div className="inline text-black text-xs font-bold">
-          Total Withdrawal Requests Outstanding
+          Open Withdrawal Requests
         </div>
         <Chip className="w-30 flex justify-center">
           {totalAmount.format(TOKEN_FORMAT_DECIMALS, true)}
@@ -92,7 +97,7 @@ const BorrowerWithdrawalRequests = ({
       </div>
 
       {thisCycle && (
-        <WithdrawalsTable
+        <ThisCycleTable
           withdrawalBatches={
             data?.activeWithdrawal ? [data.activeWithdrawal] : []
           }
@@ -118,7 +123,27 @@ const BorrowerWithdrawalRequests = ({
         </div>
       </div>
       {prevCycle && (
-        <WithdrawalsTable withdrawalBatches={data?.expiredPendingWithdrawals} />
+        <PrevCycleTable withdrawalBatches={data?.expiredPendingWithdrawals} />
+      )}
+
+      <div className="h-12 flex justify-between items-center bg-tint-10 px-6 mt-14">
+        <div className="inline text-black text-xs font-bold">
+          Claimable Withdrawal Requests
+        </div>
+        <div className="flex gap-x-4 items-center">
+          {openClaimTable ? (
+            <ExpandMore
+              className="transform rotate-180"
+              onClick={() => toggleAccordion(3)}
+            />
+          ) : (
+            <ExpandMore onClick={() => toggleAccordion(3)} />
+          )}
+          <Chip className="w-30 flex justify-center">WETH</Chip>
+        </div>
+      </div>
+      {openClaimTable && (
+        <ClaimTable withdrawalBatches={data?.expiredPendingWithdrawals} />
       )}
     </div>
   )

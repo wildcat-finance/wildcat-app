@@ -2,18 +2,18 @@ import dayjs from "dayjs"
 import {
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
-} from "../../../../../utils/formatters"
+} from "../../../../../../utils/formatters"
 import {
   Table,
   TableCell,
   TableRow,
-} from "../../../../../components/ui-components"
+} from "../../../../../../components/ui-components"
 import { WithdrawalsTableProps } from "./interface"
-import { EtherscanBaseUrl } from "../../../../../config/networks"
+import { EtherscanBaseUrl } from "../../../../../../config/networks"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
-export const WithdrawalsTable = ({
+export const PrevCycleTable = ({
   withdrawalBatches,
 }: WithdrawalsTableProps) => (
   <Table
@@ -31,7 +31,7 @@ export const WithdrawalsTable = ({
       {
         title: "Date Submitted",
         align: "start",
-        className: "w-52",
+        className: "w-40",
       },
       {
         title: "Requested",
@@ -39,12 +39,7 @@ export const WithdrawalsTable = ({
         className: "w-32",
       },
       {
-        title: "Paid",
-        align: "start",
-        className: "w-32",
-      },
-      {
-        title: "Owed",
+        title: "Outstanding",
         align: "end",
         className: "w-32",
       },
@@ -80,15 +75,8 @@ export const WithdrawalsTable = ({
             <TableCell justify="start">
               {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
             </TableCell>
-            <TableCell justify="start">
-              {withdrawal
-                .getNormalizedAmountPaid(batch)
-                .format(TOKEN_FORMAT_DECIMALS, true)}
-            </TableCell>
             <TableCell justify="end">
-              {withdrawal
-                .getNormalizedAmountOwed(batch)
-                .format(TOKEN_FORMAT_DECIMALS, true)}
+              <div />
             </TableCell>
           </TableRow>
         )),
