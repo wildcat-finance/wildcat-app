@@ -1,19 +1,16 @@
 import dayjs from "dayjs"
-import {
-  TOKEN_FORMAT_DECIMALS,
-  trimAddress,
-} from "../../../../../utils/formatters"
+import { trimAddress } from "../../../../../utils/formatters"
 import {
   Table,
   TableCell,
   TableRow,
 } from "../../../../../components/ui-components"
-import { WithdrawalsTableProps } from "./interface"
+import { ClaimTableProps } from "./type"
 import { EtherscanBaseUrl } from "../../../../../config/networks"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
-export const WithdrawalsTable = ({ withdrawals }: WithdrawalsTableProps) => (
+export const ClaimTable = ({ withdrawalBatches }: ClaimTableProps) => (
   <Table
     headers={[
       {
@@ -32,20 +29,15 @@ export const WithdrawalsTable = ({ withdrawals }: WithdrawalsTableProps) => (
         className: "w-40",
       },
       {
-        title: "Requested",
-        align: "start",
-        className: "w-32",
-      },
-      {
-        title: "Owed",
+        title: "Claimable",
         align: "end",
         className: "w-32",
       },
     ]}
   >
-    {withdrawals &&
-      withdrawals.map((wd) =>
-        wd.requests.map((withdrawal) => (
+    {withdrawalBatches &&
+      withdrawalBatches.map((batch) =>
+        batch.requests.map((withdrawal) => (
           <TableRow key={withdrawal.id}>
             <TableCell justify="start">
               <a
@@ -71,12 +63,7 @@ export const WithdrawalsTable = ({ withdrawals }: WithdrawalsTableProps) => (
               {dayjs(withdrawal.blockTimestamp * 1000).format(DATE_FORMAT)}
             </TableCell>
             <TableCell justify="start">
-              {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
-            </TableCell>
-            <TableCell justify="end">
-              {withdrawal
-                .getNormalizedAmountOwed(wd)
-                .format(TOKEN_FORMAT_DECIMALS, true)}
+              <div />
             </TableCell>
           </TableRow>
         )),
