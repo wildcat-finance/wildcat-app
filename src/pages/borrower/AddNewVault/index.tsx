@@ -254,8 +254,6 @@ const AddNewVault = () => {
               error={Boolean(errors.reserveRatioBips)}
               decimalScale={MARKET_PARAMS_DECIMALS.reserveRatioBips}
               defaultValue={getNumberFieldDefaultValue("reserveRatioBips")}
-              min={getNumberFieldConstraints("reserveRatioBips").min}
-              max={getNumberFieldConstraints("reserveRatioBips").max}
             />
           </FormItem>
 
@@ -277,8 +275,6 @@ const AddNewVault = () => {
               error={Boolean(errors.annualInterestBips)}
               decimalScale={MARKET_PARAMS_DECIMALS.annualInterestBips}
               defaultValue={getNumberFieldDefaultValue("annualInterestBips")}
-              min={getNumberFieldConstraints("annualInterestBips").min}
-              max={getNumberFieldConstraints("annualInterestBips").max}
             />
           </FormItem>
 
@@ -299,8 +295,6 @@ const AddNewVault = () => {
               error={Boolean(errors.delinquencyFeeBips)}
               decimalScale={MARKET_PARAMS_DECIMALS.delinquencyFeeBips}
               defaultValue={getNumberFieldDefaultValue("delinquencyFeeBips")}
-              min={getNumberFieldConstraints("delinquencyFeeBips").min}
-              max={getNumberFieldConstraints("delinquencyFeeBips").max}
             />
           </FormItem>
 
@@ -322,8 +316,6 @@ const AddNewVault = () => {
               defaultValue={getNumberFieldDefaultValue(
                 "delinquencyGracePeriod",
               )}
-              min={getNumberFieldConstraints("delinquencyGracePeriod").min}
-              max={getNumberFieldConstraints("delinquencyGracePeriod").max}
             />
           </FormItem>
 
@@ -350,8 +342,6 @@ const AddNewVault = () => {
               defaultValue={getNumberFieldDefaultValue(
                 "withdrawalBatchDuration",
               )}
-              min={getNumberFieldConstraints("withdrawalBatchDuration").min}
-              max={getNumberFieldConstraints("withdrawalBatchDuration").max}
             />
           </FormItem>
         </form>
