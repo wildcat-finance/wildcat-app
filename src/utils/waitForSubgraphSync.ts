@@ -3,7 +3,6 @@ import {
   SubgraphGetSubgraphStatusQuery,
   SubgraphGetSubgraphStatusQueryVariables,
 } from "@wildcatfi/wildcat-sdk/dist/gql/graphql"
-import { toast } from "react-toastify"
 import {
   ToastId,
   dismissToast,
@@ -22,7 +21,6 @@ export async function getSubgraphSyncedBlock(): Promise<{
     SubgraphGetSubgraphStatusQueryVariables
   >({
     query: GetSubgraphStatusDocument,
-    fetchPolicy: "no-cache",
   })
   // eslint-disable-next-line no-underscore-dangle
   const block = result.data._meta?.block
@@ -56,18 +54,11 @@ export async function waitForSubgraphSync(
       const blocksProcessed = latestBlock - initialBlock
       const totalBlocks = targetBlock - initialBlock
       const progress = blocksProcessed / totalBlocks
-      // if (toastId !== undefined) dismissToast(toastId)
-      if (toastId === undefined) {
-        toastId = toastifyInfo(
-          `Waiting for subgraph to sync to block: ${targetBlock}.`,
-          { progress, autoClose: false },
-        )
-      } else {
-        toast.update(toastId, {
-          progress,
-        })
-      }
-
+      if (toastId !== undefined) dismissToast(toastId)
+      toastId = toastifyInfo(
+        `Waiting for subgraph sync. Latest block: ${latestBlock}. Target block: ${targetBlock}.`,
+        { progress },
+      )
       // eslint-disable-next-line no-promise-executor-return
       await new Promise((resolve) => setTimeout(resolve, 5000))
       return check()
