@@ -1,6 +1,10 @@
 import { BigNumber } from "ethers"
 import { formatUnits } from "ethers/lib/utils"
-import { MarketParameters, stripTrailingZeroes } from "@wildcatfi/wildcat-sdk"
+import {
+  MarketParameterConstraints,
+  MarketParameters,
+  stripTrailingZeroes,
+} from "@wildcatfi/wildcat-sdk"
 import dayjs from "dayjs"
 
 // <---- MARKET PARAMETERS FORMATTERS ---->
@@ -73,3 +77,22 @@ export const formatSecsToHours = (seconds: number) => {
 export const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 export const timestampToDateFormatted = (timestamp: number) =>
   dayjs(timestamp * 1000).format(DATE_FORMAT)
+
+// <---- MARKET CONSTRAINTS ---->
+const CONSTRAINTS_IN_SECONDS: Array<keyof MarketParameterConstraints> = [
+  "minimumDelinquencyGracePeriod",
+  "maximumDelinquencyGracePeriod",
+  "minimumWithdrawalBatchDuration",
+  "maximumWithdrawalBatchDuration",
+]
+
+export function formatConstrainToNumber(
+  constraints: MarketParameterConstraints,
+  key: keyof MarketParameterConstraints,
+) {
+  if (CONSTRAINTS_IN_SECONDS.indexOf(key) !== -1) {
+    return constraints[key] / 60 / 60
+  }
+
+  return constraints[key] / 100
+}

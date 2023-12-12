@@ -1,4 +1,5 @@
 import { MarketParameterConstraints } from "@wildcatfi/wildcat-sdk"
+import { formatConstrainToNumber } from "../../../utils/formatters"
 
 export function getMinMaxFromConstraints(
   constraints: MarketParameterConstraints | undefined,
@@ -11,10 +12,13 @@ export function getMinMaxFromConstraints(
     `maximum${fieldNameFormatted}` as keyof MarketParameterConstraints
 
   return {
-    min: constraints && constraints[minKey] ? constraints[minKey] / 100 : 0,
+    min:
+      constraints && constraints[minKey]
+        ? formatConstrainToNumber(constraints, minKey)
+        : 0,
     max:
       constraints && constraints[maxKey]
-        ? constraints[maxKey] / 100
+        ? formatConstrainToNumber(constraints, maxKey)
         : undefined,
   }
 }

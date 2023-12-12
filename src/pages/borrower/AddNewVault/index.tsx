@@ -24,7 +24,6 @@ import { defaultMarketForm, useNewMarketForm } from "./hooks/useNewMarketForm"
 import { useGetController } from "../../../hooks/useGetController"
 import { ValidationSchemaType } from "./hooks/validationSchema"
 import { BASE_PATHS } from "../../../routes/constants"
-import { BORROWER_PATHS } from "../routes/constants"
 import { getMinMaxFromConstraints } from "../utils/borrowerFormUtils"
 import { MARKET_PARAMS_DECIMALS } from "../../../utils/formatters"
 
@@ -131,9 +130,6 @@ const AddNewVault = () => {
     controller?.constraints
       ? getMinMaxFromConstraints(controller.constraints, field).min
       : defaultMarketForm[field]
-
-  const getNumberFieldConstraints = (field: string) =>
-    getMinMaxFromConstraints(controller?.constraints, field)
 
   return (
     <div>

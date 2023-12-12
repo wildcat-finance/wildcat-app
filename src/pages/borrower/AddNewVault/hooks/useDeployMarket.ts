@@ -11,7 +11,6 @@ import {
 import { parseUnits } from "ethers/lib/utils"
 
 import { useNavigate } from "react-router-dom"
-import { useAccount } from "wagmi"
 import {
   GET_CONTROLLER_KEY,
   useGetController,
@@ -19,7 +18,6 @@ import {
 import { useEthersSigner } from "../../../../modules/hooks"
 import { DeployNewMarketParams } from "./interface"
 import { toastifyError, toastifyRequest } from "../../../../components/toasts"
-import { BORROWER_PATHS } from "../../routes/constants"
 import { BASE_PATHS } from "../../../../routes/constants"
 import { TargetChainId } from "../../../../config/networks"
 import { useCurrentNetwork } from "../../../../hooks/useCurrentNetwork"
