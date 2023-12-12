@@ -10,7 +10,7 @@ import { EtherscanBaseUrl } from "../../../../../config/networks"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
-export const ClaimTable = ({ withdrawalBatches }: ClaimTableProps) => (
+export const ClaimTable = ({ filteredWithdrawals }: ClaimTableProps) => (
   <Table
     headers={[
       {
@@ -35,8 +35,8 @@ export const ClaimTable = ({ withdrawalBatches }: ClaimTableProps) => (
       },
     ]}
   >
-    {withdrawalBatches &&
-      withdrawalBatches.map((batch) =>
+    {filteredWithdrawals &&
+      filteredWithdrawals.map((batch) =>
         batch.requests.map((withdrawal) => (
           <TableRow key={withdrawal.id}>
             <TableCell justify="start">
