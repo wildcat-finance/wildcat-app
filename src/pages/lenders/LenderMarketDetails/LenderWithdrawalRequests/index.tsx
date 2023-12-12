@@ -10,7 +10,7 @@ import {
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
 import type { LenderWithdrawalRequestsProps } from "./interface"
-import { ClaimTable } from "../../../borrower/BorrowerMarketDetails/BorrowerWithdrawalRequests/ClaimableTable"
+import { ClaimTable } from "./ClaimableTable"
 
 const LenderWithdrawalRequests = ({
   market,
@@ -36,6 +36,9 @@ const LenderWithdrawalRequests = ({
   const expiredTotalAmount = data.expiredTotalPendingAmount
   const activeTotalAmount = data.activeTotalPendingAmount
   const totalAmount = expiredTotalAmount.add(activeTotalAmount)
+  const filteredWithdrawals = data.expiredPendingWithdrawals.filter(
+    (withdrawal) => withdrawal.availableWithdrawalAmount.raw.isZero() === false,
+  )
 
   const cycleStart = data.activeWithdrawal?.requests[0]?.blockTimestamp
   const cycleEnd =
@@ -146,7 +149,9 @@ const LenderWithdrawalRequests = ({
           <Chip className="w-30 flex justify-center">WETH</Chip>
         </div>
       </div>
-      {openClaimTable && <ClaimTable />}
+      {openClaimTable && (
+        <ClaimTable filteredWithdrawals={filteredWithdrawals} />
+      )}
     </div>
   )
 }

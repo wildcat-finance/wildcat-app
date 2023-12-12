@@ -1,5 +1,5 @@
-import { WithdrawalBatch } from "@wildcatfi/wildcat-sdk"
+import { LenderWithdrawalStatus } from "@wildcatfi/wildcat-sdk"
 
 export type ClaimTableProps = {
-  withdrawalBatches?: WithdrawalBatch[]
+  filteredWithdrawals?: LenderWithdrawalStatus[]
 }
