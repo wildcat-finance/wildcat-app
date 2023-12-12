@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { MarketParameterConstraints } from "@wildcatfi/wildcat-sdk"
 
+import { formatConstrainToNumber } from "../../../../utils/formatters"
+
 import {
   ValidationSchemaType,
   validationSchema as vschema,
@@ -20,43 +22,26 @@ export const defaultMarketForm: Partial<ValidationSchemaType> = {
   withdrawalBatchDuration: 0,
 }
 
-function getContrainNumber(value: number) {
-  if (value !== undefined && value > 0) {
-    return value / 100
-  }
-
-  return value
-}
 function getValidationSchema(constraints: MarketParameterConstraints) {
-  const {
-    minimumDelinquencyGracePeriod,
-    maximumDelinquencyGracePeriod,
-    minimumReserveRatioBips,
-    maximumReserveRatioBips,
-    minimumDelinquencyFeeBips,
-    maximumDelinquencyFeeBips,
-    minimumWithdrawalBatchDuration,
-    maximumWithdrawalBatchDuration,
-    minimumAnnualInterestBips,
-    maximumAnnualInterestBips,
-  } = constraints
+  const getFormattedConstrain = (key: keyof MarketParameterConstraints) =>
+    formatConstrainToNumber(constraints, key)
 
   return vschema.extend({
     delinquencyGracePeriod: vschema.shape.delinquencyGracePeriod
-      .min(getContrainNumber(minimumDelinquencyGracePeriod))
-      .max(getContrainNumber(maximumDelinquencyGracePeriod)),
+      .min(getFormattedConstrain("minimumDelinquencyGracePeriod"))
+      .max(getFormattedConstrain("maximumDelinquencyGracePeriod")),
     reserveRatioBips: vschema.shape.reserveRatioBips
-      .min(getContrainNumber(minimumReserveRatioBips))
-      .max(getContrainNumber(maximumReserveRatioBips)),
+      .min(getFormattedConstrain("minimumReserveRatioBips"))
+      .max(getFormattedConstrain("maximumReserveRatioBips")),
     delinquencyFeeBips: vschema.shape.delinquencyFeeBips
-      .min(getContrainNumber(minimumDelinquencyFeeBips))
-      .max(getContrainNumber(maximumDelinquencyFeeBips)),
+      .min(getFormattedConstrain("minimumDelinquencyFeeBips"))
+      .max(getFormattedConstrain("maximumDelinquencyFeeBips")),
     withdrawalBatchDuration: vschema.shape.withdrawalBatchDuration
-      .min(getContrainNumber(minimumWithdrawalBatchDuration))
-      .max(getContrainNumber(maximumWithdrawalBatchDuration)),
+      .min(getFormattedConstrain("minimumWithdrawalBatchDuration"))
+      .max(getFormattedConstrain("maximumWithdrawalBatchDuration")),
     annualInterestBips: vschema.shape.annualInterestBips
-      .min(getContrainNumber(minimumAnnualInterestBips))
-      .max(getContrainNumber(maximumAnnualInterestBips)),
+      .min(getFormattedConstrain("minimumAnnualInterestBips"))
+      .max(getFormattedConstrain("maximumAnnualInterestBips")),
   })
 }
 
