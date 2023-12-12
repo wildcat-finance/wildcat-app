@@ -159,10 +159,9 @@ export const useDeployMarket = () => {
       await waitForSubgraphSync(receipt.blockNumber)
     },
     onSuccess: () => {
-      setTimeout(() => {
+      client.invalidateQueries({ queryKey: [GET_CONTROLLER_KEY] }).then(() => {
         navigate(`${BASE_PATHS.Borrower}`)
-      }, 3000)
-      client.invalidateQueries({ queryKey: [GET_CONTROLLER_KEY] })
+      })
     },
     onError(error) {
       console.log(error)
