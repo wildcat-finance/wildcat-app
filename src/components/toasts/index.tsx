@@ -1,4 +1,11 @@
-import { toast, UpdateOptions, ToastOptions } from "react-toastify"
+import {
+  toast,
+  UpdateOptions,
+  ToastOptions,
+  Id as ToastId,
+} from "react-toastify"
+
+export type { ToastId }
 
 type ToastifyRequestConfig = {
   pending?: string
@@ -38,14 +45,35 @@ export const toastifyRequest = async <T,>(
   return promiseFn
 }
 
-export const toastifySuccess = (message: string) => {
-  toast.success(message, DEFAULT_TOAST_OPTIONS)
-}
+export const toastifySuccess = (
+  message: string,
+  options: ToastOptions = {},
+): ToastId =>
+  toast.success(message, {
+    ...DEFAULT_TOAST_OPTIONS,
+    ...options,
+  })
 
-export const toastifyError = (message: string) => {
-  toast.error(message, DEFAULT_TOAST_OPTIONS)
-}
+export const toastifyError = (
+  message: string,
+  options: ToastOptions = {},
+): ToastId =>
+  toast.error(message, {
+    ...DEFAULT_TOAST_OPTIONS,
+    ...options,
+  })
 
-export const toastifyInfo = (message: string) => {
-  toast.info(message, DEFAULT_TOAST_OPTIONS)
-}
+export const toastifyInfo = (
+  message: string,
+  options: ToastOptions = {},
+): ToastId =>
+  toast.info(
+    message,
+
+    {
+      ...DEFAULT_TOAST_OPTIONS,
+      ...options,
+    },
+  )
+
+export const dismissToast = (id: ToastId) => toast.dismiss(id)
