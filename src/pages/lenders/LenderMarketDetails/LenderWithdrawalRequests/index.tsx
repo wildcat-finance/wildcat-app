@@ -54,6 +54,8 @@ const LenderWithdrawalRequests = ({
     ),
   }))
 
+  console.log(batches)
+
   return (
     <div className="mb-14">
       <div className="flex justify-between items-center mb-8">
@@ -190,7 +192,7 @@ const LenderWithdrawalRequests = ({
                 </div>
               </div>
               {openClaimTable && (
-                <ClaimTable filteredWithdrawals={batch.withdrawals} />
+                <ClaimTable filteredWithdrawals={batch.requests} />
               )}
             </div>
           )

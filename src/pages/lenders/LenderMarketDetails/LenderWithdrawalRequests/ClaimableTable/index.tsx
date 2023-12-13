@@ -28,45 +28,35 @@ export const ClaimTable = ({ filteredWithdrawals }: ClaimTableProps) => (
         align: "start",
         className: "w-40",
       },
-      {
-        title: "Claimable",
-        align: "end",
-        className: "w-32",
-      },
     ]}
   >
     {filteredWithdrawals &&
-      filteredWithdrawals.map((batch) =>
-        batch.requests.map((withdrawal) => (
-          <TableRow key={withdrawal.id}>
-            <TableCell justify="start">
-              <a
-                className="hover:underline"
-                href={`${EtherscanBaseUrl}/address/${withdrawal.address}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {trimAddress(withdrawal.address)}
-              </a>
-            </TableCell>
-            <TableCell justify="start">
-              <a
-                className="hover:underline"
-                href={`${EtherscanBaseUrl}/tx/${withdrawal.transactionHash}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {trimAddress(withdrawal.transactionHash, 24)}
-              </a>
-            </TableCell>
-            <TableCell justify="start">
-              {dayjs(withdrawal.blockTimestamp * 1000).format(DATE_FORMAT)}
-            </TableCell>
-            <TableCell justify="start">
-              <div />
-            </TableCell>
-          </TableRow>
-        )),
-      )}
+      filteredWithdrawals?.map((withdrawal) => (
+        <TableRow key={withdrawal.id}>
+          <TableCell justify="start">
+            <a
+              className="hover:underline"
+              href={`${EtherscanBaseUrl}/address/${withdrawal.address}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {trimAddress(withdrawal.address)}
+            </a>
+          </TableCell>
+          <TableCell justify="start">
+            <a
+              className="hover:underline"
+              href={`${EtherscanBaseUrl}/tx/${withdrawal.transactionHash}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {trimAddress(withdrawal.transactionHash, 24)}
+            </a>
+          </TableCell>
+          <TableCell justify="start">
+            {dayjs(withdrawal.blockTimestamp * 1000).format(DATE_FORMAT)}
+          </TableCell>
+        </TableRow>
+      ))}
   </Table>
 )
