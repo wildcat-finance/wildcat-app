@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 
+import { BatchStatus } from "@wildcatfi/wildcat-sdk"
 import { Chip } from "../../../../components/ui-components"
 import { ThisCycleTable } from "./WithdrawalsTable/ThisCycleTable"
 import { PrevCycleTable } from "./WithdrawalsTable/PrevCycleTable"
@@ -12,7 +13,6 @@ import {
 import type { LenderWithdrawalRequestsProps } from "./interface"
 import { ClaimTable } from "./ClaimableTable"
 import { useGetMarketWithdrawals } from "../../../../hooks/useGetMarketWithdrawals"
-import { BatchStatus } from "@wildcatfi/wildcat-sdk"
 
 const LenderWithdrawalRequests = ({
   market,
@@ -166,6 +166,7 @@ const LenderWithdrawalRequests = ({
             (acc, w) => acc.add(w.availableWithdrawalAmount),
             market.underlyingToken.getAmount(0),
           )
+          if (totalClaimableAmount.raw.isZero()) return null
           return (
             <div className="flex flex-col w-full">
               <div className="h-12 flex justify-between items-center bg-tint-10 px-6">
