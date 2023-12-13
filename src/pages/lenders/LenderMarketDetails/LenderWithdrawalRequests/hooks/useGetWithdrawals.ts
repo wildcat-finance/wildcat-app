@@ -104,6 +104,7 @@ export function useGetWithdrawals(
       (acc, w) => acc.add(w.availableWithdrawalAmount),
       market.underlyingToken.getAmount(0),
     )
+
     return {
       activeWithdrawal,
       completeWithdrawals,
