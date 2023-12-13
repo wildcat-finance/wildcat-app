@@ -11,11 +11,13 @@ import {
 } from "../../../../utils/formatters"
 import type { LenderWithdrawalRequestsProps } from "./interface"
 import { ClaimTable } from "./ClaimableTable"
+import { useGetMarketWithdrawals } from "../../../../hooks/useGetMarketWithdrawals"
 
 const LenderWithdrawalRequests = ({
   market,
 }: LenderWithdrawalRequestsProps) => {
   const { data } = useGetWithdrawals(market)
+  const { data: batches } = useGetMarketWithdrawals({ market, enabled: true })
 
   const [thisCycle, setThisCycle] = useState(false)
   const [prevCycle, setPrevCycle] = useState(false)
@@ -43,6 +45,13 @@ const LenderWithdrawalRequests = ({
   const cycleStart = data.activeWithdrawal?.requests[0]?.blockTimestamp
   const cycleEnd =
     cycleStart !== undefined ? cycleStart + market.withdrawalBatchDuration : 0
+
+  const claimableBatches = batches.map((batch) => ({
+    ...batch,
+    withdrawals: batch.withdrawals.filter(
+      (withdrawal) => !withdrawal.availableWithdrawalAmount.raw.isZero(),
+    ),
+  }))
 
   return (
     <div className="mb-14">
@@ -133,25 +142,48 @@ const LenderWithdrawalRequests = ({
         />
       )}
 
-      <div className="h-12 flex justify-between items-center bg-tint-10 px-6 mt-14">
+      <div className="flex justify-between items-center mt-14 mb-4 pr-6">
         <div className="inline text-black text-xs font-bold">
           Claimable Withdrawal Requests
         </div>
-        <div className="flex gap-x-4 items-center">
-          {openClaimTable ? (
-            <ExpandMore
-              className="transform rotate-180"
-              onClick={() => toggleAccordion(3)}
-            />
-          ) : (
-            <ExpandMore onClick={() => toggleAccordion(3)} />
-          )}
-          <Chip className="w-30 flex justify-center">WETH</Chip>
-        </div>
+        <Chip className="w-30 flex justify-center">
+          {data.totalClaimableAmount.format(TOKEN_FORMAT_DECIMALS)}{" "}
+          {market.underlyingToken.symbol}
+        </Chip>
       </div>
-      {openClaimTable && (
-        <ClaimTable filteredWithdrawals={filteredWithdrawals} />
-      )}
+      <div className="flex flex-col w-full gap-4">
+        {claimableBatches.map((batch) => {
+          const cycleStartBatch = batch?.requests[0]?.blockTimestamp
+          const cycleEndBatch =
+            cycleStart !== undefined
+              ? cycleStart + market.withdrawalBatchDuration
+              : 0
+          return (
+            <div className="flex flex-col w-full">
+              <div className="h-12 flex justify-between items-center bg-tint-10 px-6">
+                <div className="inline text-black text-xs font-bold">
+                  {timestampToDateFormatted(cycleStartBatch)} -{" "}
+                  {timestampToDateFormatted(cycleEndBatch)}
+                </div>
+                <div className="flex gap-x-4 items-center">
+                  {openClaimTable ? (
+                    <ExpandMore
+                      className="transform rotate-180"
+                      onClick={() => toggleAccordion(3)}
+                    />
+                  ) : (
+                    <ExpandMore onClick={() => toggleAccordion(3)} />
+                  )}
+                  <Chip className="w-30 flex justify-center">WETH</Chip>
+                </div>
+              </div>
+              {openClaimTable && (
+                <ClaimTable filteredWithdrawals={batch.withdrawals} />
+              )}
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
