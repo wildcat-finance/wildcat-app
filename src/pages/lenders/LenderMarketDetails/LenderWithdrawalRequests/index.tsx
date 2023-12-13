@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 
-import { BatchStatus } from "@wildcatfi/wildcat-sdk"
 import { Chip } from "../../../../components/ui-components"
 import { ThisCycleTable } from "./WithdrawalsTable/ThisCycleTable"
 import { PrevCycleTable } from "./WithdrawalsTable/PrevCycleTable"
@@ -11,8 +10,8 @@ import {
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
 import type { LenderWithdrawalRequestsProps } from "./interface"
-import { ClaimTable } from "./ClaimableTable"
 import { useGetMarketWithdrawals } from "../../../../hooks/useGetMarketWithdrawals"
+import { ClaimTable } from "./ClaimTable"
 
 const LenderWithdrawalRequests = ({
   market,
@@ -44,12 +43,7 @@ const LenderWithdrawalRequests = ({
   const cycleEnd =
     cycleStart !== undefined ? cycleStart + market.withdrawalBatchDuration : 0
 
-  const claimableBatches = batches.map((batch) => ({
-    ...batch,
-    withdrawals: batch.withdrawals.filter(
-      (withdrawal) => !withdrawal.availableWithdrawalAmount.raw.isZero(),
-    ),
-  }))
+  const claimableBatches = batches
 
   return (
     <div className="mb-14">
@@ -149,50 +143,7 @@ const LenderWithdrawalRequests = ({
           {market.underlyingToken.symbol}
         </Chip>
       </div>
-      <div className="flex flex-col w-full gap-4">
-        {claimableBatches.map((batch) => {
-          const cycleStartBatch = batch?.requests[0]?.blockTimestamp
-          const cycleEndBatch =
-            cycleStart !== undefined
-              ? cycleStart + market.withdrawalBatchDuration
-              : 0
-          const expiredPendingWithdrawals = batch.withdrawals.filter(
-            (w) => w.status !== BatchStatus.Pending,
-          )
-          const totalClaimableAmount = expiredPendingWithdrawals.reduce(
-            (acc, w) => acc.add(w.availableWithdrawalAmount),
-            market.underlyingToken.getAmount(0),
-          )
-          if (totalClaimableAmount.raw.isZero()) return null
-          return (
-            <div className="flex flex-col w-full">
-              <div className="h-12 flex justify-between items-center bg-tint-10 px-6">
-                <div className="inline text-black text-xs font-bold">
-                  {timestampToDateFormatted(cycleStartBatch)} -{" "}
-                  {timestampToDateFormatted(cycleEndBatch)}
-                </div>
-                <div className="flex gap-x-4 items-center">
-                  {openClaimTable ? (
-                    <ExpandMore
-                      className="transform rotate-180"
-                      onClick={() => toggleAccordion(3)}
-                    />
-                  ) : (
-                    <ExpandMore onClick={() => toggleAccordion(3)} />
-                  )}
-                  <Chip className="w-30 flex justify-center">
-                    {totalClaimableAmount.format(TOKEN_FORMAT_DECIMALS)}{" "}
-                    {market.underlyingToken.symbol}
-                  </Chip>
-                </div>
-              </div>
-              {openClaimTable && (
-                <ClaimTable filteredWithdrawals={batch.requests} />
-              )}
-            </div>
-          )
-        })}
-      </div>
+      <ClaimTable batches={batches} market={market} />
     </div>
   )
 }
