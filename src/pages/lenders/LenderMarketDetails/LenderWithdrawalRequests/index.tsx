@@ -39,9 +39,6 @@ const LenderWithdrawalRequests = ({
   const expiredTotalAmount = data.expiredTotalPendingAmount
   const activeTotalAmount = data.activeTotalPendingAmount
   const totalAmount = expiredTotalAmount.add(activeTotalAmount)
-  const filteredWithdrawals = data.expiredPendingWithdrawals.filter(
-    (withdrawal) => withdrawal.availableWithdrawalAmount.raw.isZero() === false,
-  )
 
   const cycleStart = data.activeWithdrawal?.requests[0]?.blockTimestamp
   const cycleEnd =
@@ -53,8 +50,6 @@ const LenderWithdrawalRequests = ({
       (withdrawal) => !withdrawal.availableWithdrawalAmount.raw.isZero(),
     ),
   }))
-
-  console.log(batches)
 
   return (
     <div className="mb-14">
