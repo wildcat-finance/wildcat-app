@@ -12,6 +12,7 @@ import {
 import type { LenderWithdrawalRequestsProps } from "./interface"
 import { ClaimTable } from "./ClaimableTable"
 import { useGetMarketWithdrawals } from "../../../../hooks/useGetMarketWithdrawals"
+import { BatchStatus } from "@wildcatfi/wildcat-sdk"
 
 const LenderWithdrawalRequests = ({
   market,
@@ -158,6 +159,13 @@ const LenderWithdrawalRequests = ({
             cycleStart !== undefined
               ? cycleStart + market.withdrawalBatchDuration
               : 0
+          const expiredPendingWithdrawals = batch.withdrawals.filter(
+            (w) => w.status !== BatchStatus.Pending,
+          )
+          const totalClaimableAmount = expiredPendingWithdrawals.reduce(
+            (acc, w) => acc.add(w.availableWithdrawalAmount),
+            market.underlyingToken.getAmount(0),
+          )
           return (
             <div className="flex flex-col w-full">
               <div className="h-12 flex justify-between items-center bg-tint-10 px-6">
@@ -174,7 +182,10 @@ const LenderWithdrawalRequests = ({
                   ) : (
                     <ExpandMore onClick={() => toggleAccordion(3)} />
                   )}
-                  <Chip className="w-30 flex justify-center">WETH</Chip>
+                  <Chip className="w-30 flex justify-center">
+                    {totalClaimableAmount.format(TOKEN_FORMAT_DECIMALS)}{" "}
+                    {market.underlyingToken.symbol}
+                  </Chip>
                 </div>
               </div>
               {openClaimTable && (
