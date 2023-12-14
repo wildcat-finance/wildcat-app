@@ -1,6 +1,5 @@
-import { Market, WithdrawalBatch } from "@wildcatfi/wildcat-sdk"
+import { Market, LenderWithdrawalStatus } from "@wildcatfi/wildcat-sdk"
 
 export type ClaimTableProps = {
-  batches?: WithdrawalBatch[]
-  market: Market
+  expiredPendingWithdrawals: LenderWithdrawalStatus[]
 }

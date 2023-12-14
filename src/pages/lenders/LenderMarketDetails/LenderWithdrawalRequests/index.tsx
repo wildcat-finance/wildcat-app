@@ -10,14 +10,12 @@ import {
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
 import type { LenderWithdrawalRequestsProps } from "./interface"
-import { useGetMarketWithdrawals } from "../../../../hooks/useGetMarketWithdrawals"
 import { ClaimTable } from "./ClaimTable"
 
 const LenderWithdrawalRequests = ({
   market,
 }: LenderWithdrawalRequestsProps) => {
   const { data } = useGetWithdrawals(market)
-  const { data: batches } = useGetMarketWithdrawals({ market, enabled: true })
 
   const [thisCycle, setThisCycle] = useState(false)
   const [prevCycle, setPrevCycle] = useState(false)
@@ -141,7 +139,8 @@ const LenderWithdrawalRequests = ({
           {market.underlyingToken.symbol}
         </Chip>
       </div>
-      <ClaimTable batches={batches} market={market} />
+
+      <ClaimTable expiredPendingWithdrawals={data.expiredPendingWithdrawals} />
     </div>
   )
 }

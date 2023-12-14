@@ -14,70 +14,65 @@ import { EtherscanBaseUrl } from "../../../../../config/networks"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
-export const ClaimTable = ({ batches, market }: ClaimTableProps) => {
-  const withdrawals: { [key: string]: LenderWithdrawalStatus[] } = {}
+const TABLE_HEADER_CONFIG = [
+  {
+    title: "Lender",
+    align: "start",
+    className: "w-40",
+  },
+  {
+    title: "Transaction ID",
+    align: "start",
+    className: "w-72",
+  },
+  {
+    title: "Date Submitted",
+    align: "start",
+    className: "w-40",
+  },
+  {
+    title: "Claimable",
+    align: "end",
+    className: "w-40",
+  },
+]
 
-  batches?.forEach((batch) => {
-    batch.withdrawals.forEach((withdrawal) => {
-      if (!withdrawals[withdrawal.lender]) {
-        withdrawals[withdrawal.lender] = []
-      }
-      if (withdrawal.availableWithdrawalAmount.raw.isZero()) {
-        return
-      }
-      withdrawals[withdrawal.lender].push(withdrawal)
-    })
+export const ClaimTable = ({ expiredPendingWithdrawals }: ClaimTableProps) => {
+  const expiredPendingWithdrawalsByLender: {
+    [key: string]: LenderWithdrawalStatus[]
+  } = {}
+
+  expiredPendingWithdrawals.forEach((batch) => {
+    if (batch.availableWithdrawalAmount.raw.isZero()) {
+      return
+    }
+
+    if (!expiredPendingWithdrawalsByLender[batch.lender]) {
+      expiredPendingWithdrawalsByLender[batch.lender] = []
+    }
+
+    expiredPendingWithdrawalsByLender[batch.lender].push(batch)
   })
 
   return (
-    <Table
-      headers={[
-        {
-          title: "Lender",
-          align: "start",
-          className: "w-40",
-        },
-        {
-          title: "Transaction ID",
-          align: "start",
-          className: "w-72",
-        },
-        {
-          title: "Date Submitted",
-          align: "start",
-          className: "w-40",
-        },
-        {
-          title: "Claimable",
-          align: "end",
-          className: "w-40",
-        },
-      ]}
-    >
-      {Object.keys(withdrawals).map((lender) =>
-        withdrawals[lender].map((withdrawal, i) =>
-          withdrawal.batch.requests.map((request, j) => {
-            const requestNumber = withdrawals[lender].reduce(
-              (acc, curr) => curr.batch.requests.length + acc,
-              0,
-            )
-            const claimableAmount = withdrawals[lender].reduce(
-              (acc, w) => acc.add(w.availableWithdrawalAmount),
-              market.underlyingToken.getAmount(0),
-            )
-            if (i === 0 && j === 0) {
-              return (
-                <TableRow key={lender}>
-                  <TableCell justify="start" rowSpan={requestNumber}>
-                    <a
-                      className="hover:underline"
-                      href={`${EtherscanBaseUrl}/address/${lender}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {trimAddress(lender)}
-                    </a>
-                  </TableCell>
+    <Table headers={TABLE_HEADER_CONFIG}>
+      {Object.keys(expiredPendingWithdrawalsByLender).map((lender) =>
+        expiredPendingWithdrawalsByLender[lender].map((withdrawal) => (
+          <TableRow>
+            <TableCell justify="start">
+              <a
+                className="hover:underline"
+                href={`${EtherscanBaseUrl}/address/${lender}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {trimAddress(lender)}
+              </a>
+            </TableCell>
+
+            <TableCell justify="start">
+              {withdrawal.requests.map((request) => (
+                <TableRow key={request.id}>
                   <TableCell justify="start">
                     <a
                       className="hover:underline"
@@ -88,34 +83,28 @@ export const ClaimTable = ({ batches, market }: ClaimTableProps) => {
                       {trimAddress(request.transactionHash, 24)}
                     </a>
                   </TableCell>
+                </TableRow>
+              ))}
+            </TableCell>
+
+            <TableCell justify="start">
+              {withdrawal.requests.map((request) => (
+                <TableRow>
                   <TableCell justify="start">
                     {dayjs(request.blockTimestamp * 1000).format(DATE_FORMAT)}
                   </TableCell>
-                  <TableCell justify="end" rowSpan={requestNumber}>
-                    {claimableAmount.format(TOKEN_FORMAT_DECIMALS, true)}
-                  </TableCell>
                 </TableRow>
-              )
-            }
-            return (
-              <TableRow key={lender}>
-                <TableCell justify="start" className="!p-0 !bg-tint-10">
-                  <a
-                    className="hover:underline"
-                    href={`${EtherscanBaseUrl}/tx/${request.transactionHash}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {trimAddress(request.transactionHash, 24)}
-                  </a>
-                </TableCell>
-                <TableCell justify="start" className="!bg-tint-10">
-                  {dayjs(request.blockTimestamp * 1000).format(DATE_FORMAT)}
-                </TableCell>
-              </TableRow>
-            )
-          }),
-        ),
+              ))}
+            </TableCell>
+
+            <TableCell justify="end">
+              {withdrawal.availableWithdrawalAmount.format(
+                TOKEN_FORMAT_DECIMALS,
+                true,
+              )}
+            </TableCell>
+          </TableRow>
+        )),
       )}
     </Table>
   )

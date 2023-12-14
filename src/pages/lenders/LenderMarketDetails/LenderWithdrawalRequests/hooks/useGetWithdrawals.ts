@@ -96,6 +96,7 @@ export function useGetWithdrawals(
     const expiredPendingWithdrawals = incompleteWithdrawals.filter(
       (w) => w.status !== BatchStatus.Pending,
     )
+
     const expiredTotalPendingAmount = expiredPendingWithdrawals.reduce(
       (acc, w) => acc.add(w.normalizedAmountOwed),
       market.underlyingToken.getAmount(0),
