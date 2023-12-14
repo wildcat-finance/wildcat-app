@@ -99,7 +99,7 @@ export const ClaimTable = ({ batches, market }: ClaimTableProps) => {
             }
             return (
               <TableRow key={lender}>
-                <TableCell justify="start">
+                <TableCell justify="start" className="!p-0 !bg-tint-10">
                   <a
                     className="hover:underline"
                     href={`${EtherscanBaseUrl}/tx/${request.transactionHash}`}
@@ -109,7 +109,7 @@ export const ClaimTable = ({ batches, market }: ClaimTableProps) => {
                     {trimAddress(request.transactionHash, 24)}
                   </a>
                 </TableCell>
-                <TableCell justify="start">
+                <TableCell justify="start" className="!bg-tint-10">
                   {dayjs(request.blockTimestamp * 1000).format(DATE_FORMAT)}
                 </TableCell>
               </TableRow>
