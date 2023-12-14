@@ -146,6 +146,7 @@ const BorrowerWithdrawalRequests = ({
           {claimableAmount.format(TOKEN_FORMAT_DECIMALS, true)}
         </Chip>
       </div>
+
       <ClaimTable batches={batches} market={market} />
     </div>
   )

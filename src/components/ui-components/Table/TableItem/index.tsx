@@ -13,6 +13,7 @@ export function TableCell({
   className?: string
 }) {
   const cellClassName = cn(`${className}`, "first:pl-6 last:pr-6")
+
   return (
     <td className={cellClassName} rowSpan={rowSpan || 1}>
       <div
