@@ -52,6 +52,11 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
               }
             }
 
+            // Don't allow dots at the beginning
+            if (value.startsWith(".")) {
+              return false
+            }
+
             // Check if the value is bigger than the max or smaller than the min
             if (floatValue !== undefined) {
               const isBiggerThanMax = max !== undefined && floatValue > max
