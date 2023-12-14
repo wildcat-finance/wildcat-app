@@ -29,6 +29,13 @@ export const ClaimTable = ({ batches, market }: ClaimTableProps) => {
     })
   })
 
+  batches?.forEach((batch) => {
+    batch.withdrawals.reduce(
+      (acc, w) => acc.add(w.availableWithdrawalAmount),
+      market.underlyingToken.getAmount(0),
+    )
+  })
+
   return (
     <Table
       headers={[
