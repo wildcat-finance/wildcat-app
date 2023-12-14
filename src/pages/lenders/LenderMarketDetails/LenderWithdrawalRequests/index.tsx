@@ -43,8 +43,6 @@ const LenderWithdrawalRequests = ({
   const cycleEnd =
     cycleStart !== undefined ? cycleStart + market.withdrawalBatchDuration : 0
 
-  const claimableBatches = batches
-
   return (
     <div className="mb-14">
       <div className="flex justify-between items-center mb-8">

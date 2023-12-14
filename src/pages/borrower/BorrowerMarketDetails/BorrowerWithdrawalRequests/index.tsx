@@ -10,12 +10,14 @@ import {
   timestampToDateFormatted,
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
-import { ClaimTable } from "./ClaimableTable"
+import { ClaimTable } from "./ClaimTable"
+import { useGetMarketWithdrawals } from "../../../../hooks/useGetMarketWithdrawals"
 
 const BorrowerWithdrawalRequests = ({
   market,
 }: BorrowerWithdrawalRequestsProps) => {
   const { data } = useGetWithdrawals(market)
+  const { data: batches } = useGetMarketWithdrawals({ market, enabled: true })
 
   const [thisCycle, setThisCycle] = useState(false)
   const [prevCycle, setPrevCycle] = useState(false)
@@ -34,6 +36,16 @@ const BorrowerWithdrawalRequests = ({
   const expiredTotalAmount = data.expiredWithdrawalsTotalOwed
   const activeTotalAmount = data.activeWithdrawalsTotalOwed
   const totalAmount = expiredTotalAmount.add(activeTotalAmount)
+
+  const claimableAmount = batches
+    ?.map((batch) => {
+      const claimableForWithdrawals = batch.withdrawals.reduce(
+        (acc, w) => acc.add(w.availableWithdrawalAmount),
+        market.underlyingToken.getAmount(0),
+      )
+      return claimableForWithdrawals
+    })
+    .reduce((acc, w) => acc.add(w), market.underlyingToken.getAmount(0))
 
   const cycleStart = data.activeWithdrawal?.requests[0]?.blockTimestamp
   const cycleEnd =
@@ -126,25 +138,15 @@ const BorrowerWithdrawalRequests = ({
         <PrevCycleTable withdrawalBatches={data?.expiredPendingWithdrawals} />
       )}
 
-      <div className="h-12 flex justify-between items-center bg-tint-10 px-6 mt-14">
+      <div className="flex justify-between items-center mt-14 mb-4 pr-6">
         <div className="inline text-black text-xs font-bold">
           Claimable Withdrawal Requests
         </div>
-        <div className="flex gap-x-4 items-center">
-          {openClaimTable ? (
-            <ExpandMore
-              className="transform rotate-180"
-              onClick={() => toggleAccordion(3)}
-            />
-          ) : (
-            <ExpandMore onClick={() => toggleAccordion(3)} />
-          )}
-          <Chip className="w-30 flex justify-center">WETH</Chip>
-        </div>
+        <Chip className="w-30 flex justify-center">
+          {claimableAmount.format(TOKEN_FORMAT_DECIMALS, true)}
+        </Chip>
       </div>
-      {openClaimTable && (
-        <ClaimTable withdrawalBatches={data?.expiredPendingWithdrawals} />
-      )}
+      <ClaimTable batches={batches} market={market} />
     </div>
   )
 }

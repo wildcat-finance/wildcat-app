@@ -59,6 +59,7 @@ export function useGetWithdrawals(
     const activeWithdrawalsTotalOwed =
       activeWithdrawal?.normalizedAmountOwed ??
       market.underlyingToken.getAmount(0)
+
     return {
       activeWithdrawal,
       expiredPendingWithdrawals,
