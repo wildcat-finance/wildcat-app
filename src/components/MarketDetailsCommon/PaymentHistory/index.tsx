@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react"
+import React, { useState } from "react"
 // import { DateValue } from "react-aria-components"
 import dayjs from "dayjs"
 
@@ -6,11 +6,7 @@ import dayjs from "dayjs"
 import { Table, TableCell, TableRow } from "../../ui-components"
 import { ExpandMore } from "../../ui-components/icons"
 import { PaymentHistoryDetailsProps } from "./interface"
-import {
-  // formatTokenAmount,
-  TOKEN_FORMAT_DECIMALS,
-  trimAddress,
-} from "../../../utils/formatters"
+import { TOKEN_FORMAT_DECIMALS, trimAddress } from "../../../utils/formatters"
 import { EtherscanBaseUrl } from "../../../config/networks"
 
 // function getFromToTimestamps(dateArray: DateValue[]) {

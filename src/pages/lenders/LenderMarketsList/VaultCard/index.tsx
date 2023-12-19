@@ -7,7 +7,6 @@ import { VaultCardProps } from "./interface"
 import {
   TOKEN_FORMAT_DECIMALS,
   formatBps,
-  formatToken,
   DATE_FORMAT,
 } from "../../../../utils/formatters"
 import {
@@ -59,8 +58,9 @@ function VaultCard({ market, className }: VaultCardProps) {
         />
         <TableItem
           title="Maximum Capacity"
-          value={`${formatToken(market.maxTotalSupply.raw)}
-            ${market.underlyingToken.symbol}`}
+          value={`${market.maxTotalSupply.format(TOKEN_FORMAT_DECIMALS)} ${
+            market.underlyingToken.symbol
+          }`}
         />
         <TableItem
           title="Loaned Amount"
