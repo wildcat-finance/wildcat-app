@@ -19,16 +19,32 @@ export const useBorrowerRouting = () => {
       pathname === `${BASE_PATHS.Borrower}/${BORROWER_PATHS.ServiceAgreement}`
     const isRegisteredBorrower = data?.isRegisteredBorrower
 
+    console.log({
+      isLoading,
+      isRegisteredBorrower,
+      hasSignedAgreement,
+      isWhitelistPage,
+      isAgreementPage,
+      isSuccess,
+    })
+
     if (!isLoading) {
       if (!isRegisteredBorrower) {
-        navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`)
+        console.log(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`)
+        if (!isWhitelistPage) {
+          navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`)
+        }
+        return
       }
 
       if (isRegisteredBorrower && !hasSignedAgreement) {
+        console.log(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.ServiceAgreement}`)
         navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.ServiceAgreement}`)
+        return
       }
 
       if (isSuccess && (isWhitelistPage || isAgreementPage)) {
+        console.log(BASE_PATHS.Borrower)
         navigate(BASE_PATHS.Borrower)
       }
     }
