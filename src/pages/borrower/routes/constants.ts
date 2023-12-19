@@ -4,4 +4,5 @@ export const BORROWER_PATHS = {
   ServiceAgreement: "agreement",
   AddNewMarket: "add-new-market",
   MarketDetails: "market-details/:marketAddress",
+  PendingRegistration: "pending-registration",
 }
