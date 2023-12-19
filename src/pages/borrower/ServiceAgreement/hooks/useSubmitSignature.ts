@@ -41,7 +41,7 @@ export function useSubmitSignature() {
     onSuccess: () => {
       setTimeout(() => {
         toastifyInfo(`Redirecting to Markets List...`)
-        navigate(LENDERS_PATH.ActiveVaults)
+        navigate(LENDERS_PATH.IndexPage)
       }, 3000)
       client.invalidateQueries({ queryKey: [HAS_SIGNED_SLA_KEY] })
     },

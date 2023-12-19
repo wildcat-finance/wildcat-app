@@ -45,8 +45,8 @@ export function useSubmitSignature() {
     },
     onSuccess: () => {
       setTimeout(() => {
-        toastifyInfo(`Redirecting to Borrower Markets...`)
-        navigate(LENDERS_PATH.ActiveVaults)
+        toastifyInfo(`Redirecting to Markets List...`)
+        navigate(LENDERS_PATH.IndexPage)
       }, 3000)
       client.invalidateQueries({ queryKey: [GET_CONTROLLER_KEY] })
       client.invalidateQueries({ queryKey: [GET_CONTROLLER_CONTRACT_KEY] })
