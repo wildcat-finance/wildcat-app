@@ -555,8 +555,8 @@ function ServiceAgreement() {
               of liability, and irrespective of whether the Service Provider or
               the Borrowers or the Lenders have been advised of the possibility
               of any such Loss, unless such Loss arises directly from the
-              Service Provider’s or its Affiliates’ wilful default or actual
-              fraud.
+              Service Provider’s or its Affiliates’ wilful default, gross
+              negligence or actual fraud.
             </p>
 
             <p className="m-4">
@@ -625,8 +625,8 @@ function ServiceAgreement() {
               costs, claims, damages or expenses incurred by the Service
               Provider arising during the course of the Service Provider
               providing the Services save for costs, claims, damages or expenses
-              arising due to the Service Provider’s actual fraud or wilful
-              default.
+              arising due to the Service Provider’s actual fraud, gross
+              negligence or wilful default.
             </p>
 
             <p className="mb-4">9. TERMINATION</p>
