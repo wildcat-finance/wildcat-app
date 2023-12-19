@@ -26,6 +26,31 @@ function getMinReserveRatio(
   )
 }
 
+const localize = (
+  tokenAmount: TokenAmount,
+  decimals = TOKEN_FORMAT_DECIMALS,
+  withSymbol = false,
+) => {
+  const text = tokenAmount.format(decimals)
+  const [beforeDecimal, afterDecimal] = text.split(".")
+  const beforeDecimalWithCommas = Number(beforeDecimal).toLocaleString("en-US")
+  return [
+    beforeDecimalWithCommas,
+    ...(afterDecimal !== undefined ? [".", afterDecimal] : []),
+    ...(withSymbol ? [" ", tokenAmount.symbol] : []),
+  ].join("")
+}
+
+const toTokenAmountProps = (
+  tokenAmount: TokenAmount | undefined,
+  defaultText = "-",
+) => ({
+  value: tokenAmount
+    ? localize(tokenAmount, TOKEN_FORMAT_DECIMALS, true)
+    : defaultText,
+  valueTooltip: tokenAmount?.format(tokenAmount.decimals, true),
+})
+
 const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
   const {
     address,
@@ -50,6 +75,10 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
     timeDelinquent > delinquencyGracePeriod
       ? 0
       : delinquencyGracePeriod - timeDelinquent
+
+  const totalInterestAccrued = (
+    market.totalDelinquencyFeesAccrued ?? underlyingToken.getAmount(0)
+  ).add(market.totalBaseInterestAccrued ?? 0)
 
   return (
     <div>
@@ -119,13 +148,13 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
             value={formatSecsToHours(delinquencyGracePeriod)}
             className="pl-6 pr-24"
           />
-        </div>
-        <div className="w-full">
           <TableItem
             title="Available Grace Period"
             value={formatSecsToHours(availableGracePeriod)}
-            className="pr-6 pl-24"
+            className="pl-6 pr-24"
           />
+        </div>
+        <div className="w-full">
           <TableItem
             title="Penalty APR"
             value={`${formatBps(
@@ -139,35 +168,48 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
             value={`${totalSupply.format(TOKEN_FORMAT_DECIMALS)} ${
               underlyingToken.symbol
             }`}
+            valueTooltip={`${totalSupply.format(totalSupply.decimals)} ${
+              underlyingToken.symbol
+            }`}
             className="pr-6 pl-24"
           />
           <TableItem
             title="Available to Borrow"
-            value={borrowableAssets.format(TOKEN_FORMAT_DECIMALS, true)}
+            {...toTokenAmountProps(borrowableAssets)}
             className="pr-6 pl-24"
           />
           <TableItem
             title="Liquid Reserves"
-            value={liquidReserves.format(TOKEN_FORMAT_DECIMALS, true)}
+            {...toTokenAmountProps(liquidReserves)}
             className="pr-6 pl-24"
           />
           <TableItem
             title="Current Min. Reserve Required"
-            value={coverageLiquidity.format(TOKEN_FORMAT_DECIMALS, true)}
+            {...toTokenAmountProps(coverageLiquidity)}
             className="pr-6 pl-24"
           />
           <TableItem
             title="Reserves Owed"
-            value={delinquentDebt.format(TOKEN_FORMAT_DECIMALS, true)}
+            {...toTokenAmountProps(delinquentDebt)}
             className="pr-6 pl-24"
           />
           <TableItem
             title="Unclaimed Withdrawals"
-            value={normalizedUnclaimedWithdrawals.format(
-              TOKEN_FORMAT_DECIMALS,
-              true,
-            )}
+            {...toTokenAmountProps(normalizedUnclaimedWithdrawals)}
+            titleTooltip="Withdrawals that have been reserved but not yet claimed"
             className="pr-6 pl-24"
+          />
+          <TableItem
+            title="Total Interest Accrued"
+            className="pr-6 pl-24"
+            {...toTokenAmountProps(totalInterestAccrued)}
+            titleTooltip="Total accrued from delinquency fees and base interest"
+          />
+          <TableItem
+            title="Total Protocol Fees"
+            className="pr-6 pl-24"
+            {...toTokenAmountProps(market.totalProtocolFeesAccrued)}
+            titleTooltip="Total accrued in protocol fees"
           />
         </div>
       </div>
