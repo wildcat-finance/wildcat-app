@@ -12,26 +12,36 @@ export const useLenderRouting = () => {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    const isAgreementPage =
-      pathname === `${BASE_PATHS.Lender}/${LENDERS_PATH.ServiceAgreement}`
+    if (!isLoading) {
+      const isIndexPage = pathname === BASE_PATHS.Lender
+      const isAgreementPage =
+        pathname === `${BASE_PATHS.Lender}/${LENDERS_PATH.ServiceAgreement}`
+      const isMarketPage = pathname.includes(
+        `${BASE_PATHS.Lender}/${LENDERS_PATH.MarketDetails.replace(
+          ":marketAddress",
+          "",
+        )}`,
+      )
 
-    console.log(
-      `hasSignedAgreement: ${hasSignedAgreement} ${pathname} ind ${isAgreementPage} agr ${isAgreementPage}`,
-    )
+      console.log(
+        `hasSignedAgreement: ${hasSignedAgreement} ${pathname} ind ${isIndexPage} agr ${isAgreementPage}`,
+      )
 
-    if (isSuccess && isAgreementPage) {
-      navigate(BASE_PATHS.Lender)
-      return
-    }
+      if ((isSuccess && isIndexPage) || isMarketPage) {
+        return
+      }
 
-    if (!hasSignedAgreement) {
-      console.log(`navigate to agreement`)
-      navigate(`${BASE_PATHS.Lender}/${LENDERS_PATH.ServiceAgreement}`)
-      return
-    }
+      if (!hasSignedAgreement) {
+        if (!isAgreementPage) {
+          console.log(`navigate to agreement`)
+          navigate(`${BASE_PATHS.Lender}/${LENDERS_PATH.ServiceAgreement}`)
+        }
+        return
+      }
 
-    if (isSuccess && hasSignedAgreement && isAgreementPage) {
-      navigate(`${BASE_PATHS.Lender}`)
+      if (isSuccess && (isIndexPage || isAgreementPage)) {
+        navigate(`${BASE_PATHS.Lender}`)
+      }
     }
   }, [isSuccess, pathname, hasSignedAgreement, isLoadingSla])
 

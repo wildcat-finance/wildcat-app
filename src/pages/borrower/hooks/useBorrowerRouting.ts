@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 
 import { useAccount } from "wagmi"
+import { logger } from "@wildcatfi/wildcat-sdk"
 import { useGetController } from "../../../hooks/useGetController"
 import { BASE_PATHS } from "../../../routes/constants"
 import { BORROWER_PATHS } from "../routes/constants"
@@ -16,7 +17,6 @@ export const useBorrowerRouting = () => {
     useBorrowerInvitation(address)
 
   useEffect(() => {
-    const isIndexPage = pathname === BASE_PATHS.Borrower
     const isWhitelistPage =
       pathname === `${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`
     const isAgreementPage =
@@ -25,26 +25,38 @@ export const useBorrowerRouting = () => {
     const isPendingRegistrationPage =
       pathname ===
       `${BASE_PATHS.Borrower}/${BORROWER_PATHS.PendingRegistration}`
+    const isMarketPage = pathname.includes(
+      `${BASE_PATHS.Borrower}/${BORROWER_PATHS.MarketDetails.replace(
+        ":marketAddress",
+        "",
+      )}`,
+    )
 
-    console.log({
+    logger.debug({
       isLoading,
       isRegisteredBorrower,
       isWhitelistPage,
       isAgreementPage,
       isSuccess,
+      invitation,
     })
 
     if (!isLoading) {
+      if (isMarketPage) return
+
       if (!isRegisteredBorrower && invitation) {
         if (!invitation.timeAccepted) {
-          if (!isAgreementPage)
+          if (!isAgreementPage) {
             navigate(
               `${BASE_PATHS.Borrower}/${BORROWER_PATHS.ServiceAgreement}`,
             )
-        } else if (!isPendingRegistrationPage)
+          }
+        } else if (!isPendingRegistrationPage) {
           navigate(
             `${BASE_PATHS.Borrower}/${BORROWER_PATHS.PendingRegistration}`,
           )
+        }
+
         return
       }
 
