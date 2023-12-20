@@ -10,14 +10,11 @@ import {
   timestampToDateFormatted,
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
-import { useGetMarketWithdrawals } from "../../../../hooks/useGetMarketWithdrawals"
 
 const BorrowerWithdrawalRequests = ({
   market,
 }: BorrowerWithdrawalRequestsProps) => {
   const { data } = useGetWithdrawals(market)
-  const { data: batches } = useGetMarketWithdrawals({ market, enabled: true })
-
   const [thisCycle, setThisCycle] = useState(false)
   const [prevCycle, setPrevCycle] = useState(false)
   const [openClaimTable, setOpenClaimTable] = useState(false)
@@ -35,16 +32,6 @@ const BorrowerWithdrawalRequests = ({
   const expiredTotalAmount = data.expiredWithdrawalsTotalOwed
   const activeTotalAmount = data.activeWithdrawalsTotalOwed
   const totalAmount = expiredTotalAmount.add(activeTotalAmount)
-
-  const claimableAmount = batches
-    ?.map((batch) => {
-      const claimableForWithdrawals = batch.withdrawals.reduce(
-        (acc, w) => acc.add(w.availableWithdrawalAmount),
-        market.underlyingToken.getAmount(0),
-      )
-      return claimableForWithdrawals
-    })
-    .reduce((acc, w) => acc.add(w), market.underlyingToken.getAmount(0))
 
   const cycleStart = data.activeWithdrawal?.requests[0]?.blockTimestamp
   const cycleEnd =
@@ -137,14 +124,14 @@ const BorrowerWithdrawalRequests = ({
         <PrevCycleTable withdrawalBatches={data?.expiredPendingWithdrawals} />
       )}
 
-      <div className="flex justify-between items-center mt-14 mb-4 pr-6">
-        <div className="inline text-black text-xs font-bold">
-          Claimable Withdrawal Requests
-        </div>
-        <Chip className="w-30 flex justify-center">
-          {claimableAmount.format(TOKEN_FORMAT_DECIMALS, true)}
-        </Chip>
-      </div>
+      {/* <div className="flex justify-between items-center mt-14 mb-4 pr-6"> */}
+      {/*  <div className="inline text-black text-xs font-bold"> */}
+      {/*    Claimable Withdrawal Requests */}
+      {/*  </div> */}
+      {/*  <Chip className="w-30 flex justify-center"> */}
+      {/*    {claimableAmount.format(TOKEN_FORMAT_DECIMALS, true)} */}
+      {/*  </Chip> */}
+      {/* </div> */}
     </div>
   )
 }
