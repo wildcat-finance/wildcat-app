@@ -56,56 +56,72 @@ export const ClaimTable = ({ expiredPendingWithdrawals }: ClaimTableProps) => {
 
   return (
     <Table headers={TABLE_HEADER_CONFIG}>
-      {Object.keys(expiredPendingWithdrawalsByLender).map((lender) =>
-        expiredPendingWithdrawalsByLender[lender].map((withdrawal) => (
-          <TableRow>
-            <TableCell justify="start">
-              <a
-                className="hover:underline"
-                href={`${EtherscanBaseUrl}/address/${lender}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {trimAddress(lender)}
-              </a>
-            </TableCell>
+      {Object.keys(expiredPendingWithdrawalsByLender).map((lender) => (
+        <TableRow key={lender}>
+          <TableCell justify="start">
+            <a
+              className="hover:underline"
+              href={`${EtherscanBaseUrl}/address/${lender}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {trimAddress(lender)}
+            </a>
+          </TableCell>
 
-            <TableCell justify="start">
-              {withdrawal.requests.map((request) => (
-                <TableRow key={request.id}>
-                  <TableCell justify="start">
-                    <a
-                      className="hover:underline"
-                      href={`${EtherscanBaseUrl}/tx/${request.transactionHash}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {trimAddress(request.transactionHash, 24)}
-                    </a>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableCell>
-
-            <TableCell justify="start">
-              {withdrawal.requests.map((request) => (
+          <td colSpan={3}>
+            <table className="w-full">
+              {expiredPendingWithdrawalsByLender[lender].map((withdrawal) => (
                 <TableRow>
+                  <TableCell
+                    justify="start"
+                    className="first:pl-0"
+                    style={{ width: "47%" }}
+                  >
+                    {withdrawal.requests.map((request) => (
+                      <TableRow key={request.id}>
+                        <TableCell
+                          justify="start"
+                          className="first:pl-0"
+                          style={{ width: "47%" }}
+                        >
+                          <a
+                            className="hover:underline"
+                            href={`${EtherscanBaseUrl}/tx/${request.transactionHash}`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {trimAddress(request.transactionHash, 24)}
+                          </a>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableCell>
+
                   <TableCell justify="start">
-                    {dayjs(request.blockTimestamp * 1000).format(DATE_FORMAT)}
+                    {withdrawal.requests.map((request) => (
+                      <TableRow>
+                        <TableCell justify="start" className="first:pl-0">
+                          {dayjs(request.blockTimestamp * 1000).format(
+                            DATE_FORMAT,
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableCell>
+
+                  <TableCell justify="end">
+                    {withdrawal.availableWithdrawalAmount.format(
+                      TOKEN_FORMAT_DECIMALS,
+                      true,
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
-            </TableCell>
-
-            <TableCell justify="end">
-              {withdrawal.availableWithdrawalAmount.format(
-                TOKEN_FORMAT_DECIMALS,
-                true,
-              )}
-            </TableCell>
-          </TableRow>
-        )),
-      )}
+            </table>
+          </td>
+        </TableRow>
+      ))}
     </Table>
   )
 }

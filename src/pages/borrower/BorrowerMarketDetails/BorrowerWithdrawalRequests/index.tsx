@@ -10,7 +10,6 @@ import {
   timestampToDateFormatted,
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
-import { ClaimTable } from "./ClaimTable"
 import { useGetMarketWithdrawals } from "../../../../hooks/useGetMarketWithdrawals"
 
 const BorrowerWithdrawalRequests = ({
@@ -146,8 +145,6 @@ const BorrowerWithdrawalRequests = ({
           {claimableAmount.format(TOKEN_FORMAT_DECIMALS, true)}
         </Chip>
       </div>
-
-      <ClaimTable batches={batches} market={market} />
     </div>
   )
 }
