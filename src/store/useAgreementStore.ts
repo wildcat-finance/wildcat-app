@@ -16,7 +16,7 @@ export const useAgreementStore = create<AgreementStore>()(
         }),
     }),
     {
-      name: "sla-signatures",
+      name: "sla_signatures",
     },
   ),
 )
