@@ -25,12 +25,16 @@ export const useBorrowerInvitation = (address: string | undefined) => {
         console.log(err)
         return undefined
       })
-    return data as BorrowerInvite | undefined
+    return data === undefined ? null : (data as BorrowerInvite)
   }
-  return useQuery({
+  const { data, ...result } = useQuery({
     enabled: !!url && !!address,
     queryKey: [USE_BORROWER_INVITE_KEY, address],
     queryFn: getInvites,
     refetchOnMount: false,
   })
+  return {
+    data: data === null ? undefined : data,
+    ...result,
+  }
 }
