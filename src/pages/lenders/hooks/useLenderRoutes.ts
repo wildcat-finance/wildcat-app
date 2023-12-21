@@ -11,6 +11,15 @@ export const useLenderRouting = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
+  console.log(`logging from useLenderRouting.ts`)
+
+  console.log({
+    isLoading,
+    isSuccess,
+    hasSignedAgreement,
+    isLoadingSla,
+  })
+
   useEffect(() => {
     if (!isLoading && !isLoadingSla) {
       const isIndexPage = pathname === BASE_PATHS.Lender
@@ -43,7 +52,7 @@ export const useLenderRouting = () => {
         navigate(`${BASE_PATHS.Lender}`)
       }
     }
-  }, [isSuccess, pathname, hasSignedAgreement, isLoadingSla])
+  }, [isSuccess, pathname, hasSignedAgreement, isLoading, isLoadingSla])
 
   return {
     isLoading,

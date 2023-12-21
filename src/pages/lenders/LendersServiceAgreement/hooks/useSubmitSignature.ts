@@ -13,6 +13,7 @@ import { USE_BORROWER_INVITES_KEY } from "../../../admin/hooks/useBorrowerInvite
 import { LENDERS_PATH } from "../../routes/constants"
 import { useAgreementStore } from "../../../../store/useAgreementStore"
 import { API_URL } from "../../../../config/api"
+import { BASE_PATHS } from "../../../../routes/constants"
 
 export interface SignatureSubmissionProps {
   address: string
@@ -44,10 +45,6 @@ export function useSubmitSignature() {
       signatures.setSlaSignature(input.address, input.signature)
     },
     onSuccess: () => {
-      setTimeout(() => {
-        toastifyInfo(`Redirecting to Markets List...`)
-        navigate(LENDERS_PATH.IndexPage)
-      }, 3000)
       client.invalidateQueries({ queryKey: [GET_CONTROLLER_KEY] })
       client.invalidateQueries({ queryKey: [GET_CONTROLLER_CONTRACT_KEY] })
       client.invalidateQueries({ queryKey: [GET_CONTROLLER_UPDATED_KEY] })
@@ -56,6 +53,10 @@ export function useSubmitSignature() {
       })
       client.invalidateQueries({ queryKey: [USE_BORROWER_INVITE_KEY] })
       client.invalidateQueries({ queryKey: [USE_BORROWER_INVITES_KEY] })
+      setTimeout(() => {
+        toastifyInfo(`Redirecting to Markets List...`)
+        navigate(`${BASE_PATHS.Lender}/${LENDERS_PATH.IndexPage}`)
+      }, 3000)
     },
     onError(error) {
       console.log(error)
