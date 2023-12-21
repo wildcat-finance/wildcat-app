@@ -12,7 +12,7 @@ export const useLenderRouting = () => {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && !isLoadingSla) {
       const isIndexPage = pathname === BASE_PATHS.Lender
       const isAgreementPage =
         pathname === `${BASE_PATHS.Lender}/${LENDERS_PATH.ServiceAgreement}`
@@ -27,7 +27,7 @@ export const useLenderRouting = () => {
         `hasSignedAgreement: ${hasSignedAgreement} ${pathname} ind ${isIndexPage} agr ${isAgreementPage}`,
       )
 
-      if ((isSuccess && isIndexPage) || isMarketPage) {
+      if ((isSuccess && isIndexPage && hasSignedAgreement) || isMarketPage) {
         return
       }
 
