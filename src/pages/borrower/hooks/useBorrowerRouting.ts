@@ -8,15 +8,18 @@ import { BASE_PATHS } from "../../../routes/constants"
 import { BORROWER_PATHS } from "../routes/constants"
 import { useBorrowerInvitation } from "../../../hooks/useBorrowerInvitation"
 import { TargetChainId } from "../../../config/networks"
+import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 
 export const useBorrowerRouting = () => {
   const { address } = useAccount()
   const { data, isLoading, isSuccess } = useGetController()
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const { isTestnet } = useCurrentNetwork()
   const { data: invitation, isLoading: isLoadingInvitation } =
     useBorrowerInvitation(address)
 
+  console.log(`logging from useBorrowerRouting.ts`)
   useEffect(() => {
     const isWhitelistPage =
       pathname === `${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`
@@ -69,7 +72,12 @@ export const useBorrowerRouting = () => {
       }
 
       // Go to whitelisting page if borrower is not registered or invited
-      if (isSuccess && !isRegisteredBorrower && !isWhitelistPage) {
+      if (
+        isSuccess &&
+        !isRegisteredBorrower &&
+        !isWhitelistPage &&
+        !isTestnet
+      ) {
         navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`)
         return
       }
@@ -77,13 +85,20 @@ export const useBorrowerRouting = () => {
       // Go to index page if borrower is registered and not on index page
       if (
         isSuccess &&
-        isRegisteredBorrower &&
+        (isRegisteredBorrower || isTestnet) &&
         (isWhitelistPage || isAgreementPage || isPendingRegistrationPage)
       ) {
         navigate(BASE_PATHS.Borrower)
       }
     }
-  }, [isSuccess, data?.isRegisteredBorrower, pathname])
+  }, [
+    isSuccess,
+    isLoading,
+    isLoadingInvitation,
+    data?.isRegisteredBorrower,
+    pathname,
+    invitation,
+  ])
 
   return {
     isLoading,

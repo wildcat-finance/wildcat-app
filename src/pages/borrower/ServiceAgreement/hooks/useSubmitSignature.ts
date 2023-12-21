@@ -6,6 +6,8 @@ import { HAS_SIGNED_SLA_KEY } from "../../../../hooks/useHasSignedSla"
 import { LENDERS_PATH } from "../../../lenders/routes/constants"
 import { useAgreementStore } from "../../../../store/useAgreementStore"
 import { API_URL } from "../../../../config/api"
+import { BORROWER_PATHS } from "../../routes/constants"
+import { BASE_PATHS } from "../../../../routes/constants"
 
 export interface SignatureSubmissionProps {
   address: string
@@ -41,7 +43,7 @@ export function useSubmitSignature() {
     onSuccess: () => {
       setTimeout(() => {
         toastifyInfo(`Redirecting to Markets List...`)
-        navigate(LENDERS_PATH.IndexPage)
+        navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.PendingRegistration}`)
       }, 3000)
       client.invalidateQueries({ queryKey: [HAS_SIGNED_SLA_KEY] })
     },
