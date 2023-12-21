@@ -17,8 +17,9 @@ export const useHasSignedSla = () => {
   const { data, isLoading } = useQuery({
     queryKey: [HAS_SIGNED_SLA_KEY],
     refetchOnMount: false,
-    enabled: !!address && !!url && !signature,
+    enabled: !!address && !!url,
     queryFn: async () => {
+      if (signature) return true
       if (!url) throw Error(`API url not defined`)
       const { data: signed } = await fetch(`${url}/sla/${address}`).then(
         (res) => res.json(),
