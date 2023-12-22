@@ -74,7 +74,9 @@ export const PrevCycleTable = ({ withdrawals }: WithdrawalsTableProps) => (
               {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
             </TableCell>
             <TableCell justify="end">
-              <div />
+              {withdrawal
+                .getNormalizedAmountOwed(wd.batch)
+                .format(TOKEN_FORMAT_DECIMALS, true)}
             </TableCell>
           </TableRow>
         )),

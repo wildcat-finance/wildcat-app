@@ -76,7 +76,9 @@ export const PrevCycleTable = ({
               {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
             </TableCell>
             <TableCell justify="end">
-              <div />
+              {withdrawal
+                .getNormalizedAmountOwed(batch)
+                .format(TOKEN_FORMAT_DECIMALS, true)}
             </TableCell>
           </TableRow>
         )),
