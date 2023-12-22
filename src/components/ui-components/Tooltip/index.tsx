@@ -22,12 +22,27 @@ export function TooltipContent({ children, ...props }: TooltipContentProps) {
   )
 }
 
-export function Tooltip({ content, placement, ...props }: TooltipProps) {
+export function Tooltip({
+  content,
+  children,
+  placement,
+  ...props
+}: TooltipProps) {
   return (
     <TooltipTrigger delay={0}>
-      <Button className="w-3 outline-none">
-        <HelpIcon />
-      </Button>
+      {children ? (
+        <Button
+          style={{
+            cursor: "text",
+          }}
+        >
+          {children}
+        </Button>
+      ) : (
+        <Button className="w-3 outline-none">
+          <HelpIcon />
+        </Button>
+      )}
       <TooltipContent {...props} placement={placement || "right"}>
         {content}
       </TooltipContent>

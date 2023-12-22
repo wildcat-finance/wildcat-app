@@ -1,18 +1,29 @@
 import { Outlet } from "react-router-dom"
 
-import { useMedia } from "react-use"
 import { Header } from "../../components/Header"
 import { MobilePage } from "./MobilePage"
 
 const Layout = () => {
-  const isDesktop = useMedia("(min-width: 768px)")
+  const isMobile = () => {
+    const toMatch = [
+      /Android/i,
+      /webOS/i,
+      /iPhone/i,
+      /iPad/i,
+      /iPod/i,
+      /BlackBerry/i,
+      /Windows Phone/i,
+    ]
+
+    return toMatch.some((toMatchItem) => navigator.userAgent.match(toMatchItem))
+  }
 
   return (
     <div>
       <Header />
 
       <div className="p-10 w-full max-w-5xl mx-auto">
-        {isDesktop ? <Outlet /> : <MobilePage />}
+        {!isMobile() ? <Outlet /> : <MobilePage />}
       </div>
     </div>
   )

@@ -29,6 +29,7 @@ import {
 import { useGetMarketsForController } from "./useGetMarketsForController"
 import { GET_LENDERS_BY_MARKET_KEY } from "./useGetAuthorisedLenders"
 import { useGnosisSafeSDK } from "../../../../hooks/useGnosisSafeSDK"
+import { waitForSubgraphSync } from "../../../../utils/waitForSubgraphSync"
 
 export const useBorrow = (marketAccount: MarketAccount) => {
   const signer = useEthersSigner()
@@ -47,10 +48,10 @@ export const useBorrow = (marketAccount: MarketAccount) => {
 
       const borrow = async () => {
         const tx = await marketAccount.borrow(tokenAmount)
-        await tx.wait()
+        return tx.wait()
       }
 
-      await toastifyRequest(borrow(), {
+      const receipt = await toastifyRequest(borrow(), {
         pending: `Borrowing ${tokenAmount.format(
           tokenAmount.token.decimals,
           true,
@@ -61,6 +62,7 @@ export const useBorrow = (marketAccount: MarketAccount) => {
         )}!`,
         error: `Error: Borrow Failed`,
       })
+      await waitForSubgraphSync(receipt.blockNumber)
     },
     onSuccess() {
       client.invalidateQueries({
@@ -113,10 +115,10 @@ export const useApprove = (token: Token, market: Market) => {
           market.address.toLowerCase(),
           tokenAmount.raw,
         )
-        await tx.wait()
+        return tx.wait()
       }
 
-      await toastifyRequest(approve(), {
+      const receipt = await toastifyRequest(approve(), {
         pending: `Approving ${tokenAmount.format(
           tokenAmount.token.decimals,
           true,
@@ -127,6 +129,7 @@ export const useApprove = (token: Token, market: Market) => {
         )}!`,
         error: `Error: ${token.symbol} Approval Failed`,
       })
+      await waitForSubgraphSync(receipt.blockNumber)
     },
     onSuccess() {
       client.invalidateQueries({ queryKey: [GET_MARKET_ACCOUNT_KEY] })
@@ -228,18 +231,18 @@ export const useDeposit = (
             await marketAccount.populateDeposit(tokenAmount),
           ]
           const tx = await sendGnosisTransactions(gnosisTransactions)
-          await tx.wait()
-        } else {
-          const tx = await marketAccount.deposit(tokenAmount)
-          await tx.wait()
+          return tx.wait()
         }
+        const tx = await marketAccount.deposit(tokenAmount)
+        return tx.wait()
       }
 
-      await toastifyRequest(deposit(), {
+      const receipt = await toastifyRequest(deposit(), {
         pending: `Depositing ${amount} ${tokenSymbol}...`,
         success: `Successfully Deposited ${amount} ${tokenSymbol}!`,
         error: `Error: ${checkCanDeposit.status}`,
       })
+      await waitForSubgraphSync(receipt.blockNumber)
     },
     onSuccess() {
       if (onSuccess) onSuccess()
@@ -341,20 +344,20 @@ export const useWithdraw = (marketAccount: MarketAccount) => {
         marketAccount.market.underlyingToken,
       )
 
-      const withdraw = async () => {
-        await marketAccount.queueWithdrawal(tokenAmount)
-      }
+      const withdraw = () => marketAccount.queueWithdrawal(tokenAmount)
 
       const { symbol } = marketAccount.market.underlyingToken
 
-      await toastifyRequest(withdraw(), {
+      const { receipt } = await toastifyRequest(withdraw(), {
         pending: `Adding ${amount} ${symbol} to withdrawal queue`,
         success: `${amount} ${symbol} successfully added to withdrawal queue`,
         error: "Error adding to withdrawal queue",
       })
+      await waitForSubgraphSync(receipt.blockNumber)
     },
     onSuccess() {
       client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
+      client.invalidateQueries({ queryKey: [GET_WITHDRAWALS_KEY] })
     },
     onError(error, amount) {
       console.log(error, amount)
@@ -397,21 +400,22 @@ export const useRepay = (marketAccount: MarketAccount) => {
           console.log(
             `Got gnosis transaction:\n\tsafeTxHash: ${tx.safeTxHash}\n\ttxHash: ${tx.txHash}`,
           )
-          await tx.wait()
+          return tx.wait()
         }
         const tx = await marketAccount.repay(amount.raw)
-        await tx?.wait()
+        return tx.wait()
       }
 
       const { symbol } = marketAccount.market.underlyingToken
 
       const tokenAmountFormatted = amount.format(TOKEN_FORMAT_DECIMALS)
 
-      await toastifyRequest(repay(), {
+      const receipt = await toastifyRequest(repay(), {
         pending: `${tokenAmountFormatted} ${symbol} Repayment In Progress...`,
         success: `Successfully Repaid ${tokenAmountFormatted} ${symbol}!`,
         error: `Error: Repayment Attempt Failed`,
       })
+      await waitForSubgraphSync(receipt.blockNumber)
     },
     onSuccess() {
       client.invalidateQueries({
@@ -436,14 +440,15 @@ export const useRepayOutstandingDebt = (marketAccount: MarketAccount) => {
 
       const repayOutstandingDebt = async () => {
         const tx = await marketAccount.repayOutstandingDebt()
-        await tx?.wait()
+        return tx.wait()
       }
 
-      await toastifyRequest(repayOutstandingDebt(), {
+      const receipt = await toastifyRequest(repayOutstandingDebt(), {
         pending: "Repaying Outstanding Debt...",
         success: "Outstanding Debt Successfully Repaid!",
         error: `Error Repaying Outstanding Debt`,
       })
+      await waitForSubgraphSync(receipt.blockNumber)
     },
     onSuccess() {
       toastifyInfo("Repayment In Progress...")
@@ -469,14 +474,15 @@ export const useAdjustAPR = (marketAccount: MarketAccount) => {
 
       const setApr = async () => {
         const tx = await marketAccount.setAnnualInterestBips(amount * 100)
-        await tx.wait()
+        return tx.wait()
       }
 
-      await toastifyRequest(setApr(), {
+      const receipt = await toastifyRequest(setApr(), {
         pending: `Adjusting Lender APR...`,
         success: `Lender APR Successfully Adjusted`,
         error: "Error adjusting Lender APR",
       })
+      await waitForSubgraphSync(receipt.blockNumber)
     },
     onSuccess() {
       client.invalidateQueries({
@@ -509,14 +515,15 @@ export const useSetMaxTotalSupply = (marketAccount: MarketAccount) => {
 
       const setMaxTotalSupply = async () => {
         const tx = await marketAccount.setMaxTotalSupply(supplyTokenAmount)
-        await tx.wait()
+        return tx.wait()
       }
 
-      await toastifyRequest(setMaxTotalSupply(), {
+      const receipt = await toastifyRequest(setMaxTotalSupply(), {
         pending: `Setting Maximum Capacity...`,
         success: `Maximum Capacity successfully Adjusted`,
         error: "Error setting Maximum Capacity",
       })
+      await waitForSubgraphSync(receipt.blockNumber)
     },
     onSuccess() {
       client.invalidateQueries({
@@ -541,14 +548,15 @@ export const useTerminateMarket = (marketAccount: MarketAccount) => {
 
       const closeMarket = async () => {
         const tx = await marketAccount.closeMarket()
-        await tx.wait()
+        return tx.wait()
       }
 
-      await toastifyRequest(closeMarket(), {
+      const receipt = await toastifyRequest(closeMarket(), {
         pending: `Terminating Market...`,
         success: `Successfully Terminated Market!`,
         error: "Error Terminating Market",
       })
+      await waitForSubgraphSync(receipt.blockNumber)
     },
     onSuccess() {
       client.invalidateQueries({
@@ -615,14 +623,15 @@ export const useAuthoriseLenders = (
         } else {
           tx = await controller.authorizeLenders(lenders)
         }
-        await tx?.wait()
+        return tx.wait()
       }
 
-      await toastifyRequest(authoriseLenders(), {
+      const receipt = await toastifyRequest(authoriseLenders(), {
         pending: "Authorising Lenders...",
         success: "Lenders Successfully Authorised!",
         error: "Error authorising lenders",
       })
+      await waitForSubgraphSync(receipt.blockNumber)
     },
     onSuccess() {
       client.invalidateQueries({ queryKey: [GET_LENDERS_BY_MARKET_KEY] })
@@ -661,14 +670,15 @@ export const useDeauthorizeLenders = (
         } else {
           tx = await controller.deauthorizeLenders(authorizedLenders)
         }
-        await tx?.wait()
+        return tx.wait()
       }
 
-      await toastifyRequest(deauthorizeLenders(), {
+      const receipt = await toastifyRequest(deauthorizeLenders(), {
         pending: "Removing Lenders...",
         success: "Lenders successfully removed!",
         error: "Error removing lenders",
       })
+      await waitForSubgraphSync(receipt.blockNumber)
     },
     onSuccess() {
       client.invalidateQueries({ queryKey: [GET_LENDERS_BY_MARKET_KEY] })

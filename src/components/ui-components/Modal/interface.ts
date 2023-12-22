@@ -8,4 +8,5 @@ export type ModalProps = {
   loadingText?: string
   firstBtnText?: string
   hasSignIcon?: boolean
+  hideButtons?: boolean
 }

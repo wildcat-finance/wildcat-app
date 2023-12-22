@@ -1,4 +1,4 @@
-import { RouteObject } from "react-router-dom"
+import { Navigate, RouteObject } from "react-router-dom"
 
 import * as React from "react"
 import { LENDERS_PATH } from "./constants"

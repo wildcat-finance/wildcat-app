@@ -1,23 +1,119 @@
 import { useNavigate } from "react-router-dom"
 
 import { AiOutlineExclamationCircle } from "react-icons/ai"
-import { Paper, Button } from "../../../components/ui-components"
+import { useAccount } from "wagmi"
+import { useEffect, useMemo, useRef, useState } from "react"
+import { AccountKind } from "@wildcatfi/wildcat-sdk"
+import dayjs from "dayjs"
+import {
+  Paper,
+  Button,
+  TextInput,
+  Tooltip,
+} from "../../../components/ui-components"
 import { BluePaper } from "../../../components/ui-components/BluePaper"
 import { DownloadIcon, SignIcon } from "../../../components/ui-components/icons"
-import { useAgreementStore } from "../../../store/useAgreementStore"
+import { useEthersSigner } from "../../../modules/hooks"
+import { useDescribeAccount } from "../../../hooks/useDescribeAccount"
+import { useSignAgreement } from "./hooks/useSignAgreement"
+import { OrangePaper } from "../../../components/ui-components/OrangePaper"
+import { toastifyError } from "../../../components/toasts"
+import { useSubmitSignature } from "./hooks/useSubmitSignature"
+import { useGnosisSafeSDK } from "../../../hooks/useGnosisSafeSDK"
+import { WaitForSignatureModal } from "./WaitForSignatureModal"
+
+const DATE_FORMAT = "MMMM DD, YYYY"
 
 function ServiceAgreement() {
-  const { setSignedAgreement } = useAgreementStore()
+  const navigate = useNavigate()
+  const ref = useRef<HTMLInputElement | null>(null)
+
+  const signer = useEthersSigner()
+  const { address } = useAccount()
+  const { isConnectedToSafe, sdk } = useGnosisSafeSDK()
+  const [orgError, setOrgError] = useState<boolean>(false)
+  const [organization, setOrganization] = useState("")
+  const [dateSigned, setDateSigned] = useState<string>("")
+  useEffect(() => {
+    setDateSigned(dayjs(Date.now()).format(DATE_FORMAT))
+  })
+
+  const onOrganizationChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = evt.target
+    setOrganization(value)
+    if (value.length) {
+      setOrgError(false)
+    }
+  }
+
+  const { account } = useDescribeAccount(address)
+  const { mutateAsync: signAgreement, isLoading: isSigning } =
+    useSignAgreement()
+  const [safeTxHash, setSafeTxHash] = useState<string | undefined>(undefined)
+
+  const { mutateAsync: submitSignature, isLoading: isSubmitting } =
+    useSubmitSignature()
+
+  const scrollToInput = () => {
+    ref.current?.scrollIntoView({ behavior: "smooth" })
+    ref.current?.focus()
+  }
+
+  const errorMessage = useMemo(() => {
+    if (account?.kind === AccountKind.UnknownContract) {
+      return `Wildcat currently only supports EOA and Gnosis Safe accounts for borrower on-boarding.`
+    }
+    return undefined
+  }, [account])
+
+  const handleSubmitForSafeTx = async () => {
+    await submitSignature({
+      signature: "0x",
+      name: organization,
+      dateSigned,
+      address: address as string,
+    }).then(() => {
+      setSafeTxHash(undefined)
+    })
+  }
+
+  const handleSign = async () => {
+    if (!organization.length) {
+      setOrgError(true)
+      scrollToInput()
+      toastifyError(`Please enter your organization's name`)
+      // return
+    } else {
+      const result = await signAgreement({
+        name: organization,
+        dateSigned,
+        address,
+      })
+      console.log(result)
+      if (result.signature) {
+        await submitSignature({
+          signature: result.signature,
+          name: organization,
+          dateSigned,
+          address: address as string,
+        })
+        // navigate("/borrower")
+      } else if (result.safeTxHash) {
+        console.log(await sdk?.txs.getBySafeTxHash(result.safeTxHash))
+        // setSafeTxHash(result.safeTxHash)
+        setSafeTxHash(result.safeTxHash)
+      }
+    }
+  }
+
+  const onReject = () => {
+    setSafeTxHash(undefined)
+  }
 
   return (
     <>
       <div className="text-green text-2xl font-bold mb-8 w-2/3">
         Wildcat Services Agreement
-      </div>
-
-      <div className="text-green text-xs font-bold mb-8 w-2/3">
-        Agreement SHA-256 Hash:
-        293aa4a019d4a77693d8bcec55872e122330a73f51b3620d7987e5b090cf7934
       </div>
 
       <BluePaper className="mb-8">
@@ -459,8 +555,8 @@ function ServiceAgreement() {
               of liability, and irrespective of whether the Service Provider or
               the Borrowers or the Lenders have been advised of the possibility
               of any such Loss, unless such Loss arises directly from the
-              Service Provider’s or its Affiliates’ wilful default or actual
-              fraud.
+              Service Provider’s or its Affiliates’ wilful default, gross
+              negligence or actual fraud.
             </p>
 
             <p className="m-4">
@@ -529,8 +625,8 @@ function ServiceAgreement() {
               costs, claims, damages or expenses incurred by the Service
               Provider arising during the course of the Service Provider
               providing the Services save for costs, claims, damages or expenses
-              arising due to the Service Provider’s actual fraud or wilful
-              default.
+              arising due to the Service Provider’s actual fraud, gross
+              negligence or wilful default.
             </p>
 
             <p className="mb-4">9. TERMINATION</p>
@@ -577,7 +673,7 @@ function ServiceAgreement() {
               time.
             </p>
 
-            <p className="pl-8 pt-2 pb-0">
+            <p className="m-4">
               (b) To the extent possible, all warranties, express or implied,
               including without limitation any implied warranties of
               merchantability and fitness for a particular purpose, are
@@ -585,7 +681,7 @@ function ServiceAgreement() {
             </p>
 
             <p className="m-4">
-              (b) The rights of the Service Provider under this Clause are
+              (c) The rights of the Service Provider under this Clause are
               without prejudice to any other rights that they may have at law to
               terminate the Agreement or to accept any breach of this Agreement
               on the part of a Borrower or Lender as having brought the
@@ -849,6 +945,25 @@ function ServiceAgreement() {
               any bug bounty program to a whitehat that accurately identifies a
               bug.
             </p>
+
+            {!isConnectedToSafe && (
+              <p className="mb-4 mt-4">Date: {dateSigned}</p>
+            )}
+
+            <div className="flex flex-row items-center justify-start">
+              <p>
+                Organization Name:{" "}
+                <Tooltip content="This will be displayed publicly" />
+              </p>
+
+              <TextInput
+                className="w-72 ml-2"
+                ref={ref}
+                error={orgError}
+                value={organization}
+                onChange={onOrganizationChange}
+              />
+            </div>
           </div>
         </div>
 
@@ -856,7 +971,8 @@ function ServiceAgreement() {
           <Button
             variant="blue"
             icon={<SignIcon />}
-            onClick={() => setSignedAgreement(true)}
+            disabled={isSigning || isSubmitting}
+            onClick={handleSign}
           >
             Sign
           </Button>
@@ -865,6 +981,14 @@ function ServiceAgreement() {
             Download
           </Button>
         </div>
+
+        {safeTxHash && (
+          <WaitForSignatureModal
+            safeTxHash={safeTxHash}
+            onClose={handleSubmitForSafeTx}
+            onReject={onReject}
+          />
+        )}
       </Paper>
     </>
   )

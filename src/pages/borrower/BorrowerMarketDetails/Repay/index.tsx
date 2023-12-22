@@ -143,7 +143,7 @@ const Repay = ({ marketAccount }: RepayProps) => {
         className="w-full"
         placeholder="00,000.00"
         onChange={handleRepayAmountChange}
-        helperText="Borrowed"
+        helperText="Max. Repay"
         error={!!error}
         errorText={error}
         helperValue={`${outstandingDebt.format(TOKEN_FORMAT_DECIMALS, true)}`}
@@ -171,7 +171,8 @@ const Repay = ({ marketAccount }: RepayProps) => {
           />
         )}
         <Button
-          disabled={repayOutstandingDisabled}
+          // @todo Disabled until this is fixed - should be delinquent not outstanding
+          disabled
           variant="green"
           className="w-full px-2 whitespace-nowrap"
           onClick={repayOutstandingDebt}

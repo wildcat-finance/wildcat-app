@@ -17,6 +17,7 @@ export function Modal({
   loadingText,
   firstBtnText,
   hasSignIcon,
+  hideButtons,
 }: ModalProps) {
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -50,36 +51,42 @@ export function Modal({
             >
               <Dialog.Panel className="transform overflow-hidden transition-all">
                 <div className="flex flex-col items-end">
-                  <Button
-                    onClick={onClose}
-                    className="w-fit relative top-10 right-0"
-                    variant="outline"
-                    disabled={isLoading}
-                  >
-                    <img src={closeIcon} alt="close" />
-                  </Button>
+                  {!hideButtons && (
+                    <Button
+                      onClick={onClose}
+                      className="w-fit relative top-10 right-0"
+                      variant="outline"
+                      disabled={isLoading}
+                    >
+                      <img src={closeIcon} alt="close" />
+                    </Button>
+                  )}
                   <Paper className="bg-white border-none py-5">
                     {children}
-                    <div className="flex gap-x-3 justify-center mt-5">
-                      <Button
-                        className="w-28"
-                        variant="blue"
-                        icon={hasSignIcon ? <SignIcon /> : undefined}
-                        onClick={onClick}
-                        disabled={isLoading}
-                      >
-                        {isLoading && loadingText ? loadingText : firstBtnText}
-                      </Button>
+                    {!hideButtons && (
+                      <div className="flex gap-x-3 justify-center mt-5">
+                        <Button
+                          className="w-28"
+                          variant="blue"
+                          icon={hasSignIcon ? <SignIcon /> : undefined}
+                          onClick={onClick}
+                          disabled={isLoading}
+                        >
+                          {isLoading && loadingText
+                            ? loadingText
+                            : firstBtnText}
+                        </Button>
 
-                      <Button
-                        variant="grey"
-                        className="!text-black font-semibold w-28"
-                        onClick={onClose}
-                        disabled={isLoading}
-                      >
-                        Cancel
-                      </Button>
-                    </div>
+                        <Button
+                          variant="grey"
+                          className="!text-black font-semibold w-28"
+                          onClick={onClose}
+                          disabled={isLoading}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    )}
                   </Paper>
                 </div>
               </Dialog.Panel>

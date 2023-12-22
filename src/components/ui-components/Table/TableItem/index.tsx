@@ -4,15 +4,23 @@ import cn from "classnames"
 export function TableCell({
   children,
   justify,
+  className,
+  ...rest
 }: {
   children: ReactNode
-  justify: string
+  justify?: string
+  className?: string
+  rowSpan?: number
+  colSpan?: number
+  style?: React.CSSProperties
 }) {
+  const cellClassName = cn("first:pl-6 last:pr-6", className)
+
   return (
-    <td className="first:pl-6 last:pr-6">
+    <td className={cellClassName} {...rest}>
       <div
         className={cn(
-          `justify-${justify}`,
+          { [`justify-${justify}`]: justify },
           "flex items-center text-black text-xs",
         )}
       >

@@ -22,6 +22,7 @@ import { BASE_PATHS } from "../../../../routes/constants"
 import { TargetChainId } from "../../../../config/networks"
 import { useCurrentNetwork } from "../../../../hooks/useCurrentNetwork"
 import { useGnosisSafeSDK } from "../../../../hooks/useGnosisSafeSDK"
+import { waitForSubgraphSync } from "../../../../utils/waitForSubgraphSync"
 
 export const useDeployMarket = () => {
   const { data: controller } = useGetController()
@@ -76,7 +77,7 @@ export const useDeployMarket = () => {
               signer,
               assetData.name,
               assetData.symbol,
-            ),
+            ).then((t) => t.token),
             {
               pending: "Step 1/2: Deploying Mock Token...",
               success: "Step 1/2: Mock Token Deployed Successfully!",
@@ -142,23 +143,25 @@ export const useDeployMarket = () => {
           console.log(
             `Got gnosis transaction:\n\tsafeTxHash: ${tx.safeTxHash}\n\ttxHash: ${tx.txHash}`,
           )
-          await tx.wait()
-        } else {
-          await controller.deployMarket(marketParameters)
+          const receipt = await tx.wait()
+          console.log(`Got gnosis transaction receipt`)
+          return receipt
         }
+        const { receipt } = await controller.deployMarket(marketParameters)
+        return receipt
       }
       // 3. Deploy market
-      await toastifyRequest(send(), {
+      const receipt = await toastifyRequest(send(), {
         pending: `${stepPrefix}Deploying Market...`,
         success: `${stepPrefix}Market Deployed - Redirecting To Market List...`,
         error: `${stepPrefix}Market Deployment Failed`,
       })
+      await waitForSubgraphSync(receipt.blockNumber)
     },
     onSuccess: () => {
-      setTimeout(() => {
+      client.invalidateQueries({ queryKey: [GET_CONTROLLER_KEY] }).then(() => {
         navigate(`${BASE_PATHS.Borrower}`)
-      }, 3000)
-      client.invalidateQueries({ queryKey: [GET_CONTROLLER_KEY] })
+      })
     },
     onError(error) {
       console.log(error)

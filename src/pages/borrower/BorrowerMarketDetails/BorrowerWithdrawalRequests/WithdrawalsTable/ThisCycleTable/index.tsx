@@ -2,18 +2,20 @@ import dayjs from "dayjs"
 import {
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
-} from "../../../../../utils/formatters"
+} from "../../../../../../utils/formatters"
 import {
   Table,
   TableCell,
   TableRow,
-} from "../../../../../components/ui-components"
+} from "../../../../../../components/ui-components"
 import { WithdrawalsTableProps } from "./interface"
-import { EtherscanBaseUrl } from "../../../../../config/networks"
+import { EtherscanBaseUrl } from "../../../../../../config/networks"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
-export const WithdrawalsTable = ({ withdrawals }: WithdrawalsTableProps) => (
+export const ThisCycleTable = ({
+  withdrawalBatches,
+}: WithdrawalsTableProps) => (
   <Table
     headers={[
       {
@@ -37,15 +39,15 @@ export const WithdrawalsTable = ({ withdrawals }: WithdrawalsTableProps) => (
         className: "w-32",
       },
       {
-        title: "Owed",
+        title: "Outstanding",
         align: "end",
         className: "w-32",
       },
     ]}
   >
-    {withdrawals &&
-      withdrawals.map((wd) =>
-        wd.requests.map((withdrawal) => (
+    {withdrawalBatches &&
+      withdrawalBatches.map((batch) =>
+        batch.requests.map((withdrawal) => (
           <TableRow key={withdrawal.id}>
             <TableCell justify="start">
               <a
@@ -75,7 +77,7 @@ export const WithdrawalsTable = ({ withdrawals }: WithdrawalsTableProps) => (
             </TableCell>
             <TableCell justify="end">
               {withdrawal
-                .getNormalizedAmountOwed(wd)
+                .getNormalizedAmountOwed(batch)
                 .format(TOKEN_FORMAT_DECIMALS, true)}
             </TableCell>
           </TableRow>

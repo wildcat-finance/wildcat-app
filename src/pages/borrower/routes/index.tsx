@@ -7,6 +7,7 @@ import BorrowerMarketsList from "../BorrowerMarketsList"
 import BorrowerMarketDetails from "../BorrowerMarketDetails"
 
 import { BORROWER_PATHS } from "./constants"
+import PendingRegistration from "../PendingRegistration"
 
 export const BORROWER_ROUTES: RouteObject[] = [
   {
@@ -29,5 +30,9 @@ export const BORROWER_ROUTES: RouteObject[] = [
   {
     path: BORROWER_PATHS.MarketDetails,
     element: <BorrowerMarketDetails />,
+  },
+  {
+    path: BORROWER_PATHS.PendingRegistration,
+    element: <PendingRegistration />,
   },
 ]

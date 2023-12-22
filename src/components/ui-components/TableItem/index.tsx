@@ -1,11 +1,17 @@
+/* eslint-disable react/jsx-no-script-url */
+/* eslint-disable no-script-url */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import cn from "classnames"
 import { TableItemProps } from "./interface"
+import { Tooltip } from "../Tooltip"
 
 export function TableItem({
   children,
   title,
   value,
   className,
+  valueTooltip,
+  titleTooltip,
 }: TableItemProps) {
   const itemClassName = cn(
     className,
@@ -16,8 +22,20 @@ export function TableItem({
     <div className={itemClassName}>
       {(title || value) && (
         <>
-          <div className="inline text-black text-xs font-bold">{title}</div>
-          <div className="inline text-black text-xs text-right">{value}</div>
+          <div className="inline text-black text-xs font-bold">
+            {titleTooltip ? (
+              <Tooltip content={titleTooltip}>{title}</Tooltip>
+            ) : (
+              title
+            )}
+          </div>
+          <div className="inline text-black text-xs text-right">
+            {valueTooltip ? (
+              <Tooltip content={valueTooltip}>{value}</Tooltip>
+            ) : (
+              value
+            )}
+          </div>
         </>
       )}
       {children}

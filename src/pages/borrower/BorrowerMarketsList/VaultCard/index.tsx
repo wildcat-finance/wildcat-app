@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import cn from "classnames"
 
+import dayjs from "dayjs"
 import { Button, Chip, TableItem } from "../../../../components/ui-components"
 import { VaultCardProps } from "./interface"
 import {
@@ -8,8 +9,8 @@ import {
   getVaultStatusColor,
 } from "../../../../utils/marketStatus"
 import {
+  DATE_FORMAT,
   formatBps,
-  formatToken,
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
 
@@ -53,13 +54,22 @@ function VaultCard({ market, className }: VaultCardProps) {
         />
         <TableItem
           title="Maximum Capacity"
-          value={`${formatToken(market.maxTotalSupply.raw)}
-            ${market.underlyingToken.symbol}`}
+          value={`${market.maxTotalSupply.format(TOKEN_FORMAT_DECIMALS)} ${
+            market.underlyingToken.symbol
+          }`}
         />
         <TableItem
           title="Available To Borrow"
           value={market.borrowableAssets.format(TOKEN_FORMAT_DECIMALS, true)}
         />
+        {market.deployedEvent && (
+          <TableItem
+            title="Deployed"
+            value={dayjs(market.deployedEvent.blockTimestamp * 1000).format(
+              DATE_FORMAT,
+            )}
+          />
+        )}
       </div>
 
       <div className="w-full p-3 bg-tint-10">
