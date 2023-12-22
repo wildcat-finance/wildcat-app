@@ -33,40 +33,50 @@ export const ThisCycleTable = ({ withdrawals }: WithdrawalsTableProps) => (
       },
       {
         title: "Requested",
+        align: "start",
+        className: "w-32",
+      },
+      {
+        title: "Outstanding",
         align: "end",
         className: "w-32",
       },
     ]}
   >
     {withdrawals &&
-      withdrawals.map((wd) =>
-        wd.requests.map((withdrawal) => (
-          <TableRow key={withdrawal.id}>
+      withdrawals.map((withdrawal) =>
+        withdrawal.requests.map((request) => (
+          <TableRow key={request.id}>
             <TableCell justify="start">
               <a
                 className="hover:underline"
-                href={`${EtherscanBaseUrl}/address/${withdrawal.address}`}
+                href={`${EtherscanBaseUrl}/address/${request.address}`}
                 target="_blank"
                 rel="noreferrer"
               >
-                {trimAddress(withdrawal.address)}
+                {trimAddress(request.address)}
               </a>
             </TableCell>
             <TableCell justify="start">
               <a
                 className="hover:underline"
-                href={`${EtherscanBaseUrl}/tx/${withdrawal.transactionHash}`}
+                href={`${EtherscanBaseUrl}/tx/${request.transactionHash}`}
                 target="_blank"
                 rel="noreferrer"
               >
-                {trimAddress(withdrawal.transactionHash, 24)}
+                {trimAddress(request.transactionHash, 24)}
               </a>
             </TableCell>
             <TableCell justify="start">
-              {dayjs(withdrawal.blockTimestamp * 1000).format(DATE_FORMAT)}
+              {dayjs(request.blockTimestamp * 1000).format(DATE_FORMAT)}
+            </TableCell>
+            <TableCell justify="start">
+              {request.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
             </TableCell>
             <TableCell justify="end">
-              {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
+              {request
+                .getNormalizedAmountOwed(withdrawal.batch)
+                .format(TOKEN_FORMAT_DECIMALS, true)}
             </TableCell>
           </TableRow>
         )),

@@ -77,7 +77,7 @@ const BorrowerWithdrawalRequests = ({
       </div>
       <div className="h-12 flex justify-between items-center bg-tint-10 px-6">
         <div className="inline text-black text-xs font-bold">
-          Requests Made In This Cycle
+          Outstanding From This Cycle
         </div>
         <div className="flex gap-x-4 items-center">
           {thisCycle ? (
