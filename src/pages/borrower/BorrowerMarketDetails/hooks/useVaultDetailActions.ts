@@ -357,6 +357,7 @@ export const useWithdraw = (marketAccount: MarketAccount) => {
     },
     onSuccess() {
       client.invalidateQueries({ queryKey: [GET_MARKET_KEY] })
+      client.invalidateQueries({ queryKey: [GET_WITHDRAWALS_KEY] })
     },
     onError(error, amount) {
       console.log(error, amount)
