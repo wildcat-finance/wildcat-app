@@ -45,51 +45,97 @@ export const useBorrowerRouting = () => {
       invitation,
     })
 
+    const temporaryPages = [
+      `${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`,
+      `${BASE_PATHS.Borrower}/${BORROWER_PATHS.ServiceAgreement}`,
+      `${BASE_PATHS.Borrower}/${BORROWER_PATHS.PendingRegistration}`,
+    ]
+    const isOnAnyTemporaryPage = temporaryPages.some(
+      (page) => pathname === page,
+    )
+
+    const invitationFlowPage = () => {
+      // - If user is registered borrower, go to index page
+      if (isRegisteredBorrower) return BASE_PATHS.Borrower
+      if (!isSuccess) return undefined
+      // - If user does not have an invitation, go to whitelisting page
+      if (!invitation)
+        return `${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`
+      // - If user has an unsigned invitation, go to agreement page
+      if (!invitation.timeAccepted)
+        return `${BASE_PATHS.Borrower}/${BORROWER_PATHS.ServiceAgreement}`
+      // - If user has a signed invitation, go to pending registration page
+      return `${BASE_PATHS.Borrower}/${BORROWER_PATHS.PendingRegistration}`
+    }
+    /*
+    On market page, skip.
+
+    Invitation page:
+      - If user is registered borrower, go to index page
+      - If user does not have an invitation, go to whitelisting page
+      - If user has an unsigned invitation, go to agreement page
+      - If user has a signed invitation, go to pending registration page
+
+    Skip routing logic if:
+      - User is a registered borrower and not on a temporary page
+
+    */
+
+    const goTo = (page: string | undefined) => {
+      if (page && pathname !== page) {
+        navigate(page)
+      }
+    }
+
     if (!isLoading && !isLoadingInvitation) {
       if (isMarketPage) return
-
-      if (invitation) {
-        // If there is a pending un-signed invitation, go to agreement page
-        if (!invitation.timeAccepted) {
-          if (!isAgreementPage) {
-            navigate(
-              `${BASE_PATHS.Borrower}/${BORROWER_PATHS.ServiceAgreement}`,
-            )
-          }
-        } else if (
-          isRegisteredBorrower &&
-          (isWhitelistPage || isAgreementPage || isPendingRegistrationPage)
-        ) {
-          // If there is a signed invitation and borrower is registered, go to index page
-          navigate(BASE_PATHS.Borrower)
-        } else if (!isPendingRegistrationPage) {
-          navigate(
-            `${BASE_PATHS.Borrower}/${BORROWER_PATHS.PendingRegistration}`,
-          )
-        }
-
-        return
+      if (!isRegisteredBorrower || isOnAnyTemporaryPage) {
+        const invitationPage = invitationFlowPage()
+        goTo(invitationPage)
       }
+
+      // if (invitation) {
+      //   // If there is a pending un-signed invitation, go to agreement page
+      //   if (!invitation.timeAccepted) {
+      //     if (!isAgreementPage) {
+      //       navigate(
+      //         `${BASE_PATHS.Borrower}/${BORROWER_PATHS.ServiceAgreement}`,
+      //       )
+      //     }
+      //   } else if (
+      //     isRegisteredBorrower &&
+      //     (isWhitelistPage || isAgreementPage || isPendingRegistrationPage)
+      //   ) {
+      //     // If there is a signed invitation and borrower is registered, go to index page
+      //     navigate(BASE_PATHS.Borrower)
+      //   } else if (!isPendingRegistrationPage) {
+      //     navigate(
+      //       `${BASE_PATHS.Borrower}/${BORROWER_PATHS.PendingRegistration}`,
+      //     )
+      //   }
+
+      //   return
+      // }
 
       // Go to whitelisting page if borrower is not registered or invited
-      if (
-        isSuccess &&
-        !isRegisteredBorrower &&
-        !isWhitelistPage &&
-        !isTestnet
-      ) {
-        navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`)
-        return
-      }
+      // if (
+      //   isSuccess &&
+      //   !isRegisteredBorrower &&
+      //   !isWhitelistPage &&
+      //   !isTestnet
+      // ) {
+      //   navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`)
+      //   return
+      // }
 
-      // Go to index page if borrower is registered and not on index page
-      if (
-        isSuccess &&
-        (isRegisteredBorrower || isTestnet) &&
-        (isWhitelistPage || isAgreementPage || isPendingRegistrationPage)
-      ) {
-        navigate(BASE_PATHS.Borrower)
-      }
+      // // Go to index page if borrower is registered and not on index page
+      // if (
+      //   isSuccess &&
+      //   (isRegisteredBorrower || isTestnet) &&
+      //   (isWhitelistPage || isAgreementPage || isPendingRegistrationPage)
+      // ) {
+      //   navigate(BASE_PATHS.Borrower)
+      // }
     }
   }, [
     isSuccess,
@@ -97,7 +143,7 @@ export const useBorrowerRouting = () => {
     isLoadingInvitation,
     data?.isRegisteredBorrower,
     pathname,
-    invitation,
+    invitation?.timeAccepted,
   ])
 
   return {
