@@ -91,6 +91,12 @@ function ServiceAgreement() {
       })
       console.log(result)
       if (result.signature) {
+        console.log({
+          signature: result.signature,
+          name: organization,
+          dateSigned,
+          address: address as string,
+        })
         await submitSignature({
           signature: result.signature,
           name: organization,

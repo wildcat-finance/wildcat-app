@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom"
 import { TargetNetwork } from "../../../../config/networks"
 import { toastifyInfo } from "../../../../components/toasts"
 import { HAS_SIGNED_SLA_KEY } from "../../../../hooks/useHasSignedSla"
-import { LENDERS_PATH } from "../../../lenders/routes/constants"
 import { useAgreementStore } from "../../../../store/useAgreementStore"
 import { API_URL } from "../../../../config/api"
 import { BORROWER_PATHS } from "../../routes/constants"
 import { BASE_PATHS } from "../../../../routes/constants"
+import { USE_BORROWER_INVITE_KEY } from "../../../../hooks/useBorrowerInvitation"
 
 export interface SignatureSubmissionProps {
   address: string
@@ -46,6 +46,7 @@ export function useSubmitSignature() {
         navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.PendingRegistration}`)
       }, 3000)
       client.invalidateQueries({ queryKey: [HAS_SIGNED_SLA_KEY] })
+      client.invalidateQueries({ queryKey: [USE_BORROWER_INVITE_KEY] })
     },
     onError(error) {
       console.log(error)
