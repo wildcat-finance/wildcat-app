@@ -35,11 +35,6 @@ export const ThisCycleTable = ({
       },
       {
         title: "Requested",
-        align: "start",
-        className: "w-32",
-      },
-      {
-        title: "Outstanding",
         align: "end",
         className: "w-32",
       },
@@ -72,14 +67,14 @@ export const ThisCycleTable = ({
             <TableCell justify="start">
               {dayjs(withdrawal.blockTimestamp * 1000).format(DATE_FORMAT)}
             </TableCell>
-            <TableCell justify="start">
+            <TableCell justify="end">
               {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
             </TableCell>
-            <TableCell justify="end">
-              {withdrawal
-                .getNormalizedAmountOwed(batch)
-                .format(TOKEN_FORMAT_DECIMALS, true)}
-            </TableCell>
+            {/* <TableCell justify="end"> */}
+            {/*  {withdrawal */}
+            {/*    .getNormalizedAmountOwed(batch) */}
+            {/*    .format(TOKEN_FORMAT_DECIMALS, true)} */}
+            {/* </TableCell> */}
           </TableRow>
         )),
       )}
