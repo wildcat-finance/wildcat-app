@@ -1,6 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react"
 
-import { CloseMarketStatus, minTokenAmount } from "@wildcatfi/wildcat-sdk"
 import { Button } from "../../../../components/ui-components"
 import { AdjustAPRModal } from "../Modals"
 import {
@@ -8,14 +7,10 @@ import {
   useAdjustAPR,
   useTerminateMarket,
   useProcessUnpaidWithdrawalBatch,
+  useResetReserveRatio,
 } from "../hooks/useVaultDetailActions"
 import { AdjustAprProps } from "./interface"
-import {
-  MARKET_PARAMS_DECIMALS,
-  TOKEN_FORMAT_DECIMALS,
-} from "../../../../utils/formatters"
-import { toastifyError, toastifyInfo } from "../../../../components/toasts"
-import { ButtonProps } from "../../../../components/ui-components/Button/interface"
+import { MARKET_PARAMS_DECIMALS } from "../../../../utils/formatters"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { SDK_ERRORS_MAPPING } from "../../../../utils/forms/errors"
 import { useTransactionWait } from "../../../../store/useTransactionWait"
@@ -27,19 +22,21 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
     isLoading: adjustAprLoading,
     isSuccess,
   } = useAdjustAPR(marketAccount)
-  const { mutate: terminateMarket, isLoading: terminateMarketLoading } =
+  const { isLoading: terminateMarketLoading } =
     useTerminateMarket(marketAccount)
-  const {
-    mutateAsync: repayAndProcessUnpaidWithdrawalBatch,
-    isLoading: isProcessing,
-  } = useProcessUnpaidWithdrawalBatch(marketAccount)
-  const { mutateAsync: approve, isLoading: isApproving } = useApprove(
+  const { isLoading: isProcessing } =
+    useProcessUnpaidWithdrawalBatch(marketAccount)
+  const { isLoading: isApproving } = useApprove(
     marketAccount.market.underlyingToken,
     marketAccount.market,
   )
+  const { mutateAsync: reset } = useResetReserveRatio(
+    marketAccount,
+    marketAccount.market.controller,
+  )
+
   const [apr, setApr] = useState("")
   const [newReserveRatio, setNewReserveRatio] = useState<number | undefined>()
-  const [isTerminating, setIsTerminating] = useState(false)
   const { isTxInProgress, setisTxInProgress } = useTransactionWait()
 
   const [error, setError] = useState<string | undefined>()
@@ -83,70 +80,14 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
         })
   }
 
-  const terminateMarketStep = marketAccount.checkCloseMarketStep()
-
-  const handleTerminateMarket = () => {
-    if (!isTerminating) {
-      setIsTerminating(true)
-      if (terminateMarketStep.status === "InsufficientAllowance") {
-        toastifyInfo(
-          `Need to approve ${terminateMarketStep.remainder.format(
-            TOKEN_FORMAT_DECIMALS,
-            true,
-          )} `,
-        )
-      } else if (terminateMarketStep.status === "UnpaidWithdrawalBatches") {
-        toastifyInfo(
-          `Need to process ${market.unpaidWithdrawalBatchExpiries.length} unpaid withdrawal batches before closing market`,
-        )
-      }
-      return
-    }
-
-    if (terminateMarketStep.status === "InsufficientAllowance") {
-      approve(terminateMarketStep.remainder)
-        .then(() => {
-          if (market.unpaidWithdrawalBatchExpiries.length) {
-            toastifyInfo(
-              `Need to process ${market.unpaidWithdrawalBatchExpiries.length} unpaid withdrawal batches before closing market`,
-            )
-          }
-        })
-        .catch(() => {})
-    } else if (terminateMarketStep.status === "UnpaidWithdrawalBatches") {
-      const { length } = market.unpaidWithdrawalBatchExpiries
-      const repayAmount = minTokenAmount(
-        market.outstandingDebt,
-        market.underlyingToken.getAmount(marketAccount.underlyingApproval),
-      )
-      repayAndProcessUnpaidWithdrawalBatch({
-        tokenAmount: repayAmount,
-        maxBatches: length,
+  const handleResetReserveRatio = () => {
+    setisTxInProgress(true)
+    reset()
+      .finally(() => setisTxInProgress(false))
+      .catch((e) => {
+        console.log(e)
       })
-    } else if (terminateMarketStep.status !== "Ready") {
-      toastifyError(terminateMarketStep.status)
-    } else {
-      terminateMarket()
-    }
   }
-
-  const getButtonTextAndColor = (
-    isActive: boolean,
-    step: CloseMarketStatus,
-  ): [string, ButtonProps["variant"]] => {
-    if (isActive && step.status === "InsufficientAllowance") {
-      return ["Approve", "green"]
-    }
-    if (isActive && step.status === "UnpaidWithdrawalBatches") {
-      return ["Close Unpaid Batch", "green"]
-    }
-    return ["Terminate Market", "red"]
-  }
-
-  const [terminateButtonText, terminateButtonColor] = getButtonTextAndColor(
-    isTerminating,
-    terminateMarketStep,
-  )
 
   const onModalClose = () => {
     setModalOpen(false)
@@ -198,12 +139,11 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
         </Button>
 
         <Button
-          variant={terminateButtonColor}
           className="w-44 px-2 whitespace-nowrap"
-          onClick={handleTerminateMarket}
-          disabled={marketDisabled || isLoading || isTxInProgress}
+          variant="green"
+          onClick={handleResetReserveRatio}
         >
-          {terminateButtonText}
+          Reset Reserve Ratio
         </Button>
       </div>
 

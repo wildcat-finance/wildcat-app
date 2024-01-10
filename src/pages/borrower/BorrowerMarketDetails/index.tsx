@@ -18,6 +18,7 @@ import AdjustMaximumCapacity from "./AdjustMaximumCapacity"
 import { BORROWER_PATHS } from "../routes/constants"
 import { BASE_PATHS } from "../../../routes/constants"
 import { useTransactionWait } from "../../../store/useTransactionWait"
+import { TerminateMarket } from "./TerminateMarket"
 
 const BorrowerMarketDetails = () => {
   const { isTxInProgress } = useTransactionWait()
@@ -54,8 +55,9 @@ const BorrowerMarketDetails = () => {
         <BackArrow />
         <p className="text-xs font-normal underline">My Markets</p>
       </button>
-      <div className="text-green text-2xl font-bold mb-8 w-2/3">
-        {market.name}
+      <div className="w-full flex justify-between mb-8">
+        <div className="text-green text-2xl font-bold">{market.name}</div>
+        <TerminateMarket marketAccount={marketAccount} />
       </div>
       <Paper className="flex flex-col gap-y-5 border-0 px-6 py-5 mb-14 bg-tint-10 border-tint-8 rounded-3xl">
         <div>
