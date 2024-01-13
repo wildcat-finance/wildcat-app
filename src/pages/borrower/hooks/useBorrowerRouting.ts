@@ -45,7 +45,7 @@ export const useBorrowerInvitationRedirect = () => {
   if (!invitation.timeAccepted) {
     return {
       message: "You have been invited to register as a Wildcat borrower.",
-      buttonText: "Accept invitation",
+      buttonText: "Accept",
       url: `${BASE_PATHS.Borrower}/${BORROWER_PATHS.ServiceAgreement}`,
     }
   }
