@@ -161,7 +161,7 @@ export function useLendersMarkets({
   }
 
   const updateQueryKeys = useMemo(
-    () => accounts.map((b) => [b.market.address, b.account]),
+    () => accounts.map((b) => [b.market.address, lender]),
     [accounts],
   )
 
