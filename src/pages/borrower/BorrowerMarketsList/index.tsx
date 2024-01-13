@@ -11,7 +11,7 @@ import { RoundButton } from "../../../components/ui-components/DatePicker/RoundB
 import { BORROWER_PATHS } from "../routes/constants"
 import { BASE_PATHS } from "../../../routes/constants"
 import { useBorrowerInvitationRedirect } from "../hooks/useBorrowerRouting"
-import { BluePaper } from "../../../components/ui-components/BluePaper"
+import { GrayPaper } from "../../../components/ui-components/GrayPaper"
 import { useBorrowerListOptions } from "../../../store/useBorrowerListOptions"
 import MarketCard from "../../../components/MarketsListCommon/MarketCard"
 import { MarketTextFilterKind } from "../../../components/MarketsListCommon/MarketsListOptions/interface"
@@ -73,15 +73,15 @@ function BorrowerMarketsList() {
         </div>
         {inviteMessage && (
           <div className="flex flex-row gap-x-2 justify-center items-center mt-2 w-full">
-            <BluePaper className="text-xl justify-between flex items-center w-2/3 ">
-              <AiOutlineExclamationCircle /* height={24} */ />
+            <GrayPaper className="text-xl justify-between flex items-center w-5/6 ">
+              <AiOutlineExclamationCircle height={24} />
               <span>{inviteMessage}</span>
               {inviteUrl && (
                 <Button onClick={() => navigate(inviteUrl)} variant="blue">
                   <span className="text-lg">{inviteButtonText}</span>
                 </Button>
               )}
-            </BluePaper>
+            </GrayPaper>
           </div>
         )}
         <div className="text-green text-2xl font-bold justify-between items-center flex mt-8">
