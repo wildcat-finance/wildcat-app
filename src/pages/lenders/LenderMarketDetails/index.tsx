@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
 
+import { LenderRole } from "@wildcatfi/wildcat-sdk"
 import { Button, Chip, Spinner } from "../../../components/ui-components"
 import { useWalletConnect } from "../../../hooks/useWalletConnect"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
@@ -37,7 +38,7 @@ export function LenderMarketDetails() {
     navigate("/lender")
   }
 
-  if (!isConnected || isWrongNetwork) {
+  if (isConnected && isWrongNetwork) {
     return <div />
   }
 
@@ -48,6 +49,12 @@ export function LenderMarketDetails() {
   if (!market || !marketAccount) {
     return <div>Market not found</div>
   }
+
+  const isLender =
+    isConnected &&
+    [LenderRole.DepositAndWithdraw, LenderRole.WithdrawOnly].includes(
+      marketAccount.role,
+    )
 
   return (
     <div className="flex flex-col">
@@ -79,11 +86,13 @@ export function LenderMarketDetails() {
         </div>
       </div>
 
-      <LenderMarketActions market={market} marketAccount={marketAccount} />
+      {isLender && (
+        <LenderMarketActions market={market} marketAccount={marketAccount} />
+      )}
 
       <LenderMarketOverview marketAccount={marketAccount} />
 
-      <WithdrawalRequests market={market} />
+      {isLender && <WithdrawalRequests market={market} />}
       <PaymentHistory market={market} />
     </div>
   )

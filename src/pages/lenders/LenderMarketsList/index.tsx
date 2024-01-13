@@ -1,180 +1,177 @@
-import { useMemo, useState } from "react"
-
-import { Select, Spinner, TextInput } from "../../../components/ui-components"
-import { SelectOptionItem } from "../../../components/ui-components/Select/interface"
-import { mockedStatuses } from "../../../mocks/vaults"
-import { getMarketStatus } from "../../../utils/marketStatus"
+import { useMemo } from "react"
+import { useAccount } from "wagmi"
+import { LenderRole, Market } from "@wildcatfi/wildcat-sdk"
+import { HiSortAscending, HiSortDescending } from "react-icons/hi"
+import { Select, Spinner } from "../../../components/ui-components"
 import { useLendersMarkets } from "./hooks/useLendersMarkets"
-
-import VaultCard from "./VaultCard"
+import MarketCard from "../../../components/MarketsListCommon/MarketCard"
+import { BASE_PATHS } from "../../../routes/constants"
+import { SortKind } from "../../../components/MarketsListCommon/MarketsListOptions/interface"
+import {
+  MarketFilterOptions,
+  MarketAccountSortOptions,
+} from "../../../components/MarketsListCommon/MarketsListOptions/constants"
+import { useLenderListOptions } from "../../../store/useLenderListOptions"
+import { RoundButton } from "../../../components/ui-components/DatePicker/RoundButton"
 
 function LenderMarketsList() {
-  const [filterByName, setFilterByName] = useState<string>("")
-  const [showTerminated, setShowTerminated] = useState<boolean>(false)
-  const [selectedUnderlyingAsset, setSelectedUnderlyingAsset] =
-    useState<SelectOptionItem | null>(null)
-  const [selectedVaultStatus, setSelectedVaultStatus] =
-    useState<SelectOptionItem | null>(null)
-
-  const handleVaultStatusChange = (selectedOption: SelectOptionItem | null) => {
-    setSelectedVaultStatus(selectedOption)
-
-    if (selectedOption?.value === "Terminated") {
-      setShowTerminated(true)
-    } else {
-      setShowTerminated(false)
-    }
-  }
-
-  const handleFilterByName = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = evt.target
-    setFilterByName(value.toLowerCase())
-  }
+  const { address } = useAccount()
+  const {
+    filterValue,
+    setFilterValue,
+    onlyOwnMarkets,
+    setOnlyOwnMarkets,
+    onlyOpenMarkets,
+    setOnlyOpenMarkets,
+    selectedSort,
+    setSelectedSort,
+    selectedFilter,
+    setSelectedFilter,
+    sortAscending,
+    toggleSortDirection,
+  } = useLenderListOptions()
 
   const {
-    data: lendersMarkets,
+    data: lenderMarketAccounts,
     isLoadingInitial,
     isLoadingUpdate,
   } = useLendersMarkets()
-  const noAvailableMarkets = lendersMarkets.length === 0
+  const noAvailableMarkets = lenderMarketAccounts.length === 0
   const isLoading = isLoadingInitial || isLoadingUpdate
+  const markets = useMemo(
+    () => lenderMarketAccounts.map(({ market }) => market),
+    [lenderMarketAccounts],
+  )
 
-  const mockedVaultStatusOptions: SelectOptionItem[] = mockedStatuses
-    .sort()
-    .map((status: string) => ({
-      id: status,
-      label: status,
-      value: status,
-    }))
+  const selectedFilterPredicate = (market: Market) =>
+    selectedFilter?.filterPredicate(market, filterValue) ?? true
 
-  const filteredMarkets = useMemo(() => {
-    if (!lendersMarkets) {
-      return []
-    }
-
-    const sortedMarkets = lendersMarkets
-      .filter((market) => {
-        if (showTerminated) return true
-        return !market.market.isClosed
-      })
-      .filter((lendersMarket) => {
-        if (!selectedVaultStatus) return true
-        return (
-          getMarketStatus(
-            lendersMarket.market.isClosed,
-            lendersMarket.market.isDelinquent,
-            lendersMarket.market.isIncurringPenalties,
-          ) === selectedVaultStatus.value
+  const filteredMarketAccounts = lenderMarketAccounts
+    ? lenderMarketAccounts
+        .filter(({ market }) => !market.isClosed || !onlyOpenMarkets)
+        .filter(
+          (account) =>
+            !onlyOwnMarkets ||
+            account.isAuthorizedOnController ||
+            account.role !== LenderRole.Null,
         )
-      })
-      .filter((market) => {
-        if (!filterByName) return true
-        return market.market.name.toLowerCase().includes(filterByName)
-      })
-      .filter((market) => {
-        if (!selectedUnderlyingAsset) return true
-        return (
-          market.market.underlyingToken.symbol === selectedUnderlyingAsset.value
+        .filter(({ market }) => selectedFilterPredicate(market))
+        .sort((a, b) =>
+          selectedSort.sortPredicate(a, b, sortAscending ? "asc" : "desc"),
         )
-      })
-      .sort((a, b) => {
-        const isClosedA = a.market.isClosed
-        const isClosedB = b.market.isClosed
+    : []
 
-        if (isClosedA && !isClosedB) {
-          return 1
-        }
-        if (!isClosedA && isClosedB) {
-          return -1
-        }
-        return 0
-      })
-
-    return sortedMarkets
-  }, [
-    lendersMarkets,
-    selectedVaultStatus,
-    filterByName,
-    selectedUnderlyingAsset,
-    showTerminated,
-  ])
-
-  const filterUnderlyingOptions = useMemo(() => {
-    if (!lendersMarkets) return []
-
-    const options = lendersMarkets
-      .map((lendersMarket) => lendersMarket.market.underlyingToken.symbol)
-      .filter((value, index, self) => self.indexOf(value) === index)
-
-    return options.map((option) => ({
-      id: option,
-      label: option,
-      value: option,
-    }))
-  }, [lendersMarkets])
-
-  if (isLoading) {
-    return <Spinner isLoading />
-  }
+  const FilterInput = selectedFilter?.inputComponent
 
   return (
     <>
       <div className="text-xs flex-col">
-        <div className="text-xs font-normal underline">My Markets</div>
+        <div className="text-xs font-normal underline">
+          {onlyOwnMarkets ? "My" : "All"} Markets
+        </div>
         <div className="text-green text-2xl font-bold mt-8">
           All Markets For Lender
         </div>
         <div className="flex flex-row gap-x-2 align-middle mt-3">
-          <input
-            type="checkbox"
-            id="showTerminated"
-            checked={showTerminated}
-            onChange={() => setShowTerminated(!showTerminated)}
-          />
-          <label htmlFor="showTerminated">Show terminated Markets</label>
+          <div className="flex flex-row align-middle justify-between gap-x-2">
+            <input
+              type="checkbox"
+              id="showTerminated"
+              checked={!onlyOpenMarkets}
+              onChange={() => setOnlyOpenMarkets(!onlyOpenMarkets)}
+              disabled={isLoading}
+            />
+            <label htmlFor="showTerminated">Show terminated Markets</label>
+          </div>
+          {address && (
+            <div className="flex flex-row align-middle justify-between gap-x-2">
+              <input
+                type="checkbox"
+                id="showOwnMarkets"
+                checked={onlyOwnMarkets}
+                onChange={() => setOnlyOwnMarkets(!onlyOwnMarkets)}
+                disabled={isLoading}
+              />
+              <label htmlFor="showOwnMarkets">Only my markets</label>
+            </div>
+          )}
         </div>
 
         <div className="flex w-full flex-wrap -mx-2.5 mt-3">
-          <div className="w-1/3 px-2.5 py-2.5">
-            <TextInput
-              onChange={handleFilterByName}
-              placeholder="Filter By Market Name"
-              className="w-full"
-            />
-          </div>
-          <div className="w-1/3 px-2.5 py-2.5">
+          <div className="w-1/5 px-2.5 py-2.5">
             <Select
-              options={filterUnderlyingOptions}
-              onChange={setSelectedUnderlyingAsset}
-              selected={selectedUnderlyingAsset}
-              placeholder="Underlying Asset"
+              options={MarketFilterOptions}
+              onChange={setSelectedFilter}
+              selected={selectedFilter}
+              placeholder="Filter By"
               className="w-full"
+              disabled={isLoading}
               noneOption
             />
           </div>
-          <div className="w-1/3 px-2.5 py-2.5">
-            <Select
-              options={mockedVaultStatusOptions}
-              onChange={handleVaultStatusChange}
-              selected={selectedVaultStatus}
-              placeholder="Market Status"
-              className="w-full"
-              noneOption
-            />
+          {FilterInput && (
+            <div className="w-1/3 px-2.5 py-2.5">
+              <FilterInput
+                markets={markets}
+                filterValue={filterValue}
+                setFilterValue={setFilterValue}
+                disabled={isLoading}
+              />
+            </div>
+          )}
+          <div className="w-2/5 px-2.5 py-2.5">
+            <div className="w-full flex flex-row justify-between items-center">
+              <div className="text-sm font-normal ">Sort By</div>
+              <Select
+                options={MarketAccountSortOptions.filter((f) => {
+                  if (
+                    !address &&
+                    [
+                      SortKind.UnderlyingBalance,
+                      SortKind.MarketBalance,
+                      SortKind.LenderRole,
+                    ].includes(f.value)
+                  )
+                    return false
+                  return true
+                })}
+                onChange={setSelectedSort}
+                selected={selectedSort}
+                placeholder="Sort"
+                className="w-4/5"
+                noneOption={false}
+                disabled={isLoading}
+              />
+            </div>
+          </div>
+
+          <div className="px-2.5 py-2.5">
+            <div className="text-lg font-normal items-center flex flex-row">
+              <RoundButton type="button">
+                {sortAscending ? (
+                  <HiSortAscending onClick={toggleSortDirection} />
+                ) : (
+                  <HiSortDescending onClick={toggleSortDirection} />
+                )}
+              </RoundButton>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="flex w-full flex-wrap -mx-2.5 mt-5">
-        {noAvailableMarkets && (
-          <div className="m-auto">No markets available yet</div>
-        )}
-        {filteredMarkets.map((lendersMarket) => (
-          <div
-            key={lendersMarket.market.address}
-            className="w-1/3 px-2.5 py-2.5"
-          >
-            <VaultCard market={lendersMarket.market} className="w-full" />
+        {isLoading && <Spinner isLoading />}
+        {noAvailableMarkets && <div className="m-auto">No markets yet</div>}
+        {filteredMarketAccounts.map((account) => (
+          <div key={account.market.address} className="w-1/3 px-2.5 py-2.5">
+            <MarketCard
+              account={account}
+              className="w-full"
+              basePath={BASE_PATHS.Lender}
+              showBalance={!!address}
+              showLenderRole={!!address}
+              variant="lender"
+            />
           </div>
         ))}
       </div>

@@ -7,6 +7,13 @@ export enum VaultStatus {
   REMOVED = "Removed",
 }
 
+export enum LenderStatus {
+  DepositAndWithdraw = "Deposit and Withdraw",
+  WithdrawOnly = "Withdraw Only",
+  Blocked = "Blocked",
+  Null = "Not Authorized",
+}
+
 export type Vault = {
   name: string
   tokenSymbol: string
