@@ -6,9 +6,9 @@ export const getMarketStatus = (
   isDelinquent: boolean,
   isIncurringPenalties: boolean,
 ): VaultStatus => {
+  if (isClosed) return VaultStatus.TERMINATED
   if (isIncurringPenalties) return VaultStatus.PENALTY
   if (isDelinquent) return VaultStatus.DELINQUENT
-  if (isClosed) return VaultStatus.TERMINATED
   return VaultStatus.HEALTHY
 }
 
