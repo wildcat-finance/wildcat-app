@@ -19,6 +19,7 @@ import {
   MarketFilterOptions,
   MarketSortOptions,
 } from "../../../components/MarketsListCommon/MarketsListOptions/constants"
+import { EXCLUDED_MARKETS } from "../../../config/excluded-markets"
 
 function BorrowerMarketsList() {
   const { address } = useAccount()
@@ -57,6 +58,11 @@ function BorrowerMarketsList() {
   const filteredMarkets = markets
     ? markets
         .filter((market) => !market.isClosed || !onlyOpenMarkets)
+        .filter(
+          (market) =>
+            !EXCLUDED_MARKETS.includes(market.address.toLowerCase()) ||
+            market.borrower.toLowerCase() === address?.toLowerCase(),
+        )
         .filter(selectedFilterPredicate)
         .sort((a, b) =>
           selectedSort.sortPredicate(a, b, sortAscending ? "asc" : "desc"),

@@ -13,6 +13,7 @@ import {
 } from "../../../components/MarketsListCommon/MarketsListOptions/constants"
 import { useLenderListOptions } from "../../../store/useLenderListOptions"
 import { RoundButton } from "../../../components/ui-components/DatePicker/RoundButton"
+import { EXCLUDED_MARKETS } from "../../../config/excluded-markets"
 
 function LenderMarketsList() {
   const { address } = useAccount()
@@ -52,6 +53,12 @@ function LenderMarketsList() {
         .filter(
           (account) =>
             !onlyOwnMarkets ||
+            account.isAuthorizedOnController ||
+            account.role !== LenderRole.Null,
+        )
+        .filter(
+          (account) =>
+            !EXCLUDED_MARKETS.includes(account.market.address.toLowerCase()) ||
             account.isAuthorizedOnController ||
             account.role !== LenderRole.Null,
         )
