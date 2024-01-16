@@ -31,7 +31,7 @@ const TABLE_HEADER_CONFIG = [
     className: "w-40",
   },
   {
-    title: "Claimable",
+    title: "Amount",
     align: "end",
     className: "w-40",
   },

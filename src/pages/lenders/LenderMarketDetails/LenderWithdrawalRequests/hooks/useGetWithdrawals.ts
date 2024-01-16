@@ -91,14 +91,14 @@ export function useGetWithdrawals(
       (w) => w.status === BatchStatus.Pending,
     )
     const activeTotalPendingAmount =
-      activeWithdrawal?.normalizedUnpaidAmount ??
+      activeWithdrawal?.normalizedTotalAmount ??
       market.underlyingToken.getAmount(0)
     const expiredPendingWithdrawals = incompleteWithdrawals.filter(
       (w) => w.status !== BatchStatus.Pending,
     )
 
     const expiredTotalPendingAmount = expiredPendingWithdrawals.reduce(
-      (acc, w) => acc.add(w.normalizedUnpaidAmount),
+      (acc, w) => acc.add(w.normalizedTotalAmount),
       market.underlyingToken.getAmount(0),
     )
     const totalClaimableAmount = expiredPendingWithdrawals.reduce(
@@ -174,7 +174,7 @@ export function useGetWithdrawals(
     )
 
     const activeTotalPendingAmount =
-      withdrawals.activeWithdrawal?.normalizedUnpaidAmount ??
+      withdrawals.activeWithdrawal?.normalizedTotalAmount ??
       market.underlyingToken.getAmount(0)
 
     const { expiredPendingWithdrawals } = withdrawals
@@ -182,7 +182,7 @@ export function useGetWithdrawals(
     const expiredTotalPendingAmount = expiredPendingWithdrawals
       .filter((w) => w.expiry !== market.pendingWithdrawalExpiry)
       .reduce(
-        (acc, w) => acc.add(w.normalizedUnpaidAmount),
+        (acc, w) => acc.add(w.normalizedTotalAmount),
         market.underlyingToken.getAmount(0),
       )
     const totalClaimableAmount = (

@@ -34,7 +34,7 @@ export const ThisCycleTable = ({
         className: "w-40",
       },
       {
-        title: "Requested",
+        title: "Amount",
         align: "end",
         className: "w-32",
       },

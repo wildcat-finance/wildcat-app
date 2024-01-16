@@ -32,7 +32,7 @@ export const ThisCycleTable = ({ withdrawals }: WithdrawalsTableProps) => (
         className: "w-40",
       },
       {
-        title: "Requested",
+        title: "Amount",
         align: "end",
         className: "w-32",
       },
