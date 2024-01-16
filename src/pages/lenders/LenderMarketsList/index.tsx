@@ -176,7 +176,7 @@ function LenderMarketsList() {
               className="w-full"
               basePath={BASE_PATHS.Lender}
               showBalance={!!address}
-              showLenderRole={!!address}
+              showRole={!!address}
               variant="lender"
             />
           </div>

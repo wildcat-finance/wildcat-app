@@ -82,10 +82,12 @@ function BorrowerMarketsList() {
             <GrayPaper className="text-xl justify-between flex items-center w-5/6 ">
               <AiOutlineExclamationCircle height={24} />
               <span>{inviteMessage}</span>
-              {inviteUrl && (
+              {inviteUrl ? (
                 <Button onClick={() => navigate(inviteUrl)} variant="blue">
                   <span className="text-lg">{inviteButtonText}</span>
                 </Button>
+              ) : (
+                <div />
               )}
             </GrayPaper>
           </div>
@@ -202,6 +204,7 @@ function BorrowerMarketsList() {
               showBorrower={!onlyOwnMarkets}
               basePath={BASE_PATHS.Borrower}
               variant="borrower"
+              showRole={!!address}
             />
           </div>
         ))}
