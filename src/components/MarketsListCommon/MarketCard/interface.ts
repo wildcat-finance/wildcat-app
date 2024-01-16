@@ -4,18 +4,19 @@ export type MarketCardProps = {
   className?: string
   showBorrower?: boolean
   basePath: string
-  variant?: "lender" | "borrower"
+  // variant?: "lender" | "borrower"
+  showRole?: boolean
 } & (
   | {
       market: Market
       account?: undefined
       showBalance?: undefined
-      showLenderRole?: undefined
+      variant: "borrower"
     }
   | {
       market?: undefined
       account: MarketAccount
       showBalance?: boolean
-      showLenderRole?: boolean
+      variant: "lender"
     }
 )

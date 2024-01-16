@@ -15,6 +15,7 @@ export enum SortKind {
   MarketBalance = "MarketBalance",
   UnderlyingBalance = "UnderlyingBalance",
   LenderRole = "LenderRole",
+  MaximumCapacity = "MaximumCapacity",
 }
 
 export type MarketFilterInputProps = {

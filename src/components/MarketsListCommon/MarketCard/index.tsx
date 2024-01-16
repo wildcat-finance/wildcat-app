@@ -16,6 +16,7 @@ import {
 } from "../../../utils/formatters"
 import { EtherscanBaseUrl } from "../../../config/networks"
 import { getLenderRoleIcon } from "../../../utils/lenderRole"
+import { getBorrowerRoleIcon } from "../../../utils/borrowerRole"
 
 function MarketCard({
   market: _market,
@@ -25,7 +26,7 @@ function MarketCard({
   showBalance,
   basePath,
   variant,
-  showLenderRole,
+  showRole,
 }: MarketCardProps) {
   const navigate = useNavigate()
   const market = _market ?? account.market
@@ -45,7 +46,10 @@ function MarketCard({
     >
       <div className="w-full flex justify-between items-center flex-row px-3 mb-4">
         <div className="inline text-black text-xs font-bold items-center flex">
-          {showLenderRole && getLenderRoleIcon(account)}
+          {showRole &&
+            (variant === "borrower"
+              ? getBorrowerRoleIcon(market)
+              : getLenderRoleIcon(account))}
           <span className="ml-2">{market.name}</span>
         </div>
         <Chip

@@ -162,22 +162,22 @@ export const MarketSortOptions: MarketSortOption[] = [
         (b.deployedEvent?.blockNumber ?? 0)) *
       (direction === "asc" ? 1 : -1),
   },
-  {
-    id: "outstanding-debt",
-    label: "Outstanding Debt",
-    value: SortKind.OutstandingDebt,
-    sortPredicate: (a: Market, b: Market, direction: "asc" | "desc") =>
-      (a.outstandingDebt.gt(b.outstandingDebt) ? 1 : -1) *
-      (direction === "asc" ? 1 : -1),
-  },
-  {
-    id: "total-supply",
-    label: "Total Supply",
-    value: SortKind.TotalSupply,
-    sortPredicate: (a: Market, b: Market, direction: "asc" | "desc") =>
-      (a.totalSupply.gt(b.totalSupply) ? 1 : -1) *
-      (direction === "asc" ? 1 : -1),
-  },
+  // {
+  //   id: "outstanding-debt",
+  //   label: "Outstanding Debt",
+  //   value: SortKind.OutstandingDebt,
+  //   sortPredicate: (a: Market, b: Market, direction: "asc" | "desc") =>
+  //     (a.outstandingDebt.gt(b.outstandingDebt) ? 1 : -1) *
+  //     (direction === "asc" ? 1 : -1),
+  // },
+  // {
+  //   id: "total-supply",
+  //   label: "Total Supply",
+  //   value: SortKind.TotalSupply,
+  //   sortPredicate: (a: Market, b: Market, direction: "asc" | "desc") =>
+  //     (a.totalSupply.gt(b.totalSupply) ? 1 : -1) *
+  //     (direction === "asc" ? 1 : -1),
+  // },
   {
     id: "market-status",
     label: "Market Status",
@@ -199,6 +199,14 @@ export const MarketSortOptions: MarketSortOption[] = [
       (a.borrowableAssets.gt(b.borrowableAssets) ? 1 : -1) *
       (direction === "asc" ? 1 : -1),
   },
+  {
+    id: "max-capacity",
+    label: "Maximum Capacity",
+    value: SortKind.MaximumCapacity,
+    sortPredicate: (a: Market, b: Market, direction: "asc" | "desc") =>
+      (a.maxTotalSupply.gt(b.maxTotalSupply) ? 1 : -1) *
+      (direction === "asc" ? 1 : -1),
+  },
 ]
 
 export const MarketFilterOptions: MarketFilterOption[] = [
@@ -215,10 +223,21 @@ const LenderStatusScores = {
 }
 
 export const MarketAccountSortOptions: MarketAccountSortOption[] = [
+  ...MarketSortOptions.filter(
+    (m) =>
+      ![SortKind.BorrowableAmount, SortKind.MaximumCapacity].includes(m.value),
+  ).map((option) => ({
+    ...option,
+    sortPredicate: (
+      a: MarketAccount,
+      b: MarketAccount,
+      direction: "asc" | "desc",
+    ) => option.sortPredicate(a.market, b.market, direction),
+  })),
   {
     id: "lender-role",
     label: "Access",
-    value: SortKind.Status,
+    value: SortKind.LenderRole,
     sortPredicate: (
       a: MarketAccount,
       b: MarketAccount,
@@ -228,14 +247,6 @@ export const MarketAccountSortOptions: MarketAccountSortOption[] = [
         LenderStatusScores[getEffectiveLenderRole(b)]) *
       (direction === "asc" ? 1 : -1),
   },
-  ...MarketSortOptions.map((option) => ({
-    ...option,
-    sortPredicate: (
-      a: MarketAccount,
-      b: MarketAccount,
-      direction: "asc" | "desc",
-    ) => option.sortPredicate(a.market, b.market, direction),
-  })),
   {
     id: "market-balance",
     label: "Loaned Amount",
@@ -248,16 +259,16 @@ export const MarketAccountSortOptions: MarketAccountSortOption[] = [
       (a.marketBalance.gt(b.marketBalance) ? 1 : -1) *
       (direction === "asc" ? 1 : -1),
   },
-  {
-    id: "underlying-balance",
-    label: "Underlying Balance",
-    value: SortKind.UnderlyingBalance,
-    sortPredicate: (
-      a: MarketAccount,
-      b: MarketAccount,
-      direction: "asc" | "desc",
-    ) =>
-      (a.underlyingBalance.gt(b.underlyingBalance) ? 1 : -1) *
-      (direction === "asc" ? 1 : -1),
-  },
+  // {
+  //   id: "underlying-balance",
+  //   label: "Underlying Balance",
+  //   value: SortKind.UnderlyingBalance,
+  //   sortPredicate: (
+  //     a: MarketAccount,
+  //     b: MarketAccount,
+  //     direction: "asc" | "desc",
+  //   ) =>
+  //     (a.underlyingBalance.gt(b.underlyingBalance) ? 1 : -1) *
+  //     (direction === "asc" ? 1 : -1),
+  // },
 ]
