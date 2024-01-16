@@ -62,7 +62,7 @@ export function getLenderRoleIcon(account: MarketAccount) {
     default:
       return (
         <Tooltip content={role}>
-          <TbLock className="text-lg" color="gray" />
+          <TbLock className="text-lg" color="red" />
         </Tooltip>
       )
   }
