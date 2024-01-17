@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 
 import { Chip } from "../../../../components/ui-components"
-import { ThisCycleTable } from "./WithdrawalsTable/ThisCycleTable"
-import { PrevCycleTable } from "./WithdrawalsTable/PrevCycleTable"
+import { ThisCycleTable } from "./BorrowerWithdrawalsTable/ThisCycleTable"
+import { PrevCycleTable } from "./BorrowerWithdrawalsTable/PrevCycleTable"
 import { useGetWithdrawals } from "./hooks/useGetWithdrawals"
 import { ExpandMore } from "../../../../components/ui-components/icons"
 import { BorrowerWithdrawalRequestsProps } from "./interface"

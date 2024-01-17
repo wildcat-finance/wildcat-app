@@ -65,14 +65,14 @@ export const PrevCycleTable = ({ withdrawals }: WithdrawalsTableProps) => (
             <TableCell justify="start">
               {dayjs(withdrawal.blockTimestamp * 1000).format(DATE_FORMAT)}
             </TableCell>
-            <TableCell justify="end">
-              {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
-            </TableCell>
             {/* <TableCell justify="end"> */}
-            {/*  {withdrawal */}
-            {/*    .getNormalizedAmountOwed(wd.batch) */}
-            {/*    .format(TOKEN_FORMAT_DECIMALS, true)} */}
+            {/*  {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)} */}
             {/* </TableCell> */}
+            <TableCell justify="end">
+              {withdrawal
+                .getNormalizedAmountOwed(wd.batch)
+                .format(TOKEN_FORMAT_DECIMALS, true)}
+            </TableCell>
           </TableRow>
         )),
       )}
