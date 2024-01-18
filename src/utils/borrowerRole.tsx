@@ -5,7 +5,7 @@ import { Tooltip } from "../components/ui-components"
 
 export function getBorrowerRoleIcon(market: Market) {
   const { address } = useAccount()
-  if (address === market.borrower) {
+  if (address?.toLowerCase() === market.borrower.toLowerCase()) {
     return (
       <Tooltip content="Your market">
         <TbLockCheck className="text-lg" color="green" />
