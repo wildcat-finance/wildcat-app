@@ -76,14 +76,18 @@ export const ClaimTable = ({ expiredPendingWithdrawals }: ClaimTableProps) => {
                   <TableCell
                     justify="start"
                     className="first:pl-0"
-                    style={{ width: "47%" }}
+                    style={{
+                      width: "47%",
+                      paddingLeft: 0,
+                      paddingTop: 10,
+                    }}
                   >
                     {withdrawal.requests.map((request) => (
                       <TableRow key={request.id}>
                         <TableCell
                           justify="start"
                           className="first:pl-0"
-                          style={{ width: "47%" }}
+                          style={{ width: "47.5%", paddingLeft: 0 }}
                         >
                           <a
                             className="hover:underline"
@@ -98,10 +102,22 @@ export const ClaimTable = ({ expiredPendingWithdrawals }: ClaimTableProps) => {
                     ))}
                   </TableCell>
 
-                  <TableCell justify="start">
+                  <TableCell
+                    justify="start"
+                    style={{
+                      paddingLeft: 0,
+                      paddingTop: 10,
+                    }}
+                  >
                     {withdrawal.requests.map((request) => (
                       <TableRow>
-                        <TableCell justify="start" className="first:pl-0">
+                        <TableCell
+                          justify="start"
+                          className="first:pl-0"
+                          style={{
+                            paddingLeft: 0,
+                          }}
+                        >
                           {dayjs(request.blockTimestamp * 1000).format(
                             DATE_FORMAT,
                           )}
