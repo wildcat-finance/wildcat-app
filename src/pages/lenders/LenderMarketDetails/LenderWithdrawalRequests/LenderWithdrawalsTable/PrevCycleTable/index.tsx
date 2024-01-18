@@ -40,41 +40,45 @@ export const PrevCycleTable = ({ withdrawals }: WithdrawalsTableProps) => (
   >
     {withdrawals &&
       withdrawals.map((wd) =>
-        wd.requests.map((withdrawal) => (
-          <TableRow key={withdrawal.id}>
-            <TableCell justify="start">
-              <a
-                className="hover:underline"
-                href={`${EtherscanBaseUrl}/address/${withdrawal.address}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {trimAddress(withdrawal.address)}
-              </a>
-            </TableCell>
-            <TableCell justify="start">
-              <a
-                className="hover:underline"
-                href={`${EtherscanBaseUrl}/tx/${withdrawal.transactionHash}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {trimAddress(withdrawal.transactionHash, 24)}
-              </a>
-            </TableCell>
-            <TableCell justify="start">
-              {dayjs(withdrawal.blockTimestamp * 1000).format(DATE_FORMAT)}
-            </TableCell>
-            {/* <TableCell justify="end"> */}
-            {/*  {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)} */}
-            {/* </TableCell> */}
-            <TableCell justify="end">
-              {withdrawal
-                .getNormalizedAmountOwed(wd.batch)
-                .format(TOKEN_FORMAT_DECIMALS, true)}
-            </TableCell>
-          </TableRow>
-        )),
+        wd.requests
+          .filter((withdrawal) =>
+            withdrawal.getNormalizedAmountOwed(wd.batch).gt(0),
+          )
+          .map((withdrawal) => (
+            <TableRow key={withdrawal.id}>
+              <TableCell justify="start">
+                <a
+                  className="hover:underline"
+                  href={`${EtherscanBaseUrl}/address/${withdrawal.address}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {trimAddress(withdrawal.address)}
+                </a>
+              </TableCell>
+              <TableCell justify="start">
+                <a
+                  className="hover:underline"
+                  href={`${EtherscanBaseUrl}/tx/${withdrawal.transactionHash}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {trimAddress(withdrawal.transactionHash, 24)}
+                </a>
+              </TableCell>
+              <TableCell justify="start">
+                {dayjs(withdrawal.blockTimestamp * 1000).format(DATE_FORMAT)}
+              </TableCell>
+              {/* <TableCell justify="end"> */}
+              {/*  {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)} */}
+              {/* </TableCell> */}
+              <TableCell justify="end">
+                {withdrawal
+                  .getNormalizedAmountOwed(wd.batch)
+                  .format(TOKEN_FORMAT_DECIMALS, true)}
+              </TableCell>
+            </TableRow>
+          )),
       )}
   </Table>
 )

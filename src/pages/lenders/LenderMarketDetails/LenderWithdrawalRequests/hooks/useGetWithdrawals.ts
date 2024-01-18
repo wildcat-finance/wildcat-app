@@ -90,9 +90,19 @@ export function useGetWithdrawals(
     const activeWithdrawal = incompleteWithdrawals.find(
       (w) => w.status === BatchStatus.Pending,
     )
+
+    // const activeTotalPendingAmount =
+    //   activeWithdrawal?.normalizedUnpaidAmount ??
+    //   market.underlyingToken.getAmount(0)
+
+    // TODO: check with Dillon difference
+
     const activeTotalPendingAmount =
-      activeWithdrawal?.normalizedUnpaidAmount ??
-      market.underlyingToken.getAmount(0)
+      activeWithdrawal?.requests.reduce(
+        (acc, req) => acc.add(req.normalizedAmount),
+        market.underlyingToken.getAmount(0),
+      ) ?? market.underlyingToken.getAmount(0)
+
     const expiredPendingWithdrawals = incompleteWithdrawals.filter(
       (w) => w.status !== BatchStatus.Pending,
     )
@@ -173,9 +183,15 @@ export function useGetWithdrawals(
       `Updated ${incompleteWithdrawals.length} incomplete withdrawals...`,
     )
 
+    // const activeTotalPendingAmount =
+    //   withdrawals.activeWithdrawal?.normalizedUnpaidAmount ??
+    //   market.underlyingToken.getAmount(0)
+
     const activeTotalPendingAmount =
-      withdrawals.activeWithdrawal?.normalizedUnpaidAmount ??
-      market.underlyingToken.getAmount(0)
+      withdrawals.activeWithdrawal?.requests.reduce(
+        (acc, req) => acc.add(req.normalizedAmount),
+        market.underlyingToken.getAmount(0),
+      ) ?? market.underlyingToken.getAmount(0)
 
     const { expiredPendingWithdrawals } = withdrawals
 
