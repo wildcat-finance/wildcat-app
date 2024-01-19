@@ -98,10 +98,8 @@ export function useGetWithdrawals(
     // TODO: check with Dillon difference
 
     const activeTotalPendingAmount =
-      activeWithdrawal?.requests.reduce(
-        (acc, req) => acc.add(req.normalizedAmount),
-        market.underlyingToken.getAmount(0),
-      ) ?? market.underlyingToken.getAmount(0)
+      activeWithdrawal?.normalizedTotalAmount ??
+      market.underlyingToken.getAmount(0)
 
     const expiredPendingWithdrawals = incompleteWithdrawals.filter(
       (w) => w.status !== BatchStatus.Pending,
