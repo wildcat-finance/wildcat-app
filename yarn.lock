@@ -7037,10 +7037,10 @@
     react-scripts "5.0.1"
     web-vitals "^2.1.4"
 
-"@wildcatfi/wildcat-sdk@^2.0.53":
-  version "2.0.53"
-  resolved "https://registry.yarnpkg.com/@wildcatfi/wildcat-sdk/-/wildcat-sdk-2.0.53.tgz#7bd80a2a80984369e8280eef35a032abffd7dd0e"
-  integrity sha512-rirYMj+B2zbA/HAaa8a82mKjH/Kvy3t0DduHSgmr1g+jq+55BytMFqEuayS3t6NeTI/WiFGLIE/wGO5Sn6SVLA==
+"@wildcatfi/wildcat-sdk@^2.0.54":
+  version "2.0.54"
+  resolved "https://registry.yarnpkg.com/@wildcatfi/wildcat-sdk/-/wildcat-sdk-2.0.54.tgz#03022a914fe1e6286d990b71b508793b0f95cc83"
+  integrity sha512-WnqGc4yV/xoJPBK98WLDRofMuo6hTUSJi7yyCNfJE8j2RQIfbJfm3FOSWheOv4gpkRXr6deTMODqgyVU6y7hrQ==
   dependencies:
     "@apollo/client" "^3.8.6"
     "@tanstack/react-query" "^4.29.14"
