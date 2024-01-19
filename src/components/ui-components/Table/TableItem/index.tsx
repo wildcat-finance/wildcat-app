@@ -7,7 +7,7 @@ export function TableCell({
   className,
   ...rest
 }: {
-  children: ReactNode
+  children?: ReactNode
   justify?: string
   className?: string
   rowSpan?: number

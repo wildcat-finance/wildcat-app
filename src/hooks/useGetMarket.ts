@@ -5,11 +5,10 @@ import {
   SubgraphGetMarketQuery,
   SubgraphGetMarketQueryVariables,
 } from "@wildcatfi/wildcat-sdk/dist/gql/graphql"
-import { useEthersSigner } from "../modules/hooks"
-import { useCurrentNetwork } from "./useCurrentNetwork"
 import { POLLING_INTERVAL } from "../config/polling"
 import { SubgraphClient } from "../config/subgraph"
 import { TargetChainId } from "../config/networks"
+import { useEthersProvider } from "../modules/hooks/useEthersSigner"
 
 export const GET_MARKET_KEY = "get-market"
 
@@ -18,12 +17,12 @@ export type UseMarketProps = {
 } & Partial<Omit<SubgraphGetMarketQueryVariables, "market">>
 
 export function useGetMarket({ marketAddress, ...filters }: UseMarketProps) {
-  const signer = useEthersSigner()
-  const { isWrongNetwork } = useCurrentNetwork()
+  const { signer, provider, isWrongNetwork } = useEthersProvider()
   const marketAddressFormatted = marketAddress?.toLowerCase()
+  const signerOrProvider = signer ?? provider
 
   async function queryMarket() {
-    if (!marketAddressFormatted || !signer) throw Error()
+    if (!marketAddressFormatted || !signerOrProvider) throw Error()
 
     const result = await SubgraphClient.query<
       SubgraphGetMarketQuery,
@@ -38,15 +37,15 @@ export function useGetMarket({ marketAddress, ...filters }: UseMarketProps) {
 
     return Market.fromSubgraphMarketData(
       TargetChainId,
-      signer,
+      signerOrProvider,
       result.data.market!,
     )
   }
 
   async function updateMarket(market: Market | undefined) {
-    if (!market || !marketAddress || !signer) throw Error()
+    if (!market || !marketAddress || !signerOrProvider) throw Error()
 
-    const lens = getLensContract(TargetChainId, signer)
+    const lens = getLensContract(TargetChainId, signerOrProvider)
     const update = await lens.getMarketData(marketAddress)
     market.updateWith(update)
 
@@ -62,7 +61,7 @@ export function useGetMarket({ marketAddress, ...filters }: UseMarketProps) {
     queryKey: [GET_MARKET_KEY, marketAddress],
     queryFn,
     refetchInterval: POLLING_INTERVAL,
-    enabled: !!marketAddress || !signer || isWrongNetwork,
+    enabled: !!marketAddress || !signerOrProvider || isWrongNetwork,
     refetchOnMount: false,
   })
 }

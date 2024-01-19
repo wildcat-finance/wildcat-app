@@ -13,7 +13,9 @@ import { EtherscanBaseUrl } from "../../../../../../config/networks"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
-export const ThisCycleTable = ({ withdrawals }: WithdrawalsTableProps) => (
+export const ThisCycleTable = ({
+  withdrawalBatches,
+}: WithdrawalsTableProps) => (
   <Table
     headers={[
       {
@@ -32,45 +34,45 @@ export const ThisCycleTable = ({ withdrawals }: WithdrawalsTableProps) => (
         className: "w-40",
       },
       {
-        title: "Requested",
+        title: "Amount",
         align: "end",
         className: "w-32",
       },
     ]}
   >
-    {withdrawals &&
-      withdrawals.map((withdrawal) =>
-        withdrawal.requests.map((request) => (
-          <TableRow key={request.id}>
+    {withdrawalBatches &&
+      withdrawalBatches.map((batch) =>
+        batch.requests.map((withdrawal) => (
+          <TableRow key={withdrawal.id}>
             <TableCell justify="start">
               <a
                 className="hover:underline"
-                href={`${EtherscanBaseUrl}/address/${request.address}`}
+                href={`${EtherscanBaseUrl}/address/${withdrawal.address}`}
                 target="_blank"
                 rel="noreferrer"
               >
-                {trimAddress(request.address)}
+                {trimAddress(withdrawal.address)}
               </a>
             </TableCell>
             <TableCell justify="start">
               <a
                 className="hover:underline"
-                href={`${EtherscanBaseUrl}/tx/${request.transactionHash}`}
+                href={`${EtherscanBaseUrl}/tx/${withdrawal.transactionHash}`}
                 target="_blank"
                 rel="noreferrer"
               >
-                {trimAddress(request.transactionHash, 24)}
+                {trimAddress(withdrawal.transactionHash, 24)}
               </a>
             </TableCell>
             <TableCell justify="start">
-              {dayjs(request.blockTimestamp * 1000).format(DATE_FORMAT)}
+              {dayjs(withdrawal.blockTimestamp * 1000).format(DATE_FORMAT)}
             </TableCell>
             <TableCell justify="end">
-              {request.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
+              {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
             </TableCell>
             {/* <TableCell justify="end"> */}
-            {/*  {request */}
-            {/*    .getNormalizedAmountOwed(withdrawal.batch) */}
+            {/*  {withdrawal */}
+            {/*    .getNormalizedAmountOwed(batch) */}
             {/*    .format(TOKEN_FORMAT_DECIMALS, true)} */}
             {/* </TableCell> */}
           </TableRow>

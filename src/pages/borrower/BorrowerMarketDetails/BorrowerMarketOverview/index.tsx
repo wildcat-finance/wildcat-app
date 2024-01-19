@@ -11,21 +11,6 @@ import {
 import type { BorrowerMarketOverviewProps } from "./interface"
 import { EtherscanBaseUrl } from "../../../../config/networks"
 
-function getMinReserveRatio(
-  reserveRatioBips: number,
-  coverageLiquidity: TokenAmount,
-  totalSupply: TokenAmount,
-) {
-  if (totalSupply.raw.isZero() || coverageLiquidity.raw.isZero()) {
-    return reserveRatioBips
-  }
-
-  return Math.min(
-    reserveRatioBips,
-    coverageLiquidity.raw.div(totalSupply.raw).toNumber(),
-  )
-}
-
 const localize = (
   tokenAmount: TokenAmount,
   decimals = TOKEN_FORMAT_DECIMALS,

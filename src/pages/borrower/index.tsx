@@ -11,7 +11,7 @@ const BorrowerSection = () => {
   const { isLoading } = useBorrowerRouting()
   const { isWrongNetwork } = useCurrentNetwork()
 
-  if (!isConnected || isWrongNetwork) {
+  if (isConnected && isWrongNetwork) {
     return <div />
   }
 

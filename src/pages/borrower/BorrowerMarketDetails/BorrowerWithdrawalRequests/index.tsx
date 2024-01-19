@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 
 import { Chip } from "../../../../components/ui-components"
-import { ThisCycleTable } from "./WithdrawalsTable/ThisCycleTable"
-import { PrevCycleTable } from "./WithdrawalsTable/PrevCycleTable"
+import { ThisCycleTable } from "./BorrowerWithdrawalsTable/ThisCycleTable"
+import { PrevCycleTable } from "./BorrowerWithdrawalsTable/PrevCycleTable"
 import { useGetWithdrawals } from "./hooks/useGetWithdrawals"
 import { ExpandMore } from "../../../../components/ui-components/icons"
 import { BorrowerWithdrawalRequestsProps } from "./interface"
@@ -77,7 +77,7 @@ const BorrowerWithdrawalRequests = ({
       </div>
       <div className="h-12 flex justify-between items-center bg-tint-10 px-6">
         <div className="inline text-black text-xs font-bold">
-          Outstanding From This Cycle
+          Requested This Cycle
         </div>
         <div className="flex gap-x-4 items-center">
           {thisCycle ? (

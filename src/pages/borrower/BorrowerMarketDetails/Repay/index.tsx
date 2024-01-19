@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useMemo, useState } from "react"
 
+import { constants } from "ethers"
 import { Button } from "../../../../components/ui-components"
 import { RepayModal } from "../Modals"
 import {
@@ -56,6 +57,11 @@ const Repay = ({ marketAccount }: RepayProps) => {
 
     if (value === "" || value === "0") {
       setError(undefined)
+      return
+    }
+
+    if (marketAccount.account === constants.AddressZero) {
+      setError("Please connect your wallet")
       return
     }
 

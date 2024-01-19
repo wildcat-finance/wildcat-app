@@ -15,7 +15,6 @@ import PaymentHistory from "../../../components/MarketDetailsCommon/PaymentHisto
 import BorrowerMarketOverview from "./BorrowerMarketOverview"
 import { AuthorisedLendersList } from "./AuthorisedLendersList"
 import AdjustMaximumCapacity from "./AdjustMaximumCapacity"
-import { BORROWER_PATHS } from "../routes/constants"
 import { BASE_PATHS } from "../../../routes/constants"
 import { useTransactionWait } from "../../../store/useTransactionWait"
 import { TerminateMarket } from "./TerminateMarket"
@@ -45,6 +44,9 @@ const BorrowerMarketDetails = () => {
     return <Spinner isLoading={isLoading} />
   }
 
+  const isBorrower =
+    market.borrower.toLowerCase() === marketAccount.account.toLowerCase()
+
   return (
     <div>
       <button
@@ -59,50 +61,47 @@ const BorrowerMarketDetails = () => {
         <div className="text-green text-2xl font-bold">{market.name}</div>
         <TerminateMarket marketAccount={marketAccount} />
       </div>
-      <Paper className="flex flex-col gap-y-5 border-0 px-6 py-5 mb-14 bg-tint-10 border-tint-8 rounded-3xl">
-        <div>
-          <div className="w-full flex justify-between">
-            <div className="font-bold h-8 leading-8">Borrow Assets</div>
-            <div className="flex gap-x-3.5 w-full max-w-xl">
-              <BorrowAssets
-                borrowableAssets={market.borrowableAssets}
-                marketAccount={marketAccount}
-              />
+      {isBorrower && (
+        <Paper className="flex flex-col gap-y-5 border-0 px-6 py-5 mb-14 bg-tint-10 border-tint-8 rounded-3xl">
+          <div>
+            <div className="w-full flex justify-between">
+              <div className="font-bold h-8 leading-8">Borrow Assets</div>
+              <div className="flex gap-x-3.5 w-full max-w-xl">
+                <BorrowAssets
+                  borrowableAssets={market.borrowableAssets}
+                  marketAccount={marketAccount}
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div>
-          <div className="w-full flex justify-between">
-            <div className="font-bold h-8 leading-8">Repay Debt</div>
-            <div className="flex items-center gap-x-3.5 w-full max-w-xl">
-              <Repay marketAccount={marketAccount} />
+          <div>
+            <div className="w-full flex justify-between">
+              <div className="font-bold h-8 leading-8">Repay Debt</div>
+              <div className="flex items-center gap-x-3.5 w-full max-w-xl">
+                <Repay marketAccount={marketAccount} />
+              </div>
             </div>
           </div>
-        </div>
-        <div>
-          <div className="w-full flex justify-between">
-            <div
-              className="font-bold
-             h-8 leading-8"
-            >
-              Adjust Lender APR
-            </div>
-            <div className="flex items-center gap-x-3.5 w-full max-w-xl">
-              <AdjustAPR marketAccount={marketAccount} />
+          <div>
+            <div className="w-full flex justify-between">
+              <div className="font-bold h-8 leading-8">Adjust Lender APR</div>
+              <div className="flex items-center gap-x-3.5 w-full max-w-xl">
+                <AdjustAPR marketAccount={marketAccount} />
+              </div>
             </div>
           </div>
-        </div>
-        <div>
-          <div className="w-full flex justify-between">
-            <div className="font-bold h-8 leading-8">
-              Adjust Maximum Capacity
-            </div>
-            <div className="flex gap-x-3.5 w-full max-w-xl">
-              <AdjustMaximumCapacity marketAccount={marketAccount} />
+          <div>
+            <div className="w-full flex justify-between">
+              <div className="font-bold h-8 leading-8">
+                Adjust Maximum Capacity
+              </div>
+              <div className="flex gap-x-3.5 w-full max-w-xl">
+                <AdjustMaximumCapacity marketAccount={marketAccount} />
+              </div>
             </div>
           </div>
-        </div>
-      </Paper>
+        </Paper>
+      )}
 
       <BorrowerMarketOverview market={market} />
 
@@ -111,10 +110,12 @@ const BorrowerMarketDetails = () => {
 
       <div className="flex w-full justify-between content-center">
         <div className="text-base font-bold">Authorised Lenders</div>
-        <div className="flex gap-x-2">
-          <NewLendersModal market={market} />
-          <RemoveLendersModal market={market} />
-        </div>
+        {isBorrower && (
+          <div className="flex gap-x-2">
+            <NewLendersModal market={market} />
+            <RemoveLendersModal market={market} />
+          </div>
+        )}
       </div>
       <div className="mt-5 mb-14">
         <AuthorisedLendersList marketAddress={market.address} />
