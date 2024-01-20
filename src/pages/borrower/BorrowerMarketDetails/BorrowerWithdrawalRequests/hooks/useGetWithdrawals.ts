@@ -53,7 +53,7 @@ export function useGetWithdrawals(
       (batch) => batch.expiry !== market.pendingWithdrawalExpiry,
     )
     const expiredWithdrawalsTotalOwed = expiredPendingWithdrawals.reduce(
-      (acc, batch) => acc.add(batch.normalizedTotalAmount),
+      (acc, batch) => acc.add(batch.normalizedAmountOwed),
       market.underlyingToken.getAmount(0),
     )
     const activeWithdrawalsTotalOwed =
@@ -134,7 +134,7 @@ export function useGetWithdrawals(
     const expiredWithdrawalsTotalOwed = (
       withdrawals.expiredPendingWithdrawals as WithdrawalBatch[]
     ).reduce(
-      (acc, batch) => acc.add(batch.normalizedTotalAmount),
+      (acc, batch) => acc.add(batch.normalizedAmountOwed),
       market.underlyingToken.getAmount(0),
     )
     const activeWithdrawalsTotalOwed =
