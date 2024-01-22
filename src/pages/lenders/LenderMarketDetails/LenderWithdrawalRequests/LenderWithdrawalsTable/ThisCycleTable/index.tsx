@@ -7,15 +7,14 @@ import {
   Table,
   TableCell,
   TableRow,
+  Tooltip,
 } from "../../../../../../components/ui-components"
 import { WithdrawalsTableProps } from "./interface"
 import { EtherscanBaseUrl } from "../../../../../../config/networks"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
-export const PrevCycleTable = ({
-  withdrawalBatches,
-}: WithdrawalsTableProps) => (
+export const ThisCycleTable = ({ withdrawals }: WithdrawalsTableProps) => (
   <Table
     headers={[
       {
@@ -34,51 +33,49 @@ export const PrevCycleTable = ({
         className: "w-40",
       },
       {
-        title: "Requested",
-        align: "start",
-        className: "w-32",
-      },
-      {
-        title: "Outstanding",
+        title: "Amount",
         align: "end",
         className: "w-32",
       },
     ]}
   >
-    {withdrawalBatches &&
-      withdrawalBatches.map((batch) =>
-        batch.requests.map((withdrawal) => (
-          <TableRow key={withdrawal.id}>
+    {withdrawals &&
+      withdrawals.map((withdrawal) =>
+        withdrawal.requests.map((request) => (
+          <TableRow key={request.id}>
             <TableCell justify="start">
               <a
                 className="hover:underline"
-                href={`${EtherscanBaseUrl}/address/${withdrawal.address}`}
+                href={`${EtherscanBaseUrl}/address/${request.address}`}
                 target="_blank"
                 rel="noreferrer"
               >
-                {trimAddress(withdrawal.address)}
+                {trimAddress(request.address)}
               </a>
             </TableCell>
             <TableCell justify="start">
               <a
                 className="hover:underline"
-                href={`${EtherscanBaseUrl}/tx/${withdrawal.transactionHash}`}
+                href={`${EtherscanBaseUrl}/tx/${request.transactionHash}`}
                 target="_blank"
                 rel="noreferrer"
               >
-                {trimAddress(withdrawal.transactionHash, 24)}
+                {trimAddress(request.transactionHash, 24)}
               </a>
             </TableCell>
             <TableCell justify="start">
-              {dayjs(withdrawal.blockTimestamp * 1000).format(DATE_FORMAT)}
-            </TableCell>
-            <TableCell justify="start">
-              {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
+              {dayjs(request.blockTimestamp * 1000).format(DATE_FORMAT)}
             </TableCell>
             <TableCell justify="end">
-              {withdrawal
-                .getNormalizedAmountOwed(batch)
-                .format(TOKEN_FORMAT_DECIMALS, true)}
+              <Tooltip
+                content={request
+                  .getNormalizedTotalAmount(withdrawal.batch)
+                  .format(withdrawal.market.decimals, true)}
+              >
+                {request
+                  .getNormalizedTotalAmount(withdrawal.batch)
+                  .format(TOKEN_FORMAT_DECIMALS, true)}
+              </Tooltip>
             </TableCell>
           </TableRow>
         )),

@@ -1,6 +1,6 @@
 export type TableItemProps = {
   title?: string
-  value?: string | number
+  value?: string | number | React.ReactNode
   children?: React.ReactNode
   className?: string
   valueTooltip?: string

@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
 
+import { LenderRole } from "@wildcatfi/wildcat-sdk"
 import { Button, Chip, Spinner } from "../../../components/ui-components"
 import { useWalletConnect } from "../../../hooks/useWalletConnect"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
@@ -12,6 +13,8 @@ import LenderMarketOverview from "./LenderMarketOverview"
 import { useAddToken } from "../../../hooks/useAddToken"
 import { useLenderMarketAccount } from "../hooks/useLenderMarketAccount"
 import { useTransactionWait } from "../../../store/useTransactionWait"
+import { getEffectiveLenderRole } from "../../../utils/lenderRole"
+import { LenderStatus } from "../../../types/vaults"
 
 export function LenderMarketDetails() {
   const navigate = useNavigate()
@@ -37,7 +40,7 @@ export function LenderMarketDetails() {
     navigate("/lender")
   }
 
-  if (!isConnected || isWrongNetwork) {
+  if (isConnected && isWrongNetwork) {
     return <div />
   }
 
@@ -48,6 +51,12 @@ export function LenderMarketDetails() {
   if (!market || !marketAccount) {
     return <div>Market not found</div>
   }
+
+  const isLender =
+    isConnected &&
+    [LenderStatus.DepositAndWithdraw, LenderStatus.WithdrawOnly].includes(
+      getEffectiveLenderRole(marketAccount),
+    )
 
   return (
     <div className="flex flex-col">
@@ -79,11 +88,13 @@ export function LenderMarketDetails() {
         </div>
       </div>
 
-      <LenderMarketActions market={market} marketAccount={marketAccount} />
+      {isLender && (
+        <LenderMarketActions market={market} marketAccount={marketAccount} />
+      )}
 
       <LenderMarketOverview marketAccount={marketAccount} />
 
-      <WithdrawalRequests market={market} />
+      {isLender && <WithdrawalRequests market={market} />}
       <PaymentHistory market={market} />
     </div>
   )

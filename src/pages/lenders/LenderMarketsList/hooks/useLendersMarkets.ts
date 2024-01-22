@@ -1,14 +1,12 @@
 /* eslint-disable camelcase */
-import { useAccount } from "wagmi"
-
 import { useQuery } from "@tanstack/react-query"
 import {
-  GetAccountsWhereLenderAuthorizedOrActiveDocument,
+  GetAllMarketsForLenderViewDocument,
   SubgraphBorrow_OrderBy,
   SubgraphDebtRepaid_OrderBy,
   SubgraphDeposit_OrderBy,
-  SubgraphGetAccountsWhereLenderAuthorizedOrActiveQuery,
-  SubgraphGetAccountsWhereLenderAuthorizedOrActiveQueryVariables,
+  SubgraphGetAllMarketsForLenderViewQuery,
+  SubgraphGetAllMarketsForLenderViewQueryVariables,
   SubgraphOrderDirection,
 } from "@wildcatfi/wildcat-sdk/dist/gql/graphql"
 import { useMemo } from "react"
@@ -20,13 +18,14 @@ import {
   TwoStepQueryHookResult,
 } from "@wildcatfi/wildcat-sdk"
 import { logger } from "@wildcatfi/wildcat-sdk/dist/utils/logger"
-import { useCurrentNetwork } from "../../../../hooks/useCurrentNetwork"
-import { useEthersSigner } from "../../../../modules/hooks"
+import { constants } from "ethers"
 import { SubgraphClient } from "../../../../config/subgraph"
 import { TargetChainId } from "../../../../config/networks"
 import { POLLING_INTERVAL } from "../../../../config/polling"
+import { useEthersProvider } from "../../../../modules/hooks/useEthersSigner"
 
 export type LenderMarketsQueryProps = {
+  lenderAddress?: string
   numDeposits?: number
   skipDeposits?: number
   orderDeposits?: SubgraphDeposit_OrderBy
@@ -48,61 +47,61 @@ export const GET_LENDERS_ACCOUNTS_KEY = "lenders_accounts_list"
 export function useLendersMarkets({
   ...filters
 }: LenderMarketsQueryProps = {}): TwoStepQueryHookResult<MarketAccount[]> {
-  const provider = useEthersSigner()
-  const { isWrongNetwork } = useCurrentNetwork()
-  const { address } = useAccount()
+  const { isWrongNetwork, provider, signer, address } = useEthersProvider()
+  const signerOrProvider = signer ?? provider
 
   const lender = address?.toLowerCase()
-  async function queryLenders() {
-    logger.debug(`Getting lenders...`)
-    const result = await SubgraphClient.query<
-      SubgraphGetAccountsWhereLenderAuthorizedOrActiveQuery,
-      SubgraphGetAccountsWhereLenderAuthorizedOrActiveQueryVariables
+
+  async function queryMarketsForLender() {
+    logger.debug(`Getting all markets...`)
+    const {
+      data: {
+        markets: _markets,
+        controllerAuthorizations,
+        lenderAccounts: _lenderAccounts,
+      },
+    } = await SubgraphClient.query<
+      SubgraphGetAllMarketsForLenderViewQuery,
+      SubgraphGetAllMarketsForLenderViewQueryVariables
     >({
-      query: GetAccountsWhereLenderAuthorizedOrActiveDocument,
+      query: GetAllMarketsForLenderViewDocument,
       variables: {
-        lender: lender as string,
         ...filters,
-        numWithdrawals: 1,
+        lender,
       },
       fetchPolicy: "network-only",
     })
-    logger.debug(
-      `Got ${result.data.lenderAccounts.length} existing lender accounts...`,
-    )
-
-    const lenderAccounts = result.data.lenderAccounts.map((account) => {
-      const market = Market.fromSubgraphMarketData(
+    const authorizedMarkets = controllerAuthorizations
+      .map((auth) => auth.controller.markets)
+      .flat()
+    const markets = _markets.map((market) =>
+      Market.fromSubgraphMarketData(
         TargetChainId,
-        provider as SignerOrProvider,
-        account.market,
+        signerOrProvider as SignerOrProvider,
+        market,
+        address,
+      ),
+    )
+    const lenderAccounts = markets.map((market) => {
+      const lenderAccount = _lenderAccounts.find(
+        (account) =>
+          account.market.id.toLowerCase() === market.address.toLowerCase(),
       )
-      return MarketAccount.fromSubgraphAccountData(market, account)
+      if (lenderAccount) {
+        return MarketAccount.fromSubgraphAccountData(market, lenderAccount)
+      }
+      const authorization = authorizedMarkets.find(
+        (auth) => auth.id.toLowerCase() === market.address.toLowerCase(),
+      )
+      if (authorization) {
+        return MarketAccount.fromMarketDataOnly(market, lender as string, true)
+      }
+      return MarketAccount.fromMarketDataOnly(
+        market,
+        lender ?? constants.AddressZero,
+        false,
+      )
     })
-    result.data.controllerAuthorizations.forEach((controller) => {
-      const markets = controller.controller.markets.filter((market) => {
-        const marketAccount = lenderAccounts.find(
-          (account) =>
-            account.market.address.toLowerCase() === market.id.toLowerCase(),
-        )
-        return !marketAccount
-      })
-      logger.debug(`Got markets without account: ${markets.length}!`)
-      markets.forEach((marketData) => {
-        const market = Market.fromSubgraphMarketData(
-          TargetChainId,
-          provider as SignerOrProvider,
-          marketData,
-        )
-        const account = MarketAccount.fromMarketDataOnly(
-          market,
-          lender as string,
-          true,
-        )
-        lenderAccounts.push(account)
-      })
-    })
-    logger.debug(`Got ${lenderAccounts.length} lender accounts...`)
     lenderAccounts.sort(
       (a, b) =>
         (b.market.deployedEvent?.blockNumber ?? 0) -
@@ -119,9 +118,9 @@ export function useLendersMarkets({
     failureReason: errorInitial,
   } = useQuery({
     queryKey: [GET_LENDERS_ACCOUNTS_KEY, "initial", lender],
-    queryFn: queryLenders,
+    queryFn: queryMarketsForLender,
     refetchInterval: POLLING_INTERVAL,
-    enabled: !!provider && !isWrongNetwork && !!lender,
+    enabled: !!signerOrProvider && !isWrongNetwork,
     refetchOnMount: false,
   })
 
@@ -129,24 +128,40 @@ export function useLendersMarkets({
 
   async function getLenderUpdates() {
     logger.debug(`Getting lender updates...`)
-    const lens = getLensContract(TargetChainId, provider as SignerOrProvider)
-    const accountUpdates = await lens.getMarketsDataWithLenderStatus(
-      lender as string,
-      accounts.map((x) => x.market.address),
+    const lens = getLensContract(
+      TargetChainId,
+      signerOrProvider as SignerOrProvider,
     )
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < accounts.length; i++) {
-      const account = accounts[i]
-      const update = accountUpdates[i]
-      account.market.updateWith(update.market)
-      account.updateWith(update.lenderStatus)
+    if (lender) {
+      const accountUpdates = await lens.getMarketsDataWithLenderStatus(
+        lender as string,
+        accounts.map((x) => x.market.address),
+      )
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < accounts.length; i++) {
+        const account = accounts[i]
+        const update = accountUpdates[i]
+        account.market.updateWith(update.market)
+        account.updateWith(update.lenderStatus)
+      }
+      logger.debug(`getLenderUpdates:: Got lender updates: ${accounts.length}`)
+    } else {
+      const marketUpdates = await lens.getMarketsData(
+        accounts.map((x) => x.market.address),
+      )
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < accounts.length; i++) {
+        const account = accounts[i]
+        const update = marketUpdates[i]
+        account.market.updateWith(update)
+      }
+      logger.debug(`getLenderUpdates:: Got market updates: ${accounts.length}`)
     }
-    logger.debug(`Got lender updates: ${accounts.length}`)
     return accounts
   }
 
   const updateQueryKeys = useMemo(
-    () => accounts.map((b) => [b.market.address]),
+    () => accounts.map((b) => [b.market.address, lender]),
     [accounts],
   )
 

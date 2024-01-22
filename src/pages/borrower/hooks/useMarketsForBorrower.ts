@@ -3,6 +3,9 @@ import {
   GetMarketsForBorrowerDocument,
   SubgraphGetMarketsForBorrowerQuery,
   SubgraphGetMarketsForBorrowerQueryVariables,
+  SubgraphGetMarketsForAllBorrowersQuery,
+  SubgraphGetMarketsForAllBorrowersQueryVariables,
+  GetMarketsForAllBorrowersDocument,
 } from "@wildcatfi/wildcat-sdk/dist/gql/graphql"
 import {
   Market,
@@ -10,12 +13,10 @@ import {
   SignerOrProvider,
 } from "@wildcatfi/wildcat-sdk"
 import { logger } from "@wildcatfi/wildcat-sdk/dist/utils/logger"
-import { useAccount } from "wagmi"
-import { useEthersSigner } from "../../../modules/hooks"
-import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 import { POLLING_INTERVAL } from "../../../config/polling"
 import { TargetChainId } from "../../../config/networks"
 import { SubgraphClient } from "../../../config/subgraph"
+import { useEthersProvider } from "../../../modules/hooks/useEthersSigner"
 
 export const GET_BORROWER_MARKETS_LIST_KEY = "get-borrower-markets-list"
 
@@ -32,6 +33,27 @@ export function useMarketsForBorrowerQuery({
   ...filters
 }: MarketsForBorrowerProps) {
   const borrower = _borrower?.toLowerCase()
+
+  async function queryMarketsForAllBorrowers() {
+    const result = await SubgraphClient.query<
+      SubgraphGetMarketsForAllBorrowersQuery,
+      SubgraphGetMarketsForAllBorrowersQueryVariables
+    >({
+      query: GetMarketsForAllBorrowersDocument,
+      variables: { ...filters },
+      fetchPolicy: "network-only",
+    })
+
+    return (
+      result.data.markets.map((market) =>
+        Market.fromSubgraphMarketData(
+          TargetChainId,
+          provider as SignerOrProvider,
+          market,
+        ),
+      ) ?? []
+    )
+  }
 
   async function queryMarketsForBorrower() {
     const result = await SubgraphClient.query<
@@ -75,12 +97,14 @@ export function useMarketsForBorrowerQuery({
   }
 
   async function getMarketsForBorrower() {
-    const subgrpahMarkets = await queryMarketsForBorrower()
-    return updateMarkets(subgrpahMarkets)
+    const subgraphMarkets = await (borrower
+      ? queryMarketsForBorrower
+      : queryMarketsForAllBorrowers)()
+    return updateMarkets(subgraphMarkets)
   }
 
   return useQuery({
-    queryKey: [GET_BORROWER_MARKETS_LIST_KEY],
+    queryKey: [GET_BORROWER_MARKETS_LIST_KEY, borrower],
     queryFn: getMarketsForBorrower,
     refetchInterval: POLLING_INTERVAL,
     enabled,
@@ -88,14 +112,17 @@ export function useMarketsForBorrowerQuery({
   })
 }
 
-export const useMarketsForBorrower = () => {
-  const { address } = useAccount()
-  const signer = useEthersSigner()
-  const { isWrongNetwork } = useCurrentNetwork()
+export const useMarketsForBorrower = (borrower?: string) => {
+  const { isWrongNetwork, provider, signer } = useEthersProvider()
+
+  const signerOrProvider = signer ?? provider
+  console.log(
+    `logging from useMarketsForBorrower.ts: ${borrower} | have provider: ${!!provider} | isWrongNetwork: ${isWrongNetwork}`,
+  )
 
   return useMarketsForBorrowerQuery({
-    borrower: address,
-    provider: signer,
-    enabled: !!address && !!signer && !isWrongNetwork,
+    borrower,
+    provider: signerOrProvider,
+    enabled: !!signerOrProvider && !isWrongNetwork,
   })
 }

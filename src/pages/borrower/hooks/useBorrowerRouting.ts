@@ -10,22 +10,70 @@ import { useBorrowerInvitation } from "../../../hooks/useBorrowerInvitation"
 import { TargetChainId } from "../../../config/networks"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 
+export enum BorrowerAuthStatus {
+  NotLoggedIn,
+  Registered,
+  NotInvited,
+  PendingInvitation,
+  PendingRegistration,
+}
+
+export const useBorrowerInvitationRedirect = () => {
+  const { address } = useAccount()
+  const { data, isLoading, isSuccess, isPaused } = useGetController()
+  const { data: invitation, isLoading: isLoadingInvitation } =
+    useBorrowerInvitation(address)
+  const isRegisteredBorrower = data?.isRegisteredBorrower
+
+  // - If user is not logged in, no redirect
+  if (!address) {
+    return { hideNewMarketButton: true }
+  }
+  if (isRegisteredBorrower) {
+    return {}
+  }
+  if (isLoading || isLoadingInvitation || !isSuccess) {
+    return { hideNewMarketButton: true }
+  }
+  if (!invitation) {
+    return {
+      message: `Want to borrow on Wildcat?`,
+      buttonText: "Go to whitelisting",
+      url: `${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`,
+    }
+  }
+  if (!invitation.timeAccepted) {
+    return {
+      message: "You have been invited to register as a Wildcat borrower.",
+      buttonText: "Accept",
+      url: `${BASE_PATHS.Borrower}/${BORROWER_PATHS.ServiceAgreement}`,
+    }
+  }
+  return {
+    message: "The Wildcat team is reviewing your registration.",
+  }
+}
+
 export const useBorrowerRouting = () => {
   const { address } = useAccount()
-  const { data, isLoading, isSuccess } = useGetController()
+  const { data, isLoading, isSuccess, isPaused, isFetching } =
+    useGetController()
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const { isTestnet } = useCurrentNetwork()
+  // const { isTestnet } = useCurrentNetwork()
   const { data: invitation, isLoading: isLoadingInvitation } =
     useBorrowerInvitation(address)
 
-  console.log(`logging from useBorrowerRouting.ts`)
+  // console.log(
+  //   `logging from useBorrowerRouting.ts paused: ${isPaused} | loading: ${isLoading} | fetching: ${isFetching} | success: ${isSuccess} | address: ${address} | pathname: ${pathname} | data: ${data} | invitation: ${invitation}}`,
+  // )
   useEffect(() => {
     const isWhitelistPage =
       pathname === `${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`
     const isAgreementPage =
       pathname === `${BASE_PATHS.Borrower}/${BORROWER_PATHS.ServiceAgreement}`
     const isRegisteredBorrower = data?.isRegisteredBorrower
+    const isIndexPage = pathname === BASE_PATHS.Borrower
     const isPendingRegistrationPage =
       pathname ===
       `${BASE_PATHS.Borrower}/${BORROWER_PATHS.PendingRegistration}`
@@ -36,59 +84,52 @@ export const useBorrowerRouting = () => {
       )}`,
     )
 
-    console.log({
-      isLoading,
-      isRegisteredBorrower,
-      isWhitelistPage,
-      isAgreementPage,
-      isSuccess,
-      invitation,
-    })
+    const temporaryPages = [
+      `${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`,
+      `${BASE_PATHS.Borrower}/${BORROWER_PATHS.ServiceAgreement}`,
+      `${BASE_PATHS.Borrower}/${BORROWER_PATHS.PendingRegistration}`,
+    ]
+    const isOnAnyTemporaryPage = temporaryPages.some(
+      (page) => pathname === page,
+    )
 
-    if (!isLoading && !isLoadingInvitation) {
-      if (isMarketPage) return
+    const invitationFlowPage = () => {
+      // - If user is registered borrower, go to index page
+      if (isRegisteredBorrower) return BASE_PATHS.Borrower
+      if (!isSuccess) return undefined
+      // - If user does not have an invitation, go to whitelisting page
+      if (!invitation)
+        return `${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`
+      // - If user has an unsigned invitation, go to agreement page
+      if (!invitation.timeAccepted)
+        return `${BASE_PATHS.Borrower}/${BORROWER_PATHS.ServiceAgreement}`
+      // - If user has a signed invitation, go to pending registration page
+      return `${BASE_PATHS.Borrower}/${BORROWER_PATHS.PendingRegistration}`
+    }
+    /*
+    On market page and index page, skip.
 
-      if (invitation) {
-        // If there is a pending un-signed invitation, go to agreement page
-        if (!invitation.timeAccepted) {
-          if (!isAgreementPage) {
-            navigate(
-              `${BASE_PATHS.Borrower}/${BORROWER_PATHS.ServiceAgreement}`,
-            )
-          }
-        } else if (
-          isRegisteredBorrower &&
-          (isWhitelistPage || isAgreementPage || isPendingRegistrationPage)
-        ) {
-          // If there is a signed invitation and borrower is registered, go to index page
-          navigate(BASE_PATHS.Borrower)
-        } else if (!isPendingRegistrationPage) {
-          navigate(
-            `${BASE_PATHS.Borrower}/${BORROWER_PATHS.PendingRegistration}`,
-          )
-        }
+    Invitation page:
+      - If user is registered borrower, go to index page
+      - If user does not have an invitation, go to whitelisting page
+      - If user has an unsigned invitation, go to agreement page
+      - If user has a signed invitation, go to pending registration page
 
-        return
+    Skip routing logic if:
+      - User is a registered borrower and not on a temporary page
+    */
+
+    const goTo = (page: string | undefined) => {
+      if (page && pathname !== page) {
+        navigate(page)
       }
+    }
 
-      // Go to whitelisting page if borrower is not registered or invited
-      if (
-        isSuccess &&
-        !isRegisteredBorrower &&
-        !isWhitelistPage &&
-        !isTestnet
-      ) {
-        navigate(`${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`)
-        return
-      }
-
-      // Go to index page if borrower is registered and not on index page
-      if (
-        isSuccess &&
-        (isRegisteredBorrower || isTestnet) &&
-        (isWhitelistPage || isAgreementPage || isPendingRegistrationPage)
-      ) {
-        navigate(BASE_PATHS.Borrower)
+    if (!address || (!isLoading && !isLoadingInvitation)) {
+      if (isMarketPage || isIndexPage) return
+      if (!isRegisteredBorrower || isOnAnyTemporaryPage) {
+        const invitationPage = invitationFlowPage()
+        goTo(invitationPage)
       }
     }
   }, [
@@ -97,11 +138,11 @@ export const useBorrowerRouting = () => {
     isLoadingInvitation,
     data?.isRegisteredBorrower,
     pathname,
-    invitation,
+    invitation?.timeAccepted,
   ])
 
   return {
-    isLoading,
-    isLoadingInvitation,
+    isLoading: address ? isLoading : false,
+    isLoadingInvitation: address ? isLoadingInvitation : false,
   }
 }

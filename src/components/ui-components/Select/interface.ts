@@ -1,17 +1,28 @@
 import { ChangeHandler } from "react-hook-form"
 
-export type SelectOptionItem = {
-  value: string
+export type SelectOptionItem<T = string> = {
+  value: T
   id: string
   label: string
 }
 
-export type SelectProps = {
-  selected: SelectOptionItem | null
-  onChange: (value: SelectOptionItem | null) => void
+export type SelectProps<
+  V = string,
+  O extends SelectOptionItem<V> = SelectOptionItem<V>,
+> = {
+  selected: O | null
   onBlur?: ChangeHandler
-  options: SelectOptionItem[]
+  options: O[]
   placeholder?: string
   className?: string
-  noneOption?: boolean
-}
+  disabled?: boolean
+} & (
+  | {
+      noneOption: true
+      onChange: (value: O | null) => void
+    }
+  | {
+      noneOption?: false
+      onChange: (value: O) => void
+    }
+)

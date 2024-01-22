@@ -2,10 +2,12 @@ import { getMarketAccount, Market, Signer } from "@wildcatfi/wildcat-sdk"
 import { useAccount } from "wagmi"
 
 import { useQuery } from "@tanstack/react-query"
+import { constants } from "ethers"
 import { useEthersSigner } from "../modules/hooks"
 import { useCurrentNetwork } from "./useCurrentNetwork"
 import { useMarketAccount } from "./useMarketAccount"
 import { TargetChainId } from "../config/networks"
+import { useEthersProvider } from "../modules/hooks/useEthersSigner"
 
 export const GET_MARKET_ACCOUNT_KEY = "get-market-account"
 
@@ -28,15 +30,14 @@ export const GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY =
 export const useGetMarketAccountForBorrowerLegacy = (
   market: Market | undefined,
 ) => {
-  const { address } = useAccount()
-  const signer = useEthersSigner()
-  const { isWrongNetwork } = useCurrentNetwork()
+  const { provider, signer, isWrongNetwork, address } = useEthersProvider()
+  const signerOrProvider = signer ?? provider
 
   async function getMarketAccountFn() {
     const marketAccount = await getMarketAccount(
       TargetChainId,
-      signer as Signer,
-      address as string,
+      signerOrProvider as Signer,
+      address ?? constants.AddressZero,
       market as Market,
     )
     return marketAccount
@@ -45,7 +46,7 @@ export const useGetMarketAccountForBorrowerLegacy = (
   return useQuery({
     queryKey: [GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY, address, market],
     queryFn: getMarketAccountFn,
-    enabled: !!market && !!address && !!signer && !isWrongNetwork,
+    enabled: !!market && !!signerOrProvider && !isWrongNetwork,
     keepPreviousData: true,
     refetchOnMount: false,
   })

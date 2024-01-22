@@ -7,6 +7,7 @@ import {
   Table,
   TableCell,
   TableRow,
+  Tooltip,
 } from "../../../../../../components/ui-components"
 import { WithdrawalsTableProps } from "./interface"
 import { EtherscanBaseUrl } from "../../../../../../config/networks"
@@ -34,12 +35,7 @@ export const ThisCycleTable = ({
         className: "w-40",
       },
       {
-        title: "Requested",
-        align: "start",
-        className: "w-32",
-      },
-      {
-        title: "Outstanding",
+        title: "Amount",
         align: "end",
         className: "w-32",
       },
@@ -72,13 +68,16 @@ export const ThisCycleTable = ({
             <TableCell justify="start">
               {dayjs(withdrawal.blockTimestamp * 1000).format(DATE_FORMAT)}
             </TableCell>
-            <TableCell justify="start">
-              {withdrawal.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
-            </TableCell>
             <TableCell justify="end">
-              {withdrawal
-                .getNormalizedAmountOwed(batch)
-                .format(TOKEN_FORMAT_DECIMALS, true)}
+              <Tooltip
+                content={withdrawal
+                  .getNormalizedTotalAmount(batch)
+                  .format(batch.market.decimals, true)}
+              >
+                {withdrawal
+                  .getNormalizedTotalAmount(batch)
+                  .format(TOKEN_FORMAT_DECIMALS, true)}
+              </Tooltip>
             </TableCell>
           </TableRow>
         )),

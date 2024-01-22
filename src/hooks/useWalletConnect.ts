@@ -10,10 +10,8 @@ export const useWalletConnect = () => {
   const { isOpen, setIsWalletModalOpen } = useWalletConnectModalStore()
 
   useEffect(() => {
-    if (!isConnected || isWrongNetwork) {
-      if (!isOpen) {
-        setIsWalletModalOpen(true)
-      }
+    if (isConnected && isWrongNetwork && !isOpen) {
+      setIsWalletModalOpen(true)
     }
   }, [isConnected, isOpen, setIsWalletModalOpen])
 

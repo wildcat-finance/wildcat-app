@@ -11,7 +11,7 @@ const LendersSection = () => {
   const { isLoading } = useLenderRouting()
   const { isWrongNetwork } = useCurrentNetwork()
 
-  if (!isConnected || isWrongNetwork) {
+  if (isConnected && isWrongNetwork) {
     return <div />
   }
 

@@ -57,7 +57,7 @@ export function useGetWithdrawals(
       market.underlyingToken.getAmount(0),
     )
     const activeWithdrawalsTotalOwed =
-      activeWithdrawal?.normalizedAmountOwed ??
+      activeWithdrawal?.normalizedTotalAmount ??
       market.underlyingToken.getAmount(0)
 
     return {
@@ -138,7 +138,7 @@ export function useGetWithdrawals(
       market.underlyingToken.getAmount(0),
     )
     const activeWithdrawalsTotalOwed =
-      withdrawals.activeWithdrawal?.normalizedAmountOwed ??
+      withdrawals.activeWithdrawal?.normalizedTotalAmount ??
       market.underlyingToken.getAmount(0)
 
     return {

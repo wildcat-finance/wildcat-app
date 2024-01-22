@@ -1,27 +1,18 @@
 import { useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { useGetController } from "../../../hooks/useGetController"
+import { useAccount } from "wagmi"
 import { BASE_PATHS } from "../../../routes/constants"
 import { LENDERS_PATH } from "../routes/constants"
 import { useHasSignedSla } from "../../../hooks/useHasSignedSla"
 
 export const useLenderRouting = () => {
-  const { isLoading, isSuccess } = useGetController()
+  const { address } = useAccount()
   const { hasSignedAgreement, isLoading: isLoadingSla } = useHasSignedSla()
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
-  console.log(`logging from useLenderRouting.ts`)
-
-  console.log({
-    isLoading,
-    isSuccess,
-    hasSignedAgreement,
-    isLoadingSla,
-  })
-
   useEffect(() => {
-    if (!isLoading && !isLoadingSla) {
+    if (!address || !isLoadingSla) {
       const isIndexPage = pathname === BASE_PATHS.Lender
       const isAgreementPage =
         pathname === `${BASE_PATHS.Lender}/${LENDERS_PATH.ServiceAgreement}`
@@ -36,7 +27,8 @@ export const useLenderRouting = () => {
         `hasSignedAgreement: ${hasSignedAgreement} ${pathname} ind ${isIndexPage} agr ${isAgreementPage}`,
       )
 
-      if ((isSuccess && isIndexPage && hasSignedAgreement) || isMarketPage) {
+      // If user not logged in, no redirect
+      if ((isIndexPage && (hasSignedAgreement || !address)) || isMarketPage) {
         return
       }
 
@@ -48,13 +40,13 @@ export const useLenderRouting = () => {
         return
       }
 
-      if (isSuccess && (isIndexPage || isAgreementPage)) {
+      if (isIndexPage || isAgreementPage) {
         navigate(`${BASE_PATHS.Lender}`)
       }
     }
-  }, [isSuccess, pathname, hasSignedAgreement, isLoading, isLoadingSla])
+  }, [pathname, hasSignedAgreement, isLoadingSla])
 
   return {
-    isLoading,
+    isLoading: address && isLoadingSla,
   }
 }

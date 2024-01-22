@@ -34,6 +34,7 @@ const BorrowAssets = ({
     marketDisabled ||
     maxBorrowAmount.eq(0) ||
     underlyingBorrowAmount.gt(maxBorrowAmount) ||
+    underlyingBorrowAmount.eq(0) ||
     isTxInProgress
 
   const leftBorrowAmount = maxBorrowAmount.sub(underlyingBorrowAmount)

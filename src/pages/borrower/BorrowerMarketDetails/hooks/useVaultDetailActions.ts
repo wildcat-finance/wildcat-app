@@ -688,3 +688,41 @@ export const useDeauthorizeLenders = (
     },
   })
 }
+
+export const useResetReserveRatio = (
+  marketAccount: MarketAccount,
+  controllerAddress: string,
+) => {
+  const { data: controller } = useGetControllerContract(controllerAddress)
+  const client = useQueryClient()
+
+  return useMutation({
+    mutationFn: async () => {
+      if (!controller) {
+        toastifyError("Controller Not Found")
+        return
+      }
+      const resetReserveRatio = async () => {
+        const tx = await controller.resetReserveRatio(
+          marketAccount.market.address,
+        )
+        return tx.wait()
+      }
+
+      const receipt = await toastifyRequest(resetReserveRatio(), {
+        pending: "Resetting Reserve Ratio...",
+        success: "Reserve Ratio successfully reset!",
+        error: "Error resetting reserve ratio",
+      })
+      await waitForSubgraphSync(receipt.blockNumber)
+    },
+    onSuccess() {
+      client.invalidateQueries({
+        queryKey: [GET_BORROWER_MARKET_ACCOUNT_LEGACY_KEY],
+      })
+    },
+    onError(error) {
+      toastifyError(`Error Resetting Reserve Ratio: ${error}`)
+    },
+  })
+}

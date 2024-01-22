@@ -13,13 +13,14 @@ import {
   SubgraphGetLenderAccountForMarketQueryVariables,
   SubgraphGetMarketQueryVariables,
 } from "@wildcatfi/wildcat-sdk/dist/gql/graphql"
-import { BigNumber } from "ethers"
+import { BigNumber, constants } from "ethers"
 import { useAccount } from "wagmi"
 import { useEthersSigner } from "../../../modules/hooks"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 import { POLLING_INTERVAL } from "../../../config/polling"
 import { SubgraphClient } from "../../../config/subgraph"
 import { TargetChainId } from "../../../config/networks"
+import { useEthersProvider } from "../../../modules/hooks/useEthersSigner"
 
 export const GET_LENDER_MARKET_ACCOUNT_KEY = "get-lender-market-account"
 
@@ -136,14 +137,13 @@ export function useLenderMarketAccountQuery({
 }
 
 export const useLenderMarketAccount = (market: Market | undefined) => {
-  const { address } = useAccount()
-  const signer = useEthersSigner()
-  const { isWrongNetwork } = useCurrentNetwork()
+  const { address, signer, provider, isWrongNetwork } = useEthersProvider()
+  const signerOrProvider = signer ?? provider
 
   return useLenderMarketAccountQuery({
     market,
-    lender: address,
-    provider: signer,
-    enabled: !!market && !!address && !!signer && !isWrongNetwork,
+    lender: address ?? constants.AddressZero,
+    provider: signerOrProvider,
+    enabled: !!market && !!signerOrProvider && !isWrongNetwork,
   })
 }
