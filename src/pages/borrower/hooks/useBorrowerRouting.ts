@@ -25,9 +25,14 @@ export const useBorrowerInvitationRedirect = () => {
     useBorrowerInvitation(address)
   const isRegisteredBorrower = data?.isRegisteredBorrower
 
-  // - If user is not logged in, no redirect
+  // - If user is not logged in, show application link
   if (!address) {
-    return { hideNewMarketButton: true }
+    return {
+      hideNewMarketButton: true,
+      message: "Want to borrow on Wildcat?",
+      buttonText: "Apply here",
+      url: `https://rvficirw76q.typeform.com/to/FKBzhnmo`,
+    }
   }
   if (isRegisteredBorrower) {
     return {}
@@ -38,8 +43,8 @@ export const useBorrowerInvitationRedirect = () => {
   if (!invitation) {
     return {
       message: `Want to borrow on Wildcat?`,
-      buttonText: "Go to whitelisting",
-      url: `${BASE_PATHS.Borrower}/${BORROWER_PATHS.Whitelisting}`,
+      buttonText: "Apply here",
+      url: `https://rvficirw76q.typeform.com/to/FKBzhnmo`,
     }
   }
   if (!invitation.timeAccepted) {
