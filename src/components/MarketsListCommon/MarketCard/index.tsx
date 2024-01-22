@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import cn from "classnames"
 
 import dayjs from "dayjs"
@@ -133,17 +133,11 @@ function MarketCard({
       </div>
 
       <div className="w-full p-3 bg-tint-10">
-        <Button
-          onClick={() =>
-            navigate(
-              `${basePath}/market-details/${market.address.toLowerCase()}`,
-            )
-          }
-          className="w-full"
-          variant="black"
-        >
-          Go To Market Details
-        </Button>
+        <Link to={`${basePath}/market-details/${market.address.toLowerCase()}`}>
+          <Button className="w-full" variant="black">
+            Go To Market Details
+          </Button>
+        </Link>
       </div>
     </div>
   )
