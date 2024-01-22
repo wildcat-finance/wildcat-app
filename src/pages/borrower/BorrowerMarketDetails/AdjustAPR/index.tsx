@@ -1,4 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react"
+import dayjs from "dayjs"
 
 import { Button } from "../../../../components/ui-components"
 import { AdjustAPRModal } from "../Modals"
@@ -10,7 +11,10 @@ import {
   useResetReserveRatio,
 } from "../hooks/useVaultDetailActions"
 import { AdjustAprProps } from "./interface"
-import { MARKET_PARAMS_DECIMALS } from "../../../../utils/formatters"
+import {
+  MARKET_PARAMS_DECIMALS,
+  timeUntilCountdown,
+} from "../../../../utils/formatters"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { SDK_ERRORS_MAPPING } from "../../../../utils/forms/errors"
 import { useTransactionWait } from "../../../../store/useTransactionWait"
@@ -105,13 +109,18 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
     newReserveRatio !== null && market.reserveRatioBips !== newReserveRatio
   const isLoading =
     adjustAprLoading || terminateMarketLoading || isProcessing || isApproving
-  const disabledApr =
-    marketDisabled ||
-    !apr ||
-    parseFloat(apr) <= 0 ||
-    !!error ||
-    isLoading ||
-    isTxInProgress
+  const globalDisabled =
+    marketDisabled || !!error || isLoading || isTxInProgress
+
+  const disabledApr = globalDisabled || !apr || parseFloat(apr) <= 0
+
+  const tempReserveRatioExpiry = dayjs(
+    market.temporaryReserveRatioExpiry * 1000,
+  )
+  const disabledReset =
+    globalDisabled ||
+    !market.temporaryReserveRatio ||
+    tempReserveRatioExpiry.isAfter(dayjs())
 
   return (
     <>
@@ -142,8 +151,20 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
           className="w-44 px-2 whitespace-nowrap"
           variant="green"
           onClick={handleResetReserveRatio}
+          disabled={disabledReset}
         >
           Reset Reserve Ratio
+          {market.temporaryReserveRatio &&
+            tempReserveRatioExpiry.isAfter(dayjs()) && (
+              <>
+                <br />
+                in{" "}
+                {timeUntilCountdown(
+                  Date.now(),
+                  market.temporaryReserveRatioExpiry * 1000,
+                )}
+              </>
+            )}
         </Button>
       </div>
 

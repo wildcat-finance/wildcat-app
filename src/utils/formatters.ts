@@ -73,6 +73,24 @@ export const formatSecsToHours = (seconds: number) => {
   return timeString.trim()
 }
 
+const padZero = (number: number): string =>
+  number < 10 ? `0${number}` : number.toString()
+
+export const timeUntilCountdown = (
+  fromTimestamp: number,
+  toTimestamp: number,
+): string => {
+  const distance = toTimestamp - fromTimestamp
+
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24))
+  const hours = Math.floor(
+    (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+  )
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+
+  return `${padZero(days)}d ${padZero(hours)}h ${padZero(minutes)}m`
+}
+
 // <---- TIMESTAMP TO DATE FORMATTERS ---->
 export const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 export const timestampToDateFormatted = (timestamp: number) =>
