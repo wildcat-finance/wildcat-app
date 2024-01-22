@@ -7,6 +7,7 @@ import {
   Table,
   TableCell,
   TableRow,
+  Tooltip,
 } from "../../../../../../components/ui-components"
 import { WithdrawalsTableProps } from "./interface"
 import { EtherscanBaseUrl } from "../../../../../../config/networks"
@@ -66,13 +67,16 @@ export const ThisCycleTable = ({ withdrawals }: WithdrawalsTableProps) => (
               {dayjs(request.blockTimestamp * 1000).format(DATE_FORMAT)}
             </TableCell>
             <TableCell justify="end">
-              {request.normalizedAmount.format(TOKEN_FORMAT_DECIMALS, true)}
+              <Tooltip
+                content={request
+                  .getNormalizedTotalAmount(withdrawal.batch)
+                  .format(withdrawal.market.decimals, true)}
+              >
+                {request
+                  .getNormalizedTotalAmount(withdrawal.batch)
+                  .format(TOKEN_FORMAT_DECIMALS, true)}
+              </Tooltip>
             </TableCell>
-            {/* <TableCell justify="end"> */}
-            {/*  {request */}
-            {/*    .getNormalizedAmountOwed(withdrawal.batch) */}
-            {/*    .format(TOKEN_FORMAT_DECIMALS, true)} */}
-            {/* </TableCell> */}
           </TableRow>
         )),
       )}

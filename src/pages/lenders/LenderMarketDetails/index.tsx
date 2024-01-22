@@ -13,6 +13,8 @@ import LenderMarketOverview from "./LenderMarketOverview"
 import { useAddToken } from "../../../hooks/useAddToken"
 import { useLenderMarketAccount } from "../hooks/useLenderMarketAccount"
 import { useTransactionWait } from "../../../store/useTransactionWait"
+import { getEffectiveLenderRole } from "../../../utils/lenderRole"
+import { LenderStatus } from "../../../types/vaults"
 
 export function LenderMarketDetails() {
   const navigate = useNavigate()
@@ -52,8 +54,8 @@ export function LenderMarketDetails() {
 
   const isLender =
     isConnected &&
-    [LenderRole.DepositAndWithdraw, LenderRole.WithdrawOnly].includes(
-      marketAccount.role,
+    [LenderStatus.DepositAndWithdraw, LenderStatus.WithdrawOnly].includes(
+      getEffectiveLenderRole(marketAccount),
     )
 
   return (
