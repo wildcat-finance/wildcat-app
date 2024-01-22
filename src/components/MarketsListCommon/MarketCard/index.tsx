@@ -11,6 +11,7 @@ import {
 import {
   DATE_FORMAT,
   formatBps,
+  formatTokenWithCommas,
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
 } from "../../../utils/formatters"
@@ -103,7 +104,7 @@ function MarketCard({
         />
         <TableItem
           title="Maximum Capacity"
-          value={`${market.maxTotalSupply.format(TOKEN_FORMAT_DECIMALS)} ${
+          value={`${formatTokenWithCommas(market.maxTotalSupply)} ${
             market.underlyingToken.symbol
           }`}
         />
