@@ -1,0 +1,55 @@
+.component__container {
+    margin-bottom: 56px;
+}
+
+.barchart__container {
+    display: flex;
+    flex-direction: row;
+    gap: 0 2px;
+    width: 100%;
+    height: 24px;
+    margin-bottom: 16px;
+}
+
+.barchart__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 12px;
+    color: #FFF;
+}
+
+.barchart__item:first-child {
+    border-radius: 8px 0 0 8px;
+}
+
+.barchart__item:last-child {
+    border-radius: 0 8px 8px 0;
+}
+
+.barchart__legend {
+    display: flex;
+    flex-direction: row;
+    gap: 0 16px;
+    width: 100%;
+
+    font-size: 12px;
+}
+
+.barchart__legend-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0 8px;
+}
+
+.barchart__legend-item:first-child {
+    margin-left: 4px;
+}
+
+.barchart__legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
