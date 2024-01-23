@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { HiSortAscending, HiSortDescending } from "react-icons/hi"
 import { Market } from "@wildcatfi/wildcat-sdk"
 import { useAccount } from "wagmi"
@@ -83,9 +83,14 @@ function BorrowerMarketsList() {
               <AiOutlineExclamationCircle height={24} />
               <span>{inviteMessage}</span>
               {inviteUrl ? (
-                <Button onClick={() => navigate(inviteUrl)} variant="blue">
-                  <span className="text-lg">{inviteButtonText}</span>
-                </Button>
+                <Link
+                  target={inviteUrl.startsWith("http") ? "_blank" : undefined}
+                  to={inviteUrl}
+                >
+                  <Button variant="blue">
+                    <span className="text-lg">{inviteButtonText}</span>
+                  </Button>
+                </Link>
               ) : (
                 <div />
               )}

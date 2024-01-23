@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import cn from "classnames"
 
 import dayjs from "dayjs"
@@ -11,6 +11,7 @@ import {
 import {
   DATE_FORMAT,
   formatBps,
+  formatTokenWithCommas,
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
 } from "../../../utils/formatters"
@@ -103,7 +104,7 @@ function MarketCard({
         />
         <TableItem
           title="Maximum Capacity"
-          value={`${market.maxTotalSupply.format(TOKEN_FORMAT_DECIMALS)} ${
+          value={`${formatTokenWithCommas(market.maxTotalSupply)} ${
             market.underlyingToken.symbol
           }`}
         />
@@ -132,17 +133,11 @@ function MarketCard({
       </div>
 
       <div className="w-full p-3 bg-tint-10">
-        <Button
-          onClick={() =>
-            navigate(
-              `${basePath}/market-details/${market.address.toLowerCase()}`,
-            )
-          }
-          className="w-full"
-          variant="black"
-        >
-          Go To Market Details
-        </Button>
+        <Link to={`${basePath}/market-details/${market.address.toLowerCase()}`}>
+          <Button className="w-full" variant="black">
+            Go To Market Details
+          </Button>
+        </Link>
       </div>
     </div>
   )
