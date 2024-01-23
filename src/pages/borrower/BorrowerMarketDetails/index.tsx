@@ -19,6 +19,8 @@ import { BASE_PATHS } from "../../../routes/constants"
 import { useTransactionWait } from "../../../store/useTransactionWait"
 import { TerminateMarket } from "./TerminateMarket"
 import { useBorrowerListOptions } from "../../../store/useBorrowerListOptions"
+import { MarketBarchart } from "../../../components/ui-components/MarketBarchart"
+import { BorrowerBarchart } from "./BorrowerBarchart"
 
 const BorrowerMarketDetails = () => {
   const { isTxInProgress } = useTransactionWait()
@@ -106,6 +108,8 @@ const BorrowerMarketDetails = () => {
           </div>
         </Paper>
       )}
+
+      <BorrowerBarchart />
 
       <BorrowerMarketOverview market={market} />
 
