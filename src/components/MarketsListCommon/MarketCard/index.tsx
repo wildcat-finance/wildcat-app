@@ -98,7 +98,7 @@ function MarketCard({
         />
         {showBalance && marketBalance && (
           <TableItem
-            title="Loaned Amount"
+            title="My Loaned Amount"
             value={`${marketBalance.format(TOKEN_FORMAT_DECIMALS)} ${
               market.underlyingToken.symbol
             }`}
