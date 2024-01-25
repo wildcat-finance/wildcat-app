@@ -93,9 +93,7 @@ function MarketCard({
         />
         <TableItem
           title="Maximum Capacity"
-          value={`${formatTokenWithCommas(market.maxTotalSupply)} ${
-            market.underlyingToken.symbol
-          }`}
+          value={formatTokenWithCommas(market.maxTotalSupply, true)}
         />
         {showBalance && marketBalance && (
           <TableItem
@@ -108,7 +106,7 @@ function MarketCard({
         {showAvailableToLend && (
           <TableItem
             title="Available to Lend"
-            value={market.maximumDeposit.format(TOKEN_FORMAT_DECIMALS, true)}
+            value={formatTokenWithCommas(market.maximumDeposit, true)}
           />
         )}
         {variant === "borrower" && (
