@@ -108,7 +108,7 @@ function MarketCard({
         {showAvailableToLend && (
           <TableItem
             title="Available to Lend"
-            value={account.maximumDeposit.format(TOKEN_FORMAT_DECIMALS, true)}
+            value={market.maximumDeposit.format(TOKEN_FORMAT_DECIMALS, true)}
           />
         )}
         {variant === "borrower" && (
