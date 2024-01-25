@@ -23,13 +23,18 @@ export const MARKET_PARAMS_DECIMALS: Partial<{
   withdrawalBatchDuration: 1,
 }
 
-export const formatTokenWithCommas = (tokenAmount: TokenAmount) =>
-  parseFloat(tokenAmount.format(TOKEN_FORMAT_DECIMALS)).toLocaleString(
-    "en-US",
-    {
-      maximumFractionDigits: 2,
-    },
-  )
+export const formatTokenWithCommas = (
+  tokenAmount: TokenAmount,
+  withSymbol?: boolean,
+) => {
+  const parsedAmountWithComma = parseFloat(
+    tokenAmount.format(TOKEN_FORMAT_DECIMALS),
+  ).toLocaleString("en-US", {
+    maximumFractionDigits: 2,
+  })
+
+  return `${parsedAmountWithComma}${withSymbol ? ` ${tokenAmount.symbol}` : ""}`
+}
 
 export const formatBps = (bps: number, fixed?: number) => {
   const fixedNum = (bps / 100).toFixed(fixed || 2)

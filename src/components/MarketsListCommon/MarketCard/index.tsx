@@ -100,7 +100,7 @@ function MarketCard({
         {showBalance && marketBalance && (
           <TableItem
             title="My Loan"
-            value={`${marketBalance.format(TOKEN_FORMAT_DECIMALS)} ${
+            value={`${formatTokenWithCommas(marketBalance)} ${
               market.underlyingToken.symbol
             }`}
           />
@@ -108,13 +108,13 @@ function MarketCard({
         {showAvailableToLend && (
           <TableItem
             title="Available to Lend"
-            value={account.maximumDeposit.format(TOKEN_FORMAT_DECIMALS, true)}
+            value={formatTokenWithCommas(market.maximumDeposit, true)}
           />
         )}
         {variant === "borrower" && (
           <TableItem
             title="Available To Borrow"
-            value={market.borrowableAssets.format(TOKEN_FORMAT_DECIMALS, true)}
+            value={formatTokenWithCommas(market.borrowableAssets, true)}
           />
         )}
         {market.deployedEvent && (
