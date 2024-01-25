@@ -172,11 +172,13 @@ function LenderMarketsList() {
         {filteredMarketAccounts.map((account) => (
           <div key={account.market.address} className="w-1/3 px-2.5 py-2.5">
             <MarketCard
+              showBorrower
               account={account}
               className="w-full"
               basePath={BASE_PATHS.Lender}
               showBalance={!!address}
               showRole={!!address}
+              showAvailableToLend={!!address}
               variant="lender"
             />
           </div>

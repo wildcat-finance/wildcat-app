@@ -18,6 +18,7 @@ import AdjustMaximumCapacity from "./AdjustMaximumCapacity"
 import { BASE_PATHS } from "../../../routes/constants"
 import { useTransactionWait } from "../../../store/useTransactionWait"
 import { TerminateMarket } from "./TerminateMarket"
+import { useBorrowerListOptions } from "../../../store/useBorrowerListOptions"
 
 const BorrowerMarketDetails = () => {
   const { isTxInProgress } = useTransactionWait()
@@ -27,6 +28,7 @@ const BorrowerMarketDetails = () => {
   const { data: market, isInitialLoading: isMarketLoading } = useGetMarket({
     marketAddress,
   })
+  const { onlyOwnMarkets } = useBorrowerListOptions()
 
   const { data: marketAccount } = useGetMarketAccountForBorrowerLegacy(market)
 
@@ -55,11 +57,13 @@ const BorrowerMarketDetails = () => {
         disabled={isTxInProgress}
       >
         <BackArrow />
-        <p className="text-xs font-normal underline">My Markets</p>
+        <p className="text-xs font-normal underline">
+          {onlyOwnMarkets ? "My" : "All"} Markets
+        </p>
       </button>
       <div className="w-full flex justify-between mb-8">
         <div className="text-green text-2xl font-bold">{market.name}</div>
-        <TerminateMarket marketAccount={marketAccount} />
+        {isBorrower && <TerminateMarket marketAccount={marketAccount} />}
       </div>
       {isBorrower && (
         <Paper className="flex flex-col gap-y-5 border-0 px-6 py-5 mb-14 bg-tint-10 border-tint-8 rounded-3xl">

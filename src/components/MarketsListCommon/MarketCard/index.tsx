@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import cn from "classnames"
 
 import dayjs from "dayjs"
@@ -18,6 +18,7 @@ import {
 import { EtherscanBaseUrl } from "../../../config/networks"
 import { getLenderRoleIcon } from "../../../utils/lenderRole"
 import { getBorrowerRoleIcon } from "../../../utils/borrowerRole"
+import { useBorrowerNameOrAddress } from "../../../hooks/useBorrowerNames"
 
 function MarketCard({
   market: _market,
@@ -28,8 +29,8 @@ function MarketCard({
   basePath,
   variant,
   showRole,
+  showAvailableToLend,
 }: MarketCardProps) {
-  const navigate = useNavigate()
   const market = _market ?? account.market
   const status = getMarketStatus(
     market.isClosed,
@@ -37,6 +38,7 @@ function MarketCard({
     market.isIncurringPenalties,
   )
   const marketBalance = account?.marketBalance
+  const borrowerName = useBorrowerNameOrAddress(market.borrower)
 
   return (
     <div
@@ -72,24 +74,11 @@ function MarketCard({
                 target="_blank"
                 rel="noreferrer"
               >
-                {trimAddress(market.borrower)}
+                {borrowerName || trimAddress(market.borrower)}
               </a>
             }
           />
         )}
-        {/* {showLenderRole && (
-          <TableItem
-            title="Market Access"
-            value={
-              <Chip
-                color={getLenderRoleColor(account)}
-                className="h-auto justify-center px-1 p-1"
-              >
-                {getEffectiveLenderRole(account)}
-              </Chip>
-            }
-          />
-        )} */}
         <TableItem
           title="Underlying Asset"
           value={`${market.underlyingToken.symbol}`}
@@ -110,10 +99,16 @@ function MarketCard({
         />
         {showBalance && marketBalance && (
           <TableItem
-            title="Loaned Amount"
+            title="My Loan"
             value={`${marketBalance.format(TOKEN_FORMAT_DECIMALS)} ${
               market.underlyingToken.symbol
             }`}
+          />
+        )}
+        {showAvailableToLend && (
+          <TableItem
+            title="Available to Lend"
+            value={account.maximumDeposit.format(TOKEN_FORMAT_DECIMALS, true)}
           />
         )}
         {variant === "borrower" && (
