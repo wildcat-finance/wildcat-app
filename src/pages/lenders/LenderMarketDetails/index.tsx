@@ -15,12 +15,14 @@ import { useLenderMarketAccount } from "../hooks/useLenderMarketAccount"
 import { useTransactionWait } from "../../../store/useTransactionWait"
 import { getEffectiveLenderRole } from "../../../utils/lenderRole"
 import { LenderStatus } from "../../../types/vaults"
+import { useLenderListOptions } from "../../../store/useLenderListOptions"
 
 export function LenderMarketDetails() {
   const navigate = useNavigate()
   const { isConnected } = useWalletConnect()
   const { isWrongNetwork } = useCurrentNetwork()
   const { isTxInProgress } = useTransactionWait()
+  const { onlyOwnMarkets } = useLenderListOptions()
 
   const { marketAddress } = useParams()
   const { data: market, isLoading: isMarketLoading } = useGetMarket({
@@ -66,7 +68,9 @@ export function LenderMarketDetails() {
         disabled={isTxInProgress}
       >
         <BackArrow />
-        <p className="text-xs font-normal underline">My Markets</p>
+        <p className="text-xs font-normal underline">
+          {onlyOwnMarkets ? "My" : "All"} Markets
+        </p>
       </button>
       <div className="flex justify-between items-center">
         <div className="w-full flex items-center justify-between mb-8">
