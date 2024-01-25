@@ -29,6 +29,7 @@ function MarketCard({
   basePath,
   variant,
   showRole,
+  showAvailableToLend,
 }: MarketCardProps) {
   const market = _market ?? account.market
   const status = getMarketStatus(
@@ -98,10 +99,16 @@ function MarketCard({
         />
         {showBalance && marketBalance && (
           <TableItem
-            title="My Loaned Amount"
+            title="My Loan"
             value={`${marketBalance.format(TOKEN_FORMAT_DECIMALS)} ${
               market.underlyingToken.symbol
             }`}
+          />
+        )}
+        {showAvailableToLend && (
+          <TableItem
+            title="Available to Lend"
+            value={account.maximumDeposit.format(TOKEN_FORMAT_DECIMALS, true)}
           />
         )}
         {variant === "borrower" && (

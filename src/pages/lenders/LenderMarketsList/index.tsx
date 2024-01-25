@@ -178,6 +178,7 @@ function LenderMarketsList() {
               basePath={BASE_PATHS.Lender}
               showBalance={!!address}
               showRole={!!address}
+              showAvailableToLend={!!address}
               variant="lender"
             />
           </div>
