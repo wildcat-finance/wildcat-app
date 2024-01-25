@@ -93,7 +93,9 @@ function MarketCard({
         />
         <TableItem
           title="Maximum Capacity"
-          value={formatTokenWithCommas(market.maxTotalSupply, true)}
+          value={`${formatTokenWithCommas(market.maxTotalSupply)} ${
+            market.underlyingToken.symbol
+          }`}
         />
         {showBalance && marketBalance && (
           <TableItem
