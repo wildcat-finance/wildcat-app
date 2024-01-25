@@ -100,7 +100,7 @@ function MarketCard({
         {showBalance && marketBalance && (
           <TableItem
             title="My Loan"
-            value={`${marketBalance.format(TOKEN_FORMAT_DECIMALS)} ${
+            value={`${formatTokenWithCommas(marketBalance)} ${
               market.underlyingToken.symbol
             }`}
           />
@@ -114,7 +114,7 @@ function MarketCard({
         {variant === "borrower" && (
           <TableItem
             title="Available To Borrow"
-            value={market.borrowableAssets.format(TOKEN_FORMAT_DECIMALS, true)}
+            value={formatTokenWithCommas(market.borrowableAssets, true)}
           />
         )}
         {market.deployedEvent && (
