@@ -27,35 +27,3 @@
 .barchart__item:last-child {
     border-radius: 0 8px 8px 0;
 }
-
-.barchart__legend {
-    display: flex;
-    flex-direction: row;
-    gap: 0 16px;
-    width: 100%;
-
-    font-size: 12px;
-}
-
-.barchart__legend-item {
-    display: flex;
-    flex-direction: column;
-    width: 25%;
-    gap: 20px 8px;
-    border: 1px solid rgb(244 243 232);
-    padding: 12px;
-    border-radius: 8px;
-}
-
-.barchart__legend-header {
-    display: flex;
-    flex-direction: row;
-    column-gap: 8px;
-    align-items: center;
-}
-
-.barchart__legend-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-}

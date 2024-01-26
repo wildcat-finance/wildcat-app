@@ -1,6 +1,9 @@
 import { Market, TokenAmount } from "@wildcatfi/wildcat-sdk"
 
-import { MarketBarchart } from "../../../../components/ui-components/MarketBarchart"
+import {
+  MarketBarchart,
+  MarketBarchartLegend,
+} from "../../../../components/ui-components"
 import { MarketBarChartItem } from "../../../../components/ui-components/MarketBarchart/interface"
 import { BorrowerMarketStatusChartProps } from "./interface"
 import {
@@ -103,44 +106,15 @@ export const BorrowerMarketStatusChart = ({
   const barData = generateBarData(market, data)
 
   return (
-    <div
-      style={{
-        marginBottom: "56px",
-      }}
-    >
-      <div
-        style={{
-          marginBottom: "24px",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
+    <div className="mb-14">
+      <div className="flex mb-6 justify-between text-base font-bold">
         <div>Total Debt:</div>
         {market.totalBorrowed && (
           <div>{formatTokenWithCommas(market.totalBorrowed, true)}</div>
         )}
       </div>
-
       <MarketBarchart data={barData} />
-
-      <div className="barchart__legend">
-        {barData.map((chartItem) => (
-          <div key={chartItem.label} className="barchart__legend-item">
-            <div className="barchart__legend-header">
-              {chartItem.label}
-              <div
-                className="barchart__legend-dot"
-                style={{
-                  backgroundColor: `${chartItem.color}`,
-                }}
-              />
-            </div>
-            <div>
-              {chartItem.value} {chartItem.asset}
-            </div>
-          </div>
-        ))}
-      </div>
+      <MarketBarchartLegend data={barData} />
     </div>
   )
 }

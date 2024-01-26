@@ -14,7 +14,13 @@ export const MarketBarchart = ({ data }: MarketBarChartProps) => (
         }}
       >
         <div style={{ color: `${chartItem.textColor}` }}>
-          {chartItem.value} {chartItem.asset}
+          {chartItem.label === "Non-collateral Interest" ? (
+            <div />
+          ) : (
+            <div>
+              {chartItem.value} {chartItem.asset}
+            </div>
+          )}
         </div>
       </div>
     ))}
