@@ -101,5 +101,45 @@ export const BorrowerMarketStatusChart = ({
 
   const barData = generateBarData(market, data)
 
-  return <MarketBarchart data={barData} />
+  return (
+    <div
+      style={{
+        marginBottom: "56px",
+      }}
+    >
+      <div
+        style={{
+          marginBottom: "24px",
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <div>Total Debt:</div>
+        {market.totalBorrowed && (
+          <div>{formatTokenWithCommas(market.totalBorrowed, true)}</div>
+        )}
+      </div>
+
+      <MarketBarchart data={barData} />
+
+      <div className="barchart__legend">
+        {barData.map((chartItem) => (
+          <div key={chartItem.label} className="barchart__legend-item">
+            <div className="barchart__legend-header">
+              {chartItem.label}
+              <div
+                className="barchart__legend-dot"
+                style={{
+                  backgroundColor: `${chartItem.color}`,
+                }}
+              />
+            </div>
+            <div>
+              {chartItem.value} {chartItem.asset}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }

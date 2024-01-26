@@ -39,13 +39,19 @@
 
 .barchart__legend-item {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0 8px;
+    flex-direction: column;
+    width: 25%;
+    gap: 20px 8px;
+    border: 1px solid rgb(244 243 232);
+    padding: 12px;
+    border-radius: 8px;
 }
 
-.barchart__legend-item:first-child {
-    margin-left: 4px;
+.barchart__legend-header {
+    display: flex;
+    flex-direction: row;
+    column-gap: 8px;
+    align-items: center;
 }
 
 .barchart__legend-dot {
