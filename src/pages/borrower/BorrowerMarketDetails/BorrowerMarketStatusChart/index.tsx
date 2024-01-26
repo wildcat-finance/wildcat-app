@@ -31,15 +31,23 @@ const generateBarData = (
     borrowableAssets,
     coverageLiquidity,
     underlyingToken,
+    totalDelinquencyFeesAccrued,
+    totalBaseInterestAccrued,
   } = market
   const { activeWithdrawalsTotalOwed, expiredWithdrawalsTotalOwed } =
     withdrawals
+
+  const totalInterestAccrued = (
+    market.totalDelinquencyFeesAccrued ?? underlyingToken.getAmount(0)
+  ).add(market.totalBaseInterestAccrued ?? 0)
 
   const collateralObligations = coverageLiquidity
     .add(activeWithdrawalsTotalOwed)
     .add(expiredWithdrawalsTotalOwed)
 
-  let totalDebt = collateralObligations.add(borrowableAssets)
+  let totalDebt = collateralObligations
+    .add(borrowableAssets)
+    .add(totalInterestAccrued)
 
   if (totalBorrowed) totalDebt = totalDebt.add(totalBorrowed)
 
@@ -60,6 +68,16 @@ const generateBarData = (
       asset: underlyingToken.symbol,
       width: getTokenAmountPercentageWidth(totalDebt, totalBorrowed),
       color: "#BEBECE",
+    })
+  }
+
+  if (totalInterestAccrued.gt(0)) {
+    barData.push({
+      label: "Non-collateral Interest",
+      value: formatTokenWithCommas(totalInterestAccrued),
+      asset: underlyingToken.symbol,
+      width: getTokenAmountPercentageWidth(totalDebt, totalInterestAccrued),
+      color: "#D6D6DE",
     })
   }
 
