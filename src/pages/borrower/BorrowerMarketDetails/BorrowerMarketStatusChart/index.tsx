@@ -88,6 +88,7 @@ const generateBarData = (
       asset: underlyingToken.symbol,
       width: getTokenAmountPercentageWidth(totalDebt, collateralObligations),
       color: "#EFF0F4",
+      textColor: "#000000",
     })
   }
 

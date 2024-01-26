@@ -4,6 +4,7 @@ export type MarketBarChartItem = {
   asset: string
   width: string
   color: string
+  textColor?: string
 }
 
 export type MarketBarChartProps = {

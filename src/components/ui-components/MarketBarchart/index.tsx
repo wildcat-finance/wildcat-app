@@ -13,7 +13,9 @@ export const MarketBarchart = ({ data }: MarketBarChartProps) => (
           backgroundColor: `${chartItem.color}`,
         }}
       >
-        {chartItem.value} {chartItem.asset}
+        <div style={{ color: `${chartItem.textColor}` }}>
+          {chartItem.value} {chartItem.asset}
+        </div>
       </div>
     ))}
   </div>
