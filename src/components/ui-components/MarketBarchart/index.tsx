@@ -1,8 +1,8 @@
 import "./styles.css"
 
-import { MarketBarchartProps } from "./type"
+import { MarketBarChartProps } from "./interface"
 
-export const MarketBarchart = ({ data }: { data: MarketBarchartProps[] }) => (
+export const MarketBarchart = ({ data }: MarketBarChartProps ) => (
   <div className="component__container">
     <div className="barchart__container">
       {data.map((chartItem) => (
