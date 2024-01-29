@@ -4,7 +4,7 @@ import {
   MarketBarchart,
   MarketBarchartLegend,
 } from "../../../../components/ui-components"
-import { MarketBarChartItem } from "../../../../components/ui-components/MarketBarchart/interface"
+import { MarketBarChartItem } from "../../../../components/ui-components/Barchart/MarketBarchart/interface"
 import { BorrowerMarketStatusChartProps } from "./interface"
 import {
   formatTokenWithCommas,
@@ -74,24 +74,25 @@ const generateBarData = (
     })
   }
 
-  if (totalInterestAccrued.gt(0)) {
-    barData.push({
-      label: "Non-collateral Interest",
-      value: formatTokenWithCommas(totalInterestAccrued),
-      asset: underlyingToken.symbol,
-      width: getTokenAmountPercentageWidth(totalDebt, totalInterestAccrued),
-      color: "#D6D6DE",
-    })
-  }
-
   if (collateralObligations.gt(0)) {
     barData.push({
       label: "Collateral Obligations",
       value: formatTokenWithCommas(collateralObligations),
       asset: underlyingToken.symbol,
       width: getTokenAmountPercentageWidth(totalDebt, collateralObligations),
+      color: "#D6D6DE",
+      textColor: "#1414144D",
+    })
+  }
+
+  if (totalInterestAccrued.gt(0)) {
+    barData.push({
+      label: "Non-collateral Interest",
+      value: formatTokenWithCommas(totalInterestAccrued),
+      asset: underlyingToken.symbol,
+      width: getTokenAmountPercentageWidth(totalDebt, totalInterestAccrued),
       color: "#EFF0F4",
-      textColor: "#000000",
+      textColor: "#14141433",
     })
   }
 

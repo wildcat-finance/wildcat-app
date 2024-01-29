@@ -1,17 +1,8 @@
-.barchart__legend {
-    display: flex;
-    flex-direction: row;
-    gap: 0 16px;
-    width: 100%;
-
-    font-size: 12px;
-}
-
 .barchart__legend-item {
     height: fit-content;
     display: flex;
     flex-direction: column;
-    width: 25%;
+    width: 50%;
     border: 1px solid rgb(244 243 232);
     padding: 12px;
     border-radius: 8px;
@@ -37,7 +28,7 @@
     row-gap: 4px;
     margin-bottom: 8px;
 
-    font-size: 8px;
+    font-size: 10px;
 }
 
 .barchart__legend-obligations-value {
