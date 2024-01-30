@@ -19,6 +19,7 @@ import { BASE_PATHS } from "../../../routes/constants"
 import { useTransactionWait } from "../../../store/useTransactionWait"
 import { TerminateMarket } from "./TerminateMarket"
 import { useBorrowerListOptions } from "../../../store/useBorrowerListOptions"
+import { BorrowerMarketStatusChart } from "./BorrowerMarketStatusChart"
 
 const BorrowerMarketDetails = () => {
   const { isTxInProgress } = useTransactionWait()
@@ -106,6 +107,8 @@ const BorrowerMarketDetails = () => {
           </div>
         </Paper>
       )}
+
+      <BorrowerMarketStatusChart market={market} />
 
       <BorrowerMarketOverview market={market} />
 

@@ -1,0 +1,27 @@
+.barchart__legend {
+    display: flex;
+    flex-direction: row;
+    gap: 0 16px;
+    width: 100%;
+    font-size: 12px;
+}
+
+.barchart__legend-obligations-values-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+    margin-bottom: 8px;
+
+    font-size: 10px;
+}
+
+.barchart__legend-obligations-value {
+    display: flex;
+    justify-content: space-between;
+}
+
+.barchart__legend-divider {
+    width: 100%;
+    border-bottom: 1px solid rgb(244 243 232);
+    margin-top: 12px;
+}
