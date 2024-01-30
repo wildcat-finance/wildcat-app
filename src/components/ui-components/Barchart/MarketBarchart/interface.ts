@@ -1,4 +1,5 @@
 export type MarketBarChartItem = {
+  id: string
   label: string
   value: string
   asset: string

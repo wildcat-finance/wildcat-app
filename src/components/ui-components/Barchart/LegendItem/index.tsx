@@ -1,9 +1,13 @@
 import { useState } from "react"
 import { ExpandMore } from "../../icons"
-import { LegendItemProps } from "./type"
+import { LegendItemProps } from "./interface"
 import "./styles.css"
 
-export const LegendItem = ({ chartItem, expandable }: LegendItemProps) => {
+export const LegendItem = ({
+  chartItem,
+  expandable,
+  children,
+}: LegendItemProps) => {
   const [expanded, setExpanded] = useState(false)
 
   const toggleExpanded = (value: boolean) => {
@@ -43,27 +47,9 @@ export const LegendItem = ({ chartItem, expandable }: LegendItemProps) => {
               <ExpandMore className="h-[18px] w-[18px]" />
             )}
           </div>
-          {expanded && (
-            <div className="barchart__legend-obligations-values-container">
-              <div className="barchart__legend-obligations-value">
-                <div>{chartItem.asset}</div>
-                <div>Min Reserves</div>
-              </div>
-              <div className="barchart__legend-obligations-value">
-                <div>{chartItem.asset}</div>
-                <div>Ongoing WDs</div>
-              </div>
-              <div className="barchart__legend-obligations-value">
-                <div>{chartItem.asset}</div>
-                <div>Claimable WDs</div>
-              </div>
-              <div className="barchart__legend-obligations-value">
-                <div>{chartItem.asset}</div>
-                <div>Outstanding WDs</div>
-              </div>
-              <div className="barchart__legend-divider" />
-            </div>
-          )}
+
+          {expanded && children}
+
           <div>
             {chartItem.value} {chartItem.asset}
           </div>

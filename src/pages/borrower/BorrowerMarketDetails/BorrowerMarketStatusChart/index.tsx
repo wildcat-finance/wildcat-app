@@ -2,18 +2,17 @@ import { Market, TokenAmount } from "@wildcatfi/wildcat-sdk"
 
 import {
   MarketBarchart,
-  MarketBarchartLegend,
+  LegendItem,
 } from "../../../../components/ui-components"
 import { MarketBarChartItem } from "../../../../components/ui-components/Barchart/MarketBarchart/interface"
 import { BorrowerMarketStatusChartProps } from "./interface"
-import {
-  formatTokenWithCommas,
-  TOKEN_FORMAT_DECIMALS,
-} from "../../../../utils/formatters"
+import { formatTokenWithCommas } from "../../../../utils/formatters"
 import {
   BorrowerWithdrawalsForMarketResult,
   useGetWithdrawals,
 } from "../BorrowerWithdrawalRequests/hooks/useGetWithdrawals"
+import { MARKET_BAR_DATA } from "./constants"
+import "./styles.css"
 
 const getPercentageTokenAmount = (total: TokenAmount, amount: TokenAmount) =>
   (parseFloat(amount.toFixed(2)) * 100) / parseFloat(total.toFixed(2))
@@ -41,8 +40,8 @@ const generateBarData = (
     withdrawals
 
   const totalInterestAccrued = (
-    market.totalDelinquencyFeesAccrued ?? underlyingToken.getAmount(0)
-  ).add(market.totalBaseInterestAccrued ?? 0)
+    totalDelinquencyFeesAccrued ?? underlyingToken.getAmount(0)
+  ).add(totalBaseInterestAccrued ?? 0)
 
   const collateralObligations = coverageLiquidity
     .add(activeWithdrawalsTotalOwed)
@@ -56,43 +55,47 @@ const generateBarData = (
 
   if (borrowableAssets.gt(0)) {
     barData.push({
-      label: "Available to borrow",
+      id: MARKET_BAR_DATA.availableToBorrow.id,
+      label: MARKET_BAR_DATA.availableToBorrow.label,
       value: formatTokenWithCommas(borrowableAssets),
       asset: underlyingToken.symbol,
       width: getTokenAmountPercentageWidth(totalDebt, borrowableAssets),
-      color: "#4971FF",
+      color: MARKET_BAR_DATA.availableToBorrow.healthyBgColor,
     })
   }
 
   if (totalBorrowed && totalBorrowed.gt(0)) {
     barData.push({
-      label: "Borrowed",
+      id: MARKET_BAR_DATA.borrowed.id,
+      label: MARKET_BAR_DATA.borrowed.label,
       value: formatTokenWithCommas(totalBorrowed),
       asset: underlyingToken.symbol,
       width: getTokenAmountPercentageWidth(totalDebt, totalBorrowed),
-      color: "#BEBECE",
+      color: MARKET_BAR_DATA.borrowed.healthyBgColor,
     })
   }
 
   if (collateralObligations.gt(0)) {
     barData.push({
-      label: "Collateral Obligations",
+      id: MARKET_BAR_DATA.collateralObligations.id,
+      label: MARKET_BAR_DATA.collateralObligations.label,
       value: formatTokenWithCommas(collateralObligations),
       asset: underlyingToken.symbol,
       width: getTokenAmountPercentageWidth(totalDebt, collateralObligations),
-      color: "#D6D6DE",
-      textColor: "#1414144D",
+      color: MARKET_BAR_DATA.collateralObligations.healthyBgColor,
+      textColor: MARKET_BAR_DATA.collateralObligations.textColor,
     })
   }
 
   if (totalInterestAccrued.gt(0)) {
     barData.push({
-      label: "Non-collateral Interest",
+      id: MARKET_BAR_DATA.nonCollateralInterest.id,
+      label: MARKET_BAR_DATA.nonCollateralInterest.label,
       value: formatTokenWithCommas(totalInterestAccrued),
       asset: underlyingToken.symbol,
       width: getTokenAmountPercentageWidth(totalDebt, totalInterestAccrued),
-      color: "#EFF0F4",
-      textColor: "#14141433",
+      color: MARKET_BAR_DATA.nonCollateralInterest.healthyBgColor,
+      textColor: MARKET_BAR_DATA.nonCollateralInterest.textColor,
     })
   }
 
@@ -102,9 +105,9 @@ const generateBarData = (
 export const BorrowerMarketStatusChart = ({
   market,
 }: BorrowerMarketStatusChartProps) => {
-  const { data } = useGetWithdrawals(market)
+  const { data: withdrawals } = useGetWithdrawals(market)
 
-  const barData = generateBarData(market, data)
+  const barData = generateBarData(market, withdrawals)
 
   return (
     <div className="mb-14">
@@ -115,7 +118,52 @@ export const BorrowerMarketStatusChart = ({
         )}
       </div>
       <MarketBarchart data={barData} />
-      <MarketBarchartLegend data={barData} />
+
+      <div className="barchart__legend">
+        {barData.map((chartItem) => (
+          <LegendItem
+            key={chartItem.label}
+            chartItem={chartItem}
+            expandable={
+              chartItem.id === MARKET_BAR_DATA.collateralObligations.id
+            }
+          >
+            {chartItem.id === MARKET_BAR_DATA.collateralObligations.id && (
+              <div className="barchart__legend-obligations-values-container">
+                <div className="barchart__legend-obligations-value">
+                  <div>{formatTokenWithCommas(market.coverageLiquidity)}</div>
+                  <div>Min Reserves</div>
+                </div>
+                <div className="barchart__legend-obligations-value">
+                  <div>
+                    {formatTokenWithCommas(
+                      withdrawals.activeWithdrawalsTotalOwed,
+                    )}
+                  </div>
+                  <div>Ongoing WDs</div>
+                </div>
+                <div className="barchart__legend-obligations-value">
+                  <div>
+                    {formatTokenWithCommas(
+                      withdrawals.expiredWithdrawalsTotalOwed,
+                    )}
+                  </div>
+                  <div>Claimable WDs</div>
+                </div>
+                <div className="barchart__legend-obligations-value">
+                  <div>
+                    {formatTokenWithCommas(
+                      withdrawals.expiredWithdrawalsTotalOwed,
+                    )}
+                  </div>
+                  <div>Outstanding WDs</div>
+                </div>
+                <div className="barchart__legend-divider" />
+              </div>
+            )}
+          </LegendItem>
+        ))}
+      </div>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { ExpandMore } from "../../icons"
-import { DoubleLegendItemProps } from "./type"
+import { DoubleLegendItemProps } from "./interface"
 import "./styles.css"
 
 export const DoubleLegendItem = ({ chartItem }: DoubleLegendItemProps) => {

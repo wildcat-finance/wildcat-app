@@ -1,4 +1,4 @@
-import { MarketBarChartItem } from "../MarketBarchartLegend/interface"
+import { MarketBarChartItem } from "../MarketBarchart/interface"
 
 export type DoubleLegendItemProps = {
   chartItem: MarketBarChartItem
