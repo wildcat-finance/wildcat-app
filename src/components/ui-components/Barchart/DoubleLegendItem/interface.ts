@@ -1,5 +1,8 @@
 import { MarketBarChartItem } from "../MarketBarchart/interface"
 
 export type DoubleLegendItemProps = {
-  chartItem: MarketBarChartItem
+  firstChartItem: MarketBarChartItem
+  secondChartItem: MarketBarChartItem
+  total?: string
+  children?: React.ReactNode
 }

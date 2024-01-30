@@ -13,6 +13,7 @@ import {
 } from "../BorrowerWithdrawalRequests/hooks/useGetWithdrawals"
 import { MARKET_BAR_DATA } from "./constants"
 import "./styles.css"
+import { DoubleLegendItem } from "../../../../components/ui-components/Barchart/DoubleLegendItem"
 
 const getPercentageTokenAmount = (total: TokenAmount, amount: TokenAmount) =>
   (parseFloat(amount.toFixed(2)) * 100) / parseFloat(total.toFixed(2))
@@ -39,6 +40,7 @@ const generateBarData = (
     underlyingToken,
     totalDelinquencyFeesAccrued,
     totalBaseInterestAccrued,
+    delinquentDebt,
   } = market
   const { activeWithdrawalsTotalOwed, expiredWithdrawalsTotalOwed } =
     withdrawals
@@ -103,6 +105,29 @@ const generateBarData = (
     }
   }
 
+  if (delinquentDebt.gt(0)) {
+    barData[MARKET_BAR_DATA.delinquentDebt.id] = {
+      id: MARKET_BAR_DATA.delinquentDebt.id,
+      label: MARKET_BAR_DATA.delinquentDebt.label,
+      value: formatTokenWithCommas(delinquentDebt),
+      asset: underlyingToken.symbol,
+      width: getTokenAmountPercentageWidth(totalDebt, delinquentDebt),
+      color: MARKET_BAR_DATA.delinquentDebt.delinquentBgColor,
+    }
+  }
+
+  if (coverageLiquidity.gt(0)) {
+    barData[MARKET_BAR_DATA.currentReserves.id] = {
+      id: MARKET_BAR_DATA.currentReserves.id,
+      label: MARKET_BAR_DATA.currentReserves.label,
+      value: formatTokenWithCommas(coverageLiquidity),
+      asset: underlyingToken.symbol,
+      width: getTokenAmountPercentageWidth(totalDebt, coverageLiquidity),
+      color: MARKET_BAR_DATA.currentReserves.delinquentBgColor,
+      textColor: MARKET_BAR_DATA.currentReserves.textColor,
+    }
+  }
+
   return barData
 }
 
@@ -114,7 +139,9 @@ const HEALTHY_MARKET_BARS_ORDER = [
 ]
 
 const DELINQUENT_MARKET_BARS_ORDER = [
-  MARKET_BAR_DATA.collateralObligations.id,
+  MARKET_BAR_DATA.delinquentDebt.id,
+  MARKET_BAR_DATA.currentReserves.id,
+  MARKET_BAR_DATA.borrowed.id,
   MARKET_BAR_DATA.nonCollateralInterest.id,
 ]
 
@@ -133,6 +160,11 @@ export const BorrowerMarketStatusChart = ({
     .filter((barId) => barRawData[barId] !== undefined)
     .map((barId) => barRawData[barId])
 
+  const collateralObligations = market.coverageLiquidity
+    .add(withdrawals.activeWithdrawalsTotalOwed)
+    .add(withdrawals.expiredWithdrawalsTotalOwed)
+    .toFixed(2)
+
   return (
     <div className="mb-14">
       <div className="flex mb-6 justify-between text-base font-bold">
@@ -144,15 +176,57 @@ export const BorrowerMarketStatusChart = ({
       <MarketBarchart data={bars} />
 
       <div className="barchart__legend">
-        {bars.map((chartItem) => (
-          <LegendItem
-            key={chartItem.label}
-            chartItem={chartItem}
-            expandable={
-              chartItem.id === MARKET_BAR_DATA.collateralObligations.id
-            }
-          >
-            {chartItem.id === MARKET_BAR_DATA.collateralObligations.id && (
+        {!market.isDelinquent &&
+          bars.map((chartItem) => (
+            <LegendItem
+              key={chartItem.label}
+              chartItem={chartItem}
+              expandable={
+                chartItem.id === MARKET_BAR_DATA.collateralObligations.id
+              }
+            >
+              {chartItem.id === MARKET_BAR_DATA.collateralObligations.id && (
+                <div className="barchart__legend-obligations-values-container">
+                  <div className="barchart__legend-obligations-value">
+                    <div>{formatTokenWithCommas(market.coverageLiquidity)}</div>
+                    <div>Min Reserves</div>
+                  </div>
+                  <div className="barchart__legend-obligations-value">
+                    <div>
+                      {formatTokenWithCommas(
+                        withdrawals.activeWithdrawalsTotalOwed,
+                      )}
+                    </div>
+                    <div>Ongoing WDs</div>
+                  </div>
+                  <div className="barchart__legend-obligations-value">
+                    <div>
+                      {formatTokenWithCommas(
+                        withdrawals.expiredWithdrawalsTotalOwed,
+                      )}
+                    </div>
+                    <div>Claimable WDs</div>
+                  </div>
+                  <div className="barchart__legend-obligations-value">
+                    <div>
+                      {formatTokenWithCommas(
+                        withdrawals.expiredWithdrawalsTotalOwed,
+                      )}
+                    </div>
+                    <div>Outstanding WDs</div>
+                  </div>
+                  <div className="barchart__legend-divider" />
+                </div>
+              )}
+            </LegendItem>
+          ))}
+        {market.isDelinquent && (
+          <>
+            <DoubleLegendItem
+              firstChartItem={bars[0]}
+              secondChartItem={bars[1]}
+              total={collateralObligations}
+            >
               <div className="barchart__legend-obligations-values-container">
                 <div className="barchart__legend-obligations-value">
                   <div>{formatTokenWithCommas(market.coverageLiquidity)}</div>
@@ -182,11 +256,12 @@ export const BorrowerMarketStatusChart = ({
                   </div>
                   <div>Outstanding WDs</div>
                 </div>
-                <div className="barchart__legend-divider" />
               </div>
-            )}
-          </LegendItem>
-        ))}
+            </DoubleLegendItem>
+            <LegendItem chartItem={bars[2]} />
+            <LegendItem chartItem={bars[3]} />
+          </>
+        )}
       </div>
     </div>
   )

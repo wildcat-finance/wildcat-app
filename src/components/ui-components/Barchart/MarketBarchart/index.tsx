@@ -10,6 +10,7 @@ export const MarketBarchart = ({ data }: MarketBarChartProps) => (
         className="barchart__item"
         style={{
           width: `${chartItem.width}`,
+          minWidth: "5px",
           backgroundColor: `${chartItem.color}`,
         }}
       >

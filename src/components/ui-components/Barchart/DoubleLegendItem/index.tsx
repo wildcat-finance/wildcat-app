@@ -3,7 +3,12 @@ import { ExpandMore } from "../../icons"
 import { DoubleLegendItemProps } from "./interface"
 import "./styles.css"
 
-export const DoubleLegendItem = ({ chartItem }: DoubleLegendItemProps) => {
+export const DoubleLegendItem = ({
+  firstChartItem,
+  secondChartItem,
+  total,
+  children,
+}: DoubleLegendItemProps) => {
   const [expanded, setExpanded] = useState(false)
 
   const toggleExpanded = (value: boolean) => {
@@ -27,56 +32,41 @@ export const DoubleLegendItem = ({ chartItem }: DoubleLegendItemProps) => {
       <div className="double-item__container-inner">
         <div style={{ width: "100%" }}>
           <div className="double-item__header">
-            <div>Delinquent Debt</div>
+            <div>{firstChartItem.label}</div>
             <div
               className="double-item__dot"
               style={{
-                backgroundColor: `${chartItem.color}`,
+                backgroundColor: `${firstChartItem.color}`,
               }}
             />
           </div>
           <div>
-            {chartItem.value} {chartItem.asset}
+            {firstChartItem.value} {firstChartItem.asset}
           </div>
         </div>
         <div className="double-item__divider-vertical" />
         <div style={{ width: "100%" }}>
           <div className="double-item__header">
-            <div>Delinquent Debt</div>
+            <div>{secondChartItem.label}</div>
             <div
               className="double-item__dot"
               style={{
-                backgroundColor: `${chartItem.color}`,
+                backgroundColor: `${secondChartItem.color}`,
               }}
             />
           </div>
           <div>
-            {chartItem.value} {chartItem.asset}
+            {secondChartItem.value} {secondChartItem.asset}
           </div>
         </div>
       </div>
       {expanded && (
         <div className="double-item__values-container">
           <div className="double-item__divider-horizontal" />
-          <div className="double-item__value">
-            <div>{chartItem.asset}</div>
-            <div>Min Reserves</div>
-          </div>
-          <div className="double-item__value">
-            <div>{chartItem.asset}</div>
-            <div>Ongoing WDs</div>
-          </div>
-          <div className="double-item__value">
-            <div>{chartItem.asset}</div>
-            <div>Claimable WDs</div>
-          </div>
-          <div className="double-item__value">
-            <div>{chartItem.asset}</div>
-            <div>Outstanding WDs</div>
-          </div>
+          {children}
           <div className="double-item__divider-horizontal" />
           <div style={{ fontSize: "12px" }}>
-            {chartItem.value} {chartItem.asset}
+            {total} {firstChartItem.asset}
           </div>
         </div>
       )}
