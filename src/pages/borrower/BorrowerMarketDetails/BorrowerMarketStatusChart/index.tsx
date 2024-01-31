@@ -18,7 +18,7 @@ export const BorrowerMarketStatusChart = ({
 }: BorrowerMarketStatusChartProps) => {
   const { data: withdrawals } = useGetWithdrawals(market)
 
-  const barRawData = useGenerateBarData(market, withdrawals)
+  const barRawData = useGenerateBarData(market)
 
   const barOrders = market.isDelinquent
     ? MARKET_BAR_ORDER.delinquentBarsOrder

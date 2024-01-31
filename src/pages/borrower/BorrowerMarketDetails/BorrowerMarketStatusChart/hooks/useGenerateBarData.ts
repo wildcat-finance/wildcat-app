@@ -1,5 +1,4 @@
 import { Market, TokenAmount } from "@wildcatfi/wildcat-sdk"
-import { BorrowerWithdrawalsForMarketResult } from "../../BorrowerWithdrawalRequests/hooks/useGetWithdrawals"
 import { MarketBarChartItem } from "../../../../../components/ui-components/Barchart/MarketBarchart/interface"
 import { MARKET_BAR_DATA } from "../constants"
 import { formatTokenWithCommas } from "../../../../../utils/formatters"
@@ -14,7 +13,6 @@ const getTokenAmountPercentageWidth = (
 
 export const useGenerateBarData = (
   market: Market,
-  withdrawals: BorrowerWithdrawalsForMarketResult,
 ): {
   [key: string]: MarketBarChartItem
 } => {
@@ -23,95 +21,111 @@ export const useGenerateBarData = (
   } = {}
 
   const {
-    totalBorrowed,
-    borrowableAssets,
-    coverageLiquidity,
+    // totalBorrowed,
+    // borrowableAssets,
     underlyingToken,
-    totalDelinquencyFeesAccrued,
-    totalBaseInterestAccrued,
-    delinquentDebt,
+    // totalDelinquencyFeesAccrued,
+    // totalBaseInterestAccrued,
   } = market
-  const { activeWithdrawalsTotalOwed, expiredWithdrawalsTotalOwed } =
-    withdrawals
 
-  const totalInterestAccrued = (
-    totalDelinquencyFeesAccrued ?? underlyingToken.getAmount(0)
-  ).add(totalBaseInterestAccrued ?? 0)
+  const marketBarchartData = market.getTotalDebtBreakdown()
 
-  const collateralObligations = coverageLiquidity
-    .add(activeWithdrawalsTotalOwed)
-    .add(expiredWithdrawalsTotalOwed)
+  let borrowableSDK
+  let borrowedSDK
+  let collateralObligationsSDK
+  let delinquentDebtSDK
+  let reservesSDK
 
-  let totalDebt = collateralObligations
-    .add(borrowableAssets)
-    .add(totalInterestAccrued)
+  if (marketBarchartData.status === "healthy") {
+    borrowableSDK = marketBarchartData.borrowable
+    borrowedSDK = marketBarchartData.borrowed
+    collateralObligationsSDK = marketBarchartData.collateralObligation
+  } else {
+    borrowedSDK = marketBarchartData.borrowed
+    delinquentDebtSDK = marketBarchartData.delinquentDebt
+    reservesSDK = marketBarchartData.reserves
+    collateralObligationsSDK = marketBarchartData.collateralObligation
+  }
 
-  if (totalBorrowed) totalDebt = totalDebt.add(totalBorrowed)
+  // const totalInterestAccrued = (
+  //   totalDelinquencyFeesAccrued ?? underlyingToken.getAmount(0)
+  // ).add(totalBaseInterestAccrued ?? 0)
 
-  if (borrowableAssets.gt(0)) {
+  // let totalDebt = collateralObligationsSDK
+  //   .add(borrowableAssets)
+  //   .add(totalInterestAccrued)
+  // if (totalBorrowed) totalDebt = totalDebt.add(totalBorrowed)
+
+  let totalDebtSDK = collateralObligationsSDK.add(borrowedSDK)
+  if (borrowableSDK) totalDebtSDK = totalDebtSDK.add(borrowableSDK)
+
+  if (borrowableSDK && borrowableSDK.gt(0)) {
     barData[MARKET_BAR_DATA.availableToBorrow.id] = {
       id: MARKET_BAR_DATA.availableToBorrow.id,
       label: MARKET_BAR_DATA.availableToBorrow.label,
-      value: formatTokenWithCommas(borrowableAssets),
+      value: formatTokenWithCommas(borrowableSDK),
       asset: underlyingToken.symbol,
-      width: getTokenAmountPercentageWidth(totalDebt, borrowableAssets),
+      width: getTokenAmountPercentageWidth(totalDebtSDK, borrowableSDK),
       color: MARKET_BAR_DATA.availableToBorrow.healthyBgColor,
     }
   }
 
-  if (totalBorrowed && totalBorrowed.gt(0)) {
+  if (borrowedSDK && borrowedSDK.gt(0)) {
     barData[MARKET_BAR_DATA.borrowed.id] = {
       id: MARKET_BAR_DATA.borrowed.id,
       label: MARKET_BAR_DATA.borrowed.label,
-      value: formatTokenWithCommas(totalBorrowed),
+      value: formatTokenWithCommas(borrowedSDK),
       asset: underlyingToken.symbol,
-      width: getTokenAmountPercentageWidth(totalDebt, totalBorrowed),
+      width: getTokenAmountPercentageWidth(totalDebtSDK, borrowedSDK),
       color: MARKET_BAR_DATA.borrowed.healthyBgColor,
     }
   }
 
-  if (collateralObligations.gt(0)) {
+  if (collateralObligationsSDK.gt(0)) {
     barData[MARKET_BAR_DATA.collateralObligations.id] = {
       id: MARKET_BAR_DATA.collateralObligations.id,
       label: MARKET_BAR_DATA.collateralObligations.label,
-      value: formatTokenWithCommas(collateralObligations),
+      value: formatTokenWithCommas(collateralObligationsSDK),
       asset: underlyingToken.symbol,
-      width: getTokenAmountPercentageWidth(totalDebt, collateralObligations),
+      width: getTokenAmountPercentageWidth(
+        totalDebtSDK,
+        collateralObligationsSDK,
+      ),
       color: MARKET_BAR_DATA.collateralObligations.healthyBgColor,
       textColor: MARKET_BAR_DATA.collateralObligations.textColor,
     }
   }
 
-  if (totalInterestAccrued.gt(0)) {
-    barData[MARKET_BAR_DATA.nonCollateralInterest.id] = {
-      id: MARKET_BAR_DATA.nonCollateralInterest.id,
-      label: MARKET_BAR_DATA.nonCollateralInterest.label,
-      value: formatTokenWithCommas(totalInterestAccrued),
-      asset: underlyingToken.symbol,
-      width: getTokenAmountPercentageWidth(totalDebt, totalInterestAccrued),
-      color: MARKET_BAR_DATA.nonCollateralInterest.healthyBgColor,
-      textColor: MARKET_BAR_DATA.nonCollateralInterest.textColor,
-    }
-  }
+  // if (totalInterestAccrued.gt(0)) {
+  //   barData[MARKET_BAR_DATA.nonCollateralInterest.id] = {
+  //     id: MARKET_BAR_DATA.nonCollateralInterest.id,
+  //     label: MARKET_BAR_DATA.nonCollateralInterest.label,
+  //     value: formatTokenWithCommas(totalInterestAccrued),
+  //     asset: underlyingToken.symbol,
+  //     width: getTokenAmountPercentageWidth(totalDebt, totalInterestAccrued),
+  //     color: MARKET_BAR_DATA.nonCollateralInterest.healthyBgColor,
+  //     textColor: MARKET_BAR_DATA.nonCollateralInterest.textColor,
+  //   }
+  // }
 
-  if (delinquentDebt.gt(0)) {
+  if (delinquentDebtSDK && delinquentDebtSDK.gt(0)) {
     barData[MARKET_BAR_DATA.delinquentDebt.id] = {
       id: MARKET_BAR_DATA.delinquentDebt.id,
       label: MARKET_BAR_DATA.delinquentDebt.label,
-      value: formatTokenWithCommas(delinquentDebt),
+      value: formatTokenWithCommas(delinquentDebtSDK),
       asset: underlyingToken.symbol,
-      width: getTokenAmountPercentageWidth(totalDebt, delinquentDebt),
+      width: getTokenAmountPercentageWidth(totalDebtSDK, delinquentDebtSDK),
       color: MARKET_BAR_DATA.delinquentDebt.delinquentBgColor,
     }
   }
 
-  if (coverageLiquidity.gt(0)) {
+  if (reservesSDK && reservesSDK.gt(0)) {
     barData[MARKET_BAR_DATA.currentReserves.id] = {
       id: MARKET_BAR_DATA.currentReserves.id,
       label: MARKET_BAR_DATA.currentReserves.label,
-      value: formatTokenWithCommas(coverageLiquidity),
+      value: formatTokenWithCommas(reservesSDK),
       asset: underlyingToken.symbol,
-      width: getTokenAmountPercentageWidth(totalDebt, coverageLiquidity),
+      width: getTokenAmountPercentageWidth(totalDebtSDK, reservesSDK),
       color: MARKET_BAR_DATA.currentReserves.delinquentBgColor,
       textColor: MARKET_BAR_DATA.currentReserves.textColor,
     }

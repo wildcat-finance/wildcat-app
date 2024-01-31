@@ -47,17 +47,14 @@ export const MARKET_BAR_ORDER = {
     MARKET_BAR_DATA.availableToBorrow.id,
     MARKET_BAR_DATA.borrowed.id,
     MARKET_BAR_DATA.collateralObligations.id,
-    MARKET_BAR_DATA.nonCollateralInterest.id,
   ],
   delinquentBarsOrder: [
     MARKET_BAR_DATA.delinquentDebt.id,
     MARKET_BAR_DATA.currentReserves.id,
     MARKET_BAR_DATA.borrowed.id,
-    MARKET_BAR_DATA.nonCollateralInterest.id,
   ],
   delinquentLegendOrder: [
     MARKET_BAR_DATA.collateralObligations.id,
     MARKET_BAR_DATA.borrowed.id,
-    MARKET_BAR_DATA.nonCollateralInterest.id,
   ],
 }
