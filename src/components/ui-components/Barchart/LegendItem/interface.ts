@@ -2,6 +2,6 @@ import { MarketBarChartItem } from "../MarketBarchart/interface"
 
 export type LegendItemProps = {
   chartItem: MarketBarChartItem
-  expandable?: boolean
+  type?: "default" | "expandable" | "extended"
   children?: React.ReactNode
 }

@@ -13,7 +13,7 @@
     flex-direction: row;
     column-gap: 8px;
     align-items: center;
-    margin-bottom: 38px;
+    margin-bottom: 24px;
 }
 
 .barchart__legend-dot {

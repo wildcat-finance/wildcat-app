@@ -5,7 +5,7 @@ import "./styles.css"
 
 export const LegendItem = ({
   chartItem,
-  expandable,
+  type = "default",
   children,
 }: LegendItemProps) => {
   const [expanded, setExpanded] = useState(false)
@@ -14,8 +14,10 @@ export const LegendItem = ({
     setExpanded(!value)
   }
 
-  switch (expandable) {
-    case true:
+  switch (type) {
+    case "extended":
+      return <div style={{ width: "50%" }}>{children}</div>
+    case "expandable":
       return (
         <div className="barchart__legend-item">
           <div

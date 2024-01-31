@@ -1,14 +1,14 @@
 import { useState } from "react"
-import { ExpandMore } from "../../icons"
-import { DoubleLegendItemProps } from "./interface"
-import "./styles.css"
+import { ExpandMore } from "../../../../../components/ui-components/icons"
 
-export const DoubleLegendItem = ({
-  firstChartItem,
-  secondChartItem,
-  total,
+import "./styles.css"
+import { DelinquentCollateralObligationsProps } from "./interface"
+
+export const DelinquentCollateralObligations = ({
+  market,
+  legendItem,
   children,
-}: DoubleLegendItemProps) => {
+}: DelinquentCollateralObligationsProps) => {
   const [expanded, setExpanded] = useState(false)
 
   const toggleExpanded = (value: boolean) => {
@@ -22,7 +22,7 @@ export const DoubleLegendItem = ({
         style={{ justifyContent: "space-between", marginBottom: "12px" }}
         onClick={() => toggleExpanded(expanded)}
       >
-        <div>Collateral Obligations</div>
+        <div>{legendItem.label}</div>
         {expanded ? (
           <ExpandMore className="transform rotate-180 h-[18px] w-[18px]" />
         ) : (
@@ -32,31 +32,33 @@ export const DoubleLegendItem = ({
       <div className="double-item__container-inner">
         <div style={{ width: "100%" }}>
           <div className="double-item__header">
-            <div>{firstChartItem.label}</div>
+            <div>Delinquent Debt</div>
             <div
               className="double-item__dot"
               style={{
-                backgroundColor: `${firstChartItem.color}`,
+                backgroundColor: "#F1464B",
               }}
             />
           </div>
           <div>
-            {firstChartItem.value} {firstChartItem.asset}
+            {market.delinquentDebt.toFixed(2)} {legendItem.asset}
           </div>
         </div>
         <div className="double-item__divider-vertical" />
         <div style={{ width: "100%" }}>
           <div className="double-item__header">
-            <div>{secondChartItem.label}</div>
+            <div>Current Reserves</div>
             <div
               className="double-item__dot"
               style={{
-                backgroundColor: `${secondChartItem.color}`,
+                backgroundColor: "#F7BEC1",
               }}
             />
           </div>
           <div>
-            {secondChartItem.value} {secondChartItem.asset}
+            <div>
+              {market.coverageLiquidity.toFixed(2)} {legendItem.asset}
+            </div>
           </div>
         </div>
       </div>
@@ -66,7 +68,7 @@ export const DoubleLegendItem = ({
           {children}
           <div className="double-item__divider-horizontal" />
           <div style={{ fontSize: "12px" }}>
-            {total} {firstChartItem.asset}
+            {legendItem.value} {legendItem.asset}
           </div>
         </div>
       )}
