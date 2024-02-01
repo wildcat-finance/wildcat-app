@@ -1,9 +1,14 @@
 import { useState } from "react"
-import { ExpandMore } from "../../icons"
-import { DoubleLegendItemProps } from "./interface"
-import "./styles.css"
+import { ExpandMore } from "../../../../../../components/ui-components/icons"
 
-export const DoubleLegendItem = ({ chartItem }: DoubleLegendItemProps) => {
+import "./styles.css"
+import { DelinquentCollateralObligationsProps } from "./interface"
+
+export const DelinquentCollateralObligations = ({
+  market,
+  legendItem,
+  children,
+}: DelinquentCollateralObligationsProps) => {
   const [expanded, setExpanded] = useState(false)
 
   const toggleExpanded = (value: boolean) => {
@@ -17,7 +22,7 @@ export const DoubleLegendItem = ({ chartItem }: DoubleLegendItemProps) => {
         style={{ justifyContent: "space-between", marginBottom: "12px" }}
         onClick={() => toggleExpanded(expanded)}
       >
-        <div>Collateral Obligations</div>
+        <div>{legendItem.label}</div>
         {expanded ? (
           <ExpandMore className="transform rotate-180 h-[18px] w-[18px]" />
         ) : (
@@ -31,52 +36,37 @@ export const DoubleLegendItem = ({ chartItem }: DoubleLegendItemProps) => {
             <div
               className="double-item__dot"
               style={{
-                backgroundColor: `${chartItem.color}`,
+                backgroundColor: "#F1464B",
               }}
             />
           </div>
           <div>
-            {chartItem.value} {chartItem.asset}
+            {market.delinquentDebt.toFixed(2)} {legendItem.asset}
           </div>
         </div>
         <div className="double-item__divider-vertical" />
         <div style={{ width: "100%" }}>
           <div className="double-item__header">
-            <div>Delinquent Debt</div>
+            <div>Current Reserves</div>
             <div
               className="double-item__dot"
               style={{
-                backgroundColor: `${chartItem.color}`,
+                backgroundColor: "#F7BEC1",
               }}
             />
           </div>
           <div>
-            {chartItem.value} {chartItem.asset}
+            <div>
+              {market.coverageLiquidity.toFixed(2)} {legendItem.asset}
+            </div>
           </div>
         </div>
       </div>
       {expanded && (
         <div className="double-item__values-container">
-          <div className="double-item__divider-horizontal" />
-          <div className="double-item__value">
-            <div>{chartItem.asset}</div>
-            <div>Min Reserves</div>
-          </div>
-          <div className="double-item__value">
-            <div>{chartItem.asset}</div>
-            <div>Ongoing WDs</div>
-          </div>
-          <div className="double-item__value">
-            <div>{chartItem.asset}</div>
-            <div>Claimable WDs</div>
-          </div>
-          <div className="double-item__value">
-            <div>{chartItem.asset}</div>
-            <div>Outstanding WDs</div>
-          </div>
-          <div className="double-item__divider-horizontal" />
+          {children}
           <div style={{ fontSize: "12px" }}>
-            {chartItem.value} {chartItem.asset}
+            {legendItem.value} {legendItem.asset}
           </div>
         </div>
       )}

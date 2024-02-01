@@ -108,7 +108,9 @@ const BorrowerMarketDetails = () => {
         </Paper>
       )}
 
-      <BorrowerMarketStatusChart market={market} />
+      {market.totalBorrowed?.gt(0) && !market.isDelinquent && (
+        <BorrowerMarketStatusChart market={market} />
+      )}
 
       <BorrowerMarketOverview market={market} />
 

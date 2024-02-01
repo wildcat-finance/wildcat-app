@@ -3,21 +3,21 @@ export const MARKET_BAR_DATA = {
     id: "availableToBorrow",
     label: "Available to borrow",
     healthyBgColor: "#4971FF",
-    delinquentBgColor: "#4971FF",
-    textColor: null,
+    delinquentBgColor: "",
+    textColor: "",
   },
   borrowed: {
     id: "borrowed",
     label: "Borrowed",
     healthyBgColor: "#BEBECE",
-    delinquentBgColor: "#BEBECE",
-    textColor: null,
+    delinquentBgColor: "#D6D6DE",
+    textColor: "",
   },
   collateralObligations: {
     id: "collateralObligations",
     label: "Collateral Obligations",
     healthyBgColor: "#D6D6DE",
-    delinquentBgColor: "#D6D6DE",
+    delinquentBgColor: "",
     textColor: "#1414144D",
   },
   delinquentDebt: {
@@ -29,4 +29,27 @@ export const MARKET_BAR_DATA = {
     hide: true,
     legendDotClassName: "delinquent_dot",
   },
+  currentReserves: {
+    id: "currentReserves",
+    label: "Current Reserves",
+    healthyBgColor: "",
+    delinquentBgColor: "#F7BEC1",
+    textColor: "#BD1D22",
+  },
+}
+export const MARKET_BAR_ORDER = {
+  healthyBarchartOrder: [
+    MARKET_BAR_DATA.availableToBorrow.id,
+    MARKET_BAR_DATA.borrowed.id,
+    MARKET_BAR_DATA.collateralObligations.id,
+  ],
+  delinquentBarsOrder: [
+    MARKET_BAR_DATA.delinquentDebt.id,
+    MARKET_BAR_DATA.currentReserves.id,
+    MARKET_BAR_DATA.borrowed.id,
+  ],
+  delinquentLegendOrder: [
+    MARKET_BAR_DATA.collateralObligations.id,
+    MARKET_BAR_DATA.borrowed.id,
+  ],
 }

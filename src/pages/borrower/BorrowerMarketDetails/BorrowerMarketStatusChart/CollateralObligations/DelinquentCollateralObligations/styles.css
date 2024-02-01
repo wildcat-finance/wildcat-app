@@ -2,7 +2,6 @@
     height: fit-content;
     display: flex;
     flex-direction: column;
-    width: 50%;
     border: 1px solid rgb(244 243 232);
     padding: 12px;
     border-radius: 8px;
@@ -13,7 +12,6 @@
     flex-direction: row;
     column-gap: 8px;
     align-items: center;
-    margin-bottom: 8px;
 }
 
 .double-item__dot {
@@ -30,7 +28,7 @@
 }
 
 .double-item__divider-vertical {
-    height: 44px;
+    height: auto;
     margin: 0 16px 0 8px;
     border-left: 1px solid rgb(244 243 232);
 }
@@ -39,8 +37,6 @@
     display: flex;
     flex-direction: column;
     row-gap: 4px;
-    margin-top: 12px;
-    margin-bottom: 8px;
 
     font-size: 10px;
 }
