@@ -1,5 +1,4 @@
 import { Market, TokenAmount } from "@wildcatfi/wildcat-sdk"
-
 import {
   MarketBarchart,
   LegendItem,
@@ -7,10 +6,7 @@ import {
 import { MarketBarChartItem } from "../../../../components/ui-components/Barchart/MarketBarchart/interface"
 import { BorrowerMarketStatusChartProps } from "./interface"
 import { formatTokenWithCommas } from "../../../../utils/formatters"
-import {
-  BorrowerWithdrawalsForMarketResult,
-  useGetWithdrawals,
-} from "../BorrowerWithdrawalRequests/hooks/useGetWithdrawals"
+import { useGetWithdrawals } from "../BorrowerWithdrawalRequests/hooks/useGetWithdrawals"
 import { MARKET_BAR_DATA } from "./constants"
 import "./styles.css"
 
@@ -24,83 +20,57 @@ const getTokenAmountPercentageWidth = (
 
 const generateBarData = (
   market: Market,
-  withdrawals: BorrowerWithdrawalsForMarketResult,
 ): {
-  [key: string]: MarketBarChartItem
+  [key: string]: MarketBarChartItem & { hide?: boolean }
 } => {
+  const breakdown = market.getTotalDebtBreakdown()
   const barData: {
-    [key: string]: MarketBarChartItem
+    [key: string]: MarketBarChartItem & { hide?: boolean }
   } = {}
+  const asset = market.underlyingToken.symbol
 
-  const {
-    totalBorrowed,
-    borrowableAssets,
-    coverageLiquidity,
-    underlyingToken,
-    totalDelinquencyFeesAccrued,
-    totalBaseInterestAccrued,
-  } = market
-  const { activeWithdrawalsTotalOwed, expiredWithdrawalsTotalOwed } =
-    withdrawals
+  const { totalDebt } = breakdown
 
-  const totalInterestAccrued = (
-    totalDelinquencyFeesAccrued ?? underlyingToken.getAmount(0)
-  ).add(totalBaseInterestAccrued ?? 0)
+  const colorKey =
+    breakdown.status === "healthy" ? "healthyBgColor" : "delinquentBgColor"
 
-  const collateralObligations = coverageLiquidity
-    .add(activeWithdrawalsTotalOwed)
-    .add(expiredWithdrawalsTotalOwed)
-
-  let totalDebt = collateralObligations
-    .add(borrowableAssets)
-    .add(totalInterestAccrued)
-
-  if (totalBorrowed) totalDebt = totalDebt.add(totalBorrowed)
-
-  if (borrowableAssets.gt(0)) {
-    barData[MARKET_BAR_DATA.availableToBorrow.id] = {
-      id: MARKET_BAR_DATA.availableToBorrow.id,
-      label: MARKET_BAR_DATA.availableToBorrow.label,
-      value: formatTokenWithCommas(borrowableAssets),
-      asset: underlyingToken.symbol,
-      width: getTokenAmountPercentageWidth(totalDebt, borrowableAssets),
-      color: MARKET_BAR_DATA.availableToBorrow.healthyBgColor,
+  const setBarData = (
+    field: keyof typeof MARKET_BAR_DATA,
+    value: TokenAmount,
+  ) => {
+    if (value.lte(0)) return
+    const { id, label, [colorKey]: color } = MARKET_BAR_DATA[field]
+    barData[id] = {
+      id,
+      label,
+      value: formatTokenWithCommas(value),
+      asset,
+      width: getTokenAmountPercentageWidth(totalDebt, value),
+      color,
     }
   }
+  if (breakdown.status === "delinquent") {
+    setBarData("collateralObligations", breakdown.collateralObligation)
+    setBarData("borrowed", breakdown.borrowed)
+    barData.collateralObligations.overlayClassName = "delinquency_overlay"
+    const width = getTokenAmountPercentageWidth(
+      breakdown.collateralObligation,
+      breakdown.delinquentDebt,
+    )
+    barData.collateralObligations.overlayWidth = width
 
-  if (totalBorrowed && totalBorrowed.gt(0)) {
-    barData[MARKET_BAR_DATA.borrowed.id] = {
-      id: MARKET_BAR_DATA.borrowed.id,
-      label: MARKET_BAR_DATA.borrowed.label,
-      value: formatTokenWithCommas(totalBorrowed),
-      asset: underlyingToken.symbol,
-      width: getTokenAmountPercentageWidth(totalDebt, totalBorrowed),
-      color: MARKET_BAR_DATA.borrowed.healthyBgColor,
+    barData.delinquentDebt = {
+      ...MARKET_BAR_DATA.delinquentDebt,
+      value: formatTokenWithCommas(breakdown.delinquentDebt),
+      asset,
+      width,
+      color: MARKET_BAR_DATA.delinquentDebt[colorKey],
+      textColor: MARKET_BAR_DATA.delinquentDebt.textColor,
     }
-  }
-
-  if (collateralObligations.gt(0)) {
-    barData[MARKET_BAR_DATA.collateralObligations.id] = {
-      id: MARKET_BAR_DATA.collateralObligations.id,
-      label: MARKET_BAR_DATA.collateralObligations.label,
-      value: formatTokenWithCommas(collateralObligations),
-      asset: underlyingToken.symbol,
-      width: getTokenAmountPercentageWidth(totalDebt, collateralObligations),
-      color: MARKET_BAR_DATA.collateralObligations.healthyBgColor,
-      textColor: MARKET_BAR_DATA.collateralObligations.textColor,
-    }
-  }
-
-  if (totalInterestAccrued.gt(0)) {
-    barData[MARKET_BAR_DATA.nonCollateralInterest.id] = {
-      id: MARKET_BAR_DATA.nonCollateralInterest.id,
-      label: MARKET_BAR_DATA.nonCollateralInterest.label,
-      value: formatTokenWithCommas(totalInterestAccrued),
-      asset: underlyingToken.symbol,
-      width: getTokenAmountPercentageWidth(totalDebt, totalInterestAccrued),
-      color: MARKET_BAR_DATA.nonCollateralInterest.healthyBgColor,
-      textColor: MARKET_BAR_DATA.nonCollateralInterest.textColor,
-    }
+  } else {
+    setBarData("availableToBorrow", breakdown.borrowable)
+    setBarData("collateralObligations", breakdown.collateralObligation)
+    setBarData("borrowed", breakdown.borrowed)
   }
 
   return barData
@@ -110,12 +80,12 @@ const HEALTHY_MARKET_BARS_ORDER = [
   MARKET_BAR_DATA.availableToBorrow.id,
   MARKET_BAR_DATA.borrowed.id,
   MARKET_BAR_DATA.collateralObligations.id,
-  MARKET_BAR_DATA.nonCollateralInterest.id,
 ]
 
 const DELINQUENT_MARKET_BARS_ORDER = [
+  MARKET_BAR_DATA.borrowed.id,
+  "delinquentDebt",
   MARKET_BAR_DATA.collateralObligations.id,
-  MARKET_BAR_DATA.nonCollateralInterest.id,
 ]
 
 export const BorrowerMarketStatusChart = ({
@@ -123,7 +93,7 @@ export const BorrowerMarketStatusChart = ({
 }: BorrowerMarketStatusChartProps) => {
   const { data: withdrawals } = useGetWithdrawals(market)
 
-  const barRawData = generateBarData(market, withdrawals)
+  const barRawData = generateBarData(market)
 
   const barOrders = market.isDelinquent
     ? DELINQUENT_MARKET_BARS_ORDER
@@ -138,10 +108,10 @@ export const BorrowerMarketStatusChart = ({
       <div className="flex mb-6 justify-between text-base font-bold">
         <div>Total Debt:</div>
         {market.totalBorrowed && (
-          <div>{formatTokenWithCommas(market.totalBorrowed, true)}</div>
+          <div>{formatTokenWithCommas(market.totalDebts, true)}</div>
         )}
       </div>
-      <MarketBarchart data={bars} />
+      <MarketBarchart data={bars.filter((b) => !b.hide)} />
 
       <div className="barchart__legend">
         {bars.map((chartItem) => (
