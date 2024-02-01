@@ -1,4 +1,5 @@
 import { useState } from "react"
+import cn from "classnames"
 import { ExpandMore } from "../../icons"
 import { LegendItemProps } from "./interface"
 import "./styles.css"
@@ -37,7 +38,10 @@ export const LegendItem = ({
             >
               {chartItem.label}
               <div
-                className="barchart__legend-dot"
+                className={cn(
+                  "barchart__legend-dot",
+                  chartItem.legendDotClassName,
+                )}
                 style={{
                   backgroundColor: `${chartItem.color}`,
                 }}
@@ -63,7 +67,10 @@ export const LegendItem = ({
           <div className="barchart__legend-header">
             {chartItem.label}
             <div
-              className="barchart__legend-dot"
+              className={cn(
+                "barchart__legend-dot",
+                chartItem.legendDotClassName,
+              )}
               style={{
                 backgroundColor: `${chartItem.color}`,
               }}
