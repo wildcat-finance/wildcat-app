@@ -12,7 +12,6 @@ import {
   DATE_FORMAT,
   formatBps,
   formatTokenWithCommas,
-  TOKEN_FORMAT_DECIMALS,
   trimAddress,
 } from "../../../utils/formatters"
 import { EtherscanBaseUrl } from "../../../config/networks"
@@ -97,12 +96,16 @@ function MarketCard({
             market.underlyingToken.symbol
           }`}
         />
-        {showBalance && marketBalance && (
+        {marketBalance && (
           <TableItem
             title="My Loan"
-            value={`${formatTokenWithCommas(marketBalance)} ${
-              market.underlyingToken.symbol
-            }`}
+            value={
+              showBalance
+                ? `${formatTokenWithCommas(marketBalance)} ${
+                    market.underlyingToken.symbol
+                  }`
+                : "Wallet disconnected"
+            }
           />
         )}
         {showAvailableToLend && (
