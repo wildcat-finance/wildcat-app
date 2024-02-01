@@ -16,7 +16,7 @@ export const LegendItem = ({
 
   switch (type) {
     case "extended":
-      return <div style={{ width: "50%" }}>{children}</div>
+      return <div style={{ width: "100%" }}>{children}</div>
     case "expandable":
       return (
         <div className="barchart__legend-item">

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { ExpandMore } from "../../../../../components/ui-components/icons"
+import { ExpandMore } from "../../../../../../components/ui-components/icons"
 
 import "./styles.css"
 import { DelinquentCollateralObligationsProps } from "./interface"
@@ -64,9 +64,7 @@ export const DelinquentCollateralObligations = ({
       </div>
       {expanded && (
         <div className="double-item__values-container">
-          <div className="double-item__divider-horizontal" />
           {children}
-          <div className="double-item__divider-horizontal" />
           <div style={{ fontSize: "12px" }}>
             {legendItem.value} {legendItem.asset}
           </div>

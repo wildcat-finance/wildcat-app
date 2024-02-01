@@ -8,7 +8,8 @@ import {
   MarketBarchart,
   LegendItem,
 } from "../../../../components/ui-components"
-import { DelinquentCollateralObligations } from "./DelinquentCollateralObligations"
+import { DelinquentCollateralObligations } from "./CollateralObligations/DelinquentCollateralObligations"
+import { CollateralObligationsData } from "./CollateralObligations/CollateralObligationsData"
 import "./styles.css"
 
 import { MARKET_BAR_DATA, MARKET_BAR_ORDER } from "./constants"
@@ -55,37 +56,10 @@ export const BorrowerMarketStatusChart = ({
               }
             >
               {chartItem.id === MARKET_BAR_DATA.collateralObligations.id && (
-                <div className="barchart__legend-obligations-values-container">
-                  <div className="barchart__legend-obligations-value">
-                    <div>{formatTokenWithCommas(market.coverageLiquidity)}</div>
-                    <div>Min Reserves</div>
-                  </div>
-                  <div className="barchart__legend-obligations-value">
-                    <div>
-                      {formatTokenWithCommas(
-                        withdrawals.activeWithdrawalsTotalOwed,
-                      )}
-                    </div>
-                    <div>Ongoing WDs</div>
-                  </div>
-                  <div className="barchart__legend-obligations-value">
-                    <div>
-                      {formatTokenWithCommas(
-                        withdrawals.expiredWithdrawalsTotalOwed,
-                      )}
-                    </div>
-                    <div>Claimable WDs</div>
-                  </div>
-                  <div className="barchart__legend-obligations-value">
-                    <div>
-                      {formatTokenWithCommas(
-                        withdrawals.expiredWithdrawalsTotalOwed,
-                      )}
-                    </div>
-                    <div>Outstanding WDs</div>
-                  </div>
-                  <div className="barchart__legend-divider" />
-                </div>
+                <CollateralObligationsData
+                  market={market}
+                  withdrawals={withdrawals}
+                />
               )}
             </LegendItem>
           ))}
@@ -103,36 +77,11 @@ export const BorrowerMarketStatusChart = ({
                 market={market}
                 legendItem={legendItem}
               >
-                <div className="barchart__legend-obligations-values-container">
-                  <div className="barchart__legend-obligations-value">
-                    <div>{formatTokenWithCommas(market.coverageLiquidity)}</div>
-                    <div>Min Reserves</div>
-                  </div>
-                  <div className="barchart__legend-obligations-value">
-                    <div>
-                      {formatTokenWithCommas(
-                        withdrawals.activeWithdrawalsTotalOwed,
-                      )}
-                    </div>
-                    <div>Ongoing WDs</div>
-                  </div>
-                  <div className="barchart__legend-obligations-value">
-                    <div>
-                      {formatTokenWithCommas(
-                        withdrawals.expiredWithdrawalsTotalOwed,
-                      )}
-                    </div>
-                    <div>Claimable WDs</div>
-                  </div>
-                  <div className="barchart__legend-obligations-value">
-                    <div>
-                      {formatTokenWithCommas(
-                        withdrawals.expiredWithdrawalsTotalOwed,
-                      )}
-                    </div>
-                    <div>Outstanding WDs</div>
-                  </div>
-                </div>
+                <CollateralObligationsData
+                  market={market}
+                  withdrawals={withdrawals}
+                  doubleDivider
+                />
               </DelinquentCollateralObligations>
             </LegendItem>
           ))}
