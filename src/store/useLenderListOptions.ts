@@ -47,10 +47,17 @@ export function useLenderListOptions() {
   const store = useLenderListOptionsStore()
   const { address } = useEthersProvider()
 
-  // First time we load the page, if the user is a registered borrower and
-  // onlyOwnMarkets has not been set, we set it to true
   useEffect(() => {
-    if (!address || store.haveSetOnlyOwnMarkets) return
+    if (!address) {
+      if (store.haveSetOnlyOwnMarkets) {
+        // When we disconnect wallet, we reset the onlyOwnMarkets flag
+        store.setOnlyOwnMarkets(false)
+      }
+      return
+    }
+
+    // First time we load the page, if the user is a registered borrower and
+    // onlyOwnMarkets has not been set, we set it to true
     store.setOnlyOwnMarkets(true)
   }, [address])
 
