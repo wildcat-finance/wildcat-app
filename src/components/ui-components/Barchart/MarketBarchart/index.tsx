@@ -1,5 +1,6 @@
 import "./styles.css"
 
+import cn from "classnames"
 import { MarketBarChartProps } from "./interface"
 
 export const MarketBarchart = ({ data }: MarketBarChartProps) => (
@@ -11,8 +12,17 @@ export const MarketBarchart = ({ data }: MarketBarChartProps) => (
         style={{
           width: `${chartItem.width}`,
           backgroundColor: `${chartItem.color}`,
+          position: "relative",
         }}
       >
+        {chartItem.overlayClassName && (
+          <div
+            className={cn("barchart__overlay", chartItem.overlayClassName)}
+            style={{
+              width: chartItem.overlayWidth,
+            }}
+          />
+        )}
         <div style={{ color: `${chartItem.textColor}` }}>
           {chartItem.label === "Non-collateral Interest" ? (
             <div />

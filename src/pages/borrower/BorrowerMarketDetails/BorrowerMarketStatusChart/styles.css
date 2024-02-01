@@ -25,3 +25,23 @@
     border-bottom: 1px solid rgb(244 243 232);
     margin-top: 12px;
 }
+
+.delinquency_overlay {
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(256, 0, 0, 0.2),
+    rgba(256, 0, 0, 0.2) 2px,
+    rgba(256, 0, 0, 0.3) 2px,
+    rgba(256, 0, 0, 0.3) 4px
+  );
+}
+
+.delinquent_dot {
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(256, 0, 0, 0.2),
+    rgba(256, 0, 0, 0.2) 2px,
+    rgba(256, 0, 0, 0.3) 2px,
+    rgba(256, 0, 0, 0.3) 4px
+  );
+}
