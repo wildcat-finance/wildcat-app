@@ -14,121 +14,56 @@ const getTokenAmountPercentageWidth = (
 export const useGenerateBarData = (
   market: Market,
 ): {
-  [key: string]: MarketBarChartItem
+  [key: string]: MarketBarChartItem & { hide?: boolean }
 } => {
+  const breakdown = market.getTotalDebtBreakdown()
   const barData: {
-    [key: string]: MarketBarChartItem
+    [key: string]: MarketBarChartItem & { hide?: boolean }
   } = {}
+  const asset = market.underlyingToken.symbol
 
-  const {
-    // totalBorrowed,
-    // borrowableAssets,
-    underlyingToken,
-    // totalDelinquencyFeesAccrued,
-    // totalBaseInterestAccrued,
-  } = market
+  const { totalDebt } = breakdown
 
-  const marketBarchartData = market.getTotalDebtBreakdown()
+  const colorKey =
+    breakdown.status === "healthy" ? "healthyBgColor" : "delinquentBgColor"
 
-  let borrowableSDK
-  let borrowedSDK
-  let collateralObligationsSDK
-  let delinquentDebtSDK
-  let reservesSDK
+  const setBarData = (
+    field: keyof typeof MARKET_BAR_DATA,
+    value: TokenAmount,
+  ) => {
+    if (value.lte(0)) return
+    const { id, label, [colorKey]: color } = MARKET_BAR_DATA[field]
+    barData[id] = {
+      id,
+      label,
+      value: formatTokenWithCommas(value),
+      asset,
+      width: getTokenAmountPercentageWidth(totalDebt, value),
+      color,
+    }
+  }
+  if (breakdown.status === "delinquent") {
+    setBarData("collateralObligations", breakdown.collateralObligation)
+    setBarData("borrowed", breakdown.borrowed)
+    barData.collateralObligations.overlayClassName = "delinquency_overlay"
+    const width = getTokenAmountPercentageWidth(
+      breakdown.collateralObligation,
+      breakdown.delinquentDebt,
+    )
+    barData.collateralObligations.overlayWidth = width
 
-  if (marketBarchartData.status === "healthy") {
-    borrowableSDK = marketBarchartData.borrowable
-    borrowedSDK = marketBarchartData.borrowed
-    collateralObligationsSDK = marketBarchartData.collateralObligation
+    barData.delinquentDebt = {
+      ...MARKET_BAR_DATA.delinquentDebt,
+      value: formatTokenWithCommas(breakdown.delinquentDebt),
+      asset,
+      width,
+      color: MARKET_BAR_DATA.delinquentDebt[colorKey],
+      textColor: MARKET_BAR_DATA.delinquentDebt.textColor,
+    }
   } else {
-    borrowedSDK = marketBarchartData.borrowed
-    delinquentDebtSDK = marketBarchartData.delinquentDebt
-    reservesSDK = marketBarchartData.reserves
-    collateralObligationsSDK = marketBarchartData.collateralObligation
-  }
-
-  // const totalInterestAccrued = (
-  //   totalDelinquencyFeesAccrued ?? underlyingToken.getAmount(0)
-  // ).add(totalBaseInterestAccrued ?? 0)
-
-  // let totalDebt = collateralObligationsSDK
-  //   .add(borrowableAssets)
-  //   .add(totalInterestAccrued)
-  // if (totalBorrowed) totalDebt = totalDebt.add(totalBorrowed)
-
-  let totalDebtSDK = collateralObligationsSDK.add(borrowedSDK)
-  if (borrowableSDK) totalDebtSDK = totalDebtSDK.add(borrowableSDK)
-
-  if (borrowableSDK && borrowableSDK.gt(0)) {
-    barData[MARKET_BAR_DATA.availableToBorrow.id] = {
-      id: MARKET_BAR_DATA.availableToBorrow.id,
-      label: MARKET_BAR_DATA.availableToBorrow.label,
-      value: formatTokenWithCommas(borrowableSDK),
-      asset: underlyingToken.symbol,
-      width: getTokenAmountPercentageWidth(totalDebtSDK, borrowableSDK),
-      color: MARKET_BAR_DATA.availableToBorrow.healthyBgColor,
-    }
-  }
-
-  if (borrowedSDK && borrowedSDK.gt(0)) {
-    barData[MARKET_BAR_DATA.borrowed.id] = {
-      id: MARKET_BAR_DATA.borrowed.id,
-      label: MARKET_BAR_DATA.borrowed.label,
-      value: formatTokenWithCommas(borrowedSDK),
-      asset: underlyingToken.symbol,
-      width: getTokenAmountPercentageWidth(totalDebtSDK, borrowedSDK),
-      color: MARKET_BAR_DATA.borrowed.healthyBgColor,
-    }
-  }
-
-  if (collateralObligationsSDK.gt(0)) {
-    barData[MARKET_BAR_DATA.collateralObligations.id] = {
-      id: MARKET_BAR_DATA.collateralObligations.id,
-      label: MARKET_BAR_DATA.collateralObligations.label,
-      value: formatTokenWithCommas(collateralObligationsSDK),
-      asset: underlyingToken.symbol,
-      width: getTokenAmountPercentageWidth(
-        totalDebtSDK,
-        collateralObligationsSDK,
-      ),
-      color: MARKET_BAR_DATA.collateralObligations.healthyBgColor,
-      textColor: MARKET_BAR_DATA.collateralObligations.textColor,
-    }
-  }
-
-  // if (totalInterestAccrued.gt(0)) {
-  //   barData[MARKET_BAR_DATA.nonCollateralInterest.id] = {
-  //     id: MARKET_BAR_DATA.nonCollateralInterest.id,
-  //     label: MARKET_BAR_DATA.nonCollateralInterest.label,
-  //     value: formatTokenWithCommas(totalInterestAccrued),
-  //     asset: underlyingToken.symbol,
-  //     width: getTokenAmountPercentageWidth(totalDebt, totalInterestAccrued),
-  //     color: MARKET_BAR_DATA.nonCollateralInterest.healthyBgColor,
-  //     textColor: MARKET_BAR_DATA.nonCollateralInterest.textColor,
-  //   }
-  // }
-
-  if (delinquentDebtSDK && delinquentDebtSDK.gt(0)) {
-    barData[MARKET_BAR_DATA.delinquentDebt.id] = {
-      id: MARKET_BAR_DATA.delinquentDebt.id,
-      label: MARKET_BAR_DATA.delinquentDebt.label,
-      value: formatTokenWithCommas(delinquentDebtSDK),
-      asset: underlyingToken.symbol,
-      width: getTokenAmountPercentageWidth(totalDebtSDK, delinquentDebtSDK),
-      color: MARKET_BAR_DATA.delinquentDebt.delinquentBgColor,
-    }
-  }
-
-  if (reservesSDK && reservesSDK.gt(0)) {
-    barData[MARKET_BAR_DATA.currentReserves.id] = {
-      id: MARKET_BAR_DATA.currentReserves.id,
-      label: MARKET_BAR_DATA.currentReserves.label,
-      value: formatTokenWithCommas(reservesSDK),
-      asset: underlyingToken.symbol,
-      width: getTokenAmountPercentageWidth(totalDebtSDK, reservesSDK),
-      color: MARKET_BAR_DATA.currentReserves.delinquentBgColor,
-      textColor: MARKET_BAR_DATA.currentReserves.textColor,
-    }
+    setBarData("availableToBorrow", breakdown.borrowable)
+    setBarData("collateralObligations", breakdown.collateralObligation)
+    setBarData("borrowed", breakdown.borrowed)
   }
 
   return barData

@@ -11,7 +11,7 @@ export const MarketBarchart = ({ data }: MarketBarChartProps) => (
         className="barchart__item"
         style={{
           width: `${chartItem.width}`,
-          minWidth: "5px",
+          minWidth: "0.5%",
           backgroundColor: `${chartItem.color}`,
           position: "relative",
         }}
@@ -25,13 +25,7 @@ export const MarketBarchart = ({ data }: MarketBarChartProps) => (
           />
         )}
         <div style={{ color: `${chartItem.textColor}` }}>
-          {chartItem.label === "Non-collateral Interest" ? (
-            <div />
-          ) : (
-            <div>
-              {chartItem.value} {chartItem.asset}
-            </div>
-          )}
+          {chartItem.value} {chartItem.asset}
         </div>
       </div>
     ))}
