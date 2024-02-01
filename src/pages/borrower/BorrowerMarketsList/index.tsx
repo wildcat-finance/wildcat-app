@@ -202,7 +202,7 @@ function BorrowerMarketsList() {
         {isLoading && <Spinner isLoading />}
         {noMarkets && <div className="m-auto">No markets yet</div>}
         {filteredMarkets.map((market) => (
-          <div key={market.address} className="w-1/3 px-2.5 py-2.5">
+          <div key={market.address + address} className="w-1/3 px-2.5 py-2.5">
             <MarketCard
               market={market}
               className="w-full"
