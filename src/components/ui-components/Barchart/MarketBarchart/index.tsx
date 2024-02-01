@@ -11,7 +11,7 @@ export const MarketBarchart = ({ data }: MarketBarChartProps) => (
         className="barchart__item"
         style={{
           width: `${chartItem.width}`,
-          minWidth: "0.5%",
+          minWidth: "0.6%",
           backgroundColor: `${chartItem.color}`,
           position: "relative",
         }}
@@ -25,7 +25,11 @@ export const MarketBarchart = ({ data }: MarketBarChartProps) => (
           />
         )}
         <div style={{ color: `${chartItem.textColor}` }}>
-          {chartItem.value} {chartItem.asset}
+          {!(Number(chartItem.width) <= 19) && (
+            <div>
+              {chartItem.value} {chartItem.asset}
+            </div>
+          )}
         </div>
       </div>
     ))}
