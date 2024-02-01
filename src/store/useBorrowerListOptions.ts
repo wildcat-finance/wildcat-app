@@ -6,6 +6,7 @@ import {
   MarketSortOption,
 } from "../components/MarketsListCommon/MarketsListOptions/interface"
 import { MarketSortOptions } from "../components/MarketsListCommon/MarketsListOptions/constants"
+import { useEthersProvider } from "../modules/hooks/useEthersSigner"
 
 export type BorrowerListOptionsStore = {
   onlyOwnMarkets: boolean
@@ -50,6 +51,7 @@ export type MarketFilterHooks = BorrowerListOptionsStore & {
 
 export function useBorrowerListOptions(): MarketFilterHooks {
   const store = useBorrowerListOptionsStore()
+  const { address } = useEthersProvider()
   const { data, isLoading } = useGetController()
 
   const isRegisteredBorrower = data?.isRegisteredBorrower
@@ -57,8 +59,16 @@ export function useBorrowerListOptions(): MarketFilterHooks {
   // First time we load the page, if the user is a registered borrower and
   // onlyOwnMarkets has not been set, we set it to true
   useEffect(() => {
-    if (isLoading || !isRegisteredBorrower || store.haveSetOnlyOwnMarkets)
+    if (!address && store.haveSetOnlyOwnMarkets) {
+      // When we disconnect wallet, we reset the onlyOwnMarkets flag
+      store.setOnlyOwnMarkets(false)
       return
+    }
+
+    if (isLoading || !isRegisteredBorrower || store.haveSetOnlyOwnMarkets) {
+      return
+    }
+
     store.setOnlyOwnMarkets(true)
   }, [isLoading, isRegisteredBorrower])
 
