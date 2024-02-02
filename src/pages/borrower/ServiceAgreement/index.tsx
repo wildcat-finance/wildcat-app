@@ -986,7 +986,7 @@ function ServiceAgreement() {
           <Button variant="gold" icon={<DownloadIcon />}>
             Download
           </Button>
-        </div>
+        </div>z
 
         {safeTxHash && (
           <WaitForSignatureModal
