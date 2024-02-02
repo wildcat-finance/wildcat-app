@@ -2,11 +2,11 @@ import { AiOutlineExclamationCircle } from "react-icons/ai"
 import { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
 import dayjs from "dayjs"
+
 import { Paper } from "../../../components/ui-components/Paper"
 import { BluePaper } from "../../../components/ui-components/BluePaper"
 import { Button } from "../../../components/ui-components/Button"
 import { DownloadIcon, SignIcon } from "../../../components/ui-components/icons"
-import { OrangePaper } from "../../../components/ui-components/OrangePaper"
 import { useGnosisSafeSDK } from "../../../hooks/useGnosisSafeSDK"
 import { useSubmitSignature } from "./hooks/useSubmitSignature"
 import { useSignAgreement } from "./hooks/useSignAgreement"
@@ -44,7 +44,6 @@ function LendersServiceAgreement() {
       dateSigned,
       address,
     })
-    console.log(result)
     if (result.signature) {
       await submitSignature({
         signature: result.signature,
@@ -915,9 +914,11 @@ function LendersServiceAgreement() {
             Sign
           </Button>
 
-          <Button variant="gold" icon={<DownloadIcon />}>
-            Download
-          </Button>
+          <a href="/pdf/Wildcat_Protocol_Services_Agreement.pdf" download>
+            <Button variant="gold" icon={<DownloadIcon />}>
+              Download
+            </Button>
+          </a>
         </div>
 
         {safeTxHash && (

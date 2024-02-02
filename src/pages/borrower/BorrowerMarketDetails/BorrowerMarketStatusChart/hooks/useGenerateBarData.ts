@@ -9,7 +9,7 @@ const getPercentageTokenAmount = (total: TokenAmount, amount: TokenAmount) =>
 const getTokenAmountPercentageWidth = (
   total: TokenAmount,
   amount: TokenAmount,
-) => `${getPercentageTokenAmount(total, amount)}%`
+) => `${getPercentageTokenAmount(total, amount)}`
 
 export const useGenerateBarData = (
   market: Market,

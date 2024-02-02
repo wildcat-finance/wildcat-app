@@ -1,10 +1,9 @@
-import { useNavigate } from "react-router-dom"
-
 import { AiOutlineExclamationCircle } from "react-icons/ai"
 import { useAccount } from "wagmi"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { AccountKind } from "@wildcatfi/wildcat-sdk"
 import dayjs from "dayjs"
+
 import {
   Paper,
   Button,
@@ -16,7 +15,6 @@ import { DownloadIcon, SignIcon } from "../../../components/ui-components/icons"
 import { useEthersSigner } from "../../../modules/hooks"
 import { useDescribeAccount } from "../../../hooks/useDescribeAccount"
 import { useSignAgreement } from "./hooks/useSignAgreement"
-import { OrangePaper } from "../../../components/ui-components/OrangePaper"
 import { toastifyError } from "../../../components/toasts"
 import { useSubmitSignature } from "./hooks/useSubmitSignature"
 import { useGnosisSafeSDK } from "../../../hooks/useGnosisSafeSDK"
@@ -25,7 +23,6 @@ import { WaitForSignatureModal } from "./WaitForSignatureModal"
 const DATE_FORMAT = "MMMM DD, YYYY"
 
 function ServiceAgreement() {
-  const navigate = useNavigate()
   const ref = useRef<HTMLInputElement | null>(null)
 
   const signer = useEthersSigner()
@@ -983,9 +980,11 @@ function ServiceAgreement() {
             Sign
           </Button>
 
-          <Button variant="gold" icon={<DownloadIcon />}>
-            Download
-          </Button>
+          <a href="/pdf/Wildcat_Protocol_Services_Agreement.pdf" download>
+            <Button variant="gold" icon={<DownloadIcon />}>
+              Download
+            </Button>
+          </a>
         </div>
 
         {safeTxHash && (
