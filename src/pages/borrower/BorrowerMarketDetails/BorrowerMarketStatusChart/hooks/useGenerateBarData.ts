@@ -23,6 +23,7 @@ export const useGenerateBarData = (
   const asset = market.underlyingToken.symbol
 
   const { totalDebt } = breakdown
+  console.log("DEBUG total", totalDebt.raw.toString(), totalDebt.lte(0))
 
   const colorKey =
     breakdown.status === "healthy" ? "healthyBgColor" : "delinquentBgColor"
@@ -31,7 +32,7 @@ export const useGenerateBarData = (
     field: keyof typeof MARKET_BAR_DATA,
     value: TokenAmount,
   ) => {
-    if (value.lte(0)) return
+    if (value.lte(0) && totalDebt.gt(0)) return
     const { id, label, [colorKey]: color } = MARKET_BAR_DATA[field]
     barData[id] = {
       id,
@@ -39,7 +40,7 @@ export const useGenerateBarData = (
       value: formatTokenWithCommas(value),
       asset,
       width: getTokenAmountPercentageWidth(totalDebt, value),
-      color,
+      color: totalDebt.gt(0) ? color : "transparent",
     }
   }
   if (breakdown.status === "delinquent") {
