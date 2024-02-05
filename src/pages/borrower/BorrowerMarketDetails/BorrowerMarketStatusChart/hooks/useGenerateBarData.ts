@@ -1,10 +1,12 @@
 import { Market, TokenAmount } from "@wildcatfi/wildcat-sdk"
+
 import { MarketBarChartItem } from "../../../../../components/ui-components/Barchart/MarketBarchart/interface"
 import { MARKET_BAR_DATA } from "../constants"
 import { formatTokenWithCommas } from "../../../../../utils/formatters"
 
 const getPercentageTokenAmount = (total: TokenAmount, amount: TokenAmount) =>
-  (parseFloat(amount.toFixed(2)) * 100) / parseFloat(total.toFixed(2))
+  (parseFloat(amount.toFixed(amount.decimals)) * 100) /
+  parseFloat(total.toFixed(total.decimals))
 
 const getTokenAmountPercentageWidth = (
   total: TokenAmount,

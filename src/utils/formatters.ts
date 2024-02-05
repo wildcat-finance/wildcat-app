@@ -27,7 +27,7 @@ export const formatTokenWithCommas = (
   tokenAmount: TokenAmount,
   withSymbol?: boolean,
 ) => {
-  const parsedAmount = parseFloat(tokenAmount.format(TOKEN_FORMAT_DECIMALS))
+  const parsedAmount = parseFloat(tokenAmount.format(tokenAmount.decimals))
   const parsedAmountWithComma = parsedAmount.toLocaleString(
     "en-US",
     parsedAmount < 1
