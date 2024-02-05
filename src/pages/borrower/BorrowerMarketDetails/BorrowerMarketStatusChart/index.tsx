@@ -6,22 +6,29 @@ import { BorrowerMarketStatusChartProps } from "./interface"
 import { formatTokenWithCommas } from "../../../../utils/formatters"
 import { useGetWithdrawals } from "../BorrowerWithdrawalRequests/hooks/useGetWithdrawals"
 import { MARKET_BAR_DATA, MARKET_BAR_ORDER } from "./constants"
-import "./styles.css"
 import { useGenerateBarData } from "./hooks/useGenerateBarData"
 import { CollateralObligationsData } from "./CollateralObligations/CollateralObligationsData"
+import { DelinquentCollateralObligations } from "./CollateralObligations/DelinquentCollateralObligations"
+import "./styles.css"
 
 export const BorrowerMarketStatusChart = ({
   market,
 }: BorrowerMarketStatusChartProps) => {
   const { data: withdrawals } = useGetWithdrawals(market)
-
   const barRawData = useGenerateBarData(market)
 
   const barOrders = market.isDelinquent
     ? MARKET_BAR_ORDER.delinquentBarsOrder
     : MARKET_BAR_ORDER.healthyBarchartOrder
+  const legendItemsOrder = market.isDelinquent
+    ? MARKET_BAR_ORDER.delinquentLegendOrder
+    : MARKET_BAR_ORDER.healthyLegendOrder
 
   const bars = barOrders
+    .filter((barId) => barRawData[barId] !== undefined)
+    .map((barId) => barRawData[barId])
+
+  const legendItems = legendItemsOrder
     .filter((barId) => barRawData[barId] !== undefined)
     .map((barId) => barRawData[barId])
 
@@ -39,7 +46,7 @@ export const BorrowerMarketStatusChart = ({
       )}
 
       <div className="barchart__legend">
-        {bars.map((chartItem) => (
+        {legendItems.map((chartItem) => (
           <LegendItem
             key={chartItem.label}
             chartItem={chartItem}
@@ -50,12 +57,26 @@ export const BorrowerMarketStatusChart = ({
             }
           >
             {chartItem.id === MARKET_BAR_DATA.collateralObligations.id && (
-              <div className="barchart__legend-obligations-values-container">
-                <CollateralObligationsData
-                  market={market}
-                  withdrawals={withdrawals}
-                />
-              </div>
+              <>
+                {!market.isDelinquent && (
+                  <div className="barchart__legend-obligations-values-container">
+                    <CollateralObligationsData
+                      market={market}
+                      withdrawals={withdrawals}
+                    />
+                  </div>
+                )}
+
+                {market.isDelinquent && (
+                  <div className="barchart__legend-obligations-values-container">
+                    <DelinquentCollateralObligations
+                      market={market}
+                      legendItem={chartItem}
+                      withdrawals={withdrawals}
+                    />
+                  </div>
+                )}
+              </>
             )}
           </LegendItem>
         ))}

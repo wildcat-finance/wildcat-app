@@ -3,16 +3,8 @@ import { MarketBarChartItem } from "../../../../../components/ui-components/Barc
 import { MARKET_BAR_DATA } from "../constants"
 import { formatTokenWithCommas } from "../../../../../utils/formatters"
 
-const getPercentageTokenAmount = (total: TokenAmount, amount: TokenAmount) => {
-  console.log(
-    "DEBUG getPercentageTokenAmount",
-    parseFloat(amount.toFixed(2)) * 100,
-    parseFloat(total.toFixed(2)),
-    (parseFloat(amount.toFixed(2)) * 100) / parseFloat(total.toFixed(2)),
-  )
-
-  return (parseFloat(amount.toFixed(2)) * 100) / parseFloat(total.toFixed(2))
-}
+const getPercentageTokenAmount = (total: TokenAmount, amount: TokenAmount) =>
+  (parseFloat(amount.toFixed(2)) * 100) / parseFloat(total.toFixed(2))
 
 const getTokenAmountPercentageWidth = (
   total: TokenAmount,
@@ -31,16 +23,6 @@ export const useGenerateBarData = (
   const asset = market.underlyingToken.symbol
 
   const { totalDebt } = breakdown
-
-  console.log("DEBUG breakdown", breakdown)
-
-  console.log("DEBUG breakdown formatter", {
-    borrowed: breakdown.borrowed.format(),
-    collateralObligation: breakdown.collateralObligation.format(),
-    currentReserves:
-      breakdown.status === "delinquent" && breakdown.reserves.format(),
-    totalDebts: totalDebt.format(),
-  })
 
   const colorKey =
     breakdown.status === "healthy" ? "healthyBgColor" : "delinquentBgColor"

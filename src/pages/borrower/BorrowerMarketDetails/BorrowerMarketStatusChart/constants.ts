@@ -48,6 +48,11 @@ export const MARKET_BAR_ORDER = {
     MARKET_BAR_DATA.currentReserves.id,
     MARKET_BAR_DATA.borrowed.id,
   ],
+  healthyLegendOrder: [
+    MARKET_BAR_DATA.availableToBorrow.id,
+    MARKET_BAR_DATA.borrowed.id,
+    MARKET_BAR_DATA.collateralObligations.id,
+  ],
   delinquentLegendOrder: [
     MARKET_BAR_DATA.collateralObligations.id,
     MARKET_BAR_DATA.borrowed.id,
