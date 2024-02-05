@@ -3,8 +3,16 @@ import { MarketBarChartItem } from "../../../../../components/ui-components/Barc
 import { MARKET_BAR_DATA } from "../constants"
 import { formatTokenWithCommas } from "../../../../../utils/formatters"
 
-const getPercentageTokenAmount = (total: TokenAmount, amount: TokenAmount) =>
-  (parseFloat(amount.toFixed(2)) * 100) / parseFloat(total.toFixed(2))
+const getPercentageTokenAmount = (total: TokenAmount, amount: TokenAmount) => {
+  console.log(
+    "DEBUG getPercentageTokenAmount",
+    parseFloat(amount.toFixed(2)) * 100,
+    parseFloat(total.toFixed(2)),
+    (parseFloat(amount.toFixed(2)) * 100) / parseFloat(total.toFixed(2)),
+  )
+
+  return (parseFloat(amount.toFixed(2)) * 100) / parseFloat(total.toFixed(2))
+}
 
 const getTokenAmountPercentageWidth = (
   total: TokenAmount,
@@ -23,6 +31,16 @@ export const useGenerateBarData = (
   const asset = market.underlyingToken.symbol
 
   const { totalDebt } = breakdown
+
+  console.log("DEBUG breakdown", breakdown)
+
+  console.log("DEBUG breakdown formatter", {
+    borrowed: breakdown.borrowed.format(),
+    collateralObligation: breakdown.collateralObligation.format(),
+    currentReserves:
+      breakdown.status === "delinquent" && breakdown.reserves.format(),
+    totalDebts: totalDebt.format(),
+  })
 
   const colorKey =
     breakdown.status === "healthy" ? "healthyBgColor" : "delinquentBgColor"
@@ -44,22 +62,9 @@ export const useGenerateBarData = (
   }
   if (breakdown.status === "delinquent") {
     setBarData("collateralObligations", breakdown.collateralObligation)
+    setBarData("delinquentDebt", breakdown.delinquentDebt)
+    setBarData("currentReserves", breakdown.reserves)
     setBarData("borrowed", breakdown.borrowed)
-    barData.collateralObligations.overlayClassName = "delinquency_overlay"
-    const width = getTokenAmountPercentageWidth(
-      breakdown.collateralObligation,
-      breakdown.delinquentDebt,
-    )
-    barData.collateralObligations.overlayWidth = width
-
-    barData.delinquentDebt = {
-      ...MARKET_BAR_DATA.delinquentDebt,
-      value: formatTokenWithCommas(breakdown.delinquentDebt),
-      asset,
-      width,
-      color: MARKET_BAR_DATA.delinquentDebt[colorKey],
-      textColor: MARKET_BAR_DATA.delinquentDebt.textColor,
-    }
   } else {
     setBarData("availableToBorrow", breakdown.borrowable)
     setBarData("collateralObligations", breakdown.collateralObligation)

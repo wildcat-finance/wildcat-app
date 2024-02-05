@@ -33,6 +33,7 @@ export const BorrowerMarketStatusChart = ({
           <div>{formatTokenWithCommas(market.totalDebts, true)}</div>
         )}
       </div>
+
       {market.totalDebts.gt(0) && (
         <MarketBarchart data={bars.filter((b) => !b.hide)} />
       )}

@@ -24,7 +24,7 @@ export const MARKET_BAR_DATA = {
     id: "delinquentDebt",
     label: "Delinquent Debt",
     healthyBgColor: "#D6D6DE",
-    delinquentBgColor: "#D6D6DE",
+    delinquentBgColor: "#F1464B",
     textColor: "#1414144D",
     hide: true,
     legendDotClassName: "delinquent_dot",
