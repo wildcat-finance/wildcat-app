@@ -25,11 +25,7 @@ export const MarketBarchart = ({ data }: MarketBarChartProps) => (
           />
         )}
         <div style={{ color: `${chartItem.textColor}` }}>
-          {!(Number(chartItem.width) <= 7.5) && (
-            <div>
-              {chartItem.value} {chartItem.asset}
-            </div>
-          )}
+          {!(Number(chartItem.width) <= 7.5) && <div>{chartItem.value}</div>}
         </div>
       </div>
     ))}
