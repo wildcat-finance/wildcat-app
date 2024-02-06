@@ -8,12 +8,7 @@ export const CollateralObligationsData = ({
   doubleDivider,
 }: CollateralObligationsDataProps) => (
   <div className="obligations__container">
-    {doubleDivider && (
-      <div
-        className="obligations__divider"
-        style={{ margin: "12px 0 12px 0" }}
-      />
-    )}
+    {doubleDivider && <div className="obligations__divider" />}
     <div className="obligations__value">
       <div>
         {formatTokenWithCommas(market.minimumReserves)}{" "}

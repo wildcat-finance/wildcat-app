@@ -8,6 +8,10 @@
     border-radius: 8px;
 }
 
+.barchart__legend-item-extended {
+    width: 100%;
+}
+
 .barchart__legend-header {
     display: flex;
     flex-direction: row;
@@ -20,4 +24,10 @@
     width: 12px;
     height: 12px;
     border-radius: 50%;
+}
+
+.barchart__legend-title-expandable {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
 }
