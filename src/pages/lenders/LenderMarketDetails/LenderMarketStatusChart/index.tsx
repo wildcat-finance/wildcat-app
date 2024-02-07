@@ -1,7 +1,4 @@
-import {
-  MarketBarchart,
-  LegendItem,
-} from "../../../../components/ui-components"
+import { LegendItem, BarItem } from "../../../../components/ui-components"
 import { LenderMarketStatusChartProps } from "./interface"
 import { formatTokenWithCommas } from "../../../../utils/formatters"
 import { MARKET_BAR_ORDER } from "./constants"
@@ -35,7 +32,13 @@ export const LenderMarketStatusChart = ({
       </div>
 
       {marketCapacity.gt(0) && (
-        <MarketBarchart data={bars.filter((b) => !b.hide)} />
+        <div className="barchart__container">
+          {bars
+            .filter((b) => !b.hide)
+            .map((chartItem) => (
+              <BarItem key={chartItem.id} chartItem={chartItem} />
+            ))}
+        </div>
       )}
 
       <div className="barchart__legend">

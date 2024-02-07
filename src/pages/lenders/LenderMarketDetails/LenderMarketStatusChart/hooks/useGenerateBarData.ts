@@ -1,7 +1,7 @@
 import { MarketAccount, TokenAmount } from "@wildcatfi/wildcat-sdk"
 import { formatEther } from "ethers/lib/utils"
 import { BigNumber } from "ethers"
-import { MarketBarChartItem } from "../../../../../components/ui-components/Barchart/MarketBarchart/interface"
+import { MarketBarChartItem } from "../../../../../components/ui-components/Barchart/BarItem/interface"
 import { MARKET_BAR_DATA } from "../constants"
 import { formatTokenWithCommas } from "../../../../../utils/formatters"
 

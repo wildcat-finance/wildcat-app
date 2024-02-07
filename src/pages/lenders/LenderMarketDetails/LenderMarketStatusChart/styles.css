@@ -1,3 +1,12 @@
+.barchart__container {
+    display: flex;
+    flex-direction: row;
+    gap: 0 2px;
+    width: 100%;
+    height: 24px;
+    margin-bottom: 16px;
+}
+
 .barchart__legend {
     display: flex;
     flex-direction: row;
