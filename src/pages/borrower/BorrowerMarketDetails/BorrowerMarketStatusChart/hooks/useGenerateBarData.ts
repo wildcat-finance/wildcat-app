@@ -34,12 +34,20 @@ export const useGenerateBarData = (
   const colorKey =
     breakdown.status === "healthy" ? "healthyBgColor" : "delinquentBgColor"
 
+  const textColorKey =
+    breakdown.status === "healthy" ? "healthyTextColor" : "delinquentTextColor"
+
   const setBarData = (
     field: keyof typeof MARKET_BAR_DATA,
     value: TokenAmount,
   ) => {
     if (value.lte(0) && totalDebt.gt(0)) return
-    const { id, label, [colorKey]: color } = MARKET_BAR_DATA[field]
+    const {
+      id,
+      label,
+      [colorKey]: color,
+      [textColorKey]: textColor,
+    } = MARKET_BAR_DATA[field]
     barData[id] = {
       id,
       label,
@@ -47,6 +55,7 @@ export const useGenerateBarData = (
       asset,
       width: getTokenAmountPercentageWidth(totalDebt, value),
       color: totalDebt.gt(0) ? color : "transparent",
+      textColor,
     }
   }
   if (breakdown.status === "delinquent") {

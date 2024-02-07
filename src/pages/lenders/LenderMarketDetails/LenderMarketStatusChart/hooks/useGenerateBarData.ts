@@ -31,13 +31,20 @@ export const useGenerateBarData = (
 
   const colorKey = "healthyBgColor"
 
+  const textColorKey = "healthyTextColor"
+
   const setBarData = (
     field: keyof typeof MARKET_BAR_DATA,
     value: TokenAmount,
     forceDisplay = false,
   ) => {
     if (value.lte(0) && total.gt(0) && !forceDisplay) return
-    const { id, label, [colorKey]: color } = MARKET_BAR_DATA[field]
+    const {
+      id,
+      label,
+      [colorKey]: color,
+      [textColorKey]: textColor,
+    } = MARKET_BAR_DATA[field]
     barData[id] = {
       id,
       label,
@@ -45,6 +52,7 @@ export const useGenerateBarData = (
       asset,
       width: getTokenAmountPercentageWidth(total, value),
       color: total.gt(0) ? color : "transparent",
+      textColor,
     }
   }
 
