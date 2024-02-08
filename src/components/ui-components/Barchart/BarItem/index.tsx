@@ -32,7 +32,7 @@ export const BarItem = ({ chartItem }: BarItemProps) => {
       className="barchart__item"
       style={{
         width: `${chartItem.width}%`,
-        minWidth: "0.6%",
+        minWidth: chartItem.value === "0" ? undefined : "0.6%",
         backgroundColor: `${chartItem.color}`,
         position: "relative",
       }}
