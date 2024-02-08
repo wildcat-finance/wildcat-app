@@ -7,6 +7,7 @@ import { AdjustMaximumCapacityModal } from "../Modals"
 import { useSetMaxTotalSupply } from "../hooks/useVaultDetailActions"
 import { AdjustMaximumCapacityProps } from "./interface"
 import {
+  formatTokenWithCommas,
   MARKET_PARAMS_DECIMALS,
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
@@ -95,9 +96,11 @@ const AdjustMaximumCapacity = ({
         value={newMaxTotalSupply}
         market={market}
         helperText="Current Capacity"
-        helperValue={`${market.maxTotalSupply.format(TOKEN_FORMAT_DECIMALS)} ${
-          market.underlyingToken.symbol
-        }`}
+        helperValue={`${formatTokenWithCommas(
+          market.maxTotalSupply,
+          false,
+          TOKEN_FORMAT_DECIMALS,
+        )} ${market.underlyingToken.symbol}`}
         errorText={error}
         disabled={isTxInProgress}
       />

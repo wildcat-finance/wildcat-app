@@ -3,6 +3,7 @@ import { TokenAmount } from "@wildcatfi/wildcat-sdk"
 import { parseUnits } from "ethers/lib/utils"
 import { Button } from "../../../../components/ui-components"
 import {
+  formatTokenWithCommas,
   MARKET_PARAMS_DECIMALS,
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
@@ -94,7 +95,9 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
           market={marketAccount.market}
           errorText={error}
           helperText="Balance"
-          helperValue={`${marketAccount.marketBalance.format(
+          helperValue={`${formatTokenWithCommas(
+            marketAccount.marketBalance,
+            false,
             TOKEN_FORMAT_DECIMALS,
           )}
           ${marketAccount.market.underlyingToken.symbol}`}

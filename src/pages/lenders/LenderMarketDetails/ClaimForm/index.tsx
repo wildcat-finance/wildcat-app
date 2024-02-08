@@ -2,7 +2,10 @@ import { useState } from "react"
 import { ClaimFormProps } from "./type"
 import { Button } from "../../../../components/ui-components"
 import { ClaimModal } from "../Modals/ClaimModal"
-import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
+import {
+  formatTokenWithCommas,
+  TOKEN_FORMAT_DECIMALS,
+} from "../../../../utils/formatters"
 import { useGetWithdrawals } from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
 import { useClaim } from "../../../borrower/BorrowerMarketDetails/hooks/useVaultDetailActions"
 import { useTransactionWait } from "../../../../store/useTransactionWait"
@@ -40,7 +43,9 @@ export const ClaimForm = ({ market }: ClaimFormProps) => {
           <div className="flex flex-col w-full">
             <div className="text-xxs text-right">
               <span className="font-semibold">Claimable: </span>
-              {withdrawals.totalClaimableAmount.format(
+              {formatTokenWithCommas(
+                withdrawals.totalClaimableAmount,
+                false,
                 TOKEN_FORMAT_DECIMALS,
               )}{" "}
               {market.underlyingToken.symbol}
