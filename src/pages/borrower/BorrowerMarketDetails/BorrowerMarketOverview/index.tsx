@@ -123,21 +123,6 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
               {marketToken.name}
             </a>
           </TableItem>
-          <TableItem
-            title="Withdrawal Cycle Duration"
-            value={formatSecsToHours(withdrawalBatchDuration)}
-            className="pl-6 pr-24"
-          />
-          <TableItem
-            title="Max. Grace Period"
-            value={formatSecsToHours(delinquencyGracePeriod)}
-            className="pl-6 pr-24"
-          />
-          <TableItem
-            title="Available Grace Period"
-            value={formatSecsToHours(availableGracePeriod)}
-            className="pl-6 pr-24"
-          />
         </div>
         <div className="w-full">
           <TableItem
@@ -146,42 +131,6 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
               delinquencyFeeBips,
               MARKET_PARAMS_DECIMALS.delinquencyFeeBips,
             )}%`}
-            className="pr-6 pl-24"
-          />
-          <TableItem
-            title="Total Outstanding Debt"
-            value={`${totalSupply.format(TOKEN_FORMAT_DECIMALS)} ${
-              underlyingToken.symbol
-            }`}
-            valueTooltip={`${totalSupply.format(totalSupply.decimals)} ${
-              underlyingToken.symbol
-            }`}
-            className="pr-6 pl-24"
-          />
-          <TableItem
-            title="Available to Borrow"
-            {...toTokenAmountProps(borrowableAssets)}
-            className="pr-6 pl-24"
-          />
-          <TableItem
-            title="Liquid Reserves"
-            {...toTokenAmountProps(liquidReserves)}
-            className="pr-6 pl-24"
-          />
-          <TableItem
-            title="Current Min. Reserve Required"
-            {...toTokenAmountProps(coverageLiquidity)}
-            className="pr-6 pl-24"
-          />
-          <TableItem
-            title="Reserves Owed"
-            {...toTokenAmountProps(delinquentDebt)}
-            className="pr-6 pl-24"
-          />
-          <TableItem
-            title="Unclaimed Withdrawals"
-            {...toTokenAmountProps(normalizedUnclaimedWithdrawals)}
-            titleTooltip="Withdrawals that have been reserved but not yet claimed"
             className="pr-6 pl-24"
           />
           <TableItem
@@ -195,6 +144,21 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
             className="pr-6 pl-24"
             {...toTokenAmountProps(market.totalProtocolFeesAccrued)}
             titleTooltip="Total accrued in protocol fees"
+          />
+          <TableItem
+            title="Withdrawal Cycle Duration"
+            value={formatSecsToHours(withdrawalBatchDuration)}
+            className="pr-6 pl-24"
+          />
+          <TableItem
+            title="Max. Grace Period"
+            value={formatSecsToHours(delinquencyGracePeriod)}
+            className="pr-6 pl-24"
+          />
+          <TableItem
+            title="Available Grace Period"
+            value={formatSecsToHours(availableGracePeriod)}
+            className="pr-6 pl-24"
           />
         </div>
       </div>
