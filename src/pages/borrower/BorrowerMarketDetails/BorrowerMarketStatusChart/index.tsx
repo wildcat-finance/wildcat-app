@@ -25,6 +25,7 @@ export const BorrowerMarketStatusChart = ({
   const bars = barOrders
     .filter((barId) => barRawData[barId] !== undefined)
     .map((barId) => barRawData[barId])
+    .filter((chartItem) => !chartItem.hide && chartItem.value !== "0")
 
   const legendItems = legendItemsOrder
     .filter((barId) => barRawData[barId] !== undefined)
@@ -41,11 +42,9 @@ export const BorrowerMarketStatusChart = ({
 
       {market.totalDebts.gt(0) && (
         <div className="barchart__container">
-          {bars
-            .filter((b) => !b.hide)
-            .map((chartItem) => (
-              <BarItem key={chartItem.id} chartItem={chartItem} />
-            ))}
+          {bars.map((chartItem) => (
+            <BarItem key={chartItem.id} chartItem={chartItem} />
+          ))}
         </div>
       )}
 

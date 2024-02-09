@@ -21,4 +21,5 @@ export type MarketBarChartItem = {
 
 export type BarItemProps = {
   chartItem: MarketBarChartItem
+  isOnlyBarItem?: boolean
 }

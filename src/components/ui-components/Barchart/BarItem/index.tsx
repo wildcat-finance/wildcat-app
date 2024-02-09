@@ -5,7 +5,7 @@ import { BarItemProps } from "./interface"
 
 import "./style.css"
 
-export const BarItem = ({ chartItem }: BarItemProps) => {
+export const BarItem = ({ chartItem, isOnlyBarItem }: BarItemProps) => {
   const [shouldDisplayValue, setShouldDisplayValue] = useState(true)
 
   const outerContainerRef = useRef<HTMLDivElement>(null)
@@ -30,12 +30,22 @@ export const BarItem = ({ chartItem }: BarItemProps) => {
     <div
       ref={outerContainerRef}
       className="barchart__item"
-      style={{
-        width: `${chartItem.width}%`,
-        minWidth: chartItem.value === "0" ? undefined : "0.6%",
-        backgroundColor: `${chartItem.color}`,
-        position: "relative",
-      }}
+      style={
+        isOnlyBarItem
+          ? {
+              width: "100%",
+              minWidth: "0.6%",
+              backgroundColor: `${chartItem.color}`,
+              position: "relative",
+              borderRadius: "8px",
+            }
+          : {
+              width: `${chartItem.width}%`,
+              minWidth: "0.6%",
+              backgroundColor: `${chartItem.color}`,
+              position: "relative",
+            }
+      }
     >
       {chartItem.overlayClassName && (
         <div
