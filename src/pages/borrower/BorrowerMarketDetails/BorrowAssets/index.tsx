@@ -3,7 +3,10 @@ import { ChangeEvent, useState } from "react"
 import { BorrowModal } from "../Modals"
 import { useBorrow } from "../hooks/useVaultDetailActions"
 import { BorrowAssetProps } from "./interface"
-import { TOKEN_FORMAT_DECIMALS } from "../../../../utils/formatters"
+import {
+  formatTokenWithCommas,
+  TOKEN_FORMAT_DECIMALS,
+} from "../../../../utils/formatters"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { Button } from "../../../../components/ui-components"
 import { useTransactionWait } from "../../../../store/useTransactionWait"
@@ -64,9 +67,10 @@ const BorrowAssets = ({
         value={borrowAmount}
         onChange={handleBorrowAmountChange}
         helperText="Available To Borrow"
-        helperValue={`${marketAccount.market.borrowableAssets.format(
-          TOKEN_FORMAT_DECIMALS,
+        helperValue={`${formatTokenWithCommas(
+          marketAccount.market.borrowableAssets,
           true,
+          TOKEN_FORMAT_DECIMALS,
         )}`}
         disabled={isTxInProgress}
       />

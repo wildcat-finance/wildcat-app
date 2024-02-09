@@ -26,14 +26,15 @@ export const MARKET_PARAMS_DECIMALS: Partial<{
 export const formatTokenWithCommas = (
   tokenAmount: TokenAmount,
   withSymbol?: boolean,
+  fractionDigits: number = 2,
 ) => {
-  const parsedAmount = parseFloat(tokenAmount.format(TOKEN_FORMAT_DECIMALS))
+  const parsedAmount = parseFloat(tokenAmount.format(tokenAmount.decimals))
   const parsedAmountWithComma = parsedAmount.toLocaleString(
     "en-US",
     parsedAmount < 1
       ? { maximumSignificantDigits: 2 }
       : {
-          maximumFractionDigits: 2,
+          maximumFractionDigits: fractionDigits,
         },
   )
 

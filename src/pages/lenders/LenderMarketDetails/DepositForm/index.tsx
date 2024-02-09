@@ -3,6 +3,7 @@ import { Controller } from "react-hook-form"
 
 import { Button } from "../../../../components/ui-components"
 import {
+  formatTokenWithCommas,
   MARKET_PARAMS_DECIMALS,
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
@@ -83,9 +84,10 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
               market={marketAccount.market}
               errorText={errors.depositAmount?.message}
               helperText="Maximum Deposit"
-              helperValue={marketAccount.maximumDeposit.format(
-                TOKEN_FORMAT_DECIMALS,
+              helperValue={formatTokenWithCommas(
+                marketAccount.maximumDeposit,
                 true,
+                TOKEN_FORMAT_DECIMALS,
               )}
               disabled={isTxInProgress}
               {...field}

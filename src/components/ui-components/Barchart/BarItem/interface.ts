@@ -19,6 +19,6 @@ export type MarketBarChartItem = {
     }
 )
 
-export type MarketBarChartProps = {
-  data: MarketBarChartItem[]
+export type BarItemProps = {
+  chartItem: MarketBarChartItem
 }

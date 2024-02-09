@@ -11,6 +11,7 @@ import {
 } from "../hooks/useVaultDetailActions"
 import { RepayProps } from "./interface"
 import {
+  formatTokenWithCommas,
   MARKET_PARAMS_DECIMALS,
   TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
@@ -152,7 +153,11 @@ const Repay = ({ marketAccount }: RepayProps) => {
         helperText="Max. Repay"
         error={!!error}
         errorText={error}
-        helperValue={`${outstandingDebt.format(TOKEN_FORMAT_DECIMALS, true)}`}
+        helperValue={`${formatTokenWithCommas(
+          outstandingDebt,
+          true,
+          TOKEN_FORMAT_DECIMALS,
+        )}`}
       />
       <div className="w-44 flex flex-col gap-y-1.5">
         {repayStep.status === "InsufficientAllowance" && !isConnectedToSafe ? (

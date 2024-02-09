@@ -17,7 +17,7 @@ export const LegendItem = ({
 
   switch (type) {
     case "extended":
-      return <div style={{ width: "100%" }}>{children}</div>
+      return <div className="barchart__legend-item-extended">{children}</div>
     case "expandable":
       return (
         <div className="barchart__legend-item">
@@ -29,13 +29,7 @@ export const LegendItem = ({
             }}
             onClick={() => toggleExpanded(expanded)}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                columnGap: "8px",
-              }}
-            >
+            <div className="barchart__legend-title-expandable">
               {chartItem.label}
               <div
                 className={cn(

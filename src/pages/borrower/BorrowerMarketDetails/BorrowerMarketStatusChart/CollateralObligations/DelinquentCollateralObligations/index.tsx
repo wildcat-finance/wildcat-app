@@ -1,34 +1,20 @@
-import { useState } from "react"
-import { ExpandMore } from "../../../../../../components/ui-components/icons"
-
-import "./styles.css"
+import { CollateralObligationsData } from "../CollateralObligationsData"
 import { DelinquentCollateralObligationsProps } from "./interface"
+import { MARKET_BAR_DATA } from "../../constants"
+import { formatTokenWithCommas } from "../../../../../../utils/formatters"
+import "./styles.css"
 
 export const DelinquentCollateralObligations = ({
   market,
   legendItem,
-  children,
+  withdrawals,
 }: DelinquentCollateralObligationsProps) => {
-  const [expanded, setExpanded] = useState(false)
+  const breakdown = market.getTotalDebtBreakdown()
 
-  const toggleExpanded = (value: boolean) => {
-    setExpanded(!value)
-  }
+  const reserves = breakdown.status === "delinquent" && breakdown.reserves
 
   return (
-    <div className="double-item__container">
-      <div
-        className="double-item__header"
-        style={{ justifyContent: "space-between", marginBottom: "12px" }}
-        onClick={() => toggleExpanded(expanded)}
-      >
-        <div>{legendItem.label}</div>
-        {expanded ? (
-          <ExpandMore className="transform rotate-180 h-[18px] w-[18px]" />
-        ) : (
-          <ExpandMore className="h-[18px] w-[18px]" />
-        )}
-      </div>
+    <>
       <div className="double-item__container-inner">
         <div style={{ width: "100%" }}>
           <div className="double-item__header">
@@ -36,7 +22,8 @@ export const DelinquentCollateralObligations = ({
             <div
               className="double-item__dot"
               style={{
-                backgroundColor: "#F1464B",
+                backgroundColor:
+                  MARKET_BAR_DATA.delinquentDebt.delinquentBgColor,
               }}
             />
           </div>
@@ -51,25 +38,21 @@ export const DelinquentCollateralObligations = ({
             <div
               className="double-item__dot"
               style={{
-                backgroundColor: "#F7BEC1",
+                backgroundColor:
+                  MARKET_BAR_DATA.currentReserves.delinquentBgColor,
               }}
             />
           </div>
           <div>
             <div>
-              {market.coverageLiquidity.toFixed(2)} {legendItem.asset}
+              {reserves && formatTokenWithCommas(reserves)} {legendItem.asset}
             </div>
           </div>
         </div>
       </div>
-      {expanded && (
-        <div className="double-item__values-container">
-          {children}
-          <div style={{ fontSize: "12px" }}>
-            {legendItem.value} {legendItem.asset}
-          </div>
-        </div>
-      )}
-    </div>
+      <div className="double-item__values-container">
+        <CollateralObligationsData market={market} withdrawals={withdrawals} />
+      </div>
+    </>
   )
 }

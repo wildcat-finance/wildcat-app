@@ -1,13 +1,11 @@
-import { Market, TokenAmount } from "@wildcatfi/wildcat-sdk"
-
-import { BigNumber } from "ethers"
+import { MarketAccount, TokenAmount } from "@wildcatfi/wildcat-sdk"
 import { formatEther } from "ethers/lib/utils"
+import { BigNumber } from "ethers"
 import { MarketBarChartItem } from "../../../../../components/ui-components/Barchart/BarItem/interface"
 import { MARKET_BAR_DATA } from "../constants"
 import { formatTokenWithCommas } from "../../../../../utils/formatters"
 
 const ONE_HUNDRED_E18 = BigNumber.from(10).pow(20)
-
 const getPercentageTokenAmount = (total: TokenAmount, amount: TokenAmount) =>
   total.eq(0)
     ? 0
@@ -19,30 +17,28 @@ const getTokenAmountPercentageWidth = (
 ) => `${getPercentageTokenAmount(total, amount)}`
 
 export const useGenerateBarData = (
-  market: Market,
+  account: MarketAccount,
 ): {
   [key: string]: MarketBarChartItem & { hide?: boolean }
 } => {
-  const breakdown = market.getTotalDebtBreakdown()
   const barData: {
     [key: string]: MarketBarChartItem & { hide?: boolean }
   } = {}
+  const { market } = account
   const asset = market.underlyingToken.symbol
 
-  const { totalDebt } = breakdown
-  console.log("DEBUG total", totalDebt.raw.toString(), totalDebt.lte(0))
+  const total = market.maxTotalSupply
 
-  const colorKey =
-    breakdown.status === "healthy" ? "healthyBgColor" : "delinquentBgColor"
+  const colorKey = "healthyBgColor"
 
-  const textColorKey =
-    breakdown.status === "healthy" ? "healthyTextColor" : "delinquentTextColor"
+  const textColorKey = "healthyTextColor"
 
   const setBarData = (
     field: keyof typeof MARKET_BAR_DATA,
     value: TokenAmount,
+    forceDisplay = false,
   ) => {
-    if (value.lte(0) && totalDebt.gt(0)) return
+    if (value.lte(0) && total.gt(0) && !forceDisplay) return
     const {
       id,
       label,
@@ -54,21 +50,20 @@ export const useGenerateBarData = (
       label,
       value: formatTokenWithCommas(value),
       asset,
-      width: getTokenAmountPercentageWidth(totalDebt, value),
-      color: totalDebt.gt(0) ? color : "transparent",
+      width: getTokenAmountPercentageWidth(total, value),
+      color: total.gt(0) ? color : "transparent",
       textColor,
     }
   }
-  if (breakdown.status === "delinquent") {
-    setBarData("collateralObligations", breakdown.collateralObligation)
-    setBarData("delinquentDebt", breakdown.delinquentDebt)
-    setBarData("currentReserves", breakdown.reserves)
-    setBarData("borrowed", breakdown.borrowed)
-  } else {
-    setBarData("availableToBorrow", breakdown.borrowable)
-    setBarData("collateralObligations", breakdown.collateralObligation)
-    setBarData("borrowed", breakdown.borrowed)
-  }
+
+  // Always display "my loan" and "other loans" if either is non-zero
+  setBarData("myLoan", account.marketBalance, market.totalSupply.gt(0))
+  setBarData(
+    "otherLoans",
+    market.totalSupply.sub(account.marketBalance),
+    market.totalSupply.gt(0),
+  )
+  setBarData("availableToLend", market.maximumDeposit, true)
 
   return barData
 }

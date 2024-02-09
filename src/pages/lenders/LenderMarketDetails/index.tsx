@@ -16,6 +16,7 @@ import { useTransactionWait } from "../../../store/useTransactionWait"
 import { getEffectiveLenderRole } from "../../../utils/lenderRole"
 import { LenderStatus } from "../../../types/vaults"
 import { useLenderListOptions } from "../../../store/useLenderListOptions"
+import { LenderMarketStatusChart } from "./LenderMarketStatusChart"
 
 export function LenderMarketDetails() {
   const navigate = useNavigate()
@@ -95,6 +96,8 @@ export function LenderMarketDetails() {
       {isLender && (
         <LenderMarketActions market={market} marketAccount={marketAccount} />
       )}
+
+      <LenderMarketStatusChart marketAccount={marketAccount} />
 
       <LenderMarketOverview marketAccount={marketAccount} />
 

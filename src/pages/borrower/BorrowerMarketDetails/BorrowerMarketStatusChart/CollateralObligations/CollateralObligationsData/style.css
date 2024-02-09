@@ -14,4 +14,5 @@
 .obligations__divider {
     width: 100%;
     border-bottom: 1px solid rgb(244 243 232);
+    margin: 12px 0;
 }
