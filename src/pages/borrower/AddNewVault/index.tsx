@@ -2,11 +2,9 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Token } from "@wildcatfi/wildcat-sdk"
 
-// import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import {
   Paper,
   Chip,
-  Button,
   FormItem,
   Select,
   TextInput,
@@ -96,7 +94,10 @@ const AddNewVault = () => {
           Number(marketParams.delinquencyGracePeriod) * 60 * 60,
         withdrawalBatchDuration:
           Number(marketParams.withdrawalBatchDuration) * 60 * 60,
-        maxTotalSupply: Number(marketParams.maxTotalSupply),
+
+        // Remove commas from maxTotalSupply
+        maxTotalSupply: Number(marketParams.maxTotalSupply.replace(/,/g, "")),
+
         assetData: tokenAsset,
       })
     }
@@ -229,6 +230,7 @@ const AddNewVault = () => {
               defaultValue={getNumberFieldDefaultValue("maxTotalSupply")}
               error={Boolean(errors.maxTotalSupply)}
               decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
+              thousandSeparator
             />
           </FormItem>
 

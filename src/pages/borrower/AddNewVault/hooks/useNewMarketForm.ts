@@ -14,7 +14,7 @@ import { mockedVaultTypes } from "../../../../mocks/vaults"
 
 export const defaultMarketForm: Partial<ValidationSchemaType> = {
   vaultType: mockedVaultTypes[0].value,
-  maxTotalSupply: 0,
+  maxTotalSupply: "0",
   annualInterestBips: 0,
   delinquencyFeeBips: 0,
   reserveRatioBips: 0,
