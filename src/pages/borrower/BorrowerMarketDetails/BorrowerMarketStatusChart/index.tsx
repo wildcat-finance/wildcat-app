@@ -8,6 +8,7 @@ import { useGenerateBarData } from "./hooks/useGenerateBarData"
 import { CollateralObligationsData } from "./CollateralObligations/CollateralObligationsData"
 import { DelinquentCollateralObligations } from "./CollateralObligations/DelinquentCollateralObligations"
 import "./styles.css"
+import { MarketBarChartItem } from "../../../../components/ui-components/Barchart/BarItem/interface"
 
 export const BorrowerMarketStatusChart = ({
   market,
@@ -31,6 +32,22 @@ export const BorrowerMarketStatusChart = ({
     .filter((barId) => barRawData[barId] !== undefined)
     .map((barId) => barRawData[barId])
 
+  const getLegendItemType = (
+    chartItem: MarketBarChartItem & { hide?: boolean | undefined },
+  ) => {
+    if (
+      chartItem.id === MARKET_BAR_DATA.collateralObligations.id &&
+      !market.isDelinquent
+    )
+      return "expandable"
+    if (
+      chartItem.id === MARKET_BAR_DATA.collateralObligations.id &&
+      market.isDelinquent
+    )
+      return "extended"
+    return "default"
+  }
+
   return (
     <div className="mb-14">
       <div className="flex mb-6 justify-between text-base font-bold">
@@ -53,11 +70,7 @@ export const BorrowerMarketStatusChart = ({
           <LegendItem
             key={chartItem.label}
             chartItem={chartItem}
-            type={
-              chartItem.id === MARKET_BAR_DATA.collateralObligations.id
-                ? "expandable"
-                : "default"
-            }
+            type={getLegendItemType(chartItem)}
           >
             {chartItem.id === MARKET_BAR_DATA.collateralObligations.id && (
               <>

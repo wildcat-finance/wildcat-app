@@ -29,9 +29,13 @@ export const useGenerateBarData = (
 
   const total = market.maxTotalSupply
 
-  const colorKey = "healthyBgColor"
+  const breakdown = market.getTotalDebtBreakdown()
 
-  const textColorKey = "healthyTextColor"
+  const colorKey =
+    breakdown.status === "healthy" ? "healthyBgColor" : "delinquentBgColor"
+
+  const textColorKey =
+    breakdown.status === "healthy" ? "healthyTextColor" : "delinquentTextColor"
 
   const setBarData = (
     field: keyof typeof MARKET_BAR_DATA,
