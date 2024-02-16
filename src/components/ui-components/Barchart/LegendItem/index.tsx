@@ -78,7 +78,10 @@ export const LegendItem = ({
             />
           </div>
           <div>
-            {formatTokenWithCommas(chartItem.value)} {chartItem.asset}
+            {formatTokenWithCommas(chartItem.value, {
+              fractionDigits: TOKEN_FORMAT_DECIMALS,
+            })}{" "}
+            {chartItem.asset}
           </div>
         </div>
       )
