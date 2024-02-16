@@ -1,7 +1,10 @@
 import { LegendItem, BarItem } from "../../../../components/ui-components"
 
 import { BorrowerMarketStatusChartProps } from "./interface"
-import { formatTokenWithCommas } from "../../../../utils/formatters"
+import {
+  formatTokenWithCommas,
+  TOKEN_FORMAT_DECIMALS,
+} from "../../../../utils/formatters"
 import { useGetWithdrawals } from "../BorrowerWithdrawalRequests/hooks/useGetWithdrawals"
 import { MARKET_BAR_DATA, MARKET_BAR_ORDER } from "./constants"
 import { useGenerateBarData } from "./hooks/useGenerateBarData"
@@ -56,6 +59,7 @@ export const BorrowerMarketStatusChart = ({
           <div>
             {formatTokenWithCommas(market.totalDebts, {
               withSymbol: true,
+              fractionDigits: TOKEN_FORMAT_DECIMALS,
             })}
           </div>
         )}
