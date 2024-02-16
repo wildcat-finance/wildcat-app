@@ -2,7 +2,10 @@ import { useState } from "react"
 import { CollateralObligationsData } from "../CollateralObligationsData"
 import { DelinquentCollateralObligationsProps } from "./interface"
 import { MARKET_BAR_DATA } from "../../constants"
-import { formatTokenWithCommas } from "../../../../../../utils/formatters"
+import {
+  formatTokenWithCommas,
+  TOKEN_FORMAT_DECIMALS,
+} from "../../../../../../utils/formatters"
 import "./styles.css"
 import { ExpandMore } from "../../../../../../components/ui-components/icons"
 
@@ -52,7 +55,10 @@ export const DelinquentCollateralObligations = ({
             />
           </div>
           <div>
-            {market.delinquentDebt.toFixed(2)} {legendItem.asset}
+            {formatTokenWithCommas(market.delinquentDebt, {
+              fractionDigits: TOKEN_FORMAT_DECIMALS,
+            })}{" "}
+            {legendItem.asset}
           </div>
         </div>
         <div className="double-item__divider-vertical" />
@@ -69,7 +75,11 @@ export const DelinquentCollateralObligations = ({
           </div>
           <div>
             <div>
-              {reserves && formatTokenWithCommas(reserves)} {legendItem.asset}
+              {reserves &&
+                formatTokenWithCommas(reserves, {
+                  fractionDigits: TOKEN_FORMAT_DECIMALS,
+                })}{" "}
+              {legendItem.asset}
             </div>
           </div>
         </div>
@@ -84,7 +94,10 @@ export const DelinquentCollateralObligations = ({
             />
           </div>
           <div>
-            {formatTokenWithCommas(legendItem.value)} {legendItem.asset}
+            {formatTokenWithCommas(legendItem.value, {
+              fractionDigits: TOKEN_FORMAT_DECIMALS,
+            })}{" "}
+            {legendItem.asset}
           </div>
         </>
       )}
