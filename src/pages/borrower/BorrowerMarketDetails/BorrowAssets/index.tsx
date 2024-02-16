@@ -69,8 +69,10 @@ const BorrowAssets = ({
         helperText="Available To Borrow"
         helperValue={`${formatTokenWithCommas(
           marketAccount.market.borrowableAssets,
-          true,
-          TOKEN_FORMAT_DECIMALS,
+          {
+            withSymbol: true,
+            fractionDigits: TOKEN_FORMAT_DECIMALS,
+          },
         )}`}
         disabled={isTxInProgress}
       />

@@ -84,7 +84,7 @@ export const DelinquentCollateralObligations = ({
             />
           </div>
           <div>
-            {legendItem.value} {legendItem.asset}
+            {formatTokenWithCommas(legendItem.value)} {legendItem.asset}
           </div>
         </>
       )}

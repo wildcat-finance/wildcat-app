@@ -43,11 +43,9 @@ export const ClaimForm = ({ market }: ClaimFormProps) => {
           <div className="flex flex-col w-full">
             <div className="text-xxs text-right">
               <span className="font-semibold">Claimable: </span>
-              {formatTokenWithCommas(
-                withdrawals.totalClaimableAmount,
-                false,
-                TOKEN_FORMAT_DECIMALS,
-              )}{" "}
+              {formatTokenWithCommas(withdrawals.totalClaimableAmount, {
+                fractionDigits: TOKEN_FORMAT_DECIMALS,
+              })}{" "}
               {market.underlyingToken.symbol}
             </div>
           </div>

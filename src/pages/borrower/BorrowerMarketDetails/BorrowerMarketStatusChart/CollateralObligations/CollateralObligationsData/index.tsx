@@ -1,4 +1,7 @@
-import { formatTokenWithCommas } from "../../../../../../utils/formatters"
+import {
+  formatTokenWithCommas,
+  TOKEN_FORMAT_DECIMALS,
+} from "../../../../../../utils/formatters"
 import { CollateralObligationsDataProps } from "./interface"
 import "./style.css"
 
@@ -11,28 +14,36 @@ export const CollateralObligationsData = ({
     {doubleDivider && <div className="obligations__divider" />}
     <div className="obligations__value">
       <div>
-        {formatTokenWithCommas(market.minimumReserves)}{" "}
+        {formatTokenWithCommas(market.minimumReserves, {
+          fractionDigits: TOKEN_FORMAT_DECIMALS,
+        })}{" "}
         {market.underlyingToken.symbol}
       </div>
       <div>Min Reserves</div>
     </div>
     <div className="obligations__value">
       <div>
-        {formatTokenWithCommas(withdrawals.activeWithdrawalsTotalOwed)}{" "}
+        {formatTokenWithCommas(withdrawals.activeWithdrawalsTotalOwed, {
+          fractionDigits: TOKEN_FORMAT_DECIMALS,
+        })}{" "}
         {market.underlyingToken.symbol}
       </div>
       <div>Ongoing WDs</div>
     </div>
     <div className="obligations__value">
       <div>
-        {formatTokenWithCommas(withdrawals.expiredWithdrawalsTotalOwed)}{" "}
+        {formatTokenWithCommas(withdrawals.expiredWithdrawalsTotalOwed, {
+          fractionDigits: TOKEN_FORMAT_DECIMALS,
+        })}{" "}
         {market.underlyingToken.symbol}
       </div>
       <div>Claimable WDs</div>
     </div>
     <div className="obligations__value">
       <div>
-        {formatTokenWithCommas(withdrawals.expiredWithdrawalsTotalOwed)}{" "}
+        {formatTokenWithCommas(withdrawals.expiredWithdrawalsTotalOwed, {
+          fractionDigits: TOKEN_FORMAT_DECIMALS,
+        })}{" "}
         {market.underlyingToken.symbol}
       </div>
       <div>Outstanding WDs</div>

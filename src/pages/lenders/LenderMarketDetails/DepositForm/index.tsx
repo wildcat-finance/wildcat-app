@@ -84,11 +84,10 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
               market={marketAccount.market}
               errorText={errors.depositAmount?.message}
               helperText="Maximum Deposit"
-              helperValue={formatTokenWithCommas(
-                marketAccount.maximumDeposit,
-                true,
-                TOKEN_FORMAT_DECIMALS,
-              )}
+              helperValue={formatTokenWithCommas(marketAccount.maximumDeposit, {
+                withSymbol: true,
+                fractionDigits: TOKEN_FORMAT_DECIMALS,
+              })}
               disabled={isTxInProgress}
               {...field}
             />

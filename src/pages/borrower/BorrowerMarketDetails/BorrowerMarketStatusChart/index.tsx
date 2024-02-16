@@ -26,7 +26,7 @@ export const BorrowerMarketStatusChart = ({
   const bars = barOrders
     .filter((barId) => barRawData[barId] !== undefined)
     .map((barId) => barRawData[barId])
-    .filter((chartItem) => !chartItem.hide && chartItem.value !== "0")
+    .filter((chartItem) => !chartItem.hide && !chartItem.value.raw.isZero())
 
   const legendItems = legendItemsOrder
     .filter((barId) => barRawData[barId] !== undefined)
@@ -53,7 +53,11 @@ export const BorrowerMarketStatusChart = ({
       <div className="flex mb-6 justify-between text-base font-bold">
         <div>Total Debt:</div>
         {market.totalBorrowed && (
-          <div>{formatTokenWithCommas(market.totalDebts, true)}</div>
+          <div>
+            {formatTokenWithCommas(market.totalDebts, {
+              withSymbol: true,
+            })}
+          </div>
         )}
       </div>
 

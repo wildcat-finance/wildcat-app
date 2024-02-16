@@ -51,7 +51,7 @@ export const useGenerateBarData = (
     barData[id] = {
       id,
       label,
-      value: formatTokenWithCommas(value),
+      value,
       asset,
       width: getTokenAmountPercentageWidth(totalDebt, value),
       color: totalDebt.gt(0) ? color : "transparent",

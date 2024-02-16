@@ -4,6 +4,7 @@ import cn from "classnames"
 import { BarItemProps } from "./interface"
 
 import "./style.css"
+import { formatTokenWithCommas } from "../../../../utils/formatters"
 
 export const BarItem = ({ chartItem, isOnlyBarItem }: BarItemProps) => {
   const [shouldDisplayValue, setShouldDisplayValue] = useState(true)
@@ -24,7 +25,7 @@ export const BarItem = ({ chartItem, isOnlyBarItem }: BarItemProps) => {
         setShouldDisplayValue(true)
       }
     }
-  }, [chartItem.width, chartItem.value])
+  }, [chartItem.width])
 
   return (
     <div
@@ -62,7 +63,13 @@ export const BarItem = ({ chartItem, isOnlyBarItem }: BarItemProps) => {
           width: "min-content",
         }}
       >
-        {shouldDisplayValue && <div>{chartItem.value}</div>}
+        {shouldDisplayValue && (
+          <div>
+            {formatTokenWithCommas(chartItem.value, {
+              forceSignificantDigits: true,
+            })}
+          </div>
+        )}
       </div>
     </div>
   )

@@ -16,21 +16,20 @@ export const LenderMarketStatusChart = ({
   const bars = barOrders
     .filter((barId) => barRawData[barId] !== undefined)
     .map((barId) => barRawData[barId])
-    .filter((chartItem) => !chartItem.hide && chartItem.value !== "0")
+    .filter((chartItem) => !chartItem.hide && !chartItem.value.raw.isZero())
 
   const legendItems = legendItemsOrder
     .filter((barId) => barRawData[barId] !== undefined)
     .map((barId) => barRawData[barId])
 
   const marketCapacity = marketAccount.market.maxTotalSupply
-  console.log(bars)
 
   return (
     <div className="mb-14">
       <div className="flex mb-6 justify-between text-base font-bold">
         <div>Market Capacity:</div>
 
-        <div>{formatTokenWithCommas(marketCapacity, true)}</div>
+        <div>{formatTokenWithCommas(marketCapacity, { withSymbol: true })}</div>
       </div>
 
       {marketCapacity.gt(0) && (

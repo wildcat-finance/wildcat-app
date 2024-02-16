@@ -111,13 +111,17 @@ function MarketCard({
         {showAvailableToLend && (
           <TableItem
             title="Available to Lend"
-            value={formatTokenWithCommas(market.maximumDeposit, true)}
+            value={formatTokenWithCommas(market.maximumDeposit, {
+              withSymbol: true,
+            })}
           />
         )}
         {variant === "borrower" && (
           <TableItem
             title="Available To Borrow"
-            value={formatTokenWithCommas(market.borrowableAssets, true)}
+            value={formatTokenWithCommas(market.borrowableAssets, {
+              withSymbol: true,
+            })}
           />
         )}
         {market.deployedEvent && (

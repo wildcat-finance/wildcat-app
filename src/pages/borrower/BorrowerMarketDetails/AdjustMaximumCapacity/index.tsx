@@ -96,11 +96,9 @@ const AdjustMaximumCapacity = ({
         value={newMaxTotalSupply}
         market={market}
         helperText="Current Capacity"
-        helperValue={`${formatTokenWithCommas(
-          market.maxTotalSupply,
-          false,
-          TOKEN_FORMAT_DECIMALS,
-        )} ${market.underlyingToken.symbol}`}
+        helperValue={`${formatTokenWithCommas(market.maxTotalSupply, {
+          fractionDigits: TOKEN_FORMAT_DECIMALS,
+        })} ${market.underlyingToken.symbol}`}
         errorText={error}
         disabled={isTxInProgress}
       />

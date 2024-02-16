@@ -3,6 +3,10 @@ import cn from "classnames"
 import { ExpandMore } from "../../icons"
 import { LegendItemProps } from "./interface"
 import "./styles.css"
+import {
+  formatTokenWithCommas,
+  TOKEN_FORMAT_DECIMALS,
+} from "../../../../utils/formatters"
 
 export const LegendItem = ({
   chartItem,
@@ -51,7 +55,10 @@ export const LegendItem = ({
           {expanded && children}
 
           <div>
-            {chartItem.value} {chartItem.asset}
+            {formatTokenWithCommas(chartItem.value, {
+              fractionDigits: TOKEN_FORMAT_DECIMALS,
+            })}{" "}
+            {chartItem.asset}
           </div>
         </div>
       )
@@ -71,7 +78,7 @@ export const LegendItem = ({
             />
           </div>
           <div>
-            {chartItem.value} {chartItem.asset}
+            {formatTokenWithCommas(chartItem.value)} {chartItem.asset}
           </div>
         </div>
       )
