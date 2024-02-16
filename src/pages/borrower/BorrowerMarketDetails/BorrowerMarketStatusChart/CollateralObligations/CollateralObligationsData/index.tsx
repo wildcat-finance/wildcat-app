@@ -32,7 +32,7 @@ export const CollateralObligationsData = ({
     </div>
     <div className="obligations__value">
       <div>
-        {formatTokenWithCommas(withdrawals.expiredWithdrawalsTotalOwed, {
+        {formatTokenWithCommas(market.normalizedUnclaimedWithdrawals, {
           fractionDigits: TOKEN_FORMAT_DECIMALS,
         })}{" "}
         {market.underlyingToken.symbol}
@@ -41,7 +41,7 @@ export const CollateralObligationsData = ({
     </div>
     <div className="obligations__value">
       <div>
-        {formatTokenWithCommas(withdrawals.expiredWithdrawalsTotalOwed, {
+        {formatTokenWithCommas(market.normalizedPendingWithdrawals, {
           fractionDigits: TOKEN_FORMAT_DECIMALS,
         })}{" "}
         {market.underlyingToken.symbol}
