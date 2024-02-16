@@ -63,7 +63,6 @@ export const useGenerateBarData = (
     setBarData("delinquentDebt", breakdown.delinquentDebt)
     setBarData("currentReserves", breakdown.reserves)
     setBarData("borrowed", breakdown.borrowed)
-    console.log("DEBUG", breakdown.borrowed.raw.toString())
   } else {
     setBarData("availableToBorrow", breakdown.borrowable)
     setBarData("collateralObligations", breakdown.collateralObligation)
