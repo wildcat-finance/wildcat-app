@@ -32,28 +32,32 @@ export const CollateralObligationsData = ({
     </div>
     <div className="obligations__value">
       <div>
-        {formatTokenWithCommas(
-          market.normalizedUnclaimedWithdrawals.sub(
-            withdrawals.activeWithdrawal!.normalizedAmountPaid,
-          ),
-          {
-            fractionDigits: TOKEN_FORMAT_DECIMALS,
-          },
-        )}{" "}
+        {withdrawals.activeWithdrawal
+          ? formatTokenWithCommas(
+              market.normalizedUnclaimedWithdrawals.sub(
+                withdrawals.activeWithdrawal.normalizedAmountPaid,
+              ),
+              {
+                fractionDigits: TOKEN_FORMAT_DECIMALS,
+              },
+            )
+          : 0}{" "}
         {market.underlyingToken.symbol}
       </div>
       <div>Claimable WDs</div>
     </div>
     <div className="obligations__value">
       <div>
-        {formatTokenWithCommas(
-          market.normalizedPendingWithdrawals.sub(
-            withdrawals.activeWithdrawal!.normalizedAmountOwed,
-          ),
-          {
-            fractionDigits: TOKEN_FORMAT_DECIMALS,
-          },
-        )}{" "}
+        {withdrawals.activeWithdrawal
+          ? formatTokenWithCommas(
+              market.normalizedPendingWithdrawals.sub(
+                withdrawals.activeWithdrawal.normalizedAmountOwed,
+              ),
+              {
+                fractionDigits: TOKEN_FORMAT_DECIMALS,
+              },
+            )
+          : 0}{" "}
         {market.underlyingToken.symbol}
       </div>
       <div>Outstanding WDs</div>
