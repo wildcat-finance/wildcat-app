@@ -66,14 +66,13 @@ export const BarItem = ({ chartItem, isOnlyBarItem }: BarItemProps) => {
           width: "min-content",
         }}
       >
-        s
-        {shouldDisplayValue && (
-          <div>
-            {formatTokenWithCommas(chartItem.value, {
-              fractionDigits: TOKEN_FORMAT_DECIMALS,
-            })}
-          </div>
-        )}
+        {/* {shouldDisplayValue && ( */}
+        {/*  <div> */}
+        {/*    {formatTokenWithCommas(chartItem.value, { */}
+        {/*      fractionDigits: TOKEN_FORMAT_DECIMALS, */}
+        {/*    })} */}
+        {/*  </div> */}
+        {/* )} */}
       </div>
     </div>
   )
