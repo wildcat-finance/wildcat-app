@@ -28,18 +28,12 @@ export const formatTokenWithCommas = (
   params?: {
     withSymbol?: boolean
     fractionDigits?: number
-    forceSignificantDigits?: boolean
   },
 ) => {
   const parsedAmount = parseFloat(tokenAmount.format(tokenAmount.decimals))
-  const parsedAmountWithComma = parsedAmount.toLocaleString(
-    "en-US",
-    parsedAmount < 1 || params?.forceSignificantDigits
-      ? { maximumSignificantDigits: 2 }
-      : {
-          maximumFractionDigits: params?.fractionDigits || 2,
-        },
-  )
+  const parsedAmountWithComma = parsedAmount.toLocaleString("en-US", {
+    maximumFractionDigits: params?.fractionDigits || 5,
+  })
 
   return `${parsedAmountWithComma}${
     params?.withSymbol ? ` ${tokenAmount.symbol}` : ""
