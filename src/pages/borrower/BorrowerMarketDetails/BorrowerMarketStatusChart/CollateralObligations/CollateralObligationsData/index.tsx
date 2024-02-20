@@ -21,7 +21,7 @@ export const CollateralObligationsData = ({
     : normalizedUnclaimedWithdrawals
 
   const outstandingWDs = activeWithdrawal
-    ? normalizedPendingWithdrawals.sub(activeWithdrawal.normalizedAmountPaid)
+    ? normalizedPendingWithdrawals.sub(activeWithdrawal.normalizedAmountOwed)
     : normalizedPendingWithdrawals
 
   return (
