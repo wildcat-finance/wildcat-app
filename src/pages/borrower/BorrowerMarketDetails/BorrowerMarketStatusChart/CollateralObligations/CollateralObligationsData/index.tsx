@@ -1,6 +1,7 @@
 import { formatTokenWithCommas } from "../../../../../../utils/formatters"
 import { CollateralObligationsDataProps } from "./interface"
 import "./style.css"
+import { TokenAmountTooltip } from "../../../../../../components/ui-components/TokenAmountTooltip"
 
 export const CollateralObligationsData = ({
   market,
@@ -27,25 +28,29 @@ export const CollateralObligationsData = ({
     <div className="obligations__container">
       {doubleDivider && <div className="obligations__divider" />}
       <div className="obligations__value">
-        <div>
+        <TokenAmountTooltip value={minimumReserves}>
           {formatTokenWithCommas(minimumReserves, { withSymbol: true })}
-        </div>
+        </TokenAmountTooltip>
         <div>Min Reserves</div>
       </div>
       <div className="obligations__value">
-        <div>
+        <TokenAmountTooltip value={activeWithdrawalsTotalOwed}>
           {formatTokenWithCommas(activeWithdrawalsTotalOwed, {
             withSymbol: true,
           })}
-        </div>
+        </TokenAmountTooltip>
         <div>Ongoing WDs</div>
       </div>
       <div className="obligations__value">
-        <div>{formatTokenWithCommas(claimableWDs, { withSymbol: true })}</div>
+        <TokenAmountTooltip value={claimableWDs}>
+          {formatTokenWithCommas(claimableWDs, { withSymbol: true })}
+        </TokenAmountTooltip>
         <div>Claimable WDs</div>
       </div>
       <div className="obligations__value">
-        <div>{formatTokenWithCommas(outstandingWDs, { withSymbol: true })}</div>
+        <TokenAmountTooltip value={outstandingWDs}>
+          {formatTokenWithCommas(outstandingWDs, { withSymbol: true })}
+        </TokenAmountTooltip>
         <div>Outstanding WDs</div>
       </div>
       <div

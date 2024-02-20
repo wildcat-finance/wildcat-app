@@ -9,6 +9,7 @@ import { CollateralObligationsData } from "./CollateralObligations/CollateralObl
 import { DelinquentCollateralObligations } from "./CollateralObligations/DelinquentCollateralObligations"
 import "./styles.css"
 import { MarketBarChartItem } from "../../../../components/ui-components/Barchart/BarItem/interface"
+import { TokenAmountTooltip } from "../../../../components/ui-components/TokenAmountTooltip"
 
 export const BorrowerMarketStatusChart = ({
   market,
@@ -53,11 +54,11 @@ export const BorrowerMarketStatusChart = ({
       <div className="flex mb-6 justify-between text-base font-bold">
         <div>Total Debt:</div>
         {market.totalBorrowed && (
-          <div>
+          <TokenAmountTooltip value={market.totalDebts}>
             {formatTokenWithCommas(market.totalDebts, {
               withSymbol: true,
             })}
-          </div>
+          </TokenAmountTooltip>
         )}
       </div>
 

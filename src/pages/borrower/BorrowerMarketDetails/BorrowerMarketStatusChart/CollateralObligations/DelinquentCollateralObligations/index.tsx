@@ -5,6 +5,7 @@ import { MARKET_BAR_DATA } from "../../constants"
 import { formatTokenWithCommas } from "../../../../../../utils/formatters"
 import "./styles.css"
 import { ExpandMore } from "../../../../../../components/ui-components/icons"
+import { TokenAmountTooltip } from "../../../../../../components/ui-components/TokenAmountTooltip"
 
 export const DelinquentCollateralObligations = ({
   market,
@@ -51,11 +52,11 @@ export const DelinquentCollateralObligations = ({
               }}
             />
           </div>
-          <div>
+          <TokenAmountTooltip value={market.delinquentDebt}>
             {formatTokenWithCommas(market.delinquentDebt, {
               withSymbol: true,
             })}
-          </div>
+          </TokenAmountTooltip>
         </div>
         <div className="double-item__divider-vertical" />
         <div style={{ width: "100%" }}>
@@ -71,10 +72,13 @@ export const DelinquentCollateralObligations = ({
           </div>
           <div>
             <div>
-              {reserves &&
-                formatTokenWithCommas(reserves, {
-                  withSymbol: true,
-                })}
+              {reserves && (
+                <TokenAmountTooltip value={reserves}>
+                  {formatTokenWithCommas(reserves, {
+                    withSymbol: true,
+                  })}
+                </TokenAmountTooltip>
+              )}
             </div>
           </div>
         </div>
@@ -88,11 +92,11 @@ export const DelinquentCollateralObligations = ({
               doubleDivider
             />
           </div>
-          <div>
+          <TokenAmountTooltip value={legendItem.value}>
             {formatTokenWithCommas(legendItem.value, {
               withSymbol: true,
             })}
-          </div>
+          </TokenAmountTooltip>
         </>
       )}
     </div>

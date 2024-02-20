@@ -4,6 +4,7 @@ import { formatTokenWithCommas } from "../../../../utils/formatters"
 import { MARKET_BAR_ORDER } from "./constants"
 import { useGenerateBarData } from "./hooks/useGenerateBarData"
 import "./styles.css"
+import { TokenAmountTooltip } from "../../../../components/ui-components/TokenAmountTooltip"
 
 export const LenderMarketStatusChart = ({
   marketAccount,
@@ -29,7 +30,9 @@ export const LenderMarketStatusChart = ({
       <div className="flex mb-6 justify-between text-base font-bold">
         <div>Market Capacity:</div>
 
-        <div>{formatTokenWithCommas(marketCapacity, { withSymbol: true })}</div>
+        <TokenAmountTooltip value={marketCapacity}>
+          {formatTokenWithCommas(marketCapacity, { withSymbol: true })}
+        </TokenAmountTooltip>
       </div>
 
       {marketCapacity.gt(0) && (
