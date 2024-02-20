@@ -155,7 +155,6 @@ const Repay = ({ marketAccount }: RepayProps) => {
         errorText={error}
         helperValue={`${formatTokenWithCommas(outstandingDebt, {
           withSymbol: true,
-          fractionDigits: TOKEN_FORMAT_DECIMALS,
         })}`}
       />
       <div className="w-44 flex flex-col gap-y-1.5">

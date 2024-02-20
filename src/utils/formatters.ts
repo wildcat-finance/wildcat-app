@@ -32,7 +32,7 @@ export const formatTokenWithCommas = (
 ) => {
   const parsedAmount = parseFloat(tokenAmount.format(tokenAmount.decimals))
   const parsedAmountWithComma = parsedAmount.toLocaleString("en-US", {
-    maximumFractionDigits: params?.fractionDigits || 5,
+    maximumFractionDigits: params?.fractionDigits || TOKEN_FORMAT_DECIMALS,
   })
 
   return `${parsedAmountWithComma}${

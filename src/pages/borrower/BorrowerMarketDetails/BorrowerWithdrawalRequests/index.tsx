@@ -7,8 +7,8 @@ import { useGetWithdrawals } from "./hooks/useGetWithdrawals"
 import { ExpandMore } from "../../../../components/ui-components/icons"
 import { BorrowerWithdrawalRequestsProps } from "./interface"
 import {
+  formatTokenWithCommas,
   timestampToDateFormatted,
-  TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
 
 const BorrowerWithdrawalRequests = ({
@@ -72,7 +72,7 @@ const BorrowerWithdrawalRequests = ({
           Open Withdrawal Requests
         </div>
         <Chip className="w-30 flex justify-center">
-          {totalAmount.format(TOKEN_FORMAT_DECIMALS, true)}
+          {formatTokenWithCommas(totalAmount, { withSymbol: true })}
         </Chip>
       </div>
       <div className="h-12 flex justify-between items-center bg-tint-10 px-6">
@@ -89,7 +89,7 @@ const BorrowerWithdrawalRequests = ({
             <ExpandMore onClick={() => toggleAccordion(1)} />
           )}
           <Chip className="w-30 flex justify-center">
-            {activeTotalAmount.format(TOKEN_FORMAT_DECIMALS, true)}
+            {formatTokenWithCommas(activeTotalAmount, { withSymbol: true })}
           </Chip>
         </div>
       </div>
@@ -116,22 +116,13 @@ const BorrowerWithdrawalRequests = ({
             <ExpandMore onClick={() => toggleAccordion(2)} />
           )}
           <Chip className="w-30 flex justify-center">
-            {expiredTotalAmount.format(TOKEN_FORMAT_DECIMALS, true)}
+            {formatTokenWithCommas(expiredTotalAmount, { withSymbol: true })}
           </Chip>
         </div>
       </div>
       {prevCycle && (
         <PrevCycleTable withdrawalBatches={data?.expiredPendingWithdrawals} />
       )}
-
-      {/* <div className="flex justify-between items-center mt-14 mb-4 pr-6"> */}
-      {/*  <div className="inline text-black text-xs font-bold"> */}
-      {/*    Claimable Withdrawal Requests */}
-      {/*  </div> */}
-      {/*  <Chip className="w-30 flex justify-center"> */}
-      {/*    {claimableAmount.format(TOKEN_FORMAT_DECIMALS, true)} */}
-      {/*  </Chip> */}
-      {/* </div> */}
     </div>
   )
 }

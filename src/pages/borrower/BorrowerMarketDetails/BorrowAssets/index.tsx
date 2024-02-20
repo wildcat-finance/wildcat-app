@@ -71,7 +71,6 @@ const BorrowAssets = ({
           marketAccount.market.borrowableAssets,
           {
             withSymbol: true,
-            fractionDigits: TOKEN_FORMAT_DECIMALS,
           },
         )}`}
         disabled={isTxInProgress}

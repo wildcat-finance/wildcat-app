@@ -9,7 +9,6 @@ import { AdjustMaximumCapacityProps } from "./interface"
 import {
   formatTokenWithCommas,
   MARKET_PARAMS_DECIMALS,
-  TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
 import { useTransactionWait } from "../../../../store/useTransactionWait"
@@ -96,9 +95,9 @@ const AdjustMaximumCapacity = ({
         value={newMaxTotalSupply}
         market={market}
         helperText="Current Capacity"
-        helperValue={`${formatTokenWithCommas(market.maxTotalSupply, {
-          fractionDigits: TOKEN_FORMAT_DECIMALS,
-        })} ${market.underlyingToken.symbol}`}
+        helperValue={`${formatTokenWithCommas(market.maxTotalSupply)} ${
+          market.underlyingToken.symbol
+        }`}
         errorText={error}
         disabled={isTxInProgress}
       />

@@ -95,9 +95,7 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
           market={marketAccount.market}
           errorText={error}
           helperText="Balance"
-          helperValue={`${formatTokenWithCommas(marketAccount.marketBalance, {
-            fractionDigits: TOKEN_FORMAT_DECIMALS,
-          })}
+          helperValue={`${formatTokenWithCommas(marketAccount.marketBalance)}
           ${marketAccount.market.underlyingToken.symbol}`}
           disabled={isTxInProgress}
         />

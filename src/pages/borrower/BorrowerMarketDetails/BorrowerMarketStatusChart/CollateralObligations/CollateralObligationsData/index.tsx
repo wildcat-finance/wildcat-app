@@ -1,7 +1,4 @@
-import {
-  formatTokenWithCommas,
-  TOKEN_FORMAT_DECIMALS,
-} from "../../../../../../utils/formatters"
+import { formatTokenWithCommas } from "../../../../../../utils/formatters"
 import { CollateralObligationsDataProps } from "./interface"
 import "./style.css"
 
@@ -13,7 +10,6 @@ export const CollateralObligationsData = ({
   const {
     normalizedUnclaimedWithdrawals,
     normalizedPendingWithdrawals,
-    underlyingToken,
     minimumReserves,
   } = market
   const { activeWithdrawalsTotalOwed } = withdrawals
@@ -32,38 +28,24 @@ export const CollateralObligationsData = ({
       {doubleDivider && <div className="obligations__divider" />}
       <div className="obligations__value">
         <div>
-          {formatTokenWithCommas(minimumReserves, {
-            fractionDigits: TOKEN_FORMAT_DECIMALS,
-          })}{" "}
-          {underlyingToken.symbol}
+          {formatTokenWithCommas(minimumReserves, { withSymbol: true })}
         </div>
         <div>Min Reserves</div>
       </div>
       <div className="obligations__value">
         <div>
           {formatTokenWithCommas(activeWithdrawalsTotalOwed, {
-            fractionDigits: TOKEN_FORMAT_DECIMALS,
-          })}{" "}
-          {underlyingToken.symbol}
+            withSymbol: true,
+          })}
         </div>
         <div>Ongoing WDs</div>
       </div>
       <div className="obligations__value">
-        <div>
-          {formatTokenWithCommas(claimableWDs, {
-            fractionDigits: TOKEN_FORMAT_DECIMALS,
-          })}{" "}
-          {underlyingToken.symbol}
-        </div>
+        <div>{formatTokenWithCommas(claimableWDs, { withSymbol: true })}</div>
         <div>Claimable WDs</div>
       </div>
       <div className="obligations__value">
-        <div>
-          {formatTokenWithCommas(outstandingWDs, {
-            fractionDigits: TOKEN_FORMAT_DECIMALS,
-          })}{" "}
-          {underlyingToken.symbol}
-        </div>
+        <div>{formatTokenWithCommas(outstandingWDs, { withSymbol: true })}</div>
         <div>Outstanding WDs</div>
       </div>
       <div

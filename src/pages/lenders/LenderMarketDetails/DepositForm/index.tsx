@@ -5,7 +5,6 @@ import { Button } from "../../../../components/ui-components"
 import {
   formatTokenWithCommas,
   MARKET_PARAMS_DECIMALS,
-  TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
 import { useDeposit } from "../../../borrower/BorrowerMarketDetails/hooks/useVaultDetailActions"
 import { DepositFormProps } from "./interface"
@@ -86,7 +85,6 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
               helperText="Maximum Deposit"
               helperValue={formatTokenWithCommas(marketAccount.maximumDeposit, {
                 withSymbol: true,
-                fractionDigits: TOKEN_FORMAT_DECIMALS,
               })}
               disabled={isTxInProgress}
               {...field}
