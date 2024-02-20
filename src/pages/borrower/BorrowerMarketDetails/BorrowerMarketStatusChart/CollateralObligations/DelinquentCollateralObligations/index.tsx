@@ -52,7 +52,10 @@ export const DelinquentCollateralObligations = ({
               }}
             />
           </div>
-          <TokenAmountTooltip value={market.delinquentDebt}>
+          <TokenAmountTooltip
+            value={market.delinquentDebt}
+            symbol={market.underlyingToken.symbol}
+          >
             {formatTokenWithCommas(market.delinquentDebt, {
               withSymbol: true,
             })}
@@ -73,7 +76,10 @@ export const DelinquentCollateralObligations = ({
           <div>
             <div>
               {reserves && (
-                <TokenAmountTooltip value={reserves}>
+                <TokenAmountTooltip
+                  value={reserves}
+                  symbol={market.underlyingToken.symbol}
+                >
                   {formatTokenWithCommas(reserves, {
                     withSymbol: true,
                   })}
@@ -92,7 +98,10 @@ export const DelinquentCollateralObligations = ({
               doubleDivider
             />
           </div>
-          <TokenAmountTooltip value={legendItem.value}>
+          <TokenAmountTooltip
+            value={legendItem.value}
+            symbol={market.underlyingToken.symbol}
+          >
             {formatTokenWithCommas(legendItem.value, {
               withSymbol: true,
             })}

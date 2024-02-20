@@ -54,7 +54,10 @@ export const BorrowerMarketStatusChart = ({
       <div className="flex mb-6 justify-between text-base font-bold">
         <div>Total Debt:</div>
         {market.totalBorrowed && (
-          <TokenAmountTooltip value={market.totalDebts}>
+          <TokenAmountTooltip
+            value={market.totalDebts}
+            symbol={market.underlyingToken.symbol}
+          >
             {formatTokenWithCommas(market.totalDebts, {
               withSymbol: true,
             })}

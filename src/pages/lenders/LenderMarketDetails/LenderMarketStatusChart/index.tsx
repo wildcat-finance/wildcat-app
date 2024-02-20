@@ -30,8 +30,12 @@ export const LenderMarketStatusChart = ({
       <div className="flex mb-6 justify-between text-base font-bold">
         <div>Market Capacity:</div>
 
-        <TokenAmountTooltip value={marketCapacity}>
-          {formatTokenWithCommas(marketCapacity, { withSymbol: true })}
+        <TokenAmountTooltip
+          value={marketCapacity}
+          symbol={marketAccount.market.underlyingToken.symbol}
+        >
+          {formatTokenWithCommas(marketCapacity)}{" "}
+          {` ${marketAccount.market.underlyingToken.symbol}`}
         </TokenAmountTooltip>
       </div>
 

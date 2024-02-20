@@ -5,20 +5,20 @@ import { TokenAmountTooltipProps } from "./interface"
 export const TokenAmountTooltip = ({
   children,
   value,
-  withSymbol = true,
   symbol,
 }: TokenAmountTooltipProps) => (
-  <Tooltip
-    content={
-      <div>
-        {formatTokenWithCommas(value, {
-          withSymbol,
-          fractionDigits: value.decimals,
-        })}{" "}
-        {symbol}
-      </div>
-    }
-  >
-    <div style={{ display: "flex" }}>{children}</div>
-  </Tooltip>
+  <div className="flex">
+    <Tooltip
+      content={
+        <div>
+          {formatTokenWithCommas(value, {
+            fractionDigits: value.decimals,
+          })}
+          {symbol && ` ${symbol}`}
+        </div>
+      }
+    >
+      <span>{children}</span>
+    </Tooltip>
+  </div>
 )

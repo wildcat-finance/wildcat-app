@@ -52,7 +52,7 @@ export const LegendItem = ({
 
           {expanded && children}
 
-          <TokenAmountTooltip value={chartItem.value}>
+          <TokenAmountTooltip value={chartItem.value} symbol={chartItem.asset}>
             {formatTokenWithCommas(chartItem.value)} {chartItem.asset}
           </TokenAmountTooltip>
         </div>
@@ -72,11 +72,7 @@ export const LegendItem = ({
               }}
             />
           </div>
-          <TokenAmountTooltip
-            value={chartItem.value}
-            withSymbol={false}
-            symbol={chartItem.asset}
-          >
+          <TokenAmountTooltip value={chartItem.value} symbol={chartItem.asset}>
             {formatTokenWithCommas(chartItem.value)} {chartItem.asset}
           </TokenAmountTooltip>
         </div>

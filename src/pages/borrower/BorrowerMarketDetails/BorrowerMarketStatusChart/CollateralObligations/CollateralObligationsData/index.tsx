@@ -28,13 +28,19 @@ export const CollateralObligationsData = ({
     <div className="obligations__container">
       {doubleDivider && <div className="obligations__divider" />}
       <div className="obligations__value">
-        <TokenAmountTooltip value={minimumReserves}>
+        <TokenAmountTooltip
+          value={minimumReserves}
+          symbol={market.underlyingToken.symbol}
+        >
           {formatTokenWithCommas(minimumReserves, { withSymbol: true })}
         </TokenAmountTooltip>
         <div>Min Reserves</div>
       </div>
       <div className="obligations__value">
-        <TokenAmountTooltip value={activeWithdrawalsTotalOwed}>
+        <TokenAmountTooltip
+          value={activeWithdrawalsTotalOwed}
+          symbol={market.underlyingToken.symbol}
+        >
           {formatTokenWithCommas(activeWithdrawalsTotalOwed, {
             withSymbol: true,
           })}
@@ -42,13 +48,19 @@ export const CollateralObligationsData = ({
         <div>Ongoing WDs</div>
       </div>
       <div className="obligations__value">
-        <TokenAmountTooltip value={claimableWDs}>
+        <TokenAmountTooltip
+          value={claimableWDs}
+          symbol={market.underlyingToken.symbol}
+        >
           {formatTokenWithCommas(claimableWDs, { withSymbol: true })}
         </TokenAmountTooltip>
         <div>Claimable WDs</div>
       </div>
       <div className="obligations__value">
-        <TokenAmountTooltip value={outstandingWDs}>
+        <TokenAmountTooltip
+          value={outstandingWDs}
+          symbol={market.underlyingToken.symbol}
+        >
           {formatTokenWithCommas(outstandingWDs, { withSymbol: true })}
         </TokenAmountTooltip>
         <div>Outstanding WDs</div>
