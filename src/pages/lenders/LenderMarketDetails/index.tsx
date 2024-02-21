@@ -17,6 +17,7 @@ import { getEffectiveLenderRole } from "../../../utils/lenderRole"
 import { LenderStatus } from "../../../types/vaults"
 import { useLenderListOptions } from "../../../store/useLenderListOptions"
 import { LenderMarketStatusChart } from "./LenderMarketStatusChart"
+import { LenderTotalDebtsChart } from "./LenderTotalDebtChart"
 
 export function LenderMarketDetails() {
   const navigate = useNavigate()
@@ -98,6 +99,8 @@ export function LenderMarketDetails() {
       )}
 
       <LenderMarketStatusChart marketAccount={marketAccount} />
+
+      <LenderTotalDebtsChart marketAccount={marketAccount} />
 
       <LenderMarketOverview marketAccount={marketAccount} />
 
