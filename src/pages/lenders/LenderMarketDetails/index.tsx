@@ -17,7 +17,7 @@ import { getEffectiveLenderRole } from "../../../utils/lenderRole"
 import { LenderStatus } from "../../../types/vaults"
 import { useLenderListOptions } from "../../../store/useLenderListOptions"
 import { LenderMarketStatusChart } from "./LenderMarketStatusChart"
-import { LenderTotalDebtsChart } from "./LenderTotalDebtChart"
+import { LenderTotalDebtsChart } from "./LenderMarketAssetsChart"
 
 export function LenderMarketDetails() {
   const navigate = useNavigate()
