@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom"
 
-import { LenderRole } from "@wildcatfi/wildcat-sdk"
 import { Button, Chip, Spinner } from "../../../components/ui-components"
 import { useWalletConnect } from "../../../hooks/useWalletConnect"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
