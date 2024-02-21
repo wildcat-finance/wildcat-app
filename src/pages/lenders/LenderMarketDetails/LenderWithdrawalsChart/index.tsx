@@ -1,17 +1,17 @@
 import { LegendItem, BarItem } from "../../../../components/ui-components"
-import { LenderTotalDebtsChartProps } from "./interface"
+import { LenderWithdrawalsChartProps } from "./interface"
 import { formatTokenWithCommas } from "../../../../utils/formatters"
 import { MARKET_BAR_ORDER } from "./constants"
 import { useGenerateBarData } from "./hooks/useGenerateBarData"
+import { useGetWithdrawals } from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
 import "./styles.css"
-import { useGetWithdrawals } from "../../../borrower/BorrowerMarketDetails/BorrowerWithdrawalRequests/hooks/useGetWithdrawals"
 import { TokenAmountTooltip } from "../../../../components/ui-components/TokenAmountTooltip"
 
-export const LenderTotalDebtsChart = ({
+export const LenderWithdrawalsChart = ({
   marketAccount,
-}: LenderTotalDebtsChartProps) => {
+}: LenderWithdrawalsChartProps) => {
   const { data } = useGetWithdrawals(marketAccount.market)
-  const barRawData = useGenerateBarData({
+  const { barData: barRawData, total } = useGenerateBarData({
     market: marketAccount.market,
     lenderWithdrawals: data,
   })
@@ -22,7 +22,6 @@ export const LenderTotalDebtsChart = ({
   const bars = barOrders
     .filter((barId) => barRawData[barId] !== undefined)
     .map((barId) => barRawData[barId])
-    .filter((chartItem) => !chartItem.hide && !chartItem.value.raw.isZero())
 
   const legendItems = legendItemsOrder
     .filter((barId) => barRawData[barId] !== undefined)
@@ -31,13 +30,13 @@ export const LenderTotalDebtsChart = ({
   return (
     <div className="mb-14">
       <div className="flex mb-6 justify-between text-base font-bold">
-        <div>Total Debts:</div>
+        <div>Your Withdrawals:</div>
 
         <TokenAmountTooltip
-          value={marketAccount.market.totalDebts}
+          value={total}
           symbol={marketAccount.market.underlyingToken.symbol}
         >
-          {formatTokenWithCommas(marketAccount.market.totalDebts, {
+          {formatTokenWithCommas(total, {
             withSymbol: true,
           })}
         </TokenAmountTooltip>
