@@ -34,10 +34,14 @@ export const LenderTotalDebtsChart = ({
       <div className="flex mb-6 justify-between text-base font-bold">
         <div>Total Debts:</div>
 
-        <div>{formatTokenWithCommas(marketCapacity, { withSymbol: true })}</div>
+        <div>
+          {formatTokenWithCommas(marketAccount.market.totalDebts, {
+            withSymbol: true,
+          })}
+        </div>
       </div>
 
-      {marketCapacity.gt(0) && (
+      {marketAccount.market.totalDebts.gt(0) && (
         <div className="barchart__container">
           {bars.map((chartItem) => (
             <BarItem
