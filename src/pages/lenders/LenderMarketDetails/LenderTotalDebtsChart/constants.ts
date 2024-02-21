@@ -2,7 +2,7 @@ export const MARKET_BAR_DATA = {
   locked: {
     id: "locked",
     label: "Locked",
-    healthyBgColor: "#4971FF",
+    healthyBgColor: "#BEBECE",
     delinquentBgColor: "#4971FF",
     healthyTextColor: "#FFFFFF",
     delinquentTextColor: "#FFFFFF",
@@ -10,7 +10,7 @@ export const MARKET_BAR_DATA = {
   liquid: {
     id: "liquid",
     label: "Liquid",
-    healthyBgColor: "#EFF0F4",
+    healthyBgColor: "#D6D6DE",
     delinquentBgColor: "#EFF0F4",
     healthyTextColor: "#1414144D",
     delinquentTextColor: "#1414144D",
@@ -18,7 +18,7 @@ export const MARKET_BAR_DATA = {
   borrowed: {
     id: "borrowed",
     label: "Borrowed",
-    healthyBgColor: "#E4EBFE",
+    healthyBgColor: "#EFF0F4",
     delinquentBgColor: "#E4EBFE",
     healthyTextColor: "#4971FF",
     delinquentTextColor: "#4971FF",
