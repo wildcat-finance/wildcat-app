@@ -4,16 +4,13 @@ import { formatTokenWithCommas } from "../../../../utils/formatters"
 import { MARKET_BAR_ORDER } from "./constants"
 import { useGenerateBarData } from "./hooks/useGenerateBarData"
 import "./styles.css"
-import { useGetWithdrawals } from "../../../borrower/BorrowerMarketDetails/BorrowerWithdrawalRequests/hooks/useGetWithdrawals"
 import { TokenAmountTooltip } from "../../../../components/ui-components/TokenAmountTooltip"
 
 export const LenderTotalDebtsChart = ({
   marketAccount,
 }: LenderTotalDebtsChartProps) => {
-  const { data } = useGetWithdrawals(marketAccount.market)
   const barRawData = useGenerateBarData({
     market: marketAccount.market,
-    lenderWithdrawals: data,
   })
 
   const barOrders = MARKET_BAR_ORDER.healthyBarchartOrder

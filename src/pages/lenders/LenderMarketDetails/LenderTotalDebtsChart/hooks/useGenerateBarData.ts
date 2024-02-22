@@ -3,7 +3,6 @@ import { formatEther } from "ethers/lib/utils"
 import { BigNumber } from "ethers"
 import { MarketBarChartItem } from "../../../../../components/ui-components/Barchart/BarItem/interface"
 import { MARKET_BAR_DATA } from "../constants"
-import { BorrowerWithdrawalsForMarketResult } from "../../../../borrower/BorrowerMarketDetails/BorrowerWithdrawalRequests/hooks/useGetWithdrawals"
 
 const ONE_HUNDRED_E18 = BigNumber.from(10).pow(20)
 const getPercentageTokenAmount = (total: TokenAmount, amount: TokenAmount) =>
@@ -17,10 +16,8 @@ const getTokenAmountPercentageWidth = (
 ) => `${getPercentageTokenAmount(total, amount)}`
 
 export const useGenerateBarData = ({
-  lenderWithdrawals,
   market,
 }: {
-  lenderWithdrawals: BorrowerWithdrawalsForMarketResult
   market: Market
 }): {
   [key: string]: MarketBarChartItem & { hide?: boolean }
@@ -28,13 +25,9 @@ export const useGenerateBarData = ({
   const barData: {
     [key: string]: MarketBarChartItem & { hide?: boolean }
   } = {}
-  const currentBatch = lenderWithdrawals.activeWithdrawal
-  let totalClaims = market.normalizedUnclaimedWithdrawals
+  const totalClaims = market.normalizedUnclaimedWithdrawals
     .add(market.normalizedPendingWithdrawals)
     .add(market.lastAccruedProtocolFees)
-  if (currentBatch) {
-    totalClaims = totalClaims.sub(currentBatch.normalizedTotalAmount)
-  }
   const locked = minTokenAmount(market.totalAssets, totalClaims)
   const liquid = market.totalAssets.sub(locked)
   const borrowed = market.totalDebts.sub(market.totalAssets)
