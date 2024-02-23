@@ -14,12 +14,12 @@ import { mockedVaultTypes } from "../../../../mocks/vaults"
 
 export const defaultMarketForm: Partial<ValidationSchemaType> = {
   vaultType: mockedVaultTypes[0].value,
-  maxTotalSupply: "0",
-  annualInterestBips: 0,
-  delinquencyFeeBips: 0,
-  reserveRatioBips: 0,
-  delinquencyGracePeriod: 0,
-  withdrawalBatchDuration: 0,
+  maxTotalSupply: undefined,
+  annualInterestBips: undefined,
+  delinquencyFeeBips: undefined,
+  reserveRatioBips: undefined,
+  delinquencyGracePeriod: undefined,
+  withdrawalBatchDuration: undefined,
 }
 
 function getValidationSchema(constraints: MarketParameterConstraints) {

@@ -1,7 +1,7 @@
 import { RouteObject } from "react-router-dom"
 
 import BorrowerWhitelisting from "../HomePage"
-import AddNewVault from "../AddNewVault"
+import AddNewVault from "../AddNewMarket"
 import ServiceAgreement from "../ServiceAgreement"
 import BorrowerMarketsList from "../BorrowerMarketsList"
 import BorrowerMarketDetails from "../BorrowerMarketDetails"

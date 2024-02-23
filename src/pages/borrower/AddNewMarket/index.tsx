@@ -33,7 +33,7 @@ export const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
   }),
 )
 
-const AddNewVault = () => {
+const AddNewMarket = () => {
   const {
     handleSubmit,
     getValues,
@@ -128,9 +128,7 @@ const AddNewVault = () => {
   }
 
   const getNumberFieldDefaultValue = (field: keyof ValidationSchemaType) =>
-    controller?.constraints
-      ? getMinMaxFromConstraints(controller.constraints, field).min
-      : defaultMarketForm[field]
+    defaultMarketForm[field]
 
   return (
     <div>
@@ -358,4 +356,4 @@ const AddNewVault = () => {
   )
 }
 
-export default AddNewVault
+export default AddNewMarket
