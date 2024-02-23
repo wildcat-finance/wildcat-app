@@ -1,7 +1,7 @@
 export const MARKET_BAR_DATA = {
   locked: {
     id: "locked",
-    label: "Locked",
+    label: "Locked reserves",
     healthyBgColor: "#4971FF",
     delinquentBgColor: "#F1464B",
     healthyTextColor: "#FFFFFF",
@@ -9,7 +9,7 @@ export const MARKET_BAR_DATA = {
   },
   liquid: {
     id: "liquid",
-    label: "Liquid",
+    label: "Liquid reserves",
     healthyBgColor: "#E4EBFE",
     delinquentBgColor: "#F7BEC1",
     healthyTextColor: "#4971FF",

@@ -13,22 +13,19 @@ import type { BorrowerMarketOverviewProps } from "./interface"
 const LenderMarketOverview = ({
   marketAccount,
 }: BorrowerMarketOverviewProps) => {
-  const { marketBalance, market } = marketAccount
+  const { market } = marketAccount
   const {
     address,
     underlyingToken,
     annualInterestBips,
     maxTotalSupply,
     reserveRatioBips,
-    totalSupply,
     coverageLiquidity,
     timeDelinquent,
     delinquencyGracePeriod,
     marketToken,
     withdrawalBatchDuration,
     delinquencyFeeBips,
-    totalAssets,
-    liquidReserves,
     delinquentDebt,
   } = market
 
@@ -95,18 +92,18 @@ const LenderMarketOverview = ({
               {marketToken.name}
             </a>
           </TableItem>
+        </div>
+        <div className="w-full">
           <TableItem
             title="Withdrawal Cycle Duration"
             value={formatSecsToHours(withdrawalBatchDuration)}
-            className="pl-6 pr-24"
+            className="pr-6 pl-24"
           />
           <TableItem
             title="Max. Grace Period"
             value={formatSecsToHours(delinquencyGracePeriod)}
-            className="pl-6 pr-24"
+            className="pr-6 pl-24"
           />
-        </div>
-        <div className="w-full">
           <TableItem
             title="Available Grace Period"
             value={formatSecsToHours(availableGracePeriod)}
@@ -118,30 +115,6 @@ const LenderMarketOverview = ({
               delinquencyFeeBips,
               MARKET_PARAMS_DECIMALS.delinquencyFeeBips,
             )}%`}
-            className="pr-6 pl-24"
-          />
-          <TableItem
-            title="Total Outstanding Debt"
-            value={`${totalSupply.format(TOKEN_FORMAT_DECIMALS)} ${
-              underlyingToken.symbol
-            }`}
-            className="pr-6 pl-24"
-          />
-          <TableItem
-            title="My Loaned Amount"
-            value={`${marketBalance.format(TOKEN_FORMAT_DECIMALS)} ${
-              underlyingToken.symbol
-            }`}
-            className="pr-6 pl-24"
-          />
-          <TableItem
-            title="Total Reserves"
-            value={totalAssets.format(TOKEN_FORMAT_DECIMALS, true)}
-            className="pr-6 pl-24"
-          />
-          <TableItem
-            title="Liquid Reserves"
-            value={liquidReserves.format(TOKEN_FORMAT_DECIMALS, true)}
             className="pr-6 pl-24"
           />
           <TableItem
