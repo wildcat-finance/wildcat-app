@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom"
 
-import { LenderRole } from "@wildcatfi/wildcat-sdk"
 import { Button, Chip, Spinner } from "../../../components/ui-components"
 import { useWalletConnect } from "../../../hooks/useWalletConnect"
 import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
@@ -17,6 +16,8 @@ import { getEffectiveLenderRole } from "../../../utils/lenderRole"
 import { LenderStatus } from "../../../types/vaults"
 import { useLenderListOptions } from "../../../store/useLenderListOptions"
 import { LenderMarketStatusChart } from "./LenderMarketStatusChart"
+import { LenderTotalDebtsChart } from "./LenderTotalDebtsChart"
+import { LenderWithdrawalsChart } from "./LenderWithdrawalsChart"
 
 export function LenderMarketDetails() {
   const navigate = useNavigate()
@@ -98,6 +99,8 @@ export function LenderMarketDetails() {
       )}
 
       <LenderMarketStatusChart marketAccount={marketAccount} />
+      <LenderTotalDebtsChart marketAccount={marketAccount} />
+      <LenderWithdrawalsChart marketAccount={marketAccount} />
 
       <LenderMarketOverview marketAccount={marketAccount} />
 

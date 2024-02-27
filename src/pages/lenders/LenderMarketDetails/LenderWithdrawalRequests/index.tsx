@@ -6,8 +6,8 @@ import { PrevCycleTable } from "./LenderWithdrawalsTable/PrevCycleTable"
 import { useGetWithdrawals } from "./hooks/useGetWithdrawals"
 import { ExpandMore } from "../../../../components/ui-components/icons"
 import {
+  formatTokenWithCommas,
   timestampToDateFormatted,
-  TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
 import type { LenderWithdrawalRequestsProps } from "./interface"
 import { ClaimTable } from "./ClaimTable"
@@ -76,7 +76,9 @@ const LenderWithdrawalRequests = ({
           Open Withdrawal Requests
         </div>
         <Chip className="w-30 flex justify-center">
-          {totalAmount.format(TOKEN_FORMAT_DECIMALS, true)}
+          {formatTokenWithCommas(totalAmount, {
+            withSymbol: true,
+          })}
         </Chip>
       </div>
       <div className="h-12 flex justify-between items-center bg-tint-10 px-6">
@@ -93,7 +95,9 @@ const LenderWithdrawalRequests = ({
             <ExpandMore onClick={() => toggleAccordion(1)} />
           )}
           <Chip className="w-30 flex justify-center">
-            {activeTotalAmount.format(TOKEN_FORMAT_DECIMALS, true)}
+            {formatTokenWithCommas(activeTotalAmount, {
+              withSymbol: true,
+            })}
           </Chip>
         </div>
       </div>
@@ -119,7 +123,9 @@ const LenderWithdrawalRequests = ({
             <ExpandMore onClick={() => toggleAccordion(2)} />
           )}
           <Chip className="w-30 flex justify-center">
-            {expiredTotalAmount.format(TOKEN_FORMAT_DECIMALS, true)}
+            {formatTokenWithCommas(expiredTotalAmount, {
+              withSymbol: true,
+            })}
           </Chip>
         </div>
       </div>
@@ -135,8 +141,9 @@ const LenderWithdrawalRequests = ({
           Claimable Withdrawal Requests
         </div>
         <Chip className="w-30 flex justify-center">
-          {data.totalClaimableAmount.format(TOKEN_FORMAT_DECIMALS)}{" "}
-          {market.underlyingToken.symbol}
+          {formatTokenWithCommas(data.totalClaimableAmount, {
+            withSymbol: true,
+          })}
         </Chip>
       </div>
 

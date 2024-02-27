@@ -1,8 +1,11 @@
+import { useState } from "react"
 import { CollateralObligationsData } from "../CollateralObligationsData"
 import { DelinquentCollateralObligationsProps } from "./interface"
 import { MARKET_BAR_DATA } from "../../constants"
 import { formatTokenWithCommas } from "../../../../../../utils/formatters"
 import "./styles.css"
+import { ExpandMore } from "../../../../../../components/ui-components/icons"
+import { TokenAmountTooltip } from "../../../../../../components/ui-components/TokenAmountTooltip"
 
 export const DelinquentCollateralObligations = ({
   market,
@@ -10,11 +13,33 @@ export const DelinquentCollateralObligations = ({
   withdrawals,
 }: DelinquentCollateralObligationsProps) => {
   const breakdown = market.getTotalDebtBreakdown()
-
   const reserves = breakdown.status === "delinquent" && breakdown.reserves
 
+  const [expanded, setExpanded] = useState(false)
+
+  const toggleExpanded = (value: boolean) => {
+    setExpanded(!value)
+  }
+
   return (
-    <>
+    <div className="barchart__legend-item">
+      <div
+        className="barchart__legend-header"
+        style={{
+          justifyContent: "space-between",
+          marginBottom: "12px",
+        }}
+        onClick={() => toggleExpanded(expanded)}
+      >
+        <div className="barchart__legend-title-expandable">
+          Collateral Obligations
+        </div>
+        {expanded ? (
+          <ExpandMore className="transform rotate-180 h-[18px] w-[18px]" />
+        ) : (
+          <ExpandMore className="h-[18px] w-[18px]" />
+        )}
+      </div>
       <div className="double-item__container-inner">
         <div style={{ width: "100%" }}>
           <div className="double-item__header">
@@ -27,9 +52,14 @@ export const DelinquentCollateralObligations = ({
               }}
             />
           </div>
-          <div>
-            {market.delinquentDebt.toFixed(2)} {legendItem.asset}
-          </div>
+          <TokenAmountTooltip
+            value={market.delinquentDebt}
+            symbol={market.underlyingToken.symbol}
+          >
+            {formatTokenWithCommas(market.delinquentDebt, {
+              withSymbol: true,
+            })}
+          </TokenAmountTooltip>
         </div>
         <div className="double-item__divider-vertical" />
         <div style={{ width: "100%" }}>
@@ -45,14 +75,39 @@ export const DelinquentCollateralObligations = ({
           </div>
           <div>
             <div>
-              {reserves && formatTokenWithCommas(reserves)} {legendItem.asset}
+              {reserves && (
+                <TokenAmountTooltip
+                  value={reserves}
+                  symbol={market.underlyingToken.symbol}
+                >
+                  {formatTokenWithCommas(reserves, {
+                    withSymbol: true,
+                  })}
+                </TokenAmountTooltip>
+              )}
             </div>
           </div>
         </div>
       </div>
-      <div className="double-item__values-container">
-        <CollateralObligationsData market={market} withdrawals={withdrawals} />
-      </div>
-    </>
+      {expanded && (
+        <>
+          <div>
+            <CollateralObligationsData
+              market={market}
+              withdrawals={withdrawals}
+              doubleDivider
+            />
+          </div>
+          <TokenAmountTooltip
+            value={legendItem.value}
+            symbol={market.underlyingToken.symbol}
+          >
+            {formatTokenWithCommas(legendItem.value, {
+              withSymbol: true,
+            })}
+          </TokenAmountTooltip>
+        </>
+      )}
+    </div>
   )
 }

@@ -3,6 +3,8 @@ import cn from "classnames"
 import { ExpandMore } from "../../icons"
 import { LegendItemProps } from "./interface"
 import "./styles.css"
+import { formatTokenWithCommas } from "../../../../utils/formatters"
+import { TokenAmountTooltip } from "../../TokenAmountTooltip"
 
 export const LegendItem = ({
   chartItem,
@@ -50,9 +52,9 @@ export const LegendItem = ({
 
           {expanded && children}
 
-          <div>
-            {chartItem.value} {chartItem.asset}
-          </div>
+          <TokenAmountTooltip value={chartItem.value} symbol={chartItem.asset}>
+            {formatTokenWithCommas(chartItem.value)} {chartItem.asset}
+          </TokenAmountTooltip>
         </div>
       )
     default:
@@ -70,9 +72,9 @@ export const LegendItem = ({
               }}
             />
           </div>
-          <div>
-            {chartItem.value} {chartItem.asset}
-          </div>
+          <TokenAmountTooltip value={chartItem.value} symbol={chartItem.asset}>
+            {formatTokenWithCommas(chartItem.value)} {chartItem.asset}
+          </TokenAmountTooltip>
         </div>
       )
   }

@@ -4,7 +4,6 @@ import { BigNumber } from "ethers"
 import { formatEther } from "ethers/lib/utils"
 import { MarketBarChartItem } from "../../../../../components/ui-components/Barchart/BarItem/interface"
 import { MARKET_BAR_DATA } from "../constants"
-import { formatTokenWithCommas } from "../../../../../utils/formatters"
 
 const ONE_HUNDRED_E18 = BigNumber.from(10).pow(20)
 
@@ -52,7 +51,7 @@ export const useGenerateBarData = (
     barData[id] = {
       id,
       label,
-      value: formatTokenWithCommas(value),
+      value,
       asset,
       width: getTokenAmountPercentageWidth(totalDebt, value),
       color: totalDebt.gt(0) ? color : "transparent",

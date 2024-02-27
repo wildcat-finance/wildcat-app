@@ -1,6 +1,6 @@
 import dayjs from "dayjs"
 import {
-  TOKEN_FORMAT_DECIMALS,
+  formatTokenWithCommas,
   trimAddress,
 } from "../../../../../../utils/formatters"
 import {
@@ -72,9 +72,10 @@ export const ThisCycleTable = ({ withdrawals }: WithdrawalsTableProps) => (
                   .getNormalizedTotalAmount(withdrawal.batch)
                   .format(withdrawal.market.decimals, true)}
               >
-                {request
-                  .getNormalizedTotalAmount(withdrawal.batch)
-                  .format(TOKEN_FORMAT_DECIMALS, true)}
+                {formatTokenWithCommas(
+                  request.getNormalizedTotalAmount(withdrawal.batch),
+                  { withSymbol: true },
+                )}
               </Tooltip>
             </TableCell>
           </TableRow>

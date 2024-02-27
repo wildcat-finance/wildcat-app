@@ -1,4 +1,4 @@
-import { MarketAccount, TokenAmount } from "@wildcatfi/wildcat-sdk"
+import { Market, TokenAmount, minTokenAmount } from "@wildcatfi/wildcat-sdk"
 import { formatEther } from "ethers/lib/utils"
 import { BigNumber } from "ethers"
 import { MarketBarChartItem } from "../../../../../components/ui-components/Barchart/BarItem/interface"
@@ -15,26 +15,31 @@ const getTokenAmountPercentageWidth = (
   amount: TokenAmount,
 ) => `${getPercentageTokenAmount(total, amount)}`
 
-export const useGenerateBarData = (
-  account: MarketAccount,
-): {
+export const useGenerateBarData = ({
+  market,
+}: {
+  market: Market
+}): {
   [key: string]: MarketBarChartItem & { hide?: boolean }
 } => {
   const barData: {
     [key: string]: MarketBarChartItem & { hide?: boolean }
   } = {}
-  const { market } = account
+  const totalClaims = market.normalizedUnclaimedWithdrawals
+    .add(market.normalizedPendingWithdrawals)
+    .add(market.lastAccruedProtocolFees)
+  const locked = minTokenAmount(market.totalAssets, totalClaims)
+  const liquid = market.totalAssets.sub(locked)
+  const borrowed = market.totalDebts.sub(market.totalAssets)
   const asset = market.underlyingToken.symbol
 
-  const total = market.maxTotalSupply
+  const total = market.totalDebts
 
-  const breakdown = market.getTotalDebtBreakdown()
+  const colorKey = !market.isDelinquent ? "healthyBgColor" : "delinquentBgColor"
 
-  const colorKey =
-    breakdown.status === "healthy" ? "healthyBgColor" : "delinquentBgColor"
-
-  const textColorKey =
-    breakdown.status === "healthy" ? "healthyTextColor" : "delinquentTextColor"
+  const textColorKey = !market.isDelinquent
+    ? "healthyTextColor"
+    : "delinquentTextColor"
 
   const setBarData = (
     field: keyof typeof MARKET_BAR_DATA,
@@ -59,14 +64,9 @@ export const useGenerateBarData = (
     }
   }
 
-  // Always display "my loan" and "other loans" if either is non-zero
-  setBarData("myLoan", account.marketBalance, market.totalSupply.gt(0))
-  setBarData(
-    "otherLoans",
-    market.totalSupply.sub(account.marketBalance),
-    market.totalSupply.gt(0),
-  )
-  setBarData("availableToLend", market.maximumDeposit, true)
+  setBarData("locked", locked)
+  setBarData("liquid", liquid)
+  setBarData("borrowed", borrowed)
 
   return barData
 }

@@ -1,7 +1,9 @@
+import { TokenAmount } from "@wildcatfi/wildcat-sdk"
+
 export type MarketBarChartItem = {
   id: string
   label: string
-  value: string
+  value: TokenAmount
   asset: string
   width: string
   color: string
@@ -21,4 +23,5 @@ export type MarketBarChartItem = {
 
 export type BarItemProps = {
   chartItem: MarketBarChartItem
+  isOnlyBarItem?: boolean
 }

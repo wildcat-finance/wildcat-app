@@ -153,11 +153,9 @@ const Repay = ({ marketAccount }: RepayProps) => {
         helperText="Max. Repay"
         error={!!error}
         errorText={error}
-        helperValue={`${formatTokenWithCommas(
-          outstandingDebt,
-          true,
-          TOKEN_FORMAT_DECIMALS,
-        )}`}
+        helperValue={`${formatTokenWithCommas(outstandingDebt, {
+          withSymbol: true,
+        })}`}
       />
       <div className="w-44 flex flex-col gap-y-1.5">
         {repayStep.status === "InsufficientAllowance" && !isConnectedToSafe ? (

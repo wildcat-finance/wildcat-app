@@ -18,7 +18,7 @@ export const validationSchema = z.object({
     .string()
     .min(3)
     .refine(isLetterNumber.validate, isLetterNumber.message),
-  maxTotalSupply: z.coerce.number(),
+  maxTotalSupply: z.coerce.string(),
   annualInterestBips: z.coerce.number(),
   delinquencyFeeBips: z.coerce.number(),
   reserveRatioBips: z.coerce.number(),

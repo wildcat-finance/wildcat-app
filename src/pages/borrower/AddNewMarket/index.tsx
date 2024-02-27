@@ -2,11 +2,9 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Token } from "@wildcatfi/wildcat-sdk"
 
-// import { ServiceAgreementCard } from "../../../components/ServiceAgreementCard"
 import {
   Paper,
   Chip,
-  Button,
   FormItem,
   Select,
   TextInput,
@@ -35,7 +33,7 @@ export const mockedVaultTypesOptions: SelectOptionItem[] = mockedVaultTypes.map(
   }),
 )
 
-const AddNewVault = () => {
+const AddNewMarket = () => {
   const {
     handleSubmit,
     getValues,
@@ -96,7 +94,10 @@ const AddNewVault = () => {
           Number(marketParams.delinquencyGracePeriod) * 60 * 60,
         withdrawalBatchDuration:
           Number(marketParams.withdrawalBatchDuration) * 60 * 60,
-        maxTotalSupply: Number(marketParams.maxTotalSupply),
+
+        // Remove commas from maxTotalSupply
+        maxTotalSupply: Number(marketParams.maxTotalSupply.replace(/,/g, "")),
+
         assetData: tokenAsset,
       })
     }
@@ -127,9 +128,7 @@ const AddNewVault = () => {
   }
 
   const getNumberFieldDefaultValue = (field: keyof ValidationSchemaType) =>
-    controller?.constraints
-      ? getMinMaxFromConstraints(controller.constraints, field).min
-      : defaultMarketForm[field]
+    defaultMarketForm[field]
 
   return (
     <div>
@@ -229,6 +228,7 @@ const AddNewVault = () => {
               defaultValue={getNumberFieldDefaultValue("maxTotalSupply")}
               error={Boolean(errors.maxTotalSupply)}
               decimalScale={MARKET_PARAMS_DECIMALS.maxTotalSupply}
+              thousandSeparator
             />
           </FormItem>
 
@@ -356,4 +356,4 @@ const AddNewVault = () => {
   )
 }
 
-export default AddNewVault
+export default AddNewMarket

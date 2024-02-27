@@ -9,7 +9,7 @@ import {
 import dayjs from "dayjs"
 
 // <---- MARKET PARAMETERS FORMATTERS ---->
-export const TOKEN_FORMAT_DECIMALS = 4
+export const TOKEN_FORMAT_DECIMALS = 5
 export const MARKET_PERCENTAGE_PARAM_DECIMALS = 2
 
 export const MARKET_PARAMS_DECIMALS: Partial<{
@@ -25,20 +25,19 @@ export const MARKET_PARAMS_DECIMALS: Partial<{
 
 export const formatTokenWithCommas = (
   tokenAmount: TokenAmount,
-  withSymbol?: boolean,
-  fractionDigits: number = 2,
+  params?: {
+    withSymbol?: boolean
+    fractionDigits?: number
+  },
 ) => {
   const parsedAmount = parseFloat(tokenAmount.format(tokenAmount.decimals))
-  const parsedAmountWithComma = parsedAmount.toLocaleString(
-    "en-US",
-    parsedAmount < 1
-      ? { maximumSignificantDigits: 2 }
-      : {
-          maximumFractionDigits: fractionDigits,
-        },
-  )
+  const parsedAmountWithComma = parsedAmount.toLocaleString("en-US", {
+    maximumFractionDigits: params?.fractionDigits || TOKEN_FORMAT_DECIMALS,
+  })
 
-  return `${parsedAmountWithComma}${withSymbol ? ` ${tokenAmount.symbol}` : ""}`
+  return `${parsedAmountWithComma}${
+    params?.withSymbol ? ` ${tokenAmount.symbol}` : ""
+  }`
 }
 
 export const formatBps = (bps: number, fixed?: number) => {

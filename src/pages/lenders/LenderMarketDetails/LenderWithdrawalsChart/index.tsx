@@ -1,15 +1,20 @@
 import { LegendItem, BarItem } from "../../../../components/ui-components"
-import { LenderMarketStatusChartProps } from "./interface"
+import { LenderWithdrawalsChartProps } from "./interface"
 import { formatTokenWithCommas } from "../../../../utils/formatters"
 import { MARKET_BAR_ORDER } from "./constants"
 import { useGenerateBarData } from "./hooks/useGenerateBarData"
+import { useGetWithdrawals } from "../LenderWithdrawalRequests/hooks/useGetWithdrawals"
 import "./styles.css"
 import { TokenAmountTooltip } from "../../../../components/ui-components/TokenAmountTooltip"
 
-export const LenderMarketStatusChart = ({
+export const LenderWithdrawalsChart = ({
   marketAccount,
-}: LenderMarketStatusChartProps) => {
-  const barRawData = useGenerateBarData(marketAccount)
+}: LenderWithdrawalsChartProps) => {
+  const { data } = useGetWithdrawals(marketAccount.market)
+  const { barData: barRawData, total } = useGenerateBarData({
+    market: marketAccount.market,
+    lenderWithdrawals: data,
+  })
 
   const barOrders = MARKET_BAR_ORDER.healthyBarchartOrder
   const legendItemsOrder = MARKET_BAR_ORDER.healthyLegendOrder
@@ -17,29 +22,27 @@ export const LenderMarketStatusChart = ({
   const bars = barOrders
     .filter((barId) => barRawData[barId] !== undefined)
     .map((barId) => barRawData[barId])
-    .filter((chartItem) => !chartItem.hide && !chartItem.value.raw.isZero())
 
   const legendItems = legendItemsOrder
     .filter((barId) => barRawData[barId] !== undefined)
     .map((barId) => barRawData[barId])
 
-  const marketCapacity = marketAccount.market.maxTotalSupply
-
   return (
     <div className="mb-14">
       <div className="flex mb-6 justify-between text-base font-bold">
-        <div>Market Capacity:</div>
+        <div>Your Withdrawals:</div>
 
         <TokenAmountTooltip
-          value={marketCapacity}
+          value={total}
           symbol={marketAccount.market.underlyingToken.symbol}
         >
-          {formatTokenWithCommas(marketCapacity)}{" "}
-          {` ${marketAccount.market.underlyingToken.symbol}`}
+          {formatTokenWithCommas(total, {
+            withSymbol: true,
+          })}
         </TokenAmountTooltip>
       </div>
 
-      {marketCapacity.gt(0) && (
+      {marketAccount.market.totalDebts.gt(0) && (
         <div className="barchart__container">
           {bars.map((chartItem) => (
             <BarItem

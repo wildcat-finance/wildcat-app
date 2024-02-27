@@ -43,17 +43,11 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
     annualInterestBips,
     maxTotalSupply,
     reserveRatioBips,
-    totalSupply,
-    coverageLiquidity,
     timeDelinquent,
     delinquencyGracePeriod,
     marketToken,
     withdrawalBatchDuration,
     delinquencyFeeBips,
-    borrowableAssets,
-    liquidReserves,
-    delinquentDebt,
-    normalizedUnclaimedWithdrawals,
   } = market
 
   const availableGracePeriod =

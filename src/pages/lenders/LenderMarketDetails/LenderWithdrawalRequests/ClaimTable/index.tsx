@@ -1,7 +1,7 @@
 import dayjs from "dayjs"
 import { LenderWithdrawalStatus } from "@wildcatfi/wildcat-sdk"
 import {
-  TOKEN_FORMAT_DECIMALS,
+  formatTokenWithCommas,
   trimAddress,
 } from "../../../../../utils/formatters"
 import {
@@ -127,9 +127,8 @@ export const ClaimTable = ({ expiredPendingWithdrawals }: ClaimTableProps) => {
                   </TableCell>
 
                   <TableCell justify="end">
-                    {withdrawal.availableWithdrawalAmount.format(
-                      TOKEN_FORMAT_DECIMALS,
-                      true,
+                    {formatTokenWithCommas(
+                      withdrawal.availableWithdrawalAmount,
                     )}
                   </TableCell>
                 </TableRow>

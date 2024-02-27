@@ -5,7 +5,6 @@ import { Button } from "../../../../components/ui-components"
 import {
   formatTokenWithCommas,
   MARKET_PARAMS_DECIMALS,
-  TOKEN_FORMAT_DECIMALS,
 } from "../../../../utils/formatters"
 import { useDeposit } from "../../../borrower/BorrowerMarketDetails/hooks/useVaultDetailActions"
 import { DepositFormProps } from "./interface"
@@ -84,11 +83,9 @@ const DepositForm = ({ marketAccount }: DepositFormProps) => {
               market={marketAccount.market}
               errorText={errors.depositAmount?.message}
               helperText="Maximum Deposit"
-              helperValue={formatTokenWithCommas(
-                marketAccount.maximumDeposit,
-                true,
-                TOKEN_FORMAT_DECIMALS,
-              )}
+              helperValue={formatTokenWithCommas(marketAccount.maximumDeposit, {
+                withSymbol: true,
+              })}
               disabled={isTxInProgress}
               {...field}
             />

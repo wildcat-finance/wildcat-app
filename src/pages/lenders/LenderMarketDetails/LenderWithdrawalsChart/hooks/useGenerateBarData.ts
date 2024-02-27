@@ -1,6 +1,8 @@
-import { MarketAccount, TokenAmount } from "@wildcatfi/wildcat-sdk"
+import { Market, TokenAmount } from "@wildcatfi/wildcat-sdk"
 import { formatEther } from "ethers/lib/utils"
 import { BigNumber } from "ethers"
+
+import { LenderWithdrawalsForMarketResult } from "../../LenderWithdrawalRequests/hooks/useGetWithdrawals"
 import { MarketBarChartItem } from "../../../../../components/ui-components/Barchart/BarItem/interface"
 import { MARKET_BAR_DATA } from "../constants"
 
@@ -15,33 +17,37 @@ const getTokenAmountPercentageWidth = (
   amount: TokenAmount,
 ) => `${getPercentageTokenAmount(total, amount)}`
 
-export const useGenerateBarData = (
-  account: MarketAccount,
-): {
-  [key: string]: MarketBarChartItem & { hide?: boolean }
+export const useGenerateBarData = ({
+  lenderWithdrawals,
+  market,
+}: {
+  lenderWithdrawals: LenderWithdrawalsForMarketResult
+  market: Market
+}): {
+  barData: { [key: string]: MarketBarChartItem & { hide?: boolean } }
+  total: TokenAmount
 } => {
   const barData: {
     [key: string]: MarketBarChartItem & { hide?: boolean }
   } = {}
-  const { market } = account
+
+  const claimable = lenderWithdrawals.totalClaimableAmount
+  const ongoing = lenderWithdrawals.activeTotalPendingAmount
+  const outstanding = lenderWithdrawals.expiredTotalPendingAmount
   const asset = market.underlyingToken.symbol
+  const total = claimable.add(ongoing).add(outstanding)
 
-  const total = market.maxTotalSupply
-
-  const breakdown = market.getTotalDebtBreakdown()
-
-  const colorKey =
-    breakdown.status === "healthy" ? "healthyBgColor" : "delinquentBgColor"
-
-  const textColorKey =
-    breakdown.status === "healthy" ? "healthyTextColor" : "delinquentTextColor"
+  const colorKey = !market.isDelinquent ? "healthyBgColor" : "delinquentBgColor"
+  const textColorKey = !market.isDelinquent
+    ? "healthyTextColor"
+    : "delinquentTextColor"
 
   const setBarData = (
     field: keyof typeof MARKET_BAR_DATA,
     value: TokenAmount,
-    forceDisplay = false,
   ) => {
-    if (value.lte(0) && total.gt(0) && !forceDisplay) return
+    if (value.lte(0) && total.gt(0)) return
+
     const {
       id,
       label,
@@ -59,14 +65,9 @@ export const useGenerateBarData = (
     }
   }
 
-  // Always display "my loan" and "other loans" if either is non-zero
-  setBarData("myLoan", account.marketBalance, market.totalSupply.gt(0))
-  setBarData(
-    "otherLoans",
-    market.totalSupply.sub(account.marketBalance),
-    market.totalSupply.gt(0),
-  )
-  setBarData("availableToLend", market.maximumDeposit, true)
+  setBarData("claimable", claimable)
+  setBarData("ongoing", ongoing)
+  setBarData("outstanding", outstanding)
 
-  return barData
+  return { barData, total }
 }
