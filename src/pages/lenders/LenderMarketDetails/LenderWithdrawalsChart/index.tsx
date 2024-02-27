@@ -22,6 +22,7 @@ export const LenderWithdrawalsChart = ({
   const bars = barOrders
     .filter((barId) => barRawData[barId] !== undefined)
     .map((barId) => barRawData[barId])
+    .filter((chartItem) => !chartItem.hide && !chartItem.value.raw.isZero())
 
   const legendItems = legendItemsOrder
     .filter((barId) => barRawData[barId] !== undefined)
