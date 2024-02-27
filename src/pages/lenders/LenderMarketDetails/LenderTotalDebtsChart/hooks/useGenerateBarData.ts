@@ -44,9 +44,7 @@ export const useGenerateBarData = ({
   const setBarData = (
     field: keyof typeof MARKET_BAR_DATA,
     value: TokenAmount,
-    forceDisplay = false,
   ) => {
-    if (value.lte(0) && total.gt(0) && !forceDisplay) return
     const {
       id,
       label,

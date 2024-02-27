@@ -1,3 +1,6 @@
+import { TokenAmount } from "@wildcatfi/wildcat-sdk"
+import { BigNumber } from "ethers"
+
 import { formatTokenWithCommas } from "../../../../../../utils/formatters"
 import { CollateralObligationsDataProps } from "./interface"
 import "./style.css"
@@ -23,6 +26,10 @@ export const CollateralObligationsData = ({
   const outstandingWDs = activeWithdrawal
     ? normalizedPendingWithdrawals.sub(activeWithdrawal.normalizedAmountOwed)
     : normalizedPendingWithdrawals
+
+  const totalProtocolFeesAccrued =
+    market.totalProtocolFeesAccrued ||
+    new TokenAmount(BigNumber.from(0), market.underlyingToken)
 
   return (
     <div className="obligations__container">
@@ -64,6 +71,17 @@ export const CollateralObligationsData = ({
           {formatTokenWithCommas(outstandingWDs, { withSymbol: true })}
         </TokenAmountTooltip>
         <div>Outstanding WDs</div>
+      </div>
+      <div className="obligations__value">
+        <TokenAmountTooltip
+          value={outstandingWDs}
+          symbol={market.underlyingToken.symbol}
+        >
+          {formatTokenWithCommas(totalProtocolFeesAccrued, {
+            withSymbol: true,
+          })}
+        </TokenAmountTooltip>
+        <div>Protocol Fees</div>
       </div>
       <div
         className="obligations__divider"
