@@ -10,6 +10,7 @@ import {
 
 import type { BorrowerMarketOverviewProps } from "./interface"
 import { EtherscanLink } from "../../../../components/ui-components/EtherscanLink"
+import { useBorrowerNameOrAddress } from "../../../../hooks/useBorrowerNames"
 
 const localize = (
   tokenAmount: TokenAmount,
@@ -59,20 +60,26 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
     market.totalDelinquencyFeesAccrued ?? underlyingToken.getAmount(0)
   ).add(market.totalBaseInterestAccrued ?? 0)
 
+  const borrowerName = useBorrowerNameOrAddress(market.borrower)
+
   return (
     <div>
       <div className="text-base font-bold">Market Details</div>
       <div className="flex w-full mt-5 mb-14">
         <div className="w-full">
-          <TableItem title="Market Address" className="pl-6 pr-24">
-            {/* <EtherscanLink kind="address" value={address}>{trimAddress(address)}</EtherscanLink> */}
+          <TableItem title="Market Token" className="pl-6 pr-24">
             <EtherscanLink kind="token" value={address}>
-              {trimAddress(address)}
+              {marketToken.symbol} ({trimAddress(marketToken.address)})
             </EtherscanLink>
           </TableItem>
           <TableItem title="Underlying Asset" className="pl-6 pr-24">
-            <EtherscanLink kind="code" value={underlyingToken.address}>
+            <EtherscanLink kind="token" value={underlyingToken.address}>
               {underlyingToken.symbol} ({trimAddress(underlyingToken.address)})
+            </EtherscanLink>
+          </TableItem>
+          <TableItem title="Borrower" className="pl-6 pr-24">
+            <EtherscanLink kind="address" value={market.borrower}>
+              {borrowerName}
             </EtherscanLink>
           </TableItem>
           <TableItem
@@ -98,11 +105,6 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
             )}%`}
             className="pl-6 pr-24"
           />
-          <TableItem title="Market Token Name" className="pl-6 pr-24">
-            <EtherscanLink kind="address" value={marketToken.address}>
-              {marketToken.name}
-            </EtherscanLink>
-          </TableItem>
         </div>
         <div className="w-full">
           <TableItem

@@ -1,5 +1,6 @@
 import { TableItem } from "../../../../components/ui-components"
 import { EtherscanLink } from "../../../../components/ui-components/EtherscanLink"
+import { useBorrowerNameOrAddress } from "../../../../hooks/useBorrowerNames"
 import {
   formatBps,
   formatSecsToHours,
@@ -34,19 +35,26 @@ const LenderMarketOverview = ({
       ? 0
       : delinquencyGracePeriod - timeDelinquent
 
+  const borrowerName = useBorrowerNameOrAddress(market.borrower)
+
   return (
     <div>
       <div className="text-base font-bold">Market Details</div>
       <div className="flex w-full mt-5 mb-14">
         <div className="w-full">
-          <TableItem title="Market Address" className="pl-6 pr-24">
-            <EtherscanLink kind="address" value={address}>
-              {trimAddress(address)}
+          <TableItem title="Market Token" className="pl-6 pr-24">
+            <EtherscanLink kind="token" value={address}>
+              {marketToken.symbol} ({trimAddress(marketToken.address)})
             </EtherscanLink>
           </TableItem>
           <TableItem title="Underlying Asset" className="pl-6 pr-24">
             <EtherscanLink kind="token" value={underlyingToken.address}>
               {underlyingToken.symbol} ({trimAddress(underlyingToken.address)})
+            </EtherscanLink>
+          </TableItem>
+          <TableItem title="Borrower" className="pl-6 pr-24">
+            <EtherscanLink kind="address" value={market.borrower}>
+              {borrowerName}
             </EtherscanLink>
           </TableItem>
           <TableItem
@@ -72,11 +80,6 @@ const LenderMarketOverview = ({
             )}%`}
             className="pl-6 pr-24"
           />
-          <TableItem title="Market Token Name" className="pl-6 pr-24">
-            <EtherscanLink kind="address" value={marketToken.address}>
-              {marketToken.name}
-            </EtherscanLink>
-          </TableItem>
         </div>
         <div className="w-full">
           <TableItem
