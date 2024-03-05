@@ -41,5 +41,5 @@ export const useBorrowerNameOrAddress = (address: string) => {
   const borrower = borrowers.data.find(
     (b) => b.address.toLowerCase() === address.toLowerCase(),
   )
-  return borrower?.name
+  return borrower?.name ?? address
 }
