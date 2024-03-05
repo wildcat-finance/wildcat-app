@@ -1,5 +1,5 @@
 import { TableItem } from "../../../../components/ui-components"
-import { EtherscanBaseUrl } from "../../../../config/networks"
+import { EtherscanLink } from "../../../../components/ui-components/EtherscanLink"
 import {
   formatBps,
   formatSecsToHours,
@@ -40,24 +40,14 @@ const LenderMarketOverview = ({
       <div className="flex w-full mt-5 mb-14">
         <div className="w-full">
           <TableItem title="Market Address" className="pl-6 pr-24">
-            <a
-              className="hover:underline text-xs"
-              href={`${EtherscanBaseUrl}/address/${address}`}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <EtherscanLink kind="address" value={address}>
               {trimAddress(address)}
-            </a>
+            </EtherscanLink>
           </TableItem>
           <TableItem title="Underlying Asset" className="pl-6 pr-24">
-            <a
-              className="hover:underline text-xs"
-              href={`${EtherscanBaseUrl}/address/${underlyingToken.address}`}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <EtherscanLink kind="token" value={underlyingToken.address}>
               {underlyingToken.symbol} ({trimAddress(underlyingToken.address)})
-            </a>
+            </EtherscanLink>
           </TableItem>
           <TableItem
             title="Base APR"
@@ -83,14 +73,9 @@ const LenderMarketOverview = ({
             className="pl-6 pr-24"
           />
           <TableItem title="Market Token Name" className="pl-6 pr-24">
-            <a
-              className="hover:underline text-xs"
-              href={`${EtherscanBaseUrl}/address/${marketToken.address}`}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <EtherscanLink kind="address" value={marketToken.address}>
               {marketToken.name}
-            </a>
+            </EtherscanLink>
           </TableItem>
         </div>
         <div className="w-full">

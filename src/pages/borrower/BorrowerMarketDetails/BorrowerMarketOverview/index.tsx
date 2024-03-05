@@ -9,7 +9,7 @@ import {
 } from "../../../../utils/formatters"
 
 import type { BorrowerMarketOverviewProps } from "./interface"
-import { EtherscanBaseUrl } from "../../../../config/networks"
+import { EtherscanLink } from "../../../../components/ui-components/EtherscanLink"
 
 const localize = (
   tokenAmount: TokenAmount,
@@ -65,24 +65,15 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
       <div className="flex w-full mt-5 mb-14">
         <div className="w-full">
           <TableItem title="Market Address" className="pl-6 pr-24">
-            <a
-              className="hover:underline text-xs"
-              href={`${EtherscanBaseUrl}/address/${address}`}
-              target="_blank"
-              rel="noreferrer"
-            >
+            {/* <EtherscanLink kind="address" value={address}>{trimAddress(address)}</EtherscanLink> */}
+            <EtherscanLink kind="token" value={address}>
               {trimAddress(address)}
-            </a>
+            </EtherscanLink>
           </TableItem>
           <TableItem title="Underlying Asset" className="pl-6 pr-24">
-            <a
-              className="hover:underline text-xs"
-              href={`${EtherscanBaseUrl}/address/${underlyingToken.address}`}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <EtherscanLink kind="code" value={underlyingToken.address}>
               {underlyingToken.symbol} ({trimAddress(underlyingToken.address)})
-            </a>
+            </EtherscanLink>
           </TableItem>
           <TableItem
             title="Base APR"
@@ -108,14 +99,9 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
             className="pl-6 pr-24"
           />
           <TableItem title="Market Token Name" className="pl-6 pr-24">
-            <a
-              className="hover:underline text-xs"
-              href={`${EtherscanBaseUrl}/address/${marketToken.address}`}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <EtherscanLink kind="address" value={marketToken.address}>
               {marketToken.name}
-            </a>
+            </EtherscanLink>
           </TableItem>
         </div>
         <div className="w-full">

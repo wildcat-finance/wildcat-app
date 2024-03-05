@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "../../../../../components/ui-components"
 import { ClaimTableProps } from "./type"
-import { EtherscanBaseUrl } from "../../../../../config/networks"
+import { EtherscanLink } from "../../../../../components/ui-components/EtherscanLink"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
@@ -59,14 +59,9 @@ export const ClaimTable = ({ expiredPendingWithdrawals }: ClaimTableProps) => {
       {Object.keys(expiredPendingWithdrawalsByLender).map((lender) => (
         <TableRow key={lender}>
           <TableCell justify="start">
-            <a
-              className="hover:underline"
-              href={`${EtherscanBaseUrl}/address/${lender}`}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <EtherscanLink kind="address" value={lender}>
               {trimAddress(lender)}
-            </a>
+            </EtherscanLink>
           </TableCell>
 
           <td colSpan={3}>
@@ -89,14 +84,12 @@ export const ClaimTable = ({ expiredPendingWithdrawals }: ClaimTableProps) => {
                           className="first:pl-0"
                           style={{ width: "47.5%", paddingLeft: 0 }}
                         >
-                          <a
-                            className="hover:underline"
-                            href={`${EtherscanBaseUrl}/tx/${request.transactionHash}`}
-                            target="_blank"
-                            rel="noreferrer"
+                          <EtherscanLink
+                            kind="tx"
+                            value={request.transactionHash}
                           >
                             {trimAddress(request.transactionHash, 24)}
-                          </a>
+                          </EtherscanLink>
                         </TableCell>
                       </TableRow>
                     ))}
