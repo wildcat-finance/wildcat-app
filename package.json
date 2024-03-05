@@ -37,7 +37,7 @@
     "react-use": "^17.4.0",
     "typescript": "^4.6.3",
     "viem": "^1.0.5",
-    "wagmi": "^1.1.1",
+    "wagmi": "^1.x",
     "web-vitals": "^2.1.4",
     "zod": "^3.22.4",
     "zustand": "^4.4.4"
