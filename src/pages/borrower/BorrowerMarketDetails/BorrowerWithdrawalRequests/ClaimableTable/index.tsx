@@ -6,7 +6,7 @@ import {
   TableRow,
 } from "../../../../../components/ui-components"
 import { ClaimTableProps } from "./type"
-import { EtherscanBaseUrl } from "../../../../../config/networks"
+import { EtherscanLink } from "../../../../../components/ui-components/EtherscanLink"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
@@ -40,24 +40,14 @@ export const ClaimTable = ({ withdrawalBatches }: ClaimTableProps) => (
         batch.requests.map((withdrawal) => (
           <TableRow key={withdrawal.id}>
             <TableCell justify="start">
-              <a
-                className="hover:underline"
-                href={`${EtherscanBaseUrl}/address/${withdrawal.address}`}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <EtherscanLink kind="address" value={withdrawal.address}>
                 {trimAddress(withdrawal.address)}
-              </a>
+              </EtherscanLink>
             </TableCell>
             <TableCell justify="start">
-              <a
-                className="hover:underline"
-                href={`${EtherscanBaseUrl}/tx/${withdrawal.transactionHash}`}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <EtherscanLink kind="tx" value={withdrawal.transactionHash}>
                 {trimAddress(withdrawal.transactionHash, 24)}
-              </a>
+              </EtherscanLink>
             </TableCell>
             <TableCell justify="start">
               {dayjs(withdrawal.blockTimestamp * 1000).format(DATE_FORMAT)}

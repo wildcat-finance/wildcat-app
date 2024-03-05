@@ -83,7 +83,7 @@ export function LenderMarketDetails() {
             </Chip>
             {canAddToken && (
               <Button
-                variant="blue"
+                variant="glacier"
                 disabled={isAddingToken}
                 onClick={handleAddToken}
               >

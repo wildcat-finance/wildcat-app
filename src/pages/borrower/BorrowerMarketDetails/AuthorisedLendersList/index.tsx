@@ -7,6 +7,7 @@ import {
 
 import { AuthorisedLendersListProps } from "./interface"
 import { useGetAuthorisedLendersByMarket } from "../hooks/useGetAuthorisedLenders"
+import { EtherscanLink } from "../../../../components/ui-components/EtherscanLink"
 
 export const AuthorisedLendersList = ({
   marketAddress,
@@ -38,7 +39,11 @@ export const AuthorisedLendersList = ({
           authorisedLenders.map((lender) => (
             <TableRow key={lender}>
               <TableCell justify="start" />
-              <TableCell justify="start">{lender}</TableCell>
+              <TableCell justify="start">
+                <EtherscanLink kind="address" value={lender}>
+                  {lender}
+                </EtherscanLink>
+              </TableCell>
               <TableCell justify="center" />
             </TableRow>
           ))}

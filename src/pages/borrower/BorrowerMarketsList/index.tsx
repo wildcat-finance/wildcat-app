@@ -87,7 +87,7 @@ function BorrowerMarketsList() {
                   target={inviteUrl.startsWith("http") ? "_blank" : undefined}
                   to={inviteUrl}
                 >
-                  <Button variant="blue">
+                  <Button variant="glacier">
                     <span className="text-lg">{inviteButtonText}</span>
                   </Button>
                 </Link>
@@ -107,7 +107,7 @@ function BorrowerMarketsList() {
                     `${BASE_PATHS.Borrower}/${BORROWER_PATHS.AddNewMarket}`,
                   )
                 }
-                variant="blue"
+                variant="glacier"
                 disabled={isLoading || !isRegisteredBorrower}
               >
                 New Market

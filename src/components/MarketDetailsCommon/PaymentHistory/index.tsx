@@ -7,7 +7,7 @@ import { Table, TableCell, TableRow } from "../../ui-components"
 import { ExpandMore } from "../../ui-components/icons"
 import { PaymentHistoryDetailsProps } from "./interface"
 import { TOKEN_FORMAT_DECIMALS, trimAddress } from "../../../utils/formatters"
-import { EtherscanBaseUrl } from "../../../config/networks"
+import { EtherscanLink } from "../../ui-components/EtherscanLink"
 
 // function getFromToTimestamps(dateArray: DateValue[]) {
 //   const fromTimestamp = dateArray[0]
@@ -137,24 +137,14 @@ const PaymentHistory = ({ market }: PaymentHistoryDetailsProps) => {
             {market.repaymentRecords.map((repayment) => (
               <TableRow key={repayment.blockTimestamp}>
                 <TableCell justify="start">
-                  <a
-                    className="hover:underline"
-                    href={`${EtherscanBaseUrl}/address/${repayment.from}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <EtherscanLink kind="address" value={repayment.from}>
                     {trimAddress(repayment.from)}
-                  </a>
+                  </EtherscanLink>
                 </TableCell>
                 <TableCell justify="start">
-                  <a
-                    className="hover:underline"
-                    href={`${EtherscanBaseUrl}/tx/${repayment.transactionHash}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <EtherscanLink kind="tx" value={repayment.transactionHash}>
                     {trimAddress(repayment.transactionHash, 24)}
-                  </a>
+                  </EtherscanLink>
                 </TableCell>
                 <TableCell justify="start">
                   {dayjs(repayment.blockTimestamp * 1000).format(DATE_FORMAT)}

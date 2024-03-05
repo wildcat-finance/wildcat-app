@@ -14,10 +14,10 @@ import {
   formatTokenWithCommas,
   trimAddress,
 } from "../../../utils/formatters"
-import { EtherscanBaseUrl } from "../../../config/networks"
 import { getLenderRoleIcon } from "../../../utils/lenderRole"
 import { getBorrowerRoleIcon } from "../../../utils/borrowerRole"
 import { useBorrowerNameOrAddress } from "../../../hooks/useBorrowerNames"
+import { EtherscanLink } from "../../ui-components/EtherscanLink"
 
 function MarketCard({
   market: _market,
@@ -67,14 +67,9 @@ function MarketCard({
           <TableItem
             title="Borrower"
             value={
-              <a
-                className="hover:underline text-xs"
-                href={`${EtherscanBaseUrl}/address/${market.borrower}`}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <EtherscanLink kind="address" value={market.borrower}>
                 {borrowerName || trimAddress(market.borrower)}
-              </a>
+              </EtherscanLink>
             }
           />
         )}

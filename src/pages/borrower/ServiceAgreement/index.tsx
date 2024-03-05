@@ -972,7 +972,7 @@ function ServiceAgreement() {
 
         <div className="flex items-center gap-8 justify-center mb-9 mt-9">
           <Button
-            variant="blue"
+            variant="glacier"
             icon={<SignIcon />}
             disabled={isSigning || isSubmitting}
             onClick={handleSign}

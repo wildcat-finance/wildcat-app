@@ -67,7 +67,7 @@ export function Modal({
                       <div className="flex gap-x-3 justify-center mt-5">
                         <Button
                           className="w-28"
-                          variant="blue"
+                          variant="glacier"
                           icon={hasSignIcon ? <SignIcon /> : undefined}
                           onClick={onClick}
                           disabled={isLoading}

@@ -26,7 +26,7 @@ export const MarketPreviewModal = ({
   return (
     <>
       <Button
-        variant="blue"
+        variant="glacier"
         className="mt-6"
         onClick={handleOpen}
         disabled={disabled}
