@@ -28,7 +28,7 @@ const config = createConfig({
   autoConnect: true,
   publicClient,
   connectors: [
-    new InjectedConnector({ chains }),
+    new InjectedConnector({ chains, options: { name: "injected" } }),
     new LedgerConnector({ chains }),
     new SafeConnector({
       chains,
