@@ -12,13 +12,15 @@ export function Button({
   icon,
   onClick,
   disabled,
+  rounded = "full",
   ...restProps
 }: ButtonProps) {
   const ref = useRef(null)
   const { buttonProps } = useButton(restProps, ref)
 
   const cssClass = cn(
-    "text-white text-xxs min-w-18 h-8 px-5 rounded-full outline-none",
+    "text-white text-xxs min-w-18 h-8 px-5 outline-none",
+    `rounded-${rounded}`,
     "flex items-center justify-center",
     `wc-btn-${variant}`,
     { "bg-gray cursor-not-allowed opacity-50": disabled },

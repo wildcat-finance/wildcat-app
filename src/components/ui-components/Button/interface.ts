@@ -19,4 +19,5 @@ export type ButtonProps = AriaButtonOptions<"button"> & {
   onClick?: () => void
   className?: string
   icon?: ReactNode
+  rounded?: "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "full"
 }
