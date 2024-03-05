@@ -4,6 +4,17 @@
 @tailwind components;
 @tailwind utilities;
 
+#root {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    margin-top: auto;
+}
+
 html {
     background-color: #FFFEF2;
     font-family: "F37Lineca", sans-serif;

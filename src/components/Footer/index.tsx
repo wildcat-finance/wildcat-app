@@ -15,7 +15,13 @@ const FooterLinks = [
 
 export function Footer() {
   return (
-    <footer className="flex justify-between flex-row px-96 py-8 bg-black">
+    <footer
+      className="flex justify-between flex-row px-96 py-8 bg-black w-full"
+      // style={{
+      //   position: "fixed",
+      //   bottom: "0",
+      // }}
+    >
       {FooterLinks.map(([name, link]) => (
         <a
           className={cn(
