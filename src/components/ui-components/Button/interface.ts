@@ -7,6 +7,7 @@ export type ButtonProps = AriaButtonOptions<"button"> & {
     | "brown"
     | "black"
     | "blue"
+    | "glacier"
     | "gold"
     | "white-brown"
     | "red"

@@ -19,6 +19,10 @@
     @apply bg-green;
 }
 
+.wc-btn-glacier[type='button'] {
+    @apply bg-glacier;
+}
+
 .wc-btn-blue[type='button'] {
     @apply bg-blue;
 }

@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "../../../../../components/ui-components"
 import { ClaimTableProps } from "./type"
-import { EtherscanBaseUrl } from "../../../../../config/networks"
+import { EtherscanLink } from "../../../../../components/ui-components/EtherscanLink"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
@@ -76,24 +76,14 @@ export const ClaimTable = ({ batches, market }: ClaimTableProps) => {
               return (
                 <TableRow key={lender}>
                   <TableCell justify="start" rowSpan={requestNumber}>
-                    <a
-                      className="hover:underline"
-                      href={`${EtherscanBaseUrl}/address/${lender}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
+                    <EtherscanLink kind="address" value={lender}>
                       {trimAddress(lender)}
-                    </a>
+                    </EtherscanLink>
                   </TableCell>
                   <TableCell justify="start">
-                    <a
-                      className="hover:underline"
-                      href={`${EtherscanBaseUrl}/tx/${request.transactionHash}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
+                    <EtherscanLink kind="tx" value={request.transactionHash}>
                       {trimAddress(request.transactionHash, 24)}
-                    </a>
+                    </EtherscanLink>
                   </TableCell>
                   <TableCell justify="start">
                     {dayjs(request.blockTimestamp * 1000).format(DATE_FORMAT)}
@@ -107,14 +97,9 @@ export const ClaimTable = ({ batches, market }: ClaimTableProps) => {
             return (
               <TableRow key={lender}>
                 <TableCell justify="start" className="!p-0 !bg-tint-10">
-                  <a
-                    className="hover:underline"
-                    href={`${EtherscanBaseUrl}/tx/${request.transactionHash}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <EtherscanLink kind="tx" value={request.transactionHash}>
                     {trimAddress(request.transactionHash, 24)}
-                  </a>
+                  </EtherscanLink>
                 </TableCell>
                 <TableCell justify="start" className="!bg-tint-10">
                   {dayjs(request.blockTimestamp * 1000).format(DATE_FORMAT)}

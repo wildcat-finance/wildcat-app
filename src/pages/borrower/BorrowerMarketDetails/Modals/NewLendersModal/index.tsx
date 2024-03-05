@@ -82,7 +82,7 @@ export function NewLendersModal({ market }: NewLendersModalProps) {
   return (
     <>
       <Button
-        variant="blue"
+        variant="glacier"
         className="w-35 whitespace-nowrap"
         disabled={disabled}
         onClick={() => setIsModalOpen(true)}
@@ -117,7 +117,7 @@ export function NewLendersModal({ market }: NewLendersModalProps) {
           </FormItem>
           <Button
             disabled={isLoading}
-            variant="blue"
+            variant="glacier"
             className="w-28"
             onClick={handleAddLender}
           >

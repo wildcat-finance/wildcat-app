@@ -73,7 +73,7 @@ export function WaitForSignatureModal({
             className="underline"
             target="_blank"
             rel="noreferrer"
-            style={{ color: "blue" }}
+            style={{ color: "glacier" }}
           >
             Link to Safe transaction
           </a>

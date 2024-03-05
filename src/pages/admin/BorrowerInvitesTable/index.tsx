@@ -7,8 +7,9 @@ import {
   TableCell,
   TableRow,
 } from "../../../components/ui-components"
-import { EtherscanBaseUrl, TargetChainId } from "../../../config/networks"
+import { TargetChainId } from "../../../config/networks"
 import { BorrowerInvite } from "../hooks/useBorrowerInvites"
+import { EtherscanLink } from "../../../components/ui-components/EtherscanLink"
 
 const DATE_FORMAT = "DD-MMM-YYYY"
 
@@ -55,14 +56,9 @@ export const BorrowerInvitesTable = ({
     {borrowerInvites.map((borrower) => (
       <TableRow key={borrower.address}>
         <TableCell justify="start">
-          <a
-            className="hover:underline"
-            href={`${EtherscanBaseUrl}/address/${borrower.address}`}
-            target="_blank"
-            rel="noreferrer"
-          >
+          <EtherscanLink kind="address" value={borrower.address}>
             {trimAddress(borrower.address)}
-          </a>
+          </EtherscanLink>
         </TableCell>
         <TableCell justify="start">{borrower.name}</TableCell>
         <TableCell justify="start">
