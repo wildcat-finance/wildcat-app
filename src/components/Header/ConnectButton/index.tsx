@@ -12,6 +12,32 @@ import { trimAddress } from "../../../utils/formatters"
 import { CopyIcon } from "../../ui-components/icons"
 import { toastifyError, toastifyInfo } from "../../toasts"
 
+import { ReactComponent as WalletConnect } from "../../../images/wallet-connect.svg"
+import { ReactComponent as MetaMask } from "../../../images/MetaMask_Fox.svg"
+import { ReactComponent as Coinbase } from "../../../images/coinbase.svg"
+import { ReactComponent as Ledger } from "../../../images/ledger.svg"
+
+type SVGComponent = React.FunctionComponent<
+  React.SVGProps<SVGSVGElement> & {
+    title?: string | undefined
+  }
+>
+
+const WalletIcons: Record<string, SVGComponent> = {
+  walletConnect: WalletConnect,
+  injected: MetaMask,
+  coinbaseWallet: Coinbase,
+  ledger: Ledger,
+}
+
+const WalletIcon = ({
+  id,
+  ...props
+}: { id: string } & React.SVGProps<SVGSVGElement>) => {
+  const Icon = WalletIcons[id]
+  return Icon ? <Icon {...props} /> : null
+}
+
 function ConnectButton() {
   const [state, copyToClipboard] = useCopyToClipboard()
   const { isOpen, setIsWalletModalOpen } = useWalletConnectModalStore()
@@ -65,8 +91,6 @@ function ConnectButton() {
     }
   }
 
-  console.log(`isWalletModalOpen: ${isOpen}`)
-
   return (
     <>
       <Button className="rounded-sm" onClick={openModal} variant="silver">
@@ -104,21 +128,12 @@ function ConnectButton() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="transform overflow-hidden transition-all">
-                  <div className="flex flex-col items-end">
-                    {/* <Button
-                        onClick={closeModal}
-                        className="w-fit relative top-10 right-0"
-                        variant="outline"
-                        disabled={isLoading}
-                      >
-                        <img src={closeIcon} alt="close" />
-                      </Button> */}
-                    {/* <RiCloseLine
-                      className="absolute w-6 right-0 top-0"
-                      onClick={closeModal}
-                    /> */}
-                    <Paper className="bg-sand w-80 p-6 rounded-sm">
+                <Dialog.Panel className="transform transition-all w-full">
+                  <div className="flex flex-col items-center">
+                    <Paper
+                      className="bg-sand p-2 rounded-sm"
+                      style={{ width: "20vw" }}
+                    >
                       <div className="flex items-center justify-center mb-4 relative">
                         <p className="text-2xl font-medium select-none">
                           {isConnected ? "Account" : " Select Wallet"}
@@ -128,7 +143,7 @@ function ConnectButton() {
                           onClick={closeModal}
                         />
                       </div>
-                      <div className="flex items-center flex-col gap-1">
+                      <div className="flex items-center justify-center h-full flex-col gap-2 p-8 overflow-scroll">
                         {isConnected && isWrongNetwork && (
                           <Button
                             variant="black"
@@ -167,15 +182,30 @@ function ConnectButton() {
                                 <Button
                                   disabled={!connector.ready}
                                   key={connector.id}
+                                  rounded="2xl"
                                   onClick={() => connect({ connector })}
                                   variant="black"
-                                  className="w-full"
+                                  className="w-full h-full flex flex-row justify-start pt-2 pb-2"
                                 >
-                                  {connector.name}
-                                  {!connector.ready && " (unsupported)"}
-                                  {isLoading &&
-                                    connector.id === pendingConnector?.id &&
-                                    " (connecting)"}
+                                  <div className="rounded-sm bg-white flex flex-row justify-center items-center p-2">
+                                    <WalletIcon
+                                      id={connector.id}
+                                      className="h-16 w-16"
+                                      // style={{ maxWidth: "100%" }}
+                                    />
+                                  </div>
+                                  <div
+                                    style={{ marginLeft: "auto" }}
+                                    className="basis-4/5 flex-row items-center justify-center"
+                                  >
+                                    <span className="text-xl">
+                                      {connector.name}
+                                      {!connector.ready && " (unsupported)"}
+                                      {isLoading &&
+                                        connector.id === pendingConnector?.id &&
+                                        " (connecting)"}
+                                    </span>
+                                  </div>
                                 </Button>
                               ))}
                           </>

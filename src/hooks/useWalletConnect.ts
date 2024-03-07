@@ -7,13 +7,13 @@ import { useCurrentNetwork } from "./useCurrentNetwork"
 export const useWalletConnect = () => {
   const { isConnected } = useAccount()
   const { isWrongNetwork } = useCurrentNetwork()
-  const { isOpen, setIsWalletModalOpen } = useWalletConnectModalStore()
+  const { setIsWalletModalOpen } = useWalletConnectModalStore()
 
   useEffect(() => {
-    if (isConnected && isWrongNetwork && !isOpen) {
+    if (isConnected && isWrongNetwork) {
       setIsWalletModalOpen(true)
     }
-  }, [isConnected, isOpen, setIsWalletModalOpen])
+  }, [isConnected, setIsWalletModalOpen])
 
   return {
     isConnected,

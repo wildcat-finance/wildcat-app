@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { TargetNetwork } from "../config/networks"
+import { trimAddress } from "../utils/formatters"
 
 export const USE_REGISTERED_BORROWERS_KEY = "use-borrower-names"
 
@@ -41,5 +42,5 @@ export const useBorrowerNameOrAddress = (address: string) => {
   const borrower = borrowers.data.find(
     (b) => b.address.toLowerCase() === address.toLowerCase(),
   )
-  return borrower?.name
+  return borrower?.name ?? trimAddress(address)
 }

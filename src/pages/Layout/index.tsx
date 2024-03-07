@@ -1,7 +1,9 @@
 import { Outlet } from "react-router-dom"
 
+import { Fragment } from "react"
 import { Header } from "../../components/Header"
 import { MobilePage } from "./MobilePage"
+import { Footer } from "../../components/Footer"
 
 const Layout = () => {
   const isMobile = () => {
@@ -19,13 +21,16 @@ const Layout = () => {
   }
 
   return (
-    <div>
+    <>
       <Header />
 
-      <div className="p-10 w-full max-w-5xl mx-auto">
-        {!isMobile() ? <Outlet /> : <MobilePage />}
-      </div>
-    </div>
+      <main>
+        <div className="p-10 w-full max-w-5xl mx-auto">
+          {!isMobile() ? <Outlet /> : <MobilePage />}
+        </div>
+      </main>
+      <Footer />
+    </>
   )
 }
 

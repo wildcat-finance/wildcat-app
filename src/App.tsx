@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react"
 import { ApolloProvider } from "@apollo/client"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
@@ -5,6 +6,7 @@ import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
+import { Buffer } from "buffer"
 import { WagmiProvider } from "./modules/wagmi/components"
 import Layout from "./pages/Layout"
 import "./styles/index.css"
@@ -13,6 +15,10 @@ import { BASE_PATHS } from "./routes/constants"
 import LendersSection from "./pages/lenders"
 import { client } from "./client/client"
 import { AdminHomePage } from "./pages/admin/AdminHomePage"
+
+Object.assign(window, {
+  Buffer: (window as any).Buffer || Buffer,
+})
 
 const queryClient = new QueryClient()
 
