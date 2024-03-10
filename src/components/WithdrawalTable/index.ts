@@ -6,17 +6,19 @@ import {
 import {
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
-} from "../../../../../../utils/formatters"
+} from "../../utils/formatters"
 import {
   Table,
   TableCell,
   TableRow,
   Tooltip,
-} from "../../../../../../components/ui-components"
+} from "../ui-components"
 import { WithdrawalsTableProps } from "./interface"
-import { EtherscanLink } from "../../../../../../components/ui-components/EtherscanLink"
-import { LenderNameStore } from "../../../../../../store/interface"
-import { useLenderNameStore } from "../../../../../../store/useLenderNameStore"
+import { EtherscanLink } from "../ui-components/EtherscanLink"
+import {
+  LenderNameStore,
+  useLenderNameStore,
+} from "../../../../../../store/useLenderNameStore"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
