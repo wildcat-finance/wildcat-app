@@ -14,3 +14,8 @@ export type txStore = {
   isTxInProgress: boolean
   setisTxInProgress: (tx: boolean) => void
 }
+
+export type LenderNameStore = {
+  setLenderName: (address: string, name: string) => void
+  [key: `lender-name-${string}`]: string
+}
