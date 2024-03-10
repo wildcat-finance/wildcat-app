@@ -5,6 +5,7 @@ export function TableCell({
   children,
   justify,
   className,
+  containerClassName,
   ...rest
 }: {
   children?: ReactNode
@@ -13,6 +14,7 @@ export function TableCell({
   rowSpan?: number
   colSpan?: number
   style?: React.CSSProperties
+  containerClassName?: string
 }) {
   const cellClassName = cn("first:pl-6 last:pr-6", className)
 
@@ -24,7 +26,7 @@ export function TableCell({
           "flex items-center text-black text-xs",
         )}
       >
-        <div>{children}</div>
+        <div className={containerClassName}>{children}</div>
       </div>
     </td>
   )
