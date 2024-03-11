@@ -1,6 +1,11 @@
-import { LenderWithdrawalStatus, Token } from "@wildcatfi/wildcat-sdk"
+import {
+  LenderWithdrawalStatus,
+  Token,
+  WithdrawalBatch,
+} from "@wildcatfi/wildcat-sdk"
 
 export type WithdrawalsTableProps = {
-  withdrawals?: LenderWithdrawalStatus[]
   underlyingToken: Token
+  withdrawals?: LenderWithdrawalStatus[]
+  withdrawalBatches?: WithdrawalBatch[]
 }
