@@ -133,17 +133,15 @@ export function useLendersMarkets({
       signerOrProvider as SignerOrProvider,
     )
     if (lender) {
-      const accountUpdates = await lens.getMarketsDataWithLenderStatus(
-        lender as string,
-        accounts.map((x) => x.market.address),
-      )
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < accounts.length; i++) {
-        const account = accounts[i]
-        const update = accountUpdates[i]
+      const promises = accounts.map(async (account) => {
+        const update = await lens.getMarketDataWithLenderStatus(
+          lender,
+          account.market.address,
+        )
         account.market.updateWith(update.market)
         account.updateWith(update.lenderStatus)
-      }
+      })
+      await Promise.all(promises)
       logger.debug(`getLenderUpdates:: Got lender updates: ${accounts.length}`)
     } else {
       const marketUpdates = await lens.getMarketsData(
