@@ -87,6 +87,7 @@ export function useMarketsForBorrowerQuery({
       const update = await lens.getMarketData(market.address)
       await market.updateWith(update)
     })
+    await Promise.all(updateMarkets)
     logger.debug(`Got ${markets.length} market updates`)
     return markets
   }
