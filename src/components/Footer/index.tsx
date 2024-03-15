@@ -1,28 +1,34 @@
 import * as React from "react"
 import cn from "classnames"
+import { ReactComponent as WildcatLogo } from "../../images/wildcat-logo-white.svg"
 
 const FooterLinks = [
-  ["Protocol", "https://wildcat.finance"],
-  ["Documentation", "https://docs.wildcat.finance"],
-  ["Github", "https://github.com/wildcat-finance"],
-  ["Twitter", "https://twitter.com/wildcatfi"],
-  ["Immunefi", "https://immunefi.com/bounty/wildcatprotocol/"],
   [
+    "protocol",
+    <WildcatLogo className="w-full h-10" />,
+    "https://wildcat.finance",
+  ],
+  ["Documentation", "Documentation", "https://docs.wildcat.finance"],
+  ["Github", "Github", "https://github.com/wildcat-finance"],
+  ["Twitter", "Twitter", "https://twitter.com/wildcatfi"],
+  ["Immunefi", "Immunefi", "https://immunefi.com/bounty/wildcatprotocol/"],
+  [
+    "Privacy Policy",
     "Privacy Policy",
     "https://docs.wildcat.finance/legal/protocol-ui-privacy-policy",
   ],
-]
+] as const
 
 export function Footer() {
   return (
     <footer
-      className="flex justify-between flex-row px-96 py-8 bg-black w-full"
+      className="flex justify-between flex-row px-96 py-8 bg-black w-full gap-x-3"
       // style={{
       //   position: "fixed",
       //   bottom: "0",
       // }}
     >
-      {FooterLinks.map(([name, link]) => (
+      {FooterLinks.map(([key, name, link]) => (
         <a
           className={cn(
             "hover:underline",
@@ -30,11 +36,9 @@ export function Footer() {
             "items-center",
             "justify-center",
             "flex",
-            "flex-row",
-            "gap-3",
             "text-white",
           )}
-          key={name}
+          key={key}
           href={link}
           target="_blank"
           rel="noreferrer"
