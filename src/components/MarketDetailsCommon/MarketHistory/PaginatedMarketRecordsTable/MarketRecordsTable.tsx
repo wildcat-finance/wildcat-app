@@ -1,15 +1,17 @@
 /* eslint-disable no-underscore-dangle */
-import { useState } from "react"
 import { Market, MarketRecord } from "@wildcatfi/wildcat-sdk"
 import dayjs from "dayjs"
-import { TOKEN_FORMAT_DECIMALS, trimAddress } from "../../utils/formatters"
-import { Table, TableCell, TableRow } from "../ui-components"
-import { EtherscanLink } from "../ui-components/EtherscanLink"
+import {
+  TOKEN_FORMAT_DECIMALS,
+  trimAddress,
+} from "../../../../utils/formatters"
+import { Table, TableCell, TableRow } from "../../../ui-components"
+import { EtherscanLink } from "../../../ui-components/EtherscanLink"
 import {
   LenderNameStore,
   useLenderNameStore,
-} from "../../store/useLenderNameStore"
-import { useBorrowerNameOrAddress } from "../../hooks/useBorrowerNames"
+} from "../../../../store/useLenderNameStore"
+import { useBorrowerNameOrAddress } from "../../../../hooks/useBorrowerNames"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
@@ -39,13 +41,13 @@ const getRecordText = (
     const lenderName =
       lenderNames[`lender-name-${record.address.toLowerCase()}`]
     const label = lenderName ?? trimAddress(record.address)
-    return `${label} repaid ${record.amount.format(
+    return `${label} loaned ${record.amount.format(
       TOKEN_FORMAT_DECIMALS,
       true,
     )}`
   }
   if (record.__typename === "DelinquencyStatusChanged") {
-    if (record.isDelinquent) return `Market in good standing`
+    if (!record.isDelinquent) return `Market back in good standing`
     const delinquentDebt = record.liquidityCoverageRequired
       .satsub(record.totalAssets)
       .format(TOKEN_FORMAT_DECIMALS, true)
@@ -62,8 +64,8 @@ const getRecordText = (
   }
   if (record.__typename === "WithdrawalRequest") {
     const lenderName =
-      lenderNames[`lender-name-${record.account.address.toLowerCase()}`]
-    const label = lenderName ?? trimAddress(record.account.address)
+      lenderNames[`lender-name-${record.address.toLowerCase()}`]
+    const label = lenderName ?? trimAddress(record.address)
     return `${label} requested withdrawal of ${record.normalizedAmount.format(
       TOKEN_FORMAT_DECIMALS,
       true,
@@ -77,7 +79,6 @@ const getRecordText = (
     TOKEN_FORMAT_DECIMALS,
     true,
   )}`
-  // }
 }
 
 function MarketRecordRow({
@@ -126,7 +127,7 @@ export function MarketRecordsTable({
           className: "w-40",
         },
         {
-          title: "Date Submitted",
+          title: "Time",
           align: "start",
           className: "w-40",
         },
