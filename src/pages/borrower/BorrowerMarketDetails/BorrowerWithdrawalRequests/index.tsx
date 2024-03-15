@@ -9,7 +9,6 @@ import {
   timestampToDateFormatted,
 } from "../../../../utils/formatters"
 import { WithdrawalsTable } from "../../../../components/WithdrawalTable"
-import { MarketRecords } from "../../../../components/MarketRecords"
 
 const BorrowerWithdrawalRequests = ({
   market,
@@ -18,7 +17,6 @@ const BorrowerWithdrawalRequests = ({
   const [thisCycle, setThisCycle] = useState(false)
   const [prevCycle, setPrevCycle] = useState(false)
   const [openClaimTable, setOpenClaimTable] = useState(false)
-  const [records, setRecords] = useState(false)
 
   const toggleAccordion = (index: number) => {
     if (index === 1) {
@@ -27,8 +25,6 @@ const BorrowerWithdrawalRequests = ({
       setPrevCycle(!prevCycle)
     } else if (index === 3) {
       setOpenClaimTable(!openClaimTable)
-    } else if (index === 4) {
-      setRecords(!records)
     }
   }
 
@@ -132,24 +128,6 @@ const BorrowerWithdrawalRequests = ({
           withdrawalBatches={data?.expiredPendingWithdrawals ?? []}
         />
       )}
-
-      <div className="h-12 flex justify-between items-center bg-tint-10 px-6 mt-6">
-        <div className="inline text-black text-xs font-bold">
-          Market Interactions
-        </div>
-        <div className="flex gap-x-4 items-center">
-          {records ? (
-            <ExpandMore
-              className="transform rotate-180"
-              onClick={() => toggleAccordion(4)}
-            />
-          ) : (
-            <ExpandMore onClick={() => toggleAccordion(4)} />
-          )}
-        </div>
-      </div>
-
-      {records && <MarketRecords market={market} />}
     </div>
   )
 }
