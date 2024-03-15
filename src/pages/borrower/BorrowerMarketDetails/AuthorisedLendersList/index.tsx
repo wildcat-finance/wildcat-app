@@ -15,6 +15,8 @@ import { EtherscanLink } from "../../../../components/ui-components/EtherscanLin
 import { useLenderNameStore } from "../../../../store/useLenderNameStore"
 import "./index.css"
 import { LenderNameStore } from "../../../../store/interface"
+import { trimAddress } from "../../../../utils/formatters"
+import { ClickAwayListener } from "../../../../components/ui-components/ClickAwayListener"
 
 type LenderRowProps = {
   address: string
@@ -32,7 +34,11 @@ function LenderRow({ address, name, store }: LenderRowProps) {
 
   const handleSave = () => {
     setIsEditing(false)
-    store.setLenderName(address, newName || address)
+    if (!newName) {
+      store.removeLenderName(address)
+    } else {
+      store.setLenderName(address, newName)
+    }
   }
   const handleCancel = () => {
     setIsEditing(false)
@@ -41,40 +47,41 @@ function LenderRow({ address, name, store }: LenderRowProps) {
 
   return (
     <TableRow key={address}>
-      <TableCell justify="start" />
-      <TableCell justify="start" className="w-full" containerClassName="w-1/2">
+      <TableCell justify="start">
         {isEditing ? (
-          <div className="flex w-full flex-row justify-center items-center gap-2">
-            <TextInput
-              className="w-full bg-tint-9"
-              value={newName}
-              onChange={onChangeName}
-              autoFocus
-              onKeyDown={(e) => {
-                e.stopPropagation()
-                if (e.key === "Enter") {
-                  handleSave()
-                }
-              }}
-            />
-            <HiCheck
-              className="icon-hover text-green flex"
-              onClick={handleSave}
-            />
-            <HiX className="icon-hover text-red flex" onClick={handleCancel} />
-          </div>
+          <ClickAwayListener onClickAway={handleCancel}>
+            <div className="flex w-full flex-row justify-center items-center gap-2">
+              <TextInput
+                className="w-full bg-tint-9"
+                value={newName}
+                onChange={onChangeName}
+                autoFocus
+                onKeyDown={(e) => {
+                  e.stopPropagation()
+                  if (e.key === "Enter") {
+                    handleSave()
+                  }
+                }}
+              />
+              <HiCheck
+                className="icon-hover text-green flex"
+                onClick={handleSave}
+              />
+              <HiX
+                className="icon-hover text-red flex"
+                onClick={handleCancel}
+              />
+            </div>
+          </ClickAwayListener>
         ) : (
           <div
             className="flex w-full flex-row justify-center items-center gap-2"
             onDoubleClick={(e) => {
               e.stopPropagation()
-
               setIsEditing(true)
             }}
           >
-            <EtherscanLink kind="address" value={address}>
-              {name}
-            </EtherscanLink>
+            {name}
 
             <HiOutlinePencilAlt
               className="flex icon-hover"
@@ -86,7 +93,11 @@ function LenderRow({ address, name, store }: LenderRowProps) {
           </div>
         )}
       </TableCell>
-      <TableCell justify="center" />
+      <TableCell justify="start">
+        <EtherscanLink kind="address" value={address}>
+          {address}
+        </EtherscanLink>
+      </TableCell>
     </TableRow>
   )
 }
@@ -103,7 +114,9 @@ export const AuthorisedLendersList = ({
     for (const address of authorisedLenders ?? []) {
       lendersList.push({
         address,
-        name: namesStore[`lender-name-${address.toLowerCase()}`] || address,
+        name:
+          namesStore[`lender-name-${address.toLowerCase()}`] ||
+          trimAddress(address),
       })
     }
     return lendersList
@@ -121,11 +134,7 @@ export const AuthorisedLendersList = ({
           {
             title: "Wallet Address",
             align: "start",
-          },
-          {
-            title: "",
-            align: "start",
-            className: "w-24",
+            className: "w-72",
           },
         ]}
       >
