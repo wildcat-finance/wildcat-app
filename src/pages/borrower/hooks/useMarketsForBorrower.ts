@@ -83,15 +83,11 @@ export function useMarketsForBorrowerQuery({
 
   async function updateMarkets(markets: Market[]) {
     const lens = getLensContract(TargetChainId, provider as SignerOrProvider)
-    const updatedMarkets = await lens.getMarketsData(
-      markets.map((x) => x.address),
-    )
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < markets.length; i++) {
-      const market = markets[i]
-      const update = updatedMarkets[i]
-      market.updateWith(update)
-    }
+    const updatedMarkets = markets.map(async (market) => {
+      const update = await lens.getMarketData(market.address)
+      await market.updateWith(update)
+    })
+    await Promise.all(updatedMarkets)
     logger.debug(`Got ${markets.length} market updates`)
     return markets
   }
