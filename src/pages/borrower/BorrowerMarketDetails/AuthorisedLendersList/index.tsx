@@ -1,6 +1,5 @@
 import { HiCheck, HiOutlinePencilAlt, HiX } from "react-icons/hi"
-import { useMemo, useRef, useState } from "react"
-import { FaCheck } from "react-icons/fa"
+import { useMemo, useState } from "react"
 import {
   Table,
   TableCell,
