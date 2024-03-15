@@ -1,24 +1,18 @@
 import dayjs from "dayjs"
 import {
+  LenderWithdrawalStatus,
   WithdrawalBatch,
   WithdrawalRequestRecord,
 } from "@wildcatfi/wildcat-sdk"
-import {
-  TOKEN_FORMAT_DECIMALS,
-  trimAddress,
-} from "../../utils/formatters"
-import {
-  Table,
-  TableCell,
-  TableRow,
-  Tooltip,
-} from "../ui-components"
+import { useMemo } from "react"
+import { TOKEN_FORMAT_DECIMALS, trimAddress } from "../../utils/formatters"
+import { Table, TableCell, TableRow, Tooltip } from "../ui-components"
 import { WithdrawalsTableProps } from "./interface"
 import { EtherscanLink } from "../ui-components/EtherscanLink"
 import {
   LenderNameStore,
   useLenderNameStore,
-} from "../../../../../../store/useLenderNameStore"
+} from "../../store/useLenderNameStore"
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
@@ -34,7 +28,7 @@ function WithdrawalRow({
   store: LenderNameStore
 }) {
   const tokenAmount =
-    kind === "pending"
+    kind === "pending" || kind === "complete"
       ? withdrawal.getNormalizedTotalAmount(batch)
       : withdrawal.getNormalizedAmountOwed(batch)
   return (
@@ -63,8 +57,9 @@ function WithdrawalRow({
   )
 }
 
-function WithdrawalsTable({
+export function WithdrawalsTable({
   withdrawals,
+  withdrawalBatches,
   kind,
 }: WithdrawalsTableProps & { kind: "pending" | "expired" | "complete" }) {
   const store = useLenderNameStore()
@@ -106,6 +101,23 @@ function WithdrawalsTable({
                 kind={kind}
                 withdrawal={withdrawal}
                 batch={wd.batch}
+                store={store}
+              />
+            )),
+        )}
+      {withdrawalBatches &&
+        withdrawalBatches.map((batch) =>
+          batch.requests
+            .filter((withdrawal) =>
+              kind === "expired"
+                ? withdrawal.getNormalizedAmountOwed(batch).gt(0)
+                : true,
+            )
+            .map((withdrawal) => (
+              <WithdrawalRow
+                kind={kind}
+                withdrawal={withdrawal}
+                batch={batch}
                 store={store}
               />
             )),
