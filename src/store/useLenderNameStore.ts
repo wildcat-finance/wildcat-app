@@ -17,4 +17,4 @@ export const useLenderNameStore = create<LenderNameStore>()(
   ),
 )
 
-export { LenderNameStore }
+export type { LenderNameStore }
