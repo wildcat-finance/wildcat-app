@@ -6,7 +6,6 @@ import { useCurrentNetwork } from "../../../hooks/useCurrentNetwork"
 import { LenderMarketActions } from "./LenderMarketActions"
 import { useGetMarket } from "../../../hooks/useGetMarket"
 import WithdrawalRequests from "./LenderWithdrawalRequests"
-import PaymentHistory from "../../../components/MarketDetailsCommon/PaymentHistory"
 import { BackArrow } from "../../../components/ui-components/icons"
 import LenderMarketOverview from "./LenderMarketOverview"
 import { useAddToken } from "../../../hooks/useAddToken"
@@ -18,6 +17,7 @@ import { useLenderListOptions } from "../../../store/useLenderListOptions"
 import { LenderMarketStatusChart } from "./LenderMarketStatusChart"
 import { LenderTotalDebtsChart } from "./LenderTotalDebtsChart"
 import { LenderWithdrawalsChart } from "./LenderWithdrawalsChart"
+import { MarketHistory } from "../../../components/MarketDetailsCommon/MarketHistory"
 
 export function LenderMarketDetails() {
   const navigate = useNavigate()
@@ -105,7 +105,7 @@ export function LenderMarketDetails() {
       <LenderMarketOverview marketAccount={marketAccount} />
 
       {isLender && <WithdrawalRequests market={market} />}
-      <PaymentHistory market={market} />
+      <MarketHistory market={market} />
     </div>
   )
 }

@@ -1,9 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
-
 import { Paper, Spinner } from "../../../components/ui-components"
-
 import { BackArrow } from "../../../components/ui-components/icons/index"
-
 import { RemoveLendersModal, NewLendersModal } from "./Modals"
 import { useGetMarket } from "../../../hooks/useGetMarket"
 import { useGetMarketAccountForBorrowerLegacy } from "../../../hooks/useGetMarketAccount"
@@ -11,7 +8,6 @@ import BorrowAssets from "./BorrowAssets"
 import Repay from "./Repay"
 import AdjustAPR from "./AdjustAPR"
 import LenderWithdrawalRequests from "./BorrowerWithdrawalRequests"
-import PaymentHistory from "../../../components/MarketDetailsCommon/PaymentHistory"
 import BorrowerMarketOverview from "./BorrowerMarketOverview"
 import { AuthorisedLendersList } from "./AuthorisedLendersList"
 import AdjustMaximumCapacity from "./AdjustMaximumCapacity"
@@ -20,6 +16,7 @@ import { useTransactionWait } from "../../../store/useTransactionWait"
 import { TerminateMarket } from "./TerminateMarket"
 import { useBorrowerListOptions } from "../../../store/useBorrowerListOptions"
 import { BorrowerMarketStatusChart } from "./BorrowerMarketStatusChart"
+import { MarketHistory } from "../../../components/MarketDetailsCommon/MarketHistory"
 
 const BorrowerMarketDetails = () => {
   const { isTxInProgress } = useTransactionWait()
@@ -113,7 +110,8 @@ const BorrowerMarketDetails = () => {
       <BorrowerMarketOverview market={market} />
 
       <LenderWithdrawalRequests market={market} />
-      <PaymentHistory market={market} />
+
+      <MarketHistory market={market} />
 
       <div className="flex w-full justify-between content-center">
         <div className="text-base font-bold">Authorised Lenders</div>
