@@ -10,6 +10,8 @@ export const useLenderNameStore = create<LenderNameStore>()(
         set({
           [`lender-name-${address.toLowerCase()}`]: signature,
         }),
+      removeLenderName: (address: string) =>
+        set({ [`lender-name-${address.toLowerCase()}`]: undefined }),
     }),
     {
       name: "lender_names",

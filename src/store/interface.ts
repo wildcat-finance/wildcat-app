@@ -17,5 +17,6 @@ export type txStore = {
 
 export type LenderNameStore = {
   setLenderName: (address: string, name: string) => void
+  removeLenderName: (address: string) => void
   [key: `lender-name-${string}`]: string
 }
