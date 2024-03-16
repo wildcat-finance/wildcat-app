@@ -9,7 +9,7 @@ export function CheckboxGrid<V extends string>({
   const isSelected = (option: CheckboxOption<V>) =>
     selected.includes(option.value)
   return (
-    <div className="grid grid-cols-6 gap-x-2 gap-y-2 mb-2 w-full bg-tint-10">
+    <div className="grid grid-cols-6 gap-x-4 gap-y-2 mb-2 w-full">
       {options.map((o) => (
         <Checkbox
           label={o.label}

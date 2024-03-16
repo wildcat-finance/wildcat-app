@@ -6,8 +6,9 @@ export type CheckboxChipProps = {
   label: string
   labelClassName?: string
   spanClassName?: string
+  inputClassName?: string
   checked: boolean
-  onChange: React.ChangeEventHandler<HTMLInputElement>
+  onChange: (e: { target: { value: string; checked: boolean } }) => void
   value: string
   name?: string
   id?: string
