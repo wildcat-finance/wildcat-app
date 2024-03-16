@@ -10,4 +10,5 @@ export type ChipProps = {
   children?: React.ReactNode
   className?: string
   color?: ChipColorVariants
+  onClick?: React.MouseEventHandler<HTMLDivElement>
 }

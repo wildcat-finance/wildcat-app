@@ -21,5 +21,9 @@ export function Chip(props: ChipProps) {
     className,
   )
 
-  return <div className={cssClass}>{children}</div>
+  return (
+    <div onClick={props.onClick} className={cssClass}>
+      {children}
+    </div>
+  )
 }
