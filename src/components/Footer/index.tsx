@@ -3,11 +3,7 @@ import cn from "classnames"
 import { ReactComponent as WildcatLogo } from "../../images/wildcat-logo-white.svg"
 
 const FooterLinks = [
-  [
-    "protocol",
-    <WildcatLogo className="w-full h-10" />,
-    "https://wildcat.finance",
-  ],
+  ["protocol", <WildcatLogo className="h-full" />, "https://wildcat.finance"],
   ["Documentation", "Documentation", "https://docs.wildcat.finance"],
   ["Github", "Github", "https://github.com/wildcat-finance"],
   ["Twitter", "Twitter", "https://twitter.com/wildcatfi"],
@@ -21,13 +17,7 @@ const FooterLinks = [
 
 export function Footer() {
   return (
-    <footer
-      className="flex justify-between flex-row px-96 py-8 bg-black w-full gap-x-3"
-      // style={{
-      //   position: "fixed",
-      //   bottom: "0",
-      // }}
-    >
+    <footer className="flex justify-between flex-row px-96 py-8 bg-black w-full gap-x-3">
       {FooterLinks.map(([key, name, link]) => (
         <a
           className={cn(
@@ -37,6 +27,7 @@ export function Footer() {
             "justify-center",
             "flex",
             "text-white",
+            "h-12",
           )}
           key={key}
           href={link}
