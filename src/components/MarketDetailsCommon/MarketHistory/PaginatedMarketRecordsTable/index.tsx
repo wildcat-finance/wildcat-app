@@ -1,7 +1,6 @@
 import { Market, MarketRecordKind } from "@wildcatfi/wildcat-sdk"
 import { useMemo, useState } from "react"
 import { MarketRecordsTable } from "./MarketRecordsTable"
-import { Spinner } from "../../../ui-components"
 import { ExpandMore } from "../../../ui-components/icons"
 import "./index.css"
 import { CheckboxGrid } from "../../../ui-components/CheckboxGrid"
@@ -25,7 +24,9 @@ const MarketRecordFilters: CheckboxOption<MarketRecordKind>[] = (
 export function PaginatedMarketRecordsTable({ market }: { market: Market }) {
   const pageSize = 10
   const [page, setPage] = useState(0)
-  const [selectedFilters, setSelectedFilters] = useState<MarketRecordKind[]>([])
+  const [selectedFilters, setSelectedFilters] = useState<MarketRecordKind[]>(
+    MarketRecordFilters.map((f) => f.value),
+  )
 
   const { data, isLoading, pagesCount, finalEventIndex } = useMarketRecords({
     market,
@@ -62,10 +63,6 @@ export function PaginatedMarketRecordsTable({ market }: { market: Market }) {
     ]
   }, [data, finalEventIndex])
 
-  if (isLoading) {
-    return <Spinner isLoading={isLoading} />
-  }
-
   return (
     <>
       <CheckboxGrid
@@ -73,7 +70,11 @@ export function PaginatedMarketRecordsTable({ market }: { market: Market }) {
         selected={selectedFilters}
         options={options}
       />
-      <MarketRecordsTable market={market} records={data} />
+      <MarketRecordsTable
+        market={market}
+        records={data}
+        isLoading={isLoading}
+      />
 
       <div className="h-9 flex justify-between items-center bg-tint-9 px-6">
         {startEventIndex !== undefined && (

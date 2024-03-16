@@ -5,7 +5,7 @@ import {
   TOKEN_FORMAT_DECIMALS,
   trimAddress,
 } from "../../../../utils/formatters"
-import { Table, TableCell, TableRow } from "../../../ui-components"
+import { Spinner, Table, TableCell, TableRow } from "../../../ui-components"
 import { EtherscanLink } from "../../../ui-components/EtherscanLink"
 import {
   LenderNameStore,
@@ -110,11 +110,13 @@ function MarketRecordRow({
 export type MarketRecordsTableProps = {
   market: Market
   records?: MarketRecord[]
+  isLoading?: boolean
 }
 
 export function MarketRecordsTable({
   market,
   records,
+  isLoading,
 }: MarketRecordsTableProps) {
   const store = useLenderNameStore()
   const name = useBorrowerNameOrAddress(market.borrower)
@@ -138,6 +140,7 @@ export function MarketRecordsTable({
         },
       ]}
     >
+      {isLoading && <Spinner isLoading={isLoading} fixedDisable />}
       {records &&
         records.map((record) => (
           <MarketRecordRow record={record} store={store} borrowerName={name} />
