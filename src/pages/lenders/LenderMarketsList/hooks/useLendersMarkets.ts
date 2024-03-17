@@ -135,8 +135,26 @@ export function useLendersMarkets({
       TargetChainId,
       signerOrProvider as SignerOrProvider,
     )
+    let chunks: MarketAccount[][]
+    if (TargetChainId === 1) {
+      chunks = [
+        ...accounts
+          .filter(
+            (m) =>
+              m.market.underlyingToken.address.toLowerCase() ===
+              "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          )
+          .map((m) => [m]),
+        accounts.filter(
+          (m) =>
+            m.market.underlyingToken.address.toLowerCase() !==
+            "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        ),
+      ]
+    } else {
+      chunks = [accounts]
+    }
     if (lender) {
-      const chunks = chunk(accounts, CHUNK_SIZE)
       await Promise.all(
         chunks.map(async (accountsChunk) => {
           const updates = await lens.getMarketsDataWithLenderStatus(
@@ -152,7 +170,6 @@ export function useLendersMarkets({
       )
       logger.debug(`getLenderUpdates:: Got lender updates: ${accounts.length}`)
     } else {
-      const chunks = chunk(accounts, CHUNK_SIZE)
       await Promise.all(
         chunks.map(async (accountsChunk) => {
           const updates = await lens.getMarketsData(
