@@ -36,9 +36,9 @@ export const useBorrowerNames = () => {
   }
 }
 
-export const useBorrowerNameOrAddress = (address: string) => {
+export const useBorrowerNameOrAddress = (address: string): string => {
   const borrowers = useBorrowerNames()
-  if (!borrowers.data) return undefined
+  if (!borrowers.data) return trimAddress(address)
   const borrower = borrowers.data.find(
     (b) => b.address.toLowerCase() === address.toLowerCase(),
   )

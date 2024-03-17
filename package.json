@@ -17,7 +17,7 @@
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.4",
     "@wildcatfi/subgraph-hooks": "^1.0.0",
-    "@wildcatfi/wildcat-sdk": "^2.0.59",
+    "@wildcatfi/wildcat-sdk": "^2.0.68",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.10",
     "ethers": "^5.7.0",
@@ -43,7 +43,7 @@
     "zustand": "^4.4.4"
   },
   "scripts": {
-    "start": "NODE_OPTIONS=--max-old-space-size=4096 HTTPS=true react-app-rewired start",
+    "start": "NODE_OPTIONS=--max-old-space-size=4096 HTTPS=true react-app-rewired start ",
     "build": "HTTPS=true react-app-rewired build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

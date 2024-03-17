@@ -23,6 +23,7 @@ import { SubgraphClient } from "../../../../config/subgraph"
 import { TargetChainId } from "../../../../config/networks"
 import { POLLING_INTERVAL } from "../../../../config/polling"
 import { useEthersProvider } from "../../../../modules/hooks/useEthersSigner"
+import { chunk } from "../../../../utils/chunk"
 
 export type LenderMarketsQueryProps = {
   lenderAddress?: string
@@ -126,6 +127,8 @@ export function useLendersMarkets({
 
   const accounts = data ?? []
 
+  const CHUNK_SIZE = TargetChainId === 1 ? 5 : 50
+
   async function getLenderUpdates() {
     logger.debug(`Getting lender updates...`)
     const lens = getLensContract(
@@ -133,26 +136,33 @@ export function useLendersMarkets({
       signerOrProvider as SignerOrProvider,
     )
     if (lender) {
-      const promises = accounts.map(async (account) => {
-        const update = await lens.getMarketDataWithLenderStatus(
-          lender,
-          account.market.address,
-        )
-        account.market.updateWith(update.market)
-        account.updateWith(update.lenderStatus)
-      })
-      await Promise.all(promises)
+      const chunks = chunk(accounts, CHUNK_SIZE)
+      await Promise.all(
+        chunks.map(async (accountsChunk) => {
+          const updates = await lens.getMarketsDataWithLenderStatus(
+            lender,
+            accountsChunk.map((m) => m.market.address),
+          )
+          accountsChunk.forEach((account, i) => {
+            const update = updates[i]
+            account.market.updateWith(update.market)
+            account.updateWith(update.lenderStatus)
+          })
+        }),
+      )
       logger.debug(`getLenderUpdates:: Got lender updates: ${accounts.length}`)
     } else {
-      const marketUpdates = await lens.getMarketsData(
-        accounts.map((x) => x.market.address),
+      const chunks = chunk(accounts, CHUNK_SIZE)
+      await Promise.all(
+        chunks.map(async (accountsChunk) => {
+          const updates = await lens.getMarketsData(
+            accountsChunk.map((m) => m.market.address),
+          )
+          accountsChunk.forEach((account, i) => {
+            account.market.updateWith(updates[i])
+          })
+        }),
       )
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < accounts.length; i++) {
-        const account = accounts[i]
-        const update = marketUpdates[i]
-        account.market.updateWith(update)
-      }
       logger.debug(`getLenderUpdates:: Got market updates: ${accounts.length}`)
     }
     return accounts
