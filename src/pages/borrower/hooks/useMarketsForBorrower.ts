@@ -34,7 +34,7 @@ export function useMarketsForBorrowerQuery({
   ...filters
 }: MarketsForBorrowerProps) {
   const borrower = _borrower?.toLowerCase()
-  const CHUNK_SIZE = TargetChainId === 1 ? 5 : 50
+  const CHUNK_SIZE = TargetChainId === 1 ? 3 : 50
 
   async function queryMarketsForAllBorrowers() {
     const result = await SubgraphClient.query<
@@ -85,7 +85,25 @@ export function useMarketsForBorrowerQuery({
 
   async function updateMarkets(markets: Market[]) {
     const lens = getLensContract(TargetChainId, provider as SignerOrProvider)
-    const chunks = chunk(markets, CHUNK_SIZE)
+    let chunks: Market[][]
+    if (TargetChainId === 1) {
+      chunks = [
+        ...markets
+          .filter(
+            (m) =>
+              m.underlyingToken.address.toLowerCase() ===
+              "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          )
+          .map((m) => [m]),
+        markets.filter(
+          (m) =>
+            m.underlyingToken.address.toLowerCase() !==
+            "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        ),
+      ]
+    } else {
+      chunks = [markets]
+    }
     await Promise.all(
       chunks.map(async (marketsChunk) => {
         const updates = await lens.getMarketsData(
