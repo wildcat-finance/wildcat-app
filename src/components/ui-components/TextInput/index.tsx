@@ -7,8 +7,10 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
   (props, ref) => {
     const { className, error, ...rest } = props
 
+    const hasBgColor = !!className?.match(/(?:\s|^)bg-/g)
     const inputCssClass = cn(
-      "h-8 px-3 text-xxs border bg-white outline-none",
+      "h-8 px-3 text-xxs border outline-none",
+      hasBgColor ? "" : "bg-white",
       { "opacity-50": props.disabled },
       { "border-red-border": error },
       { "border-tint-9": !error },

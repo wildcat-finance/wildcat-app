@@ -1,8 +1,6 @@
 import React, { useState } from "react"
 
 import { Chip } from "../../../../components/ui-components"
-import { ThisCycleTable } from "./BorrowerWithdrawalsTable/ThisCycleTable"
-import { PrevCycleTable } from "./BorrowerWithdrawalsTable/PrevCycleTable"
 import { useGetWithdrawals } from "./hooks/useGetWithdrawals"
 import { ExpandMore } from "../../../../components/ui-components/icons"
 import { BorrowerWithdrawalRequestsProps } from "./interface"
@@ -10,6 +8,7 @@ import {
   formatTokenWithCommas,
   timestampToDateFormatted,
 } from "../../../../utils/formatters"
+import { WithdrawalsTable } from "../../../../components/WithdrawalTable"
 
 const BorrowerWithdrawalRequests = ({
   market,
@@ -95,7 +94,9 @@ const BorrowerWithdrawalRequests = ({
       </div>
 
       {thisCycle && (
-        <ThisCycleTable
+        <WithdrawalsTable
+          kind="pending"
+          underlyingToken={market.underlyingToken}
           withdrawalBatches={
             data?.activeWithdrawal ? [data.activeWithdrawal] : []
           }
@@ -121,7 +122,11 @@ const BorrowerWithdrawalRequests = ({
         </div>
       </div>
       {prevCycle && (
-        <PrevCycleTable withdrawalBatches={data?.expiredPendingWithdrawals} />
+        <WithdrawalsTable
+          kind="expired"
+          underlyingToken={market.underlyingToken}
+          withdrawalBatches={data?.expiredPendingWithdrawals ?? []}
+        />
       )}
     </div>
   )

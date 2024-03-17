@@ -17,6 +17,7 @@ import { POLLING_INTERVAL } from "../../../config/polling"
 import { TargetChainId } from "../../../config/networks"
 import { SubgraphClient } from "../../../config/subgraph"
 import { useEthersProvider } from "../../../modules/hooks/useEthersSigner"
+import { chunk } from "../../../utils/chunk"
 
 export const GET_BORROWER_MARKETS_LIST_KEY = "get-borrower-markets-list"
 
@@ -33,6 +34,7 @@ export function useMarketsForBorrowerQuery({
   ...filters
 }: MarketsForBorrowerProps) {
   const borrower = _borrower?.toLowerCase()
+  const CHUNK_SIZE = TargetChainId === 1 ? 3 : 50
 
   async function queryMarketsForAllBorrowers() {
     const result = await SubgraphClient.query<
@@ -83,11 +85,35 @@ export function useMarketsForBorrowerQuery({
 
   async function updateMarkets(markets: Market[]) {
     const lens = getLensContract(TargetChainId, provider as SignerOrProvider)
-    const updatedMarkets = markets.map(async (market) => {
-      const update = await lens.getMarketData(market.address)
-      await market.updateWith(update)
-    })
-    await Promise.all(updatedMarkets)
+    let chunks: Market[][]
+    if (TargetChainId === 1) {
+      chunks = [
+        ...markets
+          .filter(
+            (m) =>
+              m.underlyingToken.address.toLowerCase() ===
+              "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          )
+          .map((m) => [m]),
+        markets.filter(
+          (m) =>
+            m.underlyingToken.address.toLowerCase() !==
+            "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        ),
+      ]
+    } else {
+      chunks = [markets]
+    }
+    await Promise.all(
+      chunks.map(async (marketsChunk) => {
+        const updates = await lens.getMarketsData(
+          marketsChunk.map((m) => m.address),
+        )
+        marketsChunk.forEach((market, i) => {
+          market.updateWith(updates[i])
+        })
+      }),
+    )
     logger.debug(`Got ${markets.length} market updates`)
     return markets
   }
