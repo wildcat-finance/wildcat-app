@@ -31,7 +31,7 @@ export const useBorrowerInvitationRedirect = () => {
       hideNewMarketButton: true,
       message: "Want to borrow on Wildcat?",
       buttonText: "Apply here",
-      url: `https://rvficirw76q.typeform.com/to/FKBzhnmo`,
+      url: `https://forms.gle/irca7KeC7ASmkRh16`,
     }
   }
   if (isRegisteredBorrower) {
@@ -44,7 +44,7 @@ export const useBorrowerInvitationRedirect = () => {
     return {
       message: `Want to borrow on Wildcat?`,
       buttonText: "Apply here",
-      url: `https://rvficirw76q.typeform.com/to/FKBzhnmo`,
+      url: `https://forms.gle/irca7KeC7ASmkRh16`,
     }
   }
   if (!invitation.timeAccepted) {
