@@ -18,7 +18,7 @@ const BorrowerWhitelisting = () => {
           with us via our{" "}
           <a
             target="_blank"
-            href="https://rvficirw76q.typeform.com/to/FKBzhnmo"
+            href="https://forms.gle/irca7KeC7ASmkRh16"
             rel="noreferrer"
             className="underline"
           >
@@ -125,7 +125,7 @@ const BorrowerWhitelisting = () => {
 //       get in touch with us via our{" "}
 //       <a
 //         target="_blank"
-//         href="https://rvficirw76q.typeform.com/to/FKBzhnmo"
+//         href="https://forms.gle/irca7KeC7ASmkRh16"
 //         rel="noreferrer"
 //         className="underline"
 //       >
