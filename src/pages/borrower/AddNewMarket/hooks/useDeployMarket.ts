@@ -11,10 +11,7 @@ import {
 import { parseUnits } from "ethers/lib/utils"
 
 import { useNavigate } from "react-router-dom"
-import {
-  GET_CONTROLLER_KEY,
-  useGetController,
-} from "../../../../hooks/useGetController"
+import { useGetController } from "../../../../hooks/useGetController"
 import { useEthersSigner } from "../../../../modules/hooks"
 import { DeployNewMarketParams } from "./interface"
 import { toastifyError, toastifyRequest } from "../../../../components/toasts"
@@ -23,6 +20,7 @@ import { TargetChainId } from "../../../../config/networks"
 import { useCurrentNetwork } from "../../../../hooks/useCurrentNetwork"
 import { useGnosisSafeSDK } from "../../../../hooks/useGnosisSafeSDK"
 import { waitForSubgraphSync } from "../../../../utils/waitForSubgraphSync"
+import { GET_BORROWER_MARKETS_LIST_KEY } from "../../hooks/useMarketsForBorrower"
 
 export const useDeployMarket = () => {
   const { data: controller } = useGetController()
@@ -144,10 +142,13 @@ export const useDeployMarket = () => {
             `Got gnosis transaction:\n\tsafeTxHash: ${tx.safeTxHash}\n\ttxHash: ${tx.txHash}`,
           )
           const receipt = await tx.wait()
-          console.log(`Got gnosis transaction receipt`)
           return receipt
         }
-        const { receipt } = await controller.deployMarket(marketParameters)
+        const { receipt, transaction } =
+          await controller.deployMarket(marketParameters)
+
+        await transaction.wait()
+
         return receipt
       }
       // 3. Deploy market
@@ -159,9 +160,11 @@ export const useDeployMarket = () => {
       await waitForSubgraphSync(receipt.blockNumber)
     },
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: [GET_CONTROLLER_KEY] }).then(() => {
-        navigate(`${BASE_PATHS.Borrower}`)
-      })
+      client
+        .invalidateQueries({ queryKey: [GET_BORROWER_MARKETS_LIST_KEY] })
+        .then(() => {
+          navigate(`${BASE_PATHS.Borrower}/`)
+        })
     },
     onError(error) {
       console.log(error)
