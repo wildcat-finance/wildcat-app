@@ -614,15 +614,7 @@ export const useAuthoriseLenders = (
         return
       }
       const authoriseLenders = async () => {
-        let tx: ContractTransaction
-        if (markets?.length) {
-          tx = await controller.authorizeLendersAndUpdateMarkets(
-            lenders,
-            markets,
-          )
-        } else {
-          tx = await controller.authorizeLenders(lenders)
-        }
+        const tx = await controller.authorizeLenders(lenders)
         return tx.wait()
       }
 
