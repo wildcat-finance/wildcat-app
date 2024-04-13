@@ -39,4 +39,5 @@
 - Made links more obvious
   - Set unvisited link color to blue and visited to purple
   - Added Etherscan icon to etherscan links
+
 [ref](https://github.com/wildcat-finance/wildcat-app/pull/41)
