@@ -18,6 +18,8 @@ export function Modal({
   firstBtnText,
   hasSignIcon,
   hideButtons,
+  firstBtnVariant = "glacier",
+  firstBtnDisabled,
 }: ModalProps) {
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -67,10 +69,10 @@ export function Modal({
                       <div className="flex gap-x-3 justify-center mt-5">
                         <Button
                           className="w-28"
-                          variant="glacier"
+                          variant={firstBtnVariant}
                           icon={hasSignIcon ? <SignIcon /> : undefined}
                           onClick={onClick}
-                          disabled={isLoading}
+                          disabled={isLoading || firstBtnDisabled}
                         >
                           {isLoading && loadingText
                             ? loadingText

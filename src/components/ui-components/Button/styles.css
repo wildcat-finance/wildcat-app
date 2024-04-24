@@ -42,3 +42,7 @@
 .wc-btn-silver[type='button'] {
     @apply bg-silver-100 text-black px-2 py-1;
 }
+
+.wc-btn-orange[type='button'] {
+  @apply bg-orange;
+}
