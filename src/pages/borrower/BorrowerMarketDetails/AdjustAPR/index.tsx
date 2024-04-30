@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react"
 import dayjs from "dayjs"
 
+import { SetAprStatus } from "@wildcatfi/wildcat-sdk"
 import { Button } from "../../../../components/ui-components"
 import { AdjustAPRModal } from "../Modals"
 import {
@@ -13,6 +14,7 @@ import {
 import { AdjustAprProps } from "./interface"
 import {
   MARKET_PARAMS_DECIMALS,
+  TOKEN_FORMAT_DECIMALS,
   timeUntilCountdown,
 } from "../../../../utils/formatters"
 import { DetailsInput } from "../../../../components/ui-components/DetailsInput"
@@ -44,6 +46,7 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
   const { isTxInProgress, setisTxInProgress } = useTransactionWait()
 
   const [error, setError] = useState<string | undefined>()
+  const [status, setStatus] = useState<SetAprStatus>()
 
   const { market } = marketAccount
 
@@ -52,7 +55,6 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
     setApr(value)
 
     if (value === "" || value === "0") {
-      setNewReserveRatio(undefined)
       setError(undefined)
       return
     }
@@ -60,6 +62,18 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
     // If status is not `Ready`, show error message
     const parsedNewApr = parseFloat(value) * 100
     const checkAPRStep = marketAccount.checkSetAPRStep(parsedNewApr)
+    setStatus(checkAPRStep)
+
+    if (checkAPRStep.status === "InsufficientReserves") {
+      setNewReserveRatio(undefined)
+      setError(
+        `Missing reserves: ${checkAPRStep.missingReserves.format(
+          TOKEN_FORMAT_DECIMALS,
+          true,
+        )}`,
+      )
+      return
+    }
 
     if (checkAPRStep.status !== "Ready") {
       setError(SDK_ERRORS_MAPPING.setApr[checkAPRStep.status])
@@ -68,9 +82,6 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
     }
 
     setError(undefined)
-    const temporaryReserveRatioForChange =
-      market.getReserveRatioForNewAPR(parsedNewApr)
-    setNewReserveRatio(temporaryReserveRatioForChange)
   }
 
   const handleAdjustAPR = () => {
@@ -130,11 +141,11 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
         placeholder="00.00"
         value={apr}
         onChange={handleAprChange}
-        error={!!error}
+        // error={!!error}
         market={market}
         helperText="Current Base Rate"
         helperValue={`${market.annualInterestBips / 100}%`}
-        errorText={error}
+        // errorText={error}
         disabled={isTxInProgress}
       />
 
@@ -142,14 +153,14 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
         <Button
           variant="green"
           onClick={() => setModalOpen(true)}
-          disabled={disabledApr}
+          disabled={isTxInProgress}
         >
           Adjust
         </Button>
 
         <Button
           className="w-44 px-2 whitespace-nowrap"
-          variant="green"
+          variant="orange"
           onClick={handleResetReserveRatio}
           disabled={disabledReset}
         >
@@ -173,10 +184,14 @@ const AdjustAPR = ({ marketAccount }: AdjustAprProps) => {
         onClose={onModalClose}
         adjustAPR={handleAdjustAPR}
         currentAPR={market.annualInterestBips / 100}
-        newAPR={parseFloat(apr)}
+        apr={apr}
+        error={error}
+        status={status}
+        onChange={handleAprChange}
         newReserveRatio={newReserveRatio}
         reserveRatioChanged={reserveRatioChanged}
         isLoading={isLoading}
+        marketAccount={marketAccount}
       />
     </>
   )

@@ -66,8 +66,7 @@ export const SDK_ERRORS_MAPPING: SDKErrorsMapping = {
 
   setApr: {
     NotBorrower: "Address attempting to adjust APR is not the borrower",
-    InvalidApr:
-      "The lender APR that you're proposing is out of bounds [min, max]",
+    InvalidApr: "APR must be between 0% and 100%",
     InsufficientReserves:
       "Liquid reserves of the market insufficient for increased reserve ratio",
   },

@@ -28,7 +28,10 @@ export const DetailsInput = forwardRef<HTMLInputElement, DetailsInputType>(
           )}
         </div>
         <div>
-          <span className="font-semibold">{props.helperText}: </span>
+          <span className="font-semibold">
+            {props.helperText}
+            {props.helperValue ? ":" : ""}{" "}
+          </span>
           <br />
           {props.helperValue && props.helperValue.replace("-", " ")}
         </div>
