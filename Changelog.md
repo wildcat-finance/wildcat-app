@@ -1,5 +1,8 @@
 # Changelog (as of March 6, 2024)
 
+**April 30, 2024**
+- Changed APR modal so it can be opened even if the proposed change is not possible, and to display more detailed information about how the change in APR will affect the reserve ratio 
+
 **April 13, 2024**
 - Fixed issue where markets list would not update on deployment of a new market
 - Skip market update to avoid interest compounding on `authorizeLenders`
