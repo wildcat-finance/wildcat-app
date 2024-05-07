@@ -1,4 +1,9 @@
-# Changelog (as of March 6, 2024)
+# Changelog (since March 6, 2024)
+
+**May 6, 2024**
+
+- Fixed issue where closed markets had the withdrawal request button disabled.
+[ref](https://github.com/wildcat-finance/wildcat-app/pull/51)
 
 **April 30, 2024**
 - Changed APR modal so it can be opened even if the proposed change is not possible, and to display more detailed information about how the change in APR will affect the reserve ratio 
