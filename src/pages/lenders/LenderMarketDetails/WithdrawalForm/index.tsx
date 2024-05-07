@@ -31,14 +31,8 @@ const WithdrawalForm = ({ marketAccount }: WithdrawalFormProps) => {
     marketAccount.market.underlyingToken,
   )
 
-  const marketDisabled = marketAccount.market.isClosed
-
   const disabled =
-    marketDisabled ||
-    withdrawalValueBigNum.raw.isZero() ||
-    !!error ||
-    isLoading ||
-    isTxInProgress
+    withdrawalValueBigNum.raw.isZero() || !!error || isLoading || isTxInProgress
   const clearErrors = () => setError(undefined)
 
   const validate = (value: string) => {
