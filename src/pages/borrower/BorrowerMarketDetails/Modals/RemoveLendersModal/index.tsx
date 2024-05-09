@@ -8,7 +8,7 @@ import { useGetAuthorisedLendersByMarket } from "../../hooks/useGetAuthorisedLen
 export function RemoveLendersModal({ market }: RemoveLendersModalProps) {
   const [selectedLenders, setSelectedLenders] = useState<string[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const { data: lenders } = useGetAuthorisedLendersByMarket(market.address)
+  const { data: lenders } = useGetAuthorisedLendersByMarket(market)
   const { mutate: deauthorize, isSuccess } = useDeauthorizeLenders(
     selectedLenders,
     market.controller,

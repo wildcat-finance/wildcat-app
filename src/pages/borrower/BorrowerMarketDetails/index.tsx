@@ -123,7 +123,7 @@ const BorrowerMarketDetails = () => {
         )}
       </div>
       <div className="mt-5 mb-14">
-        <AuthorisedLendersList marketAddress={market.address} />
+        <AuthorisedLendersList market={market} />
       </div>
     </div>
   )

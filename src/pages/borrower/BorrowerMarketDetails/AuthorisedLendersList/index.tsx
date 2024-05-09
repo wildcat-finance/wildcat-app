@@ -102,10 +102,10 @@ function LenderRow({ address, name, store }: LenderRowProps) {
 }
 
 export const AuthorisedLendersList = ({
-  marketAddress,
+  market,
 }: AuthorisedLendersListProps) => {
   const { data: authorisedLenders, isLoading } =
-    useGetAuthorisedLendersByMarket(marketAddress)
+    useGetAuthorisedLendersByMarket(market)
   const namesStore = useLenderNameStore()
   const lenders = useMemo(() => {
     const lendersList: Array<{ address: string; name: string }> = []
