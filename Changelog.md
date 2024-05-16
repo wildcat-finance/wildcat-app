@@ -3,7 +3,7 @@
 **May 16, 2024**
 
 - Added time until delinquency tracker to borrower market page
-[ref](https://github.com/wildcat-finance/wildcat-app/pull/52)
+[ref](https://github.com/wildcat-finance/wildcat-app/pull/53)
 
 **May 6, 2024**
 
