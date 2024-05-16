@@ -1,3 +1,5 @@
+import { Market } from "@wildcatfi/wildcat-sdk"
+
 export type AuthorisedLendersListProps = {
-  marketAddress: string
+  market: Market
 }
