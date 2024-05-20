@@ -5,14 +5,13 @@ import {
   SubgraphGetAuthorizedLendersByMarketQueryVariables,
 } from "@wildcatfi/wildcat-sdk/dist/gql/graphql"
 import { logger } from "@wildcatfi/wildcat-sdk/dist/utils/logger"
+import { Market } from "@wildcatfi/wildcat-sdk"
 import { SubgraphClient } from "../../../../config/subgraph"
 
 export const GET_LENDERS_BY_MARKET_KEY = "get-authorised-lenders-by-market"
-export const useGetAuthorisedLendersByMarket = (
-  marketAddress: string | undefined,
-) => {
+export const useGetAuthorisedLendersByMarket = (market: Market | undefined) => {
   const getAuthorisedLendersByMarket = async () => {
-    if (!marketAddress) throw Error()
+    if (!market) throw Error()
 
     logger.debug(`Getting authorised lenders batches...`)
 
@@ -21,7 +20,7 @@ export const useGetAuthorisedLendersByMarket = (
       SubgraphGetAuthorizedLendersByMarketQueryVariables
     >({
       query: GetAuthorizedLendersByMarketDocument,
-      variables: { market: marketAddress?.toLowerCase() },
+      variables: { market: market.address.toLowerCase() },
     })
 
     logger.debug(
@@ -34,9 +33,9 @@ export const useGetAuthorisedLendersByMarket = (
   }
 
   return useQuery({
-    queryKey: [GET_LENDERS_BY_MARKET_KEY, marketAddress],
+    queryKey: [GET_LENDERS_BY_MARKET_KEY, market?.address],
     queryFn: getAuthorisedLendersByMarket,
-    enabled: !!marketAddress,
+    enabled: !!market,
     refetchOnMount: false,
   })
 }

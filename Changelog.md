@@ -1,5 +1,10 @@
 # Changelog (since March 6, 2024)
 
+**May 16, 2024**
+
+- Added time until delinquency tracker to borrower market page
+[ref](https://github.com/wildcat-finance/wildcat-app/pull/53)
+
 **May 6, 2024**
 
 - Fixed issue where closed markets had the withdrawal request button disabled.
