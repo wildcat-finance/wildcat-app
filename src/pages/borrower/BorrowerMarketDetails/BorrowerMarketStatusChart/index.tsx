@@ -66,13 +66,15 @@ export const BorrowerMarketStatusChart = ({
           </TokenAmountTooltip>
         )}
       </div>
-      <div className="flex mb-6 justify-between text-sm">
-        Market has sufficient reserves to cover interest for:{" "}
-        {humanizeDuration(market.secondsBeforeDelinquency * 1000, {
-          round: true,
-          largest: 2,
-        })}
-      </div>
+      {market.totalDebts.gt(0) && (
+        <div className="flex mb-6 justify-between text-sm">
+          Market has sufficient reserves to cover interest for:{" "}
+          {humanizeDuration(market.secondsBeforeDelinquency * 1000, {
+            round: true,
+            largest: 2,
+          })}
+        </div>
+      )}
 
       {market.totalDebts.gt(0) && (
         <div className="barchart__container">
