@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query"
 import { toastifyRequest } from "../../../../components/toasts"
 import { useGnosisSafeSDK } from "../../../../hooks/useGnosisSafeSDK"
 import { useEthersSigner } from "../../../../modules/hooks"
-import WildcatServiceAgreementText from "../../../../config/wildcat-service-agreement.json"
+import WildcatServiceAgreementAcknowledgement from "../../../../config/wildcat-service-agreement-acknowledgement.json"
 
 export type SignAgreementProps = {
   address: string | undefined
@@ -20,7 +20,7 @@ export const useSignAgreement = () => {
       if (!address) throw Error(`No address`)
 
       const sign = async () => {
-        let agreementText = WildcatServiceAgreementText
+        let agreementText = WildcatServiceAgreementAcknowledgement
         if (dateSigned) {
           agreementText = `${agreementText}\n\nDate: ${dateSigned}`
         }
