@@ -1,5 +1,11 @@
 # Changelog (since March 6, 2024)
 
+**August 15, 2024**
+
+Use acknowledgement message instead of full service agreement in signature request to deal with Trezor's failure to handle long messages for signatures.
+
+[ref](https://github.com/wildcat-finance/wildcat-app/pull/55)
+
 **May 16, 2024**
 
 - Added time until delinquency tracker to borrower market page
