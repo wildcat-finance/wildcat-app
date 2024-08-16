@@ -6,6 +6,8 @@
 .pnp.js
 
 .env
+.env.sepolia
+.env.mainnet
 
 # testing
 /coverage

@@ -1,7 +1,6 @@
 import dayjs from "dayjs"
-import { LenderWithdrawalStatus } from "@wildcatfi/wildcat-sdk"
 import {
-  TOKEN_FORMAT_DECIMALS,
+  formatTokenWithCommas,
   trimAddress,
 } from "../../../../../utils/formatters"
 import {
@@ -14,101 +13,122 @@ import { EtherscanLink } from "../../../../../components/ui-components/Etherscan
 
 const DATE_FORMAT = "DD-MMM-YYYY HH:mm"
 
-export const ClaimTable = ({ batches, market }: ClaimTableProps) => {
-  const withdrawals: { [key: string]: LenderWithdrawalStatus[] } = {}
+const TABLE_HEADER_CONFIG = [
+  {
+    title: "Batch",
+    align: "start",
+    className: "w-8",
+  },
+  {
+    title: "Lender",
+    align: "start",
+    className: "w-40",
+  },
+  {
+    title: "Transaction ID",
+    align: "start",
+    className: "w-64",
+  },
+  {
+    title: "Date Submitted",
+    align: "start",
+    className: "w-40",
+  },
+  {
+    title: "Amount",
+    align: "end",
+    className: "w-40",
+  },
+]
 
-  batches?.forEach((batch) => {
-    batch.withdrawals.forEach((withdrawal) => {
-      if (!withdrawals[withdrawal.lender]) {
-        withdrawals[withdrawal.lender] = []
-      }
-      if (withdrawal.availableWithdrawalAmount.raw.isZero()) {
-        return
-      }
-      withdrawals[withdrawal.lender].push(withdrawal)
-    })
-  })
+export const ClaimTable = ({ batches }: ClaimTableProps) => (
+  <Table headers={TABLE_HEADER_CONFIG}>
+    {(batches ?? []).map((batch) => (
+      <TableRow key={batch.expiry}>
+        <TableCell justify="start" className="w-8">
+          {batch.expiry}
+        </TableCell>
 
-  batches?.forEach((batch) => {
-    batch.withdrawals.reduce(
-      (acc, w) => acc.add(w.availableWithdrawalAmount),
-      market.underlyingToken.getAmount(0),
-    )
-  })
-
-  return (
-    <Table
-      headers={[
-        {
-          title: "Lender",
-          align: "start",
-          className: "w-40",
-        },
-        {
-          title: "Transaction ID",
-          align: "start",
-          className: "w-72",
-        },
-        {
-          title: "Date Submitted",
-          align: "start",
-          className: "w-40",
-        },
-        {
-          title: "Claimable",
-          align: "end",
-          className: "w-40",
-        },
-      ]}
-    >
-      {Object.keys(withdrawals).map((lender) =>
-        withdrawals[lender].map((withdrawal, i) =>
-          withdrawal.batch.requests.map((request, j) => {
-            const requestNumber = withdrawals[lender].reduce(
-              (acc, curr) => curr.batch.requests.length + acc,
-              0,
-            )
-            const claimableAmount = withdrawals[lender].reduce(
-              (acc, w) => acc.add(w.availableWithdrawalAmount),
-              market.underlyingToken.getAmount(0),
-            )
-            if (i === 0 && j === 0) {
-              return (
-                <TableRow key={lender}>
-                  <TableCell justify="start" rowSpan={requestNumber}>
-                    <EtherscanLink kind="address" value={lender}>
-                      {trimAddress(lender)}
-                    </EtherscanLink>
-                  </TableCell>
-                  <TableCell justify="start">
-                    <EtherscanLink kind="tx" value={request.transactionHash}>
-                      {trimAddress(request.transactionHash, 24)}
-                    </EtherscanLink>
-                  </TableCell>
-                  <TableCell justify="start">
-                    {dayjs(request.blockTimestamp * 1000).format(DATE_FORMAT)}
-                  </TableCell>
-                  <TableCell justify="end" rowSpan={requestNumber}>
-                    {claimableAmount.format(TOKEN_FORMAT_DECIMALS, true)}
-                  </TableCell>
-                </TableRow>
-              )
-            }
-            return (
-              <TableRow key={lender}>
-                <TableCell justify="start" className="!p-0 !bg-tint-10">
-                  <EtherscanLink kind="tx" value={request.transactionHash}>
-                    {trimAddress(request.transactionHash, 24)}
+        <td colSpan={4}>
+          <table className="w-full">
+            {batch.withdrawals.map((withdrawal) => (
+              <TableRow key={withdrawal.lender}>
+                <TableCell
+                  justify="start"
+                  className="first:pl-0 w-40"
+                  style={{ paddingLeft: 0 }}
+                >
+                  <EtherscanLink kind="address" value={withdrawal.lender}>
+                    {trimAddress(withdrawal.lender)}
                   </EtherscanLink>
                 </TableCell>
-                <TableCell justify="start" className="!bg-tint-10">
-                  {dayjs(request.blockTimestamp * 1000).format(DATE_FORMAT)}
-                </TableCell>
+                <td colSpan={3}>
+                  <table className="w-full">
+                    <TableRow>
+                      <TableCell
+                        justify="start"
+                        className="first:pl-0 w-64"
+                        style={{
+                          paddingLeft: 0,
+                          paddingTop: 10,
+                        }}
+                      >
+                        {withdrawal.requests.map((request) => (
+                          <TableRow key={request.id}>
+                            <TableCell
+                              justify="start"
+                              className="first:pl-0 w-64"
+                              style={{ paddingLeft: 0 }}
+                            >
+                              <EtherscanLink
+                                kind="tx"
+                                value={request.transactionHash}
+                              >
+                                {trimAddress(request.transactionHash, 24)}
+                              </EtherscanLink>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableCell>
+
+                      <TableCell
+                        justify="start"
+                        className="first:pl-0 w-40"
+                        style={{
+                          paddingLeft: 0,
+                          paddingTop: 10,
+                        }}
+                      >
+                        {withdrawal.requests.map((request) => (
+                          <TableRow>
+                            <TableCell
+                              justify="start"
+                              className="first:pl-0"
+                              style={{
+                                paddingLeft: 0,
+                              }}
+                            >
+                              {dayjs(request.blockTimestamp * 1000).format(
+                                DATE_FORMAT,
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableCell>
+
+                      <TableCell justify="end" className="w-40 first:pl-0">
+                        {formatTokenWithCommas(
+                          withdrawal.availableWithdrawalAmount,
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  </table>
+                </td>
               </TableRow>
-            )
-          }),
-        ),
-      )}
-    </Table>
-  )
-}
+            ))}
+          </table>
+        </td>
+      </TableRow>
+    ))}
+  </Table>
+)

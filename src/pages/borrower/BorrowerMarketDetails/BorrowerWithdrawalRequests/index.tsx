@@ -9,6 +9,7 @@ import {
   timestampToDateFormatted,
 } from "../../../../utils/formatters"
 import { WithdrawalsTable } from "../../../../components/WithdrawalTable"
+import { ClaimTable } from "./ClaimTable"
 
 const BorrowerWithdrawalRequests = ({
   market,
@@ -128,6 +129,22 @@ const BorrowerWithdrawalRequests = ({
           withdrawalBatches={data?.expiredPendingWithdrawals ?? []}
         />
       )}
+
+      <div className="flex justify-between items-center mt-14 mb-4 pr-6">
+        <div className="inline text-black text-xs font-bold">
+          Unclaimed Withdrawal Requests
+        </div>
+        <Chip className="w-30 flex justify-center">
+          {formatTokenWithCommas(data.claimableWithdrawalsAmount, {
+            withSymbol: true,
+          })}
+        </Chip>
+      </div>
+
+      <ClaimTable
+        market={market}
+        batches={data.batchesWithClaimableWithdrawals}
+      />
     </div>
   )
 }
