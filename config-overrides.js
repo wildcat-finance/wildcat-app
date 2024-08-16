@@ -1,3 +1,7 @@
+const { existsSync, writeFileSync, write } = require("fs");
+const { config } = require("dotenv");
+const path = require("path");
+
 module.exports = {
   webpack: function (config) {
     return config;
@@ -15,16 +19,29 @@ module.exports = {
       const config = configFunction(proxy, allowedHost);
 
       config.headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET',
-        'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Headers":
+          "X-Requested-With, content-type, Authorization",
       };
 
       // Return your customized Webpack Development Server config.
-      return config
-    }
+      return config;
+    };
   },
-  paths: function (paths) {
+  paths: function (paths, env) {
+    if (!existsSync(path.join(__dirname, ".env.sepolia")) && !existsSync(path.join(__dirname, ".env.mainnet"))) {
+      return paths;
+    }
+    const environmentArg =
+      process.argv.find((arg) => arg.startsWith("network=")) ??
+      `network=${env === "development" ? `sepolia` : `mainnet`}`;
+    const network = environmentArg.split("=")[1];
+    const networkEnv = path.join(__dirname, `.env.${network}`);
+    if (existsSync(networkEnv)) {
+      paths.dotenv = networkEnv;
+      config({ path: networkEnv });
+    }
     return paths;
   },
-}
+};
