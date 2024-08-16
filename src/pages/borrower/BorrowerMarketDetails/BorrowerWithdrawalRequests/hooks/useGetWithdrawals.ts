@@ -5,6 +5,7 @@ import {
   WithdrawalBatch,
   TwoStepQueryHookResult,
   TokenAmount,
+  BatchStatus,
 } from "@wildcatfi/wildcat-sdk"
 import {
   GetIncompleteWithdrawalsForMarketDocument,
@@ -45,8 +46,10 @@ function processIncompleteWithdrawals(
   const activeWithdrawalsTotalOwed =
     activeWithdrawal?.normalizedTotalAmount ??
     market.underlyingToken.getAmount(0)
-  const batchesWithClaimableWithdrawals = incompleteBatches.filter((batch) =>
-    batch.withdrawals.some((w) => w.availableWithdrawalAmount.gt(0)),
+  const batchesWithClaimableWithdrawals = incompleteBatches.filter(
+    (batch) =>
+      batch.status > 1 &&
+      batch.withdrawals.some((w) => w.availableWithdrawalAmount.gt(0)),
   )
   const claimableWithdrawalsAmount = batchesWithClaimableWithdrawals.reduce(
     (acc, batch) =>
@@ -184,8 +187,10 @@ export function useGetWithdrawals(
       market.underlyingToken.getAmount(0)
 
     const batchesWithClaimableWithdrawals =
-      withdrawals.incompleteBatches.filter((batch) =>
-        batch.withdrawals.some((w) => w.availableWithdrawalAmount.gt(0)),
+      withdrawals.incompleteBatches.filter(
+        (batch) =>
+          batch.status > 1 &&
+          batch.withdrawals.some((w) => w.availableWithdrawalAmount.gt(0)),
       )
     const claimableWithdrawalsAmount = batchesWithClaimableWithdrawals.reduce(
       (acc, batch) =>
