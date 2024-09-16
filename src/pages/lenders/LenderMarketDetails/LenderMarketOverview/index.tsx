@@ -1,3 +1,6 @@
+import humanizeDuration from "humanize-duration"
+import { useMemo } from "react"
+import { FaExclamationCircle } from "react-icons/fa"
 import { TableItem } from "../../../../components/ui-components"
 import { EtherscanLink } from "../../../../components/ui-components/EtherscanLink"
 import { useBorrowerNameOrAddress } from "../../../../hooks/useBorrowerNames"
@@ -29,11 +32,31 @@ const LenderMarketOverview = ({
     delinquencyFeeBips,
     delinquentDebt,
   } = market
-
-  const availableGracePeriod =
+  const [gracePeriodLabel, gracePeriodTimer] =
     timeDelinquent > delinquencyGracePeriod
-      ? 0
-      : delinquencyGracePeriod - timeDelinquent
+      ? [
+          "Remaining Time With Delinquency Fees",
+          humanizeDuration((timeDelinquent - delinquencyGracePeriod) * 1000, {
+            round: true,
+            largest: 2,
+          }),
+        ]
+      : [
+          "Available Grace Period",
+          formatSecsToHours(delinquencyGracePeriod - timeDelinquent),
+        ]
+
+  const warningText = useMemo(() => {
+    const breakdown = market.getTotalDebtBreakdown()
+    const willBeDelinquent = breakdown.status === "delinquent"
+    if (!market.isDelinquent && willBeDelinquent) {
+      return "The delinquency timer will only begin ticking after a market update."
+    }
+    if (!willBeDelinquent && timeDelinquent > delinquencyGracePeriod) {
+      return "The market is not currently delinquent, but penalty fees will apply until the delinquency timer is below the grace period."
+    }
+    return undefined
+  }, [market])
 
   const borrowerName = useBorrowerNameOrAddress(market.borrower)
 
@@ -93,8 +116,18 @@ const LenderMarketOverview = ({
             className="pr-6 pl-24"
           />
           <TableItem
-            title="Available Grace Period"
-            value={formatSecsToHours(availableGracePeriod)}
+            title={gracePeriodLabel}
+            valueTooltip={warningText}
+            value={
+              warningText ? (
+                <span className="flex justify-center items-center gap-2">
+                  {gracePeriodTimer}
+                  <FaExclamationCircle height={12} color="orange" />
+                </span>
+              ) : (
+                gracePeriodTimer
+              )
+            }
             className="pr-6 pl-24"
           />
           <TableItem

@@ -1,4 +1,7 @@
 import { TokenAmount } from "@wildcatfi/wildcat-sdk"
+import humanizeDuration from "humanize-duration"
+import { FaExclamationCircle } from "react-icons/fa"
+import { useMemo } from "react"
 import { TableItem } from "../../../../components/ui-components"
 import {
   formatBps,
@@ -51,16 +54,36 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
     delinquencyFeeBips,
   } = market
 
-  const availableGracePeriod =
-    timeDelinquent > delinquencyGracePeriod
-      ? 0
-      : delinquencyGracePeriod - timeDelinquent
-
   const totalInterestAccrued = (
     market.totalDelinquencyFeesAccrued ?? underlyingToken.getAmount(0)
   ).add(market.totalBaseInterestAccrued ?? 0)
 
   const borrowerName = useBorrowerNameOrAddress(market.borrower)
+  const [gracePeriodLabel, gracePeriodTimer] =
+    timeDelinquent > delinquencyGracePeriod
+      ? [
+          "Remaining Time With Delinquency Fees",
+          humanizeDuration((timeDelinquent - delinquencyGracePeriod) * 1000, {
+            round: true,
+            largest: 2,
+          }),
+        ]
+      : [
+          "Available Grace Period",
+          formatSecsToHours(delinquencyGracePeriod - timeDelinquent),
+        ]
+
+  const warningText = useMemo(() => {
+    const breakdown = market.getTotalDebtBreakdown()
+    const willBeDelinquent = breakdown.status === "delinquent"
+    if (!market.isDelinquent && willBeDelinquent) {
+      return "The delinquency timer will only begin ticking after a market update."
+    }
+    if (!willBeDelinquent && timeDelinquent > delinquencyGracePeriod) {
+      return "The market is not currently delinquent, but penalty fees will apply until the delinquency timer is below the grace period."
+    }
+    return undefined
+  }, [market])
 
   return (
     <div>
@@ -138,8 +161,18 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
             className="pr-6 pl-24"
           />
           <TableItem
-            title="Available Grace Period"
-            value={formatSecsToHours(availableGracePeriod)}
+            title={gracePeriodLabel}
+            valueTooltip={warningText}
+            value={
+              warningText ? (
+                <span className="flex justify-center items-center gap-2">
+                  {gracePeriodTimer}
+                  <FaExclamationCircle height={12} color="orange" />
+                </span>
+              ) : (
+                gracePeriodTimer
+              )
+            }
             className="pr-6 pl-24"
           />
         </div>
