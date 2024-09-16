@@ -17,12 +17,13 @@ export const BorrowerMarketStatusChart = ({
   market,
 }: BorrowerMarketStatusChartProps) => {
   const { data: withdrawals } = useGetWithdrawals(market)
-  const barRawData = useGenerateBarData(market)
+  const { barData: barRawData, breakdown } = useGenerateBarData(market)
+  const isDelinquent = breakdown.status === "delinquent"
 
-  const barOrders = market.isDelinquent
+  const barOrders = isDelinquent
     ? MARKET_BAR_ORDER.delinquentBarsOrder
     : MARKET_BAR_ORDER.healthyBarchartOrder
-  const legendItemsOrder = market.isDelinquent
+  const legendItemsOrder = isDelinquent
     ? MARKET_BAR_ORDER.delinquentLegendOrder
     : MARKET_BAR_ORDER.healthyLegendOrder
 
@@ -40,12 +41,12 @@ export const BorrowerMarketStatusChart = ({
   ) => {
     if (
       chartItem.id === MARKET_BAR_DATA.collateralObligations.id &&
-      !market.isDelinquent
+      !isDelinquent
     )
       return "expandable"
     if (
       chartItem.id === MARKET_BAR_DATA.collateralObligations.id &&
-      market.isDelinquent
+      isDelinquent
     )
       return "extended"
     return "default"
@@ -66,7 +67,7 @@ export const BorrowerMarketStatusChart = ({
           </TokenAmountTooltip>
         )}
       </div>
-      {market.totalDebts.gt(0) && (
+      {market.totalDebts.gt(0) && !isDelinquent && (
         <div className="flex mb-6 justify-between text-sm">
           Market has sufficient reserves to cover interest for:{" "}
           {humanizeDuration(market.secondsBeforeDelinquency * 1000, {
@@ -93,7 +94,7 @@ export const BorrowerMarketStatusChart = ({
           >
             {chartItem.id === MARKET_BAR_DATA.collateralObligations.id && (
               <>
-                {!market.isDelinquent && (
+                {!isDelinquent && (
                   <div className="barchart__legend-obligations-values-container">
                     <CollateralObligationsData
                       market={market}
@@ -102,7 +103,7 @@ export const BorrowerMarketStatusChart = ({
                   </div>
                 )}
 
-                {market.isDelinquent && (
+                {isDelinquent && (
                   <div className="barchart__legend-obligations-values-container">
                     <DelinquentCollateralObligations
                       market={market}
