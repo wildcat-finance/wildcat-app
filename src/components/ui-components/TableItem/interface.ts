@@ -5,4 +5,6 @@ export type TableItemProps = {
   className?: string
   valueTooltip?: string
   titleTooltip?: string
+  titleClassName?: string
+  valueClassName?: string
 }

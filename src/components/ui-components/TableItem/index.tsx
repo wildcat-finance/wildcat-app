@@ -9,27 +9,37 @@ export function TableItem({
   children,
   title,
   value,
-  className,
+  className: _className,
+  valueClassName: _valueClassName,
   valueTooltip,
+  titleClassName: _titleClassName,
   titleTooltip,
 }: TableItemProps) {
-  const itemClassName = cn(
-    className,
+  const className = cn(
+    _className,
     "w-full flex px-3 items-center flex-row h-9 leading-8 odd:bg-tint-9 even:bg-tint-10 justify-between",
+  )
+  const titleClassName = cn(
+    _titleClassName,
+    "inline text-black text-xs font-bold",
+  )
+  const valueClassName = cn(
+    _valueClassName,
+    "inline text-black text-xs text-right",
   )
 
   return (
-    <div className={itemClassName}>
+    <div className={className}>
       {(title || value) && (
         <>
-          <div className="inline text-black text-xs font-bold">
+          <div className={titleClassName}>
             {titleTooltip ? (
               <Tooltip content={titleTooltip}>{title}</Tooltip>
             ) : (
               title
             )}
           </div>
-          <div className="inline text-black text-xs text-right">
+          <div className={valueClassName}>
             {valueTooltip ? (
               <Tooltip content={valueTooltip}>{value}</Tooltip>
             ) : (
