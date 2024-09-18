@@ -46,6 +46,12 @@ export const formatBps = (bps: number, fixed?: number) => {
   return stripTrailingZeroes(fixedNum)
 }
 
+export const formatRayAsPercentage = (ray: BigNumber, fixed?: number) => {
+  const percentage = parseFloat(formatUnits(ray, 27)) * 100
+
+  return stripTrailingZeroes(percentage.toFixed(fixed || 2))
+}
+
 // <---- TOKEN PARAMETERS FORMATTERS ---->
 export const trimAddress = (
   address: string,
