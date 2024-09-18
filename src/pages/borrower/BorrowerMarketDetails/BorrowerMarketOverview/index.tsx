@@ -1,10 +1,11 @@
 import { TokenAmount } from "@wildcatfi/wildcat-sdk"
 import humanizeDuration from "humanize-duration"
-import { FaExclamationCircle } from "react-icons/fa"
+import { HiQuestionMarkCircle } from "react-icons/hi"
 import { useMemo } from "react"
 import { TableItem } from "../../../../components/ui-components"
 import {
   formatBps,
+  formatRayAsPercentage,
   formatSecsToHours,
   MARKET_PARAMS_DECIMALS,
   TOKEN_FORMAT_DECIMALS,
@@ -73,16 +74,26 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
           formatSecsToHours(delinquencyGracePeriod - timeDelinquent),
         ]
 
-  const warningText = useMemo(() => {
+  const gracePeriodTooltip = useMemo(() => {
     const breakdown = market.getTotalDebtBreakdown()
     const willBeDelinquent = breakdown.status === "delinquent"
-    if (!market.isDelinquent && willBeDelinquent) {
-      return "The delinquency timer will only begin ticking after a market update."
+    if (!market.isDelinquent) {
+      if (willBeDelinquent) {
+        // If the market is not currently delinquent but will be after the next update:
+        return "This market has become delinquent since its last update and its delinquency timer will begin to increase once it is updated."
+      }
+      if (timeDelinquent > delinquencyGracePeriod) {
+        // If the market is not currently delinquent (on-chain) but is incurring penalties:
+        return "This market is not currently delinquent, but delinquency fees will apply until the timer is below the grace period."
+      }
+      return undefined
     }
-    if (!willBeDelinquent && timeDelinquent > delinquencyGracePeriod) {
-      return "The market is not currently delinquent, but penalty fees will apply until the delinquency timer is below the grace period."
+    if (!willBeDelinquent) {
+      // If the market will stop being delinquent after the next update:
+      return "This market has become healthy since its last update and its delinquency timer will begin to decrease once it is updated."
     }
-    return undefined
+    // If the market will continue to be delinquent after the next update:
+    return "The delinquency timer will continue to increase until this market is returned to a healthy state."
   }, [market])
 
   return (
@@ -132,11 +143,37 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
         <div className="w-full">
           <TableItem
             title="Penalty APR"
-            value={`${formatBps(
-              delinquencyFeeBips,
-              MARKET_PARAMS_DECIMALS.delinquencyFeeBips,
-            )}%`}
+            value={
+              market.isIncurringPenalties ? (
+                <span className="flex justify-center items-center gap-1">
+                  {`${formatBps(
+                    delinquencyFeeBips,
+                    MARKET_PARAMS_DECIMALS.delinquencyFeeBips,
+                  )}%`}
+                  <HiQuestionMarkCircle
+                    className="text-base cursor-pointer"
+                    color="orange"
+                  />
+                </span>
+              ) : (
+                `${formatBps(
+                  delinquencyFeeBips,
+                  MARKET_PARAMS_DECIMALS.delinquencyFeeBips,
+                )}%`
+              )
+            }
             className="pr-6 pl-24"
+            valueTooltip={
+              market.isIncurringPenalties
+                ? `This market is incurring delinquency fees, leading to a total APR of ${formatRayAsPercentage(
+                    market.effectiveLenderAPR,
+                    MARKET_PARAMS_DECIMALS.annualInterestBips,
+                  )}%. Penalties will continue to apply until the delinquency timer is below the grace period.`
+                : undefined
+            }
+            valueClassName={
+              market.isIncurringPenalties ? "!text-red-400 font-bold" : ""
+            }
           />
           <TableItem
             title="Total Interest Accrued"
@@ -162,18 +199,26 @@ const BorrowerMarketOverview = ({ market }: BorrowerMarketOverviewProps) => {
           />
           <TableItem
             title={gracePeriodLabel}
-            valueTooltip={warningText}
+            valueTooltip={gracePeriodTooltip}
             value={
-              warningText ? (
-                <span className="flex justify-center items-center gap-2">
+              gracePeriodTooltip ? (
+                <span className="flex justify-center items-center gap-1">
                   {gracePeriodTimer}
-                  <FaExclamationCircle height={12} color="orange" />
+                  <HiQuestionMarkCircle
+                    className="text-base cursor-pointer"
+                    color="orange"
+                  />
                 </span>
               ) : (
                 gracePeriodTimer
               )
             }
             className="pr-6 pl-24"
+            valueClassName={
+              timeDelinquent > delinquencyGracePeriod
+                ? "!text-red-400 font-bold"
+                : ""
+            }
           />
         </div>
       </div>

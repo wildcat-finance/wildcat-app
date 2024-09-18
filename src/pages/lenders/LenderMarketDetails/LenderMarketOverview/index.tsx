@@ -1,11 +1,12 @@
 import humanizeDuration from "humanize-duration"
 import { useMemo } from "react"
-import { FaExclamationCircle } from "react-icons/fa"
+import { HiQuestionMarkCircle } from "react-icons/hi"
 import { TableItem } from "../../../../components/ui-components"
 import { EtherscanLink } from "../../../../components/ui-components/EtherscanLink"
 import { useBorrowerNameOrAddress } from "../../../../hooks/useBorrowerNames"
 import {
   formatBps,
+  formatRayAsPercentage,
   formatSecsToHours,
   MARKET_PARAMS_DECIMALS,
   TOKEN_FORMAT_DECIMALS,
@@ -35,7 +36,7 @@ const LenderMarketOverview = ({
   const [gracePeriodLabel, gracePeriodTimer] =
     timeDelinquent > delinquencyGracePeriod
       ? [
-          "Remaining Time With Delinquency Fees",
+          "Remaining Time With Penalties",
           humanizeDuration((timeDelinquent - delinquencyGracePeriod) * 1000, {
             round: true,
             largest: 2,
@@ -46,16 +47,26 @@ const LenderMarketOverview = ({
           formatSecsToHours(delinquencyGracePeriod - timeDelinquent),
         ]
 
-  const warningText = useMemo(() => {
+  const gracePeriodTooltip = useMemo(() => {
     const breakdown = market.getTotalDebtBreakdown()
     const willBeDelinquent = breakdown.status === "delinquent"
-    if (!market.isDelinquent && willBeDelinquent) {
-      return "The delinquency timer will only begin ticking after a market update."
+    if (!market.isDelinquent) {
+      if (willBeDelinquent) {
+        // If the market is not currently delinquent but will be after the next update:
+        return "This market has become delinquent since its last update and its delinquency timer will begin to increase once it is updated."
+      }
+      if (timeDelinquent > delinquencyGracePeriod) {
+        // If the market is not currently delinquent (on-chain) but is incurring penalties:
+        return "This market is not currently delinquent, but delinquency fees will apply until the timer is below the grace period."
+      }
+      return undefined
     }
-    if (!willBeDelinquent && timeDelinquent > delinquencyGracePeriod) {
-      return "The market is not currently delinquent, but penalty fees will apply until the delinquency timer is below the grace period."
+    if (!willBeDelinquent) {
+      // If the market will stop being delinquent after the next update:
+      return "This market has become healthy since its last update and its delinquency timer will begin to decrease once it is updated."
     }
-    return undefined
+    // If the market will continue to be delinquent after the next update:
+    return "The delinquency timer will continue to increase until this market is returned to a healthy state."
   }, [market])
 
   const borrowerName = useBorrowerNameOrAddress(market.borrower)
@@ -117,26 +128,60 @@ const LenderMarketOverview = ({
           />
           <TableItem
             title={gracePeriodLabel}
-            valueTooltip={warningText}
+            valueTooltip={gracePeriodTooltip}
             value={
-              warningText ? (
-                <span className="flex justify-center items-center gap-2">
+              gracePeriodTooltip ? (
+                <span className="flex justify-center items-center gap-1">
                   {gracePeriodTimer}
-                  <FaExclamationCircle height={12} color="orange" />
+                  <HiQuestionMarkCircle
+                    className="text-base cursor-pointer"
+                    color="orange"
+                  />
                 </span>
               ) : (
                 gracePeriodTimer
               )
             }
             className="pr-6 pl-24"
+            valueClassName={
+              timeDelinquent > delinquencyGracePeriod
+                ? "!text-red-400 font-bold"
+                : ""
+            }
           />
           <TableItem
             title="Penalty APR"
-            value={`${formatBps(
-              delinquencyFeeBips,
-              MARKET_PARAMS_DECIMALS.delinquencyFeeBips,
-            )}%`}
+            value={
+              market.isIncurringPenalties ? (
+                <span className="flex justify-center items-center gap-1">
+                  {`${formatBps(
+                    delinquencyFeeBips,
+                    MARKET_PARAMS_DECIMALS.delinquencyFeeBips,
+                  )}%`}
+                  <HiQuestionMarkCircle
+                    className="text-base cursor-pointer"
+                    color="orange"
+                  />
+                </span>
+              ) : (
+                `${formatBps(
+                  delinquencyFeeBips,
+                  MARKET_PARAMS_DECIMALS.delinquencyFeeBips,
+                )}%`
+              )
+            }
             className="pr-6 pl-24"
+            valueTooltip={
+              market.isIncurringPenalties
+                ? `This market is incurring delinquency fees, leading to a total APR of ${formatRayAsPercentage(
+                    market.effectiveLenderAPR,
+                    MARKET_PARAMS_DECIMALS.annualInterestBips,
+                  )}%. Penalties will continue to apply until the delinquency timer is below the grace period.`
+                : undefined
+            }
+            valueClassName={
+              market.isIncurringPenalties ? "!text-red-400 font-bold" : ""
+            }
           />
           <TableItem
             title="Current Min. Reserve Required"
