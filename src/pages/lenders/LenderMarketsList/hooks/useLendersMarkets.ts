@@ -73,16 +73,19 @@ export function useLendersMarkets({
       fetchPolicy: "network-only",
     })
     const authorizedMarkets = controllerAuthorizations
+      .filter((auth) => !!auth.controller)
       .map((auth) => auth.controller.markets)
       .flat()
-    const markets = _markets.map((market) =>
-      Market.fromSubgraphMarketData(
-        TargetChainId,
-        signerOrProvider as SignerOrProvider,
-        market,
-        address,
-      ),
-    )
+    const markets = _markets
+      .filter((market) => !!market.controller)
+      .map((market) =>
+        Market.fromSubgraphMarketData(
+          TargetChainId,
+          signerOrProvider as SignerOrProvider,
+          market,
+          address,
+        ),
+      )
     const lenderAccounts = markets.map((market) => {
       const lenderAccount = _lenderAccounts.find(
         (account) =>
