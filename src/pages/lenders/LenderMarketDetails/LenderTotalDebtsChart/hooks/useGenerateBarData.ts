@@ -25,6 +25,8 @@ export const useGenerateBarData = ({
   const barData: {
     [key: string]: MarketBarChartItem & { hide?: boolean }
   } = {}
+  const breakdown = market.getTotalDebtBreakdown()
+  const isDelinquent = breakdown.status === "delinquent"
   const totalClaims = market.normalizedUnclaimedWithdrawals
     .add(market.normalizedPendingWithdrawals)
     .add(market.lastAccruedProtocolFees)
@@ -35,9 +37,9 @@ export const useGenerateBarData = ({
 
   const total = market.totalDebts
 
-  const colorKey = !market.isDelinquent ? "healthyBgColor" : "delinquentBgColor"
+  const colorKey = !isDelinquent ? "healthyBgColor" : "delinquentBgColor"
 
-  const textColorKey = !market.isDelinquent
+  const textColorKey = !isDelinquent
     ? "healthyTextColor"
     : "delinquentTextColor"
 

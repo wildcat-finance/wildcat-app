@@ -184,10 +184,18 @@ export const MarketSortOptions: MarketSortOption[] = [
     value: SortKind.Status,
     sortPredicate: (a: Market, b: Market, direction: "asc" | "desc") =>
       (MarketStatusScores[
-        getMarketStatus(a.isClosed, a.isDelinquent, a.isIncurringPenalties)
+        getMarketStatus(
+          a.isClosed,
+          a.isDelinquent || a.willBeDelinquent,
+          a.isIncurringPenalties,
+        )
       ] -
         MarketStatusScores[
-          getMarketStatus(b.isClosed, b.isDelinquent, b.isIncurringPenalties)
+          getMarketStatus(
+            b.isClosed,
+            b.isDelinquent || b.willBeDelinquent,
+            b.isIncurringPenalties,
+          )
         ]) *
       (direction === "asc" ? 1 : -1),
   },

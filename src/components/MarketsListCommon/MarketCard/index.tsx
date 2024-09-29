@@ -33,7 +33,7 @@ function MarketCard({
   const market = _market ?? account.market
   const status = getMarketStatus(
     market.isClosed,
-    market.isDelinquent,
+    market.isDelinquent || market.willBeDelinquent,
     market.isIncurringPenalties,
   )
   const marketBalance = account?.marketBalance
