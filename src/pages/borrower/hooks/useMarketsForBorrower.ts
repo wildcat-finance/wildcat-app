@@ -47,13 +47,15 @@ export function useMarketsForBorrowerQuery({
     })
 
     return (
-      result.data.markets.map((market) =>
-        Market.fromSubgraphMarketData(
-          TargetChainId,
-          provider as SignerOrProvider,
-          market,
-        ),
-      ) ?? []
+      result.data.markets
+        .filter((m) => !!m.controller)
+        .map((market) =>
+          Market.fromSubgraphMarketData(
+            TargetChainId,
+            provider as SignerOrProvider,
+            market,
+          ),
+        ) ?? []
     )
   }
 
@@ -70,13 +72,15 @@ export function useMarketsForBorrowerQuery({
     const controller = result.data.controllers[0]
     if (controller) {
       return (
-        controller.markets.map((market) =>
-          Market.fromSubgraphMarketData(
-            TargetChainId,
-            provider as SignerOrProvider,
-            market,
-          ),
-        ) ?? []
+        controller.markets
+          .filter((m) => !!m.controller)
+          .map((market) =>
+            Market.fromSubgraphMarketData(
+              TargetChainId,
+              provider as SignerOrProvider,
+              market,
+            ),
+          ) ?? []
       )
     }
 
